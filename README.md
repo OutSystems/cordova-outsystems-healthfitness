@@ -1,2 +1,3 @@
-# cordova-outsystems-healthfitness
-OutSystems owned repository for the Health &amp; Fitness Cordova Plugin
+# HealthFitness
+
+## Health &amp; Fitness cordova plugin for OutSystems applications.
