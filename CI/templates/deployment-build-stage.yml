@@ -1,0 +1,29 @@
+# For now just a simple squeleton needs proper setting for deployment to ui test env
+parameters:
+- name: fromEnvironment
+  type: string
+  default: ''
+- name: toEnvironment
+  type: string
+  default: ''
+- name: basicAuthentication
+  type: string
+  default: null
+- name: pipelineURL
+  type: string
+  default: null
+
+
+stages:
+  - stage: EnvironmentDeploymentBuild
+    jobs:
+      - job: environment_deployment_build
+        displayName: 'Deploy Plugin from ${{ parameters.fromEnvironment }} environment to ${{ parameters.toEnvironment }} environment and build on ${{ parameters.toEnvironment }} environment'
+        pool:
+          vmImage: 'ubuntu-latest'
+        steps:
+          - template: 'npm-steps.yml'
+            parameters:
+              workingDirectory: 'CI/templates'
+          - script: 'npm deploy --pipelineSupportURL="${{ parameters.pipelineURL }}" --fromEnvironment=${{ parameters.fromEnvironment }} --toEnvironment=${{ parameters.toEnvironment }} --destinationFolder="$(System.DefaultWorkingDirectory)/builds/" --authentication="${{ parameters.basicAuthentication }}"'
+            workingDirectory: 'CI/templates'
