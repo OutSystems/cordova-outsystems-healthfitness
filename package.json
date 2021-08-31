@@ -1,18 +1,21 @@
 {
-  "name": "com.outsystems.plugins.healthfitness",
+  "name": "cordova-outsystems-health-fitness",
   "version": "0.0.1",
-  "description": "Health & Fitness cordova plugin for OutSystems applications.",
-  "keywords": [
-    "ecosystem:cordova",
-    "cordova-android",
-    "cordova-ios"
-  ],
+  "description": "OutSystems plugin that enables Health and Fitness capabilities to OutSystems apps",
   "cordova": {
-    "id": "com.outsystems.plugins.healthfitness",
+    "id": "cordova-outsystems-health-fitness",
     "platforms": [
-      "android",
       "ios"
     ]
   },
-  "engines": []
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/OutSystems"
+  },
+  "keywords": [
+    "ecosystem:cordova",
+    "cordova-ios"
+  ],
+  "author": "Andre Grillo - OutSystems",
+  "license": "MIT"
 }
