@@ -10,13 +10,10 @@ import HealthKit
 class UserHealthProfile {
   
   var age: Int?
-  var biologicalSex: HKBiologicalSex?
-  var bloodType: HKBloodType?
+  var biologicalSex: String?
+  var bloodType: String?
   var heightInMeters: Double?
   var weightInKilograms: Double?
-  var error: Bool = false
-  var errorMessage: String = ""
-  
   var bodyMassIndex: Double? {
     
     guard let weightInKilograms = weightInKilograms,

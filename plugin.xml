@@ -24,8 +24,8 @@
 		<!-- iOS Source Files -->
 		<source-file src="src/ios/HealthAndFitness.swift" />
 		<source-file src="src/ios/HealthKitSetup.swift" />
-		<source-file src="ProfileDataStore.swift" />
-		<source-file src="UserHealthProfile.swift" />
+		<source-file src="src/ios/ProfileDataStore.swift" />
+		<source-file src="src/ios/UserHealthProfile.swift" />
 
 		<!-- iOS Permissions -->
 		<preference name="HEALTH_SHARE_DESCRIPTION" default=" " />
