@@ -38,5 +38,14 @@
             <string>$HEALTH_UPDATE_DESCRIPTION</string>
         </config-file>
 
+        <!-- Entitlements -->
+        <config-file target="*/Entitlements-Debug.plist" parent="com.apple.developer.healthkit">
+	      <true/>
+	    </config-file>
+
+	    <config-file target="*/Entitlements-Release.plist" parent="com.apple.developer.healthkit">
+	      <true/>
+	    </config-file>
+
 	</platform>
 </plugin>
