@@ -131,7 +131,71 @@ import Foundation
         
     }
     
+        @objc(loadMostRecentHeight:)
+    func loadMostRecentHeight(command: CDVInvokedUrlCommand) {
+        var pluginResult = CDVPluginResult()
+        
+        //1. Use HealthKit to create the Height Sample Type
+        guard let heightSampleType = HKSampleType.quantityType(forIdentifier: .height) else {
+            print("Height Sample Type is no longer available in HealthKit")
+            return
+        }
+        
+        ProfileDataStore.getMostRecentSample(for: heightSampleType) { (sample, error) in
+            
+            guard let sample = sample else {
+                
+                if let error = error {
+                    print(error.localizedDescription)
+                    pluginResult = CDVPluginResult(status: CDVCommandStatus_ERROR)
+                    self.commandDelegate!.send(pluginResult, callbackId: command.callbackId)
+                }
+                
+                return
+            }
+            
+            //2. Convert the height sample to meters
+            let heightInMeters = sample.quantity.doubleValue(for: HKUnit.meter())
+            
+            //Callback cordova
+            print("HealthKit loadMostRecentHeight successful. Most recent height: \(heightInMeters)")
+            
+            //MARK TODO: Convert result to JSON
+            pluginResult = CDVPluginResult(status: CDVCommandStatus_OK, messageAs: "\(heightInMeters)")
+            self.commandDelegate!.send(pluginResult, callbackId: command.callbackId)
+        }
+    }
     
+    
+    @objc(loadMostRecentWeight:)
+    func loadMostRecentWeight(command: CDVInvokedUrlCommand) {
+        var pluginResult = CDVPluginResult()
+        
+        guard let weightSampleType = HKSampleType.quantityType(forIdentifier: .bodyMass) else {
+            print("Body Mass Sample Type is no longer available in HealthKit")
+            return
+        }
+        
+        ProfileDataStore.getMostRecentSample(for: weightSampleType) { (sample, error) in
+            
+            guard let sample = sample else {
+                
+                if let error = error {
+                    print(error.localizedDescription)
+                    pluginResult = CDVPluginResult(status: CDVCommandStatus_ERROR)
+                    self.commandDelegate!.send(pluginResult, callbackId: command.callbackId)
+                }
+                return
+            }
+            
+            let weightInKilograms = sample.quantity.doubleValue(for: HKUnit.gramUnit(with: .kilo))
+            
+            //MARK TODO: Convert result to JSON
+            pluginResult = CDVPluginResult(status: CDVCommandStatus_OK, messageAs: "\(weightInKilograms)")
+            self.commandDelegate!.send(pluginResult, callbackId: command.callbackId)
+        }
+        
+    }
     
 }
 
