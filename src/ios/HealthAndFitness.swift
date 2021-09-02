@@ -9,6 +9,8 @@ import Foundation
 
 @objc(HealthAndFitness) class HealthAndFitness: CDVPlugin {
     
+    var callbackId:String=""
+    
     @objc(initialize:)
     func initialize(command: CDVInvokedUrlCommand) {
         var pluginResult = CDVPluginResult()
@@ -43,19 +45,11 @@ import Foundation
     func getAgeSexAndBloodType(command: CDVInvokedUrlCommand) {
         var pluginResult = CDVPluginResult()
         let userHealthProfile = UserHealthProfile()
+        let profileDataStore = ProfileDataStore()
+        
         do {
-            let userAgeSexAndBloodType = try ProfileDataStore.getAgeSexAndBloodType()
-            //            userHealthProfile.age = userAgeSexAndBloodType.age
-            //            userHealthProfile.biologicalSex = userAgeSexAndBloodType.biologicalSex
-            //            userHealthProfile.bloodType = userAgeSexAndBloodType.bloodType
-            
-            //            if let age = userHealthProfile.age, let bioSex = userAgeSexAndBloodType.biologicalSex, let bloodType = userAgeSexAndBloodType.bloodType {
+            let userAgeSexAndBloodType = try profileDataStore.getAgeSexAndBloodType()
             userHealthProfile.age = userAgeSexAndBloodType.age
-            //            let bioSex = userAgeSexAndBloodType.biologicalSex
-            //            let bloodType = userAgeSexAndBloodType.bloodType
-            
-            //            var bioSexString: String
-            //            var bloodTypeString: String
             
             switch userAgeSexAndBloodType.biologicalSex.rawValue{
             case 0:
@@ -103,29 +97,42 @@ import Foundation
             self.commandDelegate!.send(pluginResult, callbackId: command.callbackId)
         }
         
-        
-        
-        //        if userHealthProfile.error {
-        //            print("HealthKit getAgeSexAndBloodType Failed. Reason: \(userHealthProfile.errorMessage)")
-        //            pluginResult = CDVPluginResult(status: CDVCommandStatus_ERROR, messageAs: "HealthKit getAgeSexAndBloodType Failed. Reason: \(userHealthProfile.errorMessage)")
-        //            self.commandDelegate!.send(pluginResult, callbackId: command.callbackId)
-        //        } else {
-        
-        //            if let age = userHealthProfile.age, let bioSex = userHealthProfile.biologicalSex?.rawValue, let bloodType = userHealthProfile.bloodType?.rawValue {
-        
         //MARK: TODO: Return JSON as message
         print("HealthKit getAgeSexAndBloodType successful. Age: \(userHealthProfile.age), Biological Sex \(userHealthProfile.biologicalSex), Blood Type: \(userHealthProfile.bloodType)")
         pluginResult = CDVPluginResult(status: CDVCommandStatus_OK, messageAs: "HealthKit getAgeSexAndBloodType successful. Age: \(userHealthProfile.age), Biological Sex \(userHealthProfile.biologicalSex), Blood Type: \(userHealthProfile.bloodType)")
         self.commandDelegate!.send(pluginResult, callbackId: command.callbackId)
         
     }
-    //        else {
-    //                print("HealthKit getAgeSexAndBloodType Failed. Some variables returned null")
-    //                pluginResult = CDVPluginResult(status: CDVCommandStatus_ERROR, messageAs: "HealthKit getAgeSexAndBloodType Failed. Some variables returned null")
-    //                self.commandDelegate!.send(pluginResult, callbackId: command.callbackId)
-    //            }
     
-    //        }
+    
+    @objc(getHeartRates:)
+    func getHeartRates(command: CDVInvokedUrlCommand) {
+        callbackId = command.callbackId
+        let profileDataStore = ProfileDataStore()
+        profileDataStore.getHeartRates() { result,error in
+            self.sendResultHeartRateResult(result: result, error: "")
+        }
+    }    
+    
+    func sendResultHeartRateResult(result:[HeartRateInfo],error:String) {
+        var pluginResult = CDVPluginResult (status: CDVCommandStatus_ERROR);
+        if error.isEmpty {
+            
+            //MARK: TODO: Return JSON as message
+            let jsonEncoder = JSONEncoder()
+            let jsonData = try? jsonEncoder.encode(result)
+            let json = String(data: jsonData!, encoding: String.Encoding.utf8)
+            pluginResult = CDVPluginResult(status: CDVCommandStatus_OK, messageAs: json)
+        } else {
+            let errorDict = ["code": "0", "message": error]
+            pluginResult = CDVPluginResult(status: CDVCommandStatus_ERROR, messageAs: errorDict);
+        }
+        self.commandDelegate!.send(pluginResult, callbackId: callbackId);
+        
+    }
+    
+    
+    
 }
 
 
