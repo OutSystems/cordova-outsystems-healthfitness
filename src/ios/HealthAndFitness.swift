@@ -113,6 +113,15 @@ import Foundation
             self.sendResultHeartRateResult(result: result, error: "")
         }
     }    
+
+    @objc(saveSteps:)
+    func saveSteps(command: CDVInvokedUrlCommand) {
+        callbackId = command.callbackId
+        let profileDataStore = ProfileDataStore()
+        profileDataStore.saveSteps(stepsCountValue: 200, date: Date()) { error in
+            
+        }
+    }
     
     func sendResultHeartRateResult(result:[HeartRateInfo],error:String) {
         var pluginResult = CDVPluginResult (status: CDVCommandStatus_ERROR);

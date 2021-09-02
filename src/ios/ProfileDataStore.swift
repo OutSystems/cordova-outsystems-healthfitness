@@ -98,6 +98,35 @@ class ProfileDataStore: NSObject {
         healthKitStore.execute(heartRateQuery!)
      }
 
+    func saveSteps(stepsCountValue: Int,
+                                 date: Date,
+                                 completion: @escaping (Error?) -> Void) {
+            
+        guard let stepCountType = HKQuantityType.quantityType(forIdentifier: .stepCount) else {
+            fatalError("Step Count Type is no longer available in HealthKit")
+        }
+        
+        let stepsCountUnit:HKUnit = HKUnit.count()
+        let stepsCountQuantity = HKQuantity(unit: stepsCountUnit,
+                                           doubleValue: Double(stepsCountValue))
+        
+        let stepsCountSample = HKQuantitySample(type: stepCountType,
+                                               quantity: stepsCountQuantity,
+                                               start: date,
+                                               end: date)
+        
+        HKHealthStore().save(stepsCountSample) { (success, error) in
+            
+            if let error = error {
+                completion(error)
+                print("Error Saving Steps Count Sample: \(error.localizedDescription)")
+            } else {
+                completion(nil)
+                print("Successfully saved Steps Count Sample")
+            }
+        }
+        
+    }
     
 }
 
