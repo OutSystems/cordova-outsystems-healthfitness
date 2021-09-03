@@ -209,7 +209,7 @@ import Foundation
         @objc(saveWeight:)
     func saveWeight(command: CDVInvokedUrlCommand) {
         //MARK TODO: Remove the mock below
-        let weight: Double = 45 * 2.20462 //Convert to Pounds?
+        let weight: Double = 45
         let date = Date()
         //MARK TODO: Remove the comments below for allowing receiving parameters from Cordova
         // Still need to change the OSHealthFitness.js
