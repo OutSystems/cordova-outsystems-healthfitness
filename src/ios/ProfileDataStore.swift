@@ -164,6 +164,33 @@ class ProfileDataStore: NSObject {
     }
 
     
+    class func saveBodyMassSample(bodyMass: Double, date: Date) {
+      
+      //1.  Make sure the body mass type exists
+      guard let bodyMassType = HKQuantityType.quantityType(forIdentifier: .bodyMass) else {
+        fatalError("Body Mass Type is no longer available in HealthKit")
+      }
+        
+      //2.  Use the Count HKUnit to create a body mass quantity
+        let bodyMassQuantity = HKQuantity(unit: HKUnit.gramUnit(with: .kilo),
+                                        doubleValue: bodyMass)
+        
+      let bodyMassSample = HKQuantitySample(type: bodyMassType,
+                                                 quantity: bodyMassQuantity,
+                                                 start: date,
+                                                 end: date)
+        
+      //3.  Save the same to HealthKit
+      HKHealthStore().save(bodyMassSample) { (success, error) in
+          
+        if let error = error {
+          print("Error Saving Body Mass Sample: \(error.localizedDescription)")
+        } else {
+          print("Successfully saved Body Mass Sample")
+        }
+      }
+    }
+    
 }
 
 class HeartRateInfo: Codable{

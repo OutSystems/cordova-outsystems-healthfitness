@@ -205,6 +205,19 @@ import Foundation
         }
         
     }
+
+        @objc(saveWeight:)
+    func saveWeight(command: CDVInvokedUrlCommand) {
+        //MARK TODO: Remove the mock below
+        let weight: Double = 45 * 2.20462 //Convert to Pounds?
+        let date = Date()
+        //MARK TODO: Remove the comments below for allowing receiving parameters from Cordova
+        // Still need to change the OSHealthFitness.js
+        //if let weigth: Double = command.arguments[0] as? Double, let date: Date = (command.arguments[1] as? Date) {
+            ProfileDataStore.saveBodyMassSample(bodyMass: weight, date: date)
+        //}
+        
+    }
     
 }
 
