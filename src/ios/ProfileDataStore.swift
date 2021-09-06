@@ -6,8 +6,19 @@
 //
 
 import HealthKit
+import BackgroundTasks
+import NotificationCenter
+import UserNotifications
+import UserNotificationsUI
 
-class ProfileDataStore: NSObject {
+class ProfileDataStore: NSObject, UNUserNotificationCenterDelegate {
+
+    let notificationCenter = UNUserNotificationCenter.current()
+    let heartRateUnit:HKUnit = HKUnit(from: "count/min")
+    let stepCountUnit:HKUnit = HKUnit(from: "count")
+    let heartRateType:HKQuantityType = HKQuantityType.quantityType(forIdentifier: HKQuantityTypeIdentifier.heartRate)!
+    let stepCountType:HKQuantityType = HKQuantityType.quantityType(forIdentifier: HKQuantityTypeIdentifier.stepCount)!
+    var heartRateQuery:HKSampleQuery?
 
     func getAgeSexAndBloodType() throws -> (age: Int,
                                             biologicalSex: HKBiologicalSex,
@@ -42,15 +53,6 @@ class ProfileDataStore: NSObject {
 //
 //        }
     }
-    
-    
-    //let health: HKHealthStore = HKHealthStore()
-    let heartRateUnit:HKUnit = HKUnit(from: "count/min")
-    let stepCountUnit:HKUnit = HKUnit(from: "count")
-    let heartRateType:HKQuantityType = HKQuantityType.quantityType(forIdentifier: HKQuantityTypeIdentifier.heartRate)!
-    let stepCountType:HKQuantityType = HKQuantityType.quantityType(forIdentifier: HKQuantityTypeIdentifier.stepCount)!
-    var heartRateQuery:HKSampleQuery?
-        
         
     func getHeartRates(completion: @escaping([HeartRateInfo], Error?) -> Void) {
         
@@ -97,6 +99,88 @@ class ProfileDataStore: NSObject {
         
         healthKitStore.execute(heartRateQuery!)
      }
+
+    func requestAuthorization(completion: @escaping  (Bool) -> Void) {
+      UNUserNotificationCenter.current()
+        .requestAuthorization(options: [.alert, .sound, .badge]) { granted, _  in
+          // TODO: Fetch notification settings
+          completion(granted)
+        }
+    }
+    
+    func scheduleNotification(notificationType: String) {
+            
+        let content = UNMutableNotificationContent() // Содержимое уведомления
+        let userActions = "User Actions"
+        
+        content.title = notificationType
+        content.body = "This is example how to create " + notificationType
+        content.sound = UNNotificationSound.default
+        content.badge = 1
+        content.categoryIdentifier = userActions
+        
+        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 5, repeats: false)
+        let identifier = "Local Notification"
+        let request = UNNotificationRequest(identifier: identifier, content: content, trigger: trigger)
+        
+        notificationCenter.add(request) { (error) in
+            if let error = error {
+                print("Error \(error.localizedDescription)")
+            }
+        }
+        
+        let snoozeAction = UNNotificationAction(identifier: "Snooze", title: "Snooze", options: [])
+        let deleteAction = UNNotificationAction(identifier: "Delete", title: "Delete", options: [.destructive])
+        let category = UNNotificationCategory(identifier: userActions,
+                                                actions: [snoozeAction, deleteAction],
+                                                intentIdentifiers: [],
+                                                options: [])
+        
+        notificationCenter.setNotificationCategories([category])
+    }
+    
+    func userNotificationCenter(_ center: UNUserNotificationCenter,
+                                    willPresent notification: UNNotification,
+                                    withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+            
+        completionHandler([.alert,.sound])
+    }
+    
+    func addChangesObserver() {
+        self.requestAuthorization() { _ in
+            print("ok")
+        }
+        
+        let healthKitStore = HKHealthStore()
+        
+        let query = HKObserverQuery(sampleType: bodyMassType, predicate: nil) { [self] (query, completionHandler, errorOrNil) in
+            
+            if let error = errorOrNil {
+                print(error.localizedDescription)
+                return
+            }
+                
+            // If you have subscribed for background updates you must call the completion handler here.
+            print("will call completionHandler")
+            self.scheduleNotification(notificationType: "Teste")
+            completionHandler()
+        }
+        
+        healthKitStore.execute(query)
+        
+        healthKitStore.enableBackgroundDelivery(for: bodyMassType, frequency: .immediate) {succeeded,error in
+
+            if succeeded{
+                print("Enabled background delivery of steps changes")
+            } else {
+                if let theError = error {
+                    print("Failed to enable background delivery of weight changes. ")
+                    print("Error = \(theError)")
+                }
+            }
+        }
+        
+    }
 
     func saveSteps(stepsCountValue: Int,
                                  date: Date,

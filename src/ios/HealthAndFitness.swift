@@ -114,6 +114,13 @@ import Foundation
         }
     }    
 
+    @objc(addChangesObserver:)
+    func addChangesObserver(command: CDVInvokedUrlCommand) {
+        callbackId = command.callbackId
+        let profileDataStore = ProfileDataStore()
+        profileDataStore.addChangesObserver()
+    }
+
     @objc(saveSteps:)
     func saveSteps(command: CDVInvokedUrlCommand) {
         callbackId = command.callbackId
