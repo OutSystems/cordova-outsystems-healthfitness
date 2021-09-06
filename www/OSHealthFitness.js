@@ -1,4 +1,5 @@
 var exec = require('cordova/exec');
+
 exports.initialize = function (success, error) {
     exec(success, error, 'HealthAndFitness', 'initialize');
 };
@@ -24,4 +25,8 @@ exports.loadMostRecentHeight = function (success, error) {
 
 exports.saveWeight = function (success, error) {
         exec(success, error, 'HealthAndFitness', 'saveWeight');
+};        
+
+exports.addChangesObserver = function (dataTypes, success, error) {
+    exec(success, error, 'HealthAndFitness', 'addChangesObserver', [dataTypes]);
 };

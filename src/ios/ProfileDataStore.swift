@@ -18,6 +18,7 @@ class ProfileDataStore: NSObject, UNUserNotificationCenterDelegate {
     let stepCountUnit:HKUnit = HKUnit(from: "count")
     let heartRateType:HKQuantityType = HKQuantityType.quantityType(forIdentifier: HKQuantityTypeIdentifier.heartRate)!
     let stepCountType:HKQuantityType = HKQuantityType.quantityType(forIdentifier: HKQuantityTypeIdentifier.stepCount)!
+    let bodyMassType:HKQuantityType = HKQuantityType.quantityType(forIdentifier: HKQuantityTypeIdentifier.bodyMassIndex)!
     var heartRateQuery:HKSampleQuery?
 
     func getAgeSexAndBloodType() throws -> (age: Int,
