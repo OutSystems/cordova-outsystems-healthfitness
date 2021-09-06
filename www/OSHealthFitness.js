@@ -21,3 +21,7 @@ exports.loadMostRecentWeight = function (success, error) {
 exports.loadMostRecentHeight = function (success, error) {
         exec(success, error, 'HealthAndFitness', 'loadMostRecentHeight');
 };
+
+exports.saveWeight = function (success, error) {
+        exec(success, error, 'HealthAndFitness', 'saveWeight');
+};
