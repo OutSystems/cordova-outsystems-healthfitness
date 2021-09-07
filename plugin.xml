@@ -59,6 +59,7 @@
 		<!-- iOS Source Files -->
 		<source-file src="src/ios/OSHealthFitness.swift" />
 		<source-file src="src/ios/HealthKitManager.swift" />
+    <source-file src="src/ios/HealthFitnessPlugin.swift" />
 
   </platform>
 </plugin>
