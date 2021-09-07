@@ -1,0 +1,7 @@
+
+
+import HealthKit
+
+class HealthKitManager {
+
+}
