@@ -33,12 +33,12 @@
 		<source-file src="src/ios/HealthKitManager.swift" />
 
     <!-- iOS Permissions -->
-    <preference name="HEALTH_SHARE_DESCRIPTION" default=" " />
+    <preference name="HEALTH_SHARE_DESCRIPTION" default="App needs to shared health data" />
     <config-file target="*-Info.plist" parent="NSHealthShareUsageDescription">
         <string>$HEALTH_SHARE_DESCRIPTION</string>
     </config-file>
 
-    <preference name="HEALTH_UPDATE_DESCRIPTION" default=" " />
+    <preference name="HEALTH_UPDATE_DESCRIPTION" default="App needs to use health data" />
     <config-file target="*-Info.plist" parent="NSHealthUpdateUsageDescription">
         <string>$HEALTH_UPDATE_DESCRIPTION</string>
     </config-file>
