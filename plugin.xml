@@ -28,10 +28,6 @@
 		<hook type="before_plugin_install" src="hooks/install_prerequisites.js"/>
     <hook type="after_plugin_add" src="hooks/add_swift_support.js" /> 
 
-		<!-- iOS Source Files -->
-		<source-file src="src/ios/OSHealthFitness.swift" />
-		<source-file src="src/ios/HealthKitManager.swift" />
-
     <!-- iOS Permissions -->
     <preference name="HEALTH_SHARE_DESCRIPTION" default="App needs to shared health data" />
     <config-file target="*-Info.plist" parent="NSHealthShareUsageDescription">
@@ -60,7 +56,9 @@
       <true/>
     </config-file>
       
-    <source-file src="src/ios/HealthFitness.m"/>
-    <header-file src="src/ios/HealthFitness.h"/>
+		<!-- iOS Source Files -->
+		<source-file src="src/ios/OSHealthFitness.swift" />
+		<source-file src="src/ios/HealthKitManager.swift" />
+    
   </platform>
 </plugin>
