@@ -3,13 +3,13 @@
   <name>HealthFitness</name>
   <description>Health &amp; Fitness cordova plugin for OutSystems applications.</description>
   <author>OutSystems Inc</author>
-  <js-module name="HealthFitness" src="www/HealthFitness.js">
+  <js-module name="HealthFitness" src="www/OSHealthFitness.js">
     <clobbers target="cordova.plugins.HealthFitness"/>
   </js-module>
   <platform name="android">
     <config-file parent="/*" target="res/xml/config.xml">
-      <feature name="HealthFitness">
-        <param name="android-package" value="com.outsystems.plugins.healthfitness.HealthFitness"/>
+      <feature name="OSHealthFitness">
+        <param name="android-package" value="com.outsystems.plugins.healthfitness.OSHealthFitness"/>
       </feature>
     </config-file>
     <config-file parent="/*" target="AndroidManifest.xml"/>
@@ -18,7 +18,7 @@
   <platform name="ios">
     <config-file parent="/*" target="config.xml">
 			<feature name="OSHealthFitness">
-				<param name="ios-package" value="com.outsystems.plugins.healthfitness.HealthFitness" />
+				<param name="ios-package" value="com.outsystems.plugins.healthfitness.OSHealthFitness" />
 			</feature>
 			<preference name="deployment-target" value="10" />
       <preference name="UseSwiftLanguageVersion" value="5" />
@@ -59,6 +59,6 @@
 		<!-- iOS Source Files -->
 		<source-file src="src/ios/OSHealthFitness.swift" />
 		<source-file src="src/ios/HealthKitManager.swift" />
-    
+
   </platform>
 </plugin>
