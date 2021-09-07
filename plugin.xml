@@ -18,7 +18,7 @@
   <platform name="ios">
     <config-file parent="/*" target="config.xml">
 			<feature name="OSHealthFitness">
-				<param name="ios-package" value="com.outsystems.plugins.healthfitness.OSHealthFitness" />
+				<param name="ios-package" value="OSHealthFitness" />
 			</feature>
 			<preference name="deployment-target" value="10" />
       <preference name="UseSwiftLanguageVersion" value="5" />
