@@ -1,5 +1,17 @@
 var exec = require('cordova/exec');
 
-exports.coolMethod = function (arg0, success, error) {
-    exec(success, error, 'HealthFitness', 'coolMethod', [arg0]);
+exports.requestPermissions = function (success, error, params) {
+
+    const { 
+        customPermissions, 
+        allVariables = false, 
+        fitnessVariables = false, 
+        healthVariables = false, 
+        profileVariables = false, 
+        groupPermissionsType = false 
+    } = params;
+
+    var args = [customPermissions, allVariables, fitnessVariables, healthVariables, profileVariables, groupPermissionsType];
+
+    exec(success, error, 'HealthFitness', 'requestPermissions', args);
 };
