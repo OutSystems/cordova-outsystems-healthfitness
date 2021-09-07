@@ -13,5 +13,5 @@ exports.requestPermissions = function (success, error, params) {
 
     var args = [customPermissions, allVariables, fitnessVariables, healthVariables, profileVariables, groupPermissionsType];
 
-    exec(success, error, 'HealthFitness', 'requestPermissions', args);
+    exec(success, error, 'OSHealthFitness', 'requestPermissions', args);
 };
