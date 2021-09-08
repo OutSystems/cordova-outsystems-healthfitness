@@ -61,7 +61,8 @@ class OSHealthFitness : CordovaPlugin() {
                 initAndRequestPermissions()
             }
             "getData" -> {
-                getData()
+                dummyGetData()
+                //getData()
             }
             "updateData" -> {
                 updateData()
@@ -174,7 +175,13 @@ class OSHealthFitness : CordovaPlugin() {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
+    private fun dummyGetData() {
+        callBackResult("Ping from Kotlin")
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
     private fun getData() {
+
         val end = LocalDateTime.now()
         val start = end.minusYears(1L)
         val endSeconds = end.atZone(ZoneId.systemDefault()).toEpochSecond()
