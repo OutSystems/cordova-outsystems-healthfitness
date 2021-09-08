@@ -4,7 +4,7 @@
   <description>Health &amp; Fitness cordova plugin for OutSystems applications.</description>
   <author>OutSystems Inc</author>
   <js-module name="HealthFitness" src="www/HealthFitness.js">
-    <clobbers target="cordova.plugins.HealthFitness"/>
+    <clobbers target="cordova.plugins.OSHealthFitness"/>
   </js-module>
   <platform name="android">
 
