@@ -61,8 +61,9 @@ class OSHealthFitness : CordovaPlugin() {
                 initAndRequestPermissions()
             }
             "getData" -> {
-                dummyGetData()
-                //getData()
+                //dummyGetData()
+                getData()
+                return true
             }
             "updateData" -> {
                 updateData()
@@ -75,21 +76,12 @@ class OSHealthFitness : CordovaPlugin() {
     }
 
     fun <T> callBackResult(resultVariable: T, error: String? = null) {
-        resultVariable?.let {
-            val jsonResult = JSONObject()
-            jsonResult.put("value", resultVariable)
-            this.callbackContext?.let {
-                it.success(jsonResult)
-            }
-            return
-        }
-        val jsonResult = JSONObject()
-        jsonResult.put("ErrorCode", 404)
-        jsonResult.put("ErrorMessage", error ?: "No Results")
-        this.callbackContext?.let {
-            it.error(jsonResult)
-        }
+        var pluginResult: PluginResult? = null
 
+        pluginResult = PluginResult(PluginResult.Status.OK, "Hello!")
+        this.callbackContext?.let {
+            it.sendPluginResult(pluginResult)
+        }
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -176,41 +168,16 @@ class OSHealthFitness : CordovaPlugin() {
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     private fun dummyGetData() {
-        callBackResult("Ping from Kotlin")
+
+        callbackContext.let { cbc ->
+        }
+
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     private fun getData() {
 
-        val end = LocalDateTime.now()
-        val start = end.minusYears(1L)
-        val endSeconds = end.atZone(ZoneId.systemDefault()).toEpochSecond()
-        val startSeconds = start.atZone(ZoneId.systemDefault()).toEpochSecond()
-        val context = cordova.context
-        val readRequest = DataReadRequest.Builder()
-                .read(DataType.TYPE_WEIGHT)
-                .setTimeRange(startSeconds, endSeconds, TimeUnit.SECONDS)
-                .setLimit(1)
-                .build()
-        val account = GoogleSignIn.getAccountForExtension(context, fitnessOptions)
-        var resultVariable: Float? = null
-        Fitness.getHistoryClient(context, account).readData(readRequest)
-                .addOnSuccessListener { dataReadResponse: DataReadResponse ->
-                    resultVariable = dataReadResponse.dataSets[0].dataPoints.firstOrNull()
-                            ?.getValue(Field.FIELD_WEIGHT)?.asFloat()
-                    Log.d(
-                            "Access GoogleFit:",
-                            dataReadResponse.dataSets[0].dataPoints.firstOrNull()
-                                    ?.getValue(Field.FIELD_WEIGHT).toString()
-                    )
-                }
-                .addOnFailureListener { dataReadResponse: Exception ->
-                    Log.d(
-                            "TAG",
-                            dataReadResponse.message!!
-                    )
-                }
-        callBackResult(resultVariable)
+        callBackResult("resultVariable")
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)

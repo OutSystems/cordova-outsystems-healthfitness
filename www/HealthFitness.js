@@ -16,14 +16,14 @@ exports.requestPermissions = function (success, error, params) {
     exec(success, error, 'OSHealthFitness', 'requestPermissions', args);
 };
 
-exports.getData = function (arg0, success, error) {
-    exec(success, error, 'OSHealthFitness', 'getData', [arg0]);
+exports.getData = function (success, error) {
+    exec(success, error, 'OSHealthFitness', 'getData');
 };
 
-exports.updateData = function (arg0, success, error) {
-    exec(success, error, 'OSHealthFitness', 'updateData', [arg0]);
+exports.updateData = function (success, error) {
+    exec(success, error, 'OSHealthFitness', 'updateData');
 };
 
-exports.enableBackgroundJob = function (arg0, success, error) {
-    exec(success, error, 'OSHealthFitness', 'enableBackgroundJob', [arg0]);
+exports.enableBackgroundJob = function (success, error) {
+    exec(success, error, 'OSHealthFitness', 'enableBackgroundJob');
 };
