@@ -10,9 +10,9 @@
 
     <config-file parent="/*" target="res/xml/config.xml">
 
-      <feature name="HealthFitness">
-        <param name="android-package" value="com.outsystems.plugins.healthfitness.HealthFitness"/>
-      </feature>
+      <feature name="OSHealthFitness">
+        <param name="android-package" value="com.outsystems.plugins.healthfitness.OSHealthFitness"/>
+      </feature> 
 
       <preference name="GradlePluginKotlinEnabled" value="true" />
       <preference name="GradlePluginKotlinCodeStyle" value="official" />
