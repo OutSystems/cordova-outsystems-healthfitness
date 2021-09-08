@@ -14,7 +14,6 @@ import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.google.android.gms.fitness.data.DataUpdateNotification
-import com.outsystems.rd.HealthFitnessSampleAppPOC.R
 import java.util.concurrent.TimeUnit
 
 
@@ -36,7 +35,7 @@ class MyDataUpdateService : IntentService("MyDataUpdateService") {
         )
         val notif = NotificationCompat.Builder(applicationContext, "com.outsystems.health")
             .setContentTitle("Titulo")
-            .setSmallIcon(R.drawable.ic_stat_name)
+            //.setSmallIcon(R.drawable.ic_stat_name)
             .build()
         NotificationManagerCompat.from(applicationContext).notify(12,notif)
 
