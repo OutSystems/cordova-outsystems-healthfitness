@@ -30,7 +30,7 @@
       <uses-permission android:name="android.permission.BODY_SENSORS" />
     </config-file>
     
-    <source-file src="src/android/com/outsystems/plugins/healthfitness/HealthFitness.kt" target-dir="app/src/main/kotlin/com/outsystems/plugins/healthfitness"/>
+    <source-file src="src/android/com/outsystems/plugins/healthfitness/OSHealthFitness.kt" target-dir="app/src/main/kotlin/com/outsystems/plugins/healthfitness"/>
     <source-file src="src/android/com/outsystems/plugins/healthfitness/MyDataUpdateService.kt" target-dir="app/src/main/kotlin/com/outsystems/plugins/healthfitness"/>
 
     <framework src="src/android/build.gradle" custom="true" type="gradleReference" />

@@ -13,5 +13,17 @@ exports.requestPermissions = function (success, error, params) {
 
     var args = [customPermissions, allVariables, fitnessVariables, healthVariables, profileVariables, groupPermissionsType];
 
-    exec(success, error, 'HealthFitness', 'requestPermissions', args);
+    exec(success, error, 'OSHealthFitness', 'requestPermissions', args);
+};
+
+exports.getData = function (arg0, success, error) {
+    exec(success, error, 'OSHealthFitness', 'getData', [arg0]);
+};
+
+exports.updateData = function (arg0, success, error) {
+    exec(success, error, 'OSHealthFitness', 'updateData', [arg0]);
+};
+
+exports.enableBackgroundJob = function (arg0, success, error) {
+    exec(success, error, 'OSHealthFitness', 'enableBackgroundJob', [arg0]);
 };
