@@ -15,3 +15,7 @@ exports.requestPermissions = function (success, error, params) {
 
     exec(success, error, 'OSHealthFitness', 'requestPermissions', args);
 };
+
+exports.getData = function (success, error) {
+    exec(success, error, 'OSHealthFitness', 'getData');
+};
