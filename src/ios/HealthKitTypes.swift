@@ -1,9 +1,3 @@
-//
-//  HealthKitTypes.swift
-//  iOS health Test App
-//
-//  Created by Carlos Correa on 09/09/2021.
-//
 
 import Foundation
 import HealthKit
@@ -13,10 +7,11 @@ enum HealthTypeEnum: String
 {
     case stepCount = "STEPS",
          heartRate = "HEARTRATE",
-         bodyMass = "BODYMASS",
-         height = "HEIGTH"
+         bodyMass = "WEIGTH",
+         height = "HEIGTH",
+         sleepAnalysis = "SLEEP",
+         activeEnergyBurned = "CALORIES_BURNNED"
 }
-
 
 // MARK: - CustomPermissions
 class CustomPermissions: Codable {
@@ -36,5 +31,27 @@ class CustomPermissions: Codable {
 
 typealias PermissionsArray = [CustomPermissions]
 
+// MARK: - GroupPermissions
+class GroupPermissions: Codable {
+    let isActive: Bool
+    let accessType: String
+    
+    enum CodingKeys: String, CodingKey {
+        case isActive = "IsActive"
+        case accessType = "AccessType"
+    }
 
+    init(isActive: Bool, accessType: String) {
+        self.isActive = isActive
+        self.accessType = accessType
+    }
+    
+}
 
+enum HKVariablesGroup: Error {
+    case all
+    case profile 
+    case fitness
+    case summary
+    case health
+}
