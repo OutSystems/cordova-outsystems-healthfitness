@@ -4,29 +4,25 @@ import Foundation
 class HealthFitnessPlugin {
 
     func getData() -> String {
-        return "Test String as result"
+        let healthKitManager = HealthKitManager()
+        return healthKitManager.getData()
     }
     
-    func requestPermissions(completion: @escaping (Bool, Error?) -> Void) {
+    func requestPermissions(customPermissions:String, completion: @escaping (Bool, Error?) -> Void) {
         
         let healthKitManager = HealthKitManager()
-    
-        healthKitManager.authorizeHealthKit { (authorized, error) in
+        healthKitManager.authorizeHealthKit(customPermissions: customPermissions) { (authorized, error) in
             
-            guard authorized else {
-                if let error = error {
-                    completion(false,error)
-                } else {
-                    completion(true,nil)
-                }
-                
-                return
+            guard let error = error else {
+                return completion(false,error)
             }
             
-            print("HealthKit Successfully Authorized.")
+            if authorized {
+                completion(authorized,error)
+            }
+        
         }
         
     }
-    
     
 }

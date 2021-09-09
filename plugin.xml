@@ -60,6 +60,9 @@
 		<source-file src="src/ios/OSHealthFitness.swift" />
 		<source-file src="src/ios/HealthKitManager.swift" />
     <source-file src="src/ios/HealthFitnessPlugin.swift" />
+    <source-file src="src/ios/CordovaImplementation.swift" />
+    <source-file src="src/ios/HealthKitTypes.swift" />
+    <source-file src="src/ios/IOSPlatformInterface.swift" />
 
   </platform>
 </plugin>

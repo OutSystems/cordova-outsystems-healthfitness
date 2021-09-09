@@ -1,7 +1,7 @@
 import Foundation
 
 @objc(OSHealthFitness)
-class OSHealthFitness: CDVPlugin {
+class OSHealthFitness: CordovaImplementation {
     var plugin: HealthFitnessPlugin?
     var callbackId:String=""
     
@@ -12,45 +12,38 @@ class OSHealthFitness: CDVPlugin {
     @objc(requestPermissions:)
     func requestPermissions(command: CDVInvokedUrlCommand) {
         callbackId = command.callbackId
-    
-        plugin?.requestPermissions() { (authorized, error) in
-            
+        
+        let customPermissions = command.arguments[0] as? String ?? ""
+        let allVariables = command.arguments[1] as? String ?? ""
+        let fitnessVariables = command.arguments[2] as? String ?? ""
+        let healthVariables = command.arguments[3] as? String ?? ""
+        let profileVariables = command.arguments[4] as? String ?? ""
+        let summaryVariables = command.arguments[5] as? String ?? ""
+        
+        print(customPermissions)
+        print(allVariables)
+        print(fitnessVariables)
+        print(healthVariables)
+        print(profileVariables)
+        print(summaryVariables)
+        
+        plugin?.requestPermissions(customPermissions:customPermissions) { [self] (authorized, error) in
             if authorized {
-                self.sendResult(result: "", error: "")
+                self.sendResult(result: "", error: "", callBackID: self.callbackId)
             }
-            
         }
     }
-    
     
     @objc(getData:)
     func getData(command: CDVInvokedUrlCommand) {
         callbackId = command.callbackId
     
         if let resultStr = plugin?.getData() {
-            self.sendResult(result: resultStr, error: "")
+            self.sendResult(result: resultStr, error: "", callBackID: callbackId)
         } else {
-            self.sendResult(result: "", error: "Data is empty")
+            self.sendResult(result: "", error: "Data is empty", callBackID: callbackId)
         }
         
-    }
-    
-    @objc(sendResult:error:)
-    func sendResult(result:String,error:String) {
-        var pluginResult = CDVPluginResult (status: CDVCommandStatus_ERROR);
-        
-        if !result.isEmpty {
-            pluginResult = CDVPluginResult(status: CDVCommandStatus_OK, messageAs: result)
-        } else {
-            pluginResult = CDVPluginResult(status: CDVCommandStatus_OK)
-        }
-        
-        if !error.isEmpty {
-            let errorDict = ["code": "0", "message": error]
-            pluginResult = CDVPluginResult(status: CDVCommandStatus_ERROR, messageAs: errorDict);
-        }
-        
-        self.commandDelegate!.send(pluginResult, callbackId: callbackId);
     }
     
 }
