@@ -4,11 +4,11 @@ exports.requestPermissions = function (success, error, params) {
 
     const { 
         customPermissions, 
-        allVariables = false, 
-        fitnessVariables = false, 
-        healthVariables = false, 
-        profileVariables = false, 
-        summaryVariables = false 
+        allVariables, 
+        fitnessVariables, 
+        healthVariables, 
+        profileVariables, 
+        summaryVariables 
     } = params;
 
     var args = [customPermissions, allVariables, fitnessVariables, healthVariables, profileVariables, summaryVariables];
