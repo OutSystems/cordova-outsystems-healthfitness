@@ -32,6 +32,9 @@
     
     <source-file src="src/android/com/outsystems/plugins/healthfitness/OSHealthFitness.kt" target-dir="app/src/main/kotlin/com/outsystems/plugins/healthfitness"/>
     <source-file src="src/android/com/outsystems/plugins/healthfitness/MyDataUpdateService.kt" target-dir="app/src/main/kotlin/com/outsystems/plugins/healthfitness"/>
+    <source-file src="src/android/com/outsystems/plugins/healthfitness/CordovaImplementation.kt" target-dir="app/src/main/kotlin/com/outsystems/plugins/healthfitness"/>
+    <source-file src="src/android/com/outsystems/plugins/healthfitness/AndroidPlatformInterface.kt" target-dir="app/src/main/kotlin/com/outsystems/plugins/healthfitness"/>
+    <source-file src="src/android/com/outsystems/plugins/healthfitness/store/HealthStore.kt" target-dir="app/src/main/kotlin/com/outsystems/plugins/healthfitness/store"/>
 
     <framework src="src/android/build.gradle" custom="true" type="gradleReference" />
     <framework src="org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.4.3" />

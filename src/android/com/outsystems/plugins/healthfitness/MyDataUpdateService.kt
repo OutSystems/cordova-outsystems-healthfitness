@@ -14,6 +14,7 @@ import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.google.android.gms.fitness.data.DataUpdateNotification
+import com.outsystems.rd.HealthFitnessSampleAppPOC.R
 import java.util.concurrent.TimeUnit
 
 
@@ -26,6 +27,8 @@ class MyDataUpdateService : IntentService("MyDataUpdateService") {
         // use DataReadRequest.
         Log.println(Log.INFO, "Health", "Data Update start1")
 
+
+
         NotificationManagerCompat.from(applicationContext).createNotificationChannel(
             NotificationChannel(
                 "com.outsystems.health",
@@ -35,9 +38,15 @@ class MyDataUpdateService : IntentService("MyDataUpdateService") {
         )
         val notif = NotificationCompat.Builder(applicationContext, "com.outsystems.health")
             .setContentTitle("Titulo")
-            //.setSmallIcon(R.drawable.ic_stat_name)
+//            .setSmallIcon(R.drawable.ic_stat_name)
             .build()
         NotificationManagerCompat.from(applicationContext).notify(12,notif)
+
+        //QUERY FOR COMPARE
+
+        val compare = intent?.getBundleExtra("AMOUNTTOCPMARE").toString()
+
+
 
         update?.apply {
             val start = getUpdateStartTime(TimeUnit.MILLISECONDS)
@@ -48,6 +57,12 @@ class MyDataUpdateService : IntentService("MyDataUpdateService") {
                 Log.INFO,
                 "Health",
                 "Data Update start: $start end: $end DataType: ${dataType.name}"
+            )
+
+            Log.println(
+                Log.INFO,
+                "Healthupdate",
+                update.toString()
             )
         }
     }
