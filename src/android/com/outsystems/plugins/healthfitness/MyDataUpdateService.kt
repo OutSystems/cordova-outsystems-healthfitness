@@ -38,7 +38,8 @@ class MyDataUpdateService : IntentService("MyDataUpdateService") {
         )
         val notif = NotificationCompat.Builder(applicationContext, "com.outsystems.health")
             .setContentTitle("Titulo")
-//            .setSmallIcon(R.drawable.ic_stat_name)
+            //TODO: USE APP ICON
+//            .setSma<llIcon(R.drawable.ic_stat_name)
             .build()
         NotificationManagerCompat.from(applicationContext).notify(12,notif)
 

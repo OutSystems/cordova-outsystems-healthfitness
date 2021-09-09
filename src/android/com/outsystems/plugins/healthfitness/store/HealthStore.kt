@@ -21,39 +21,101 @@ import com.google.android.gms.fitness.request.DataReadRequest
 import com.google.android.gms.fitness.request.DataUpdateListenerRegistrationRequest
 import com.google.android.gms.fitness.request.SensorRequest
 import com.google.android.gms.fitness.result.DataReadResponse
+import com.google.gson.Gson
 import com.outsystems.plugins.healthfitness.AndroidPlatformInterface
 import com.outsystems.plugins.healthfitness.OSHealthFitness
 import com.outsystems.plugins.healthfitness.MyDataUpdateService
+import org.json.JSONArray
+import org.json.JSONObject
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.util.concurrent.TimeUnit
 
-class HealthStore(val platformInterface: AndroidPlatformInterface) {
+enum class EnumAccessType(val value : String) {
+    READ("READ"),
+    WRITE("WRITE"),
+    READWRITE("READWRITE")
+}
+
+class  HealthStore(val platformInterface: AndroidPlatformInterface) {
     var context: Context = platformInterface.getContext()
     var activity: Activity = platformInterface.getActivity()
     
     private var fitnessOptions: FitnessOptions? = null
-    private var googleFitPermission: List<Pair<DataType, Int>> = listOf()
     private var account: GoogleSignInAccount? = null
-    
+
+    private val googleFitVariables: Map<String, GoogleFitVariable> by lazy {
+        mapOf(
+            "HEARTRATE" to GoogleFitVariable(DataType.TYPE_HEART_RATE_BPM),
+            "STEPS" to GoogleFitVariable(DataType.TYPE_STEP_COUNT_DELTA),
+            "WEIGHT" to GoogleFitVariable(DataType.TYPE_WEIGHT)
+        )
+    }
+
     @RequiresApi(Build.VERSION_CODES.O)
+    fun initAndRequestPermissions(args: JSONArray) {
 
 
-    fun initAndRequestPermissions(permissionList: List<Pair<DataType, Int>>) {
-        googleFitPermission = listOf(
-            Pair(DataType.TYPE_STEP_COUNT_DELTA, FitnessOptions.ACCESS_READ),
+        val customPermissions = args.getString(0)
+
+        /*
+        val allVariables = args.getBoolean(1)
+        val fitnessVariables = args.getBoolean(2)
+        val healthVariables = args.getBoolean(3)
+        val profileVariables = args.getBoolean(4)
+        */
+
+        val permissionList = parseCustomPermissions(customPermissions)
+
+        /*
+        val permissionList = listOf(
+            Pair(DataType.TYPE_STEP_COUNT_DELTA, FitnessOptions.ACCESS_WRITE),
             Pair(DataType.AGGREGATE_STEP_COUNT_DELTA, FitnessOptions.ACCESS_READ),
-            Pair(DataType.TYPE_HEART_RATE_BPM, FitnessOptions.ACCESS_READ),
-            Pair(DataType.TYPE_WEIGHT, FitnessOptions.ACCESS_READ),
-            Pair(DataType.TYPE_WEIGHT, FitnessOptions.ACCESS_WRITE),
-            Pair(DataType.TYPE_HEIGHT, FitnessOptions.ACCESS_READ),
+            Pair(DataType.TYPE_CALORIES_EXPENDED, FitnessOptions.ACCESS_READ),
             Pair(DataType.TYPE_HEART_RATE_BPM, FitnessOptions.ACCESS_READ)
         )
-        initFitnessOption(googleFitPermission)
+*/
+
+        initFitnessOptions(permissionList)
+    }
+
+    private fun parseCustomPermissions(permissionsJson : String) : List<Pair<DataType, Int>> {
+
+        val result: MutableList<Pair<DataType, Int>> = mutableListOf()
+        val permissions = Gson().fromJson(permissionsJson, Array<GoogleFitPermission>::class.java)
+
+        permissions.forEach { permission ->
+
+            googleFitVariables[permission.variable]?.let { googleVariable ->
+
+                if(permission.accessType == EnumAccessType.WRITE.value) {
+                    result.add(Pair(googleVariable.dataType, FitnessOptions.ACCESS_WRITE))
+                }
+                else if(permission.accessType == EnumAccessType.READWRITE.value){
+                    result.add(Pair(googleVariable.dataType, FitnessOptions.ACCESS_READ))
+                    result.add(Pair(googleVariable.dataType, FitnessOptions.ACCESS_WRITE))
+                }
+                else {
+                    result.add(Pair(googleVariable.dataType, FitnessOptions.ACCESS_READ))
+                }
+
+            }
+        }
+
+        return result
+    }
+
+    private fun initFitnessOptions(permissionList: List<Pair<DataType, Int>>) {
+        val fitnessBuild = FitnessOptions.builder()
+        permissionList.forEach {
+            fitnessBuild.addDataType(it.first, it.second)
+        }
+        fitnessOptions = fitnessBuild.build()
+        account = GoogleSignIn.getAccountForExtension(context, fitnessOptions!!)
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-     fun requestGoogleFitPermissions() {
+    fun requestGoogleFitPermissions() {
         fitnessOptions?.let {
             GoogleSignIn.requestPermissions(
                 platformInterface.getActivity(),  // your activity
@@ -64,7 +126,7 @@ class HealthStore(val platformInterface: AndroidPlatformInterface) {
         }
     }
 
-     fun checkAllGoogleFitPermissionGranted(): Boolean {
+    fun checkAllGoogleFitPermissionGranted(): Boolean {
         account.let {
             fitnessOptions.let {
                 return GoogleSignIn.hasPermissions(account!!, fitnessOptions!!)
@@ -72,17 +134,7 @@ class HealthStore(val platformInterface: AndroidPlatformInterface) {
         }
     }
 
-     fun initFitnessOption(params: List<Pair<DataType, Int>>) {
-        var fitnessBuild = FitnessOptions.builder()
-        params.forEach {
-            fitnessBuild.addDataType(it.first, it.second)
-        }
-        fitnessOptions = fitnessBuild.build()
-        account = GoogleSignIn.getAccountForExtension(context, fitnessOptions!!)
-    }
-
-
-     fun checkAllPermissionGranted(permissions: Array<String>): Boolean {
+    fun checkAllPermissionGranted(permissions: Array<String>): Boolean {
         permissions.forEach {
             if (ContextCompat.checkSelfPermission(
                     platformInterface.getActivity(),
@@ -94,11 +146,44 @@ class HealthStore(val platformInterface: AndroidPlatformInterface) {
         }
         return true
     }
-    
-    
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    fun getDataAlt() {
+
+        val end = LocalDateTime.now()
+        val start = end.minusDays(1L)
+        val endSeconds = end.atZone(ZoneId.systemDefault()).toEpochSecond()
+        val startSeconds = start.atZone(ZoneId.systemDefault()).toEpochSecond()
+        val context = context
+        val readRequest = DataReadRequest.Builder()
+            .read(DataType.TYPE_CALORIES_EXPENDED)
+            .setTimeRange(startSeconds, endSeconds, TimeUnit.SECONDS)
+            .setLimit(1)
+            .build()
+        val account = GoogleSignIn.getAccountForExtension(context, fitnessOptions)
+        var resultVariable: Float? = null
+        Fitness.getHistoryClient(context, account).readData(readRequest)
+            .addOnSuccessListener { dataReadResponse: DataReadResponse ->
+                resultVariable = dataReadResponse.dataSets[0].dataPoints.firstOrNull()
+                    ?.getValue(Field.FIELD_CALORIES)?.asFloat()
+                Log.d(
+                    "Access GoogleFit:",
+                    dataReadResponse.dataSets[0].dataPoints.firstOrNull()
+                        ?.getValue(Field.FIELD_CALORIES).toString()
+                )
+            }
+            .addOnFailureListener { dataReadResponse: Exception ->
+                Log.d(
+                    "TAG",
+                    dataReadResponse.message!!
+                )
+            }
+        platformInterface.sendPluginResult(resultVariable)
+    }
+
     @RequiresApi(api = Build.VERSION_CODES.O)
      fun getData() {
-        val endTime = LocalDateTime.of(2021,9,8,0,0,0).atZone(ZoneId.systemDefault())
+        val endTime = LocalDateTime.of(2021,9,10,0,0,0).atZone(ZoneId.systemDefault())
         val startTime = endTime.minusDays(7)
 
         val datasource = DataSource.Builder()
@@ -165,7 +250,7 @@ class HealthStore(val platformInterface: AndroidPlatformInterface) {
 
         val dataSourceStep = DataSource.Builder()
             .setDataType(DataType.TYPE_STEP_COUNT_DELTA)
-            .setType(DataSource.TYPE_RAW)
+            //.setType(DataSource.T)
             .build()
 
         Fitness.getRecordingClient(

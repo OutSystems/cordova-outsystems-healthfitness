@@ -40,7 +40,7 @@ class OSHealthFitness : CordovaImplementation() {
         this.callbackContext = callbackContext
         when (action) {
             "requestPermissions" -> {
-                initAndRequestPermissions()
+                initAndRequestPermissions(args)
             }
             "getData" -> {
                 getData()
@@ -52,15 +52,8 @@ class OSHealthFitness : CordovaImplementation() {
     //create array of permission oauth
 
     @RequiresApi(Build.VERSION_CODES.O)
-    private fun initAndRequestPermissions() {
-        healthStore?.initAndRequestPermissions(listOf(
-            Pair(DataType.TYPE_STEP_COUNT_DELTA, FitnessOptions.ACCESS_READ),
-            Pair(DataType.AGGREGATE_STEP_COUNT_DELTA, FitnessOptions.ACCESS_READ),
-            Pair(DataType.TYPE_WEIGHT, FitnessOptions.ACCESS_READ),
-            Pair(DataType.TYPE_WEIGHT, FitnessOptions.ACCESS_WRITE),
-            Pair(DataType.TYPE_HEIGHT, FitnessOptions.ACCESS_READ),
-            Pair(DataType.TYPE_HEART_RATE_BPM, FitnessOptions.ACCESS_READ)
-        ))
+    private fun initAndRequestPermissions(args : JSONArray) {
+        healthStore?.initAndRequestPermissions(args)
         checkAndGrantPermissions()
     }
 
@@ -89,7 +82,7 @@ class OSHealthFitness : CordovaImplementation() {
             Manifest.permission.BODY_SENSORS
         )
         if (checkAllPermissionGranted(permissions)) {
-            healthStore!!.requestGoogleFitPermissions()
+            healthStore?.requestGoogleFitPermissions()
         } else {
             PermissionHelper.requestPermissions(
                 this,
@@ -99,7 +92,6 @@ class OSHealthFitness : CordovaImplementation() {
         }
         return false
     }
-
 
     //Get steps by day
     @RequiresApi(api = Build.VERSION_CODES.O)
