@@ -55,7 +55,6 @@ class  HealthStore(val platformInterface: AndroidPlatformInterface) {
     @RequiresApi(Build.VERSION_CODES.O)
     fun initAndRequestPermissions(args: JSONArray) {
 
-
         val customPermissions = args.getString(0)
 
         /*
@@ -67,27 +66,14 @@ class  HealthStore(val platformInterface: AndroidPlatformInterface) {
 
         val permissionList = parseCustomPermissions(customPermissions)
 
-        /*
-        val permissionList = listOf(
-            Pair(DataType.TYPE_STEP_COUNT_DELTA, FitnessOptions.ACCESS_WRITE),
-            Pair(DataType.AGGREGATE_STEP_COUNT_DELTA, FitnessOptions.ACCESS_READ),
-            Pair(DataType.TYPE_CALORIES_EXPENDED, FitnessOptions.ACCESS_READ),
-            Pair(DataType.TYPE_HEART_RATE_BPM, FitnessOptions.ACCESS_READ)
-        )
-*/
-
         initFitnessOptions(permissionList)
     }
 
     private fun parseCustomPermissions(permissionsJson : String) : List<Pair<DataType, Int>> {
-
         val result: MutableList<Pair<DataType, Int>> = mutableListOf()
         val permissions = Gson().fromJson(permissionsJson, Array<GoogleFitPermission>::class.java)
-
         permissions.forEach { permission ->
-
             googleFitVariables[permission.variable]?.let { googleVariable ->
-
                 if(permission.accessType == EnumAccessType.WRITE.value) {
                     result.add(Pair(googleVariable.dataType, FitnessOptions.ACCESS_WRITE))
                 }
@@ -98,10 +84,8 @@ class  HealthStore(val platformInterface: AndroidPlatformInterface) {
                 else {
                     result.add(Pair(googleVariable.dataType, FitnessOptions.ACCESS_READ))
                 }
-
             }
         }
-
         return result
     }
 
@@ -182,7 +166,7 @@ class  HealthStore(val platformInterface: AndroidPlatformInterface) {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-     fun getData() {
+    fun getData() {
         val endTime = LocalDateTime.of(2021,9,10,0,0,0).atZone(ZoneId.systemDefault())
         val startTime = endTime.minusDays(7)
 
@@ -240,7 +224,7 @@ class  HealthStore(val platformInterface: AndroidPlatformInterface) {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-     fun enableBackgroundJob() {
+    fun enableBackgroundJob() {
 
         val intent = Intent(context, MyDataUpdateService::class.java)
         val pendingIntent =
