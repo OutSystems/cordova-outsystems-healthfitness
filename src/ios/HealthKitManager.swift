@@ -160,11 +160,12 @@ class HealthKitManager {
     }
     
     func parseProfileVariablesPermissons(profileVariables:String){
+        
         let data: Data? = profileVariables.data(using: .utf8)
         if let groupPermissions = try? JSONDecoder().decode(GroupPermissions.self, from: data!) {
+        
             if (groupPermissions.isActive) {
                 if (groupPermissions.accessType == "WRITE") {
-                    
                     for item in allVariablesDictToWrite {
                         healthKitTypesToWrite.insert(item.value)
                     }
@@ -199,6 +200,9 @@ class HealthKitManager {
           return
         }
         
+        let teste = customPermissions.decode(string: customPermissions) as PermissionsArray?
+        print(teste!)
+        
         parseCustomPermissons(customPermissions: customPermissions)
         parseAllVariablesPermissons(allVariables: allVariables)
         parseFitnessVariablesPermissons(fitnessVariables: fitnessVariables)
@@ -222,3 +226,11 @@ class HealthKitManager {
 
 }
 
+extension String {
+    
+    func decode<T: Decodable>(string:String) -> T {
+        let data: Data? = string.data(using: .utf8)
+        return try! JSONDecoder().decode(T.self, from: data!)
+    }
+    
+}

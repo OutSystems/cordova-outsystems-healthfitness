@@ -27,7 +27,13 @@ class OSHealthFitness: CordovaImplementation {
         print(profileVariables)
         print(summaryVariables)
         
-        plugin?.requestPermissions(customPermissions:customPermissions) { [self] (authorized, error) in
+        plugin?.requestPermissions(customPermissions:customPermissions,
+                                   allVariables:allVariables,
+                                   fitnessVariables:fitnessVariables,
+                                   healthVariables:healthVariables,
+                                   profileVariables:profileVariables,
+                                   summaryVariables:summaryVariables)
+        { [self] (authorized, error) in
             if authorized {
                 self.sendResult(result: "", error: "", callBackID: self.callbackId)
             }
