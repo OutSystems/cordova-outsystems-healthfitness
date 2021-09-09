@@ -4,15 +4,14 @@ exports.requestPermissions = function (success, error, params) {
 
     const { 
         customPermissions, 
-        allVariables = false, 
-        fitnessVariables = false, 
-        healthVariables = false, 
-        profileVariables = false, 
-        groupPermissionsType = false 
+        allVariables,
+        fitnessVariables,
+        healthVariables,
+        profileVariables,
+        summaryVariables
     } = params;
 
-    var args = [customPermissions, allVariables, fitnessVariables, healthVariables, profileVariables, groupPermissionsType];
-
+    var args = [customPermissions, allVariables, fitnessVariables, healthVariables, profileVariables, summaryVariables];
     exec(success, error, 'OSHealthFitness', 'requestPermissions', args);
 };
 
