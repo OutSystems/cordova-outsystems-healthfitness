@@ -17,7 +17,7 @@ class HealthKitManager {
          HealthTypeEnum.height.rawValue:HKSampleType.quantityType(forIdentifier: .height)!]
     
     lazy var profileVariablesDictToRead: [String: HKObjectType] =
-        [HealthTypeEnum.stepCount.rawValue:HKObjectType.quantityType(forIdentifier: .bodyMass)!,
+        [HealthTypeEnum.bodyMass.rawValue:HKObjectType.quantityType(forIdentifier: .bodyMass)!,
          HealthTypeEnum.height.rawValue:HKObjectType.quantityType(forIdentifier: .height)!]
     
     lazy var profileVariablesDictToWrite: [String: HKSampleType] =
@@ -33,24 +33,22 @@ class HealthKitManager {
          HealthTypeEnum.activeEnergyBurned.rawValue:HKSampleType.quantityType(forIdentifier:HKQuantityTypeIdentifier.activeEnergyBurned)!]
     
     lazy var healthVariablesDictToRead: [String: HKObjectType] =
-        [HealthTypeEnum.stepCount.rawValue:HKSampleType.categoryType(forIdentifier: .sleepAnalysis)!,
-         HealthTypeEnum.height.rawValue:HKObjectType.quantityType(forIdentifier: .height)!]
+        [HealthTypeEnum.sleepAnalysis.rawValue:HKSampleType.categoryType(forIdentifier: .sleepAnalysis)!,
+         HealthTypeEnum.heartRate.rawValue:HKObjectType.quantityType(forIdentifier: .heartRate)!]
     
     lazy var healthVariablesDictToWrite: [String: HKSampleType] =
         [HealthTypeEnum.sleepAnalysis.rawValue:HKSampleType.categoryType(forIdentifier: .sleepAnalysis)!,
-         HealthTypeEnum.height.rawValue:HKSampleType.quantityType(forIdentifier: .heartRate)!]
+         HealthTypeEnum.heartRate.rawValue:HKSampleType.quantityType(forIdentifier: .heartRate)!]
     
 
     var healthKitTypesToRead = Set<HKObjectType>()
     var healthKitTypesToWrite = Set<HKSampleType>()
 
-
-
     func getData() -> String {
         return "Test String as result"
     }
     
-    func isValidField(dict:[String: Any], variable:String) -> Bool {
+    func isValidVariable(dict:[String: Any], variable:String) -> Bool {
         let filtered = dict.filter { $0.key == variable }
         return !filtered.isEmpty
     }
@@ -60,18 +58,21 @@ class HealthKitManager {
             for element in permissions {
                 let variable = element.variable
                 
-                let existVariableToRead = isValidField(dict: allVariablesDictToRead, variable: variable)
-                let existVariableToWrite = isValidField(dict: allVariablesDictToWrite, variable: variable)
+                let existVariableToRead = isValidVariable(dict: allVariablesDictToRead, variable: variable)
+                let existVariableToWrite = isValidVariable(dict: allVariablesDictToWrite, variable: variable)
                 
-                if (!variable.isEmpty && existVariableToRead && existVariableToWrite) {
-                    if (element.accessType == "WRITE") {
+                if (!variable.isEmpty) {
+                    if (element.accessType == "WRITE" && existVariableToWrite) {
                         healthKitTypesToWrite.insert(allVariablesDictToWrite[variable]!)
-                    }else if (element.accessType == "READWRITE") {
+                    }else if (element.accessType == "READWRITE") && existVariableToRead && existVariableToWrite {
                         healthKitTypesToRead.insert(allVariablesDictToRead[variable]!)
                         healthKitTypesToWrite.insert(allVariablesDictToWrite[variable]!)
+                    } else if (existVariableToRead) {
+                        healthKitTypesToRead.insert(allVariablesDictToRead[variable]!)
                     } else {
-                        healthKitTypesToRead.insert(allVariablesDictToRead[variable]!)
+                        return false
                     }
+                    
                 } else {
                     return false
                 }
@@ -101,11 +102,12 @@ class HealthKitManager {
                             healthVariables:String,
                             profileVariables:String,
                             summaryVariables:String,
-                            completion: @escaping (Bool, Error?) -> Void) {
+                            completion: @escaping (Bool, HealthKitAuthorizationErrors?) -> Void) {
         
-        guard HKHealthStore.isHealthDataAvailable() else {
-            completion(false, HealthKitAuthorizationErrors.notAvailableOnDevice as? Error)
-          return
+        var isAuthorizationValid = true
+        
+        if let error = self.isHealthDataAvailable() {
+            completion(false, error)
         }
         
         let all = allVariables.decode(string: allVariables) as GroupPermissions
@@ -138,22 +140,32 @@ class HealthKitManager {
         
         let permissonsOK = self.parseCustomPermissons(customPermissions: customPermissions)
         if !permissonsOK {
-            return completion(false, HealthKitAuthorizationErrors.dataTypeNotAvailable as? Error)
+            isAuthorizationValid = false
+            completion(false, HealthKitAuthorizationErrors.dataTypeNotAvailable)
         }
         
-        HKHealthStore().requestAuthorization(toShare: healthKitTypesToWrite,
-                                             read: healthKitTypesToRead) { (success, error) in
-            
-            guard let error = error else {
-                return completion(false, HealthKitAuthorizationErrors.notAuthorizedByUser as? Error)
+        if (isAuthorizationValid) {
+            HKHealthStore().requestAuthorization(toShare: healthKitTypesToWrite,
+                                                 read: healthKitTypesToRead) { (success, error) in
+                
+                guard let error = error else {
+                    return completion(false, HealthKitAuthorizationErrors.notAuthorizedByUser)
+                }
+                
+                if success {
+                    completion(success,error as? HealthKitAuthorizationErrors)
+                }
+                
             }
-            
-            if success {
-                completion(success,error)
-            }
-            
         }
         
+    }
+    
+    func isHealthDataAvailable() -> HealthKitAuthorizationErrors? {
+        guard HKHealthStore.isHealthDataAvailable() else {
+            return HealthKitAuthorizationErrors.notAvailableOnDevice
+        }
+        return nil
     }
 
 }

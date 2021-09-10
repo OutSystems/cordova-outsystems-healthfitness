@@ -25,8 +25,7 @@ class OSHealthFitness: CordovaImplementation {
                                    fitnessVariables:fitnessVariables,
                                    healthVariables:healthVariables,
                                    profileVariables:profileVariables,
-                                   summaryVariables:summaryVariables)
-        { [self] (authorized, error) in
+                                   summaryVariables:summaryVariables) { [self] (authorized, error) in
             
             if let err = error {
                 self.sendResult(result: "", error:err.localizedDescription , callBackID: self.callbackId)

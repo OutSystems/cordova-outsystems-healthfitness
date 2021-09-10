@@ -14,7 +14,7 @@ class HealthFitnessPlugin {
                             healthVariables:String,
                             profileVariables:String,
                             summaryVariables:String,
-                            completion: @escaping (Bool, Error?) -> Void) {
+                            completion: @escaping (Bool, HealthKitAuthorizationErrors?) -> Void) {
         
         let healthKitManager = HealthKitManager()
         healthKitManager.authorizeHealthKit(customPermissions: customPermissions,
@@ -25,16 +25,14 @@ class HealthFitnessPlugin {
                                             summaryVariables:summaryVariables)
         { (authorized, error) in
             
-            guard let error = error else {
-                return completion(false,error)
-            }
-            
-            if authorized {
+            if let error = error {
+                completion(false,error)
+            } else if (authorized && error == nil) {
                 completion(authorized,error)
             }
         
         }
-        
+         
     }
     
 }
