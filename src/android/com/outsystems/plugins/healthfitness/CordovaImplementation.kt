@@ -45,21 +45,21 @@ abstract  class CordovaImplementation : CordovaPlugin(), AndroidPlatformInterfac
         super.onActivityResult(requestCode,resultCode,intent)
     }
 
-    override fun <T> sendPluginResult(resultVariable: T, error: String?) {
+    override fun <T> sendPluginResult(resultVariable: T, error: Pair<Int, String>?) {
         var pluginResult: PluginResult? = null
-//        resultVariable?.let {
-//            val jsonResult = JSONObject()
-//            jsonResult.put("value", resultVariable)
-//            pluginResult = PluginResult(PluginResult.Status.OK, "dsfsdfds")
-//            this.callbackContext?.let {
-//                it.sendPluginResult(pluginResult)
-//            }
-//            return
-//        }
-//        val jsonResult = JSONObject()
-//        jsonResult.put("ErrorCode", 404)
-//        jsonResult.put("ErrorMessage", error ?: "No Results")
-        pluginResult = PluginResult(PluginResult.Status.OK, "HOLA")
+        resultVariable?.let {
+            val jsonResult = JSONObject()
+            jsonResult.put("value", resultVariable)
+            pluginResult = PluginResult(PluginResult.Status.OK, jsonResult)
+            this.callbackContext?.let {
+                it.sendPluginResult(pluginResult)
+            }
+            return
+        }
+        val jsonResult = JSONObject()
+        jsonResult.put("errorCode", error?.first)
+        jsonResult.put("errorMessage", error?.second ?: "No Results")
+        pluginResult = PluginResult(PluginResult.Status.ERROR, jsonResult)
         this.callbackContext?.let {
             it.sendPluginResult(pluginResult)
         }
