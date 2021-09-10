@@ -24,15 +24,15 @@ abstract  class CordovaImplementation : CordovaPlugin(), AndroidPlatformInterfac
         super.initialize(cordova, webView)
     }
 
-    override fun getContext(): Context {
+     override fun getContext(): Context {
         return cordova.context
     }
 
-    override fun getActivity(): Activity {
+     override fun getActivity(): Activity {
         return cordova.activity
     }
 
-    fun onPermissionResult(
+     fun onPermissionResult(
         requestCode: Int, permissions: Array<String>,
         grantResults: IntArray
     ) {
@@ -49,7 +49,7 @@ abstract  class CordovaImplementation : CordovaPlugin(), AndroidPlatformInterfac
         var pluginResult: PluginResult? = null
         resultVariable?.let {
             val jsonResult = JSONObject()
-            jsonResult.put("value", resultVariable)
+            jsonResult.put("result", resultVariable)
             pluginResult = PluginResult(PluginResult.Status.OK, jsonResult)
             this.callbackContext?.let {
                 it.sendPluginResult(pluginResult)
@@ -57,8 +57,8 @@ abstract  class CordovaImplementation : CordovaPlugin(), AndroidPlatformInterfac
             return
         }
         val jsonResult = JSONObject()
-        jsonResult.put("errorCode", error?.first)
-        jsonResult.put("errorMessage", error?.second ?: "No Results")
+        jsonResult.put("code", error?.first)
+        jsonResult.put("message", error?.second ?: "No Results")
         pluginResult = PluginResult(PluginResult.Status.ERROR, jsonResult)
         this.callbackContext?.let {
             it.sendPluginResult(pluginResult)
