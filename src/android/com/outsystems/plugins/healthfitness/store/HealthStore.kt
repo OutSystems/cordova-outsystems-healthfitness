@@ -175,13 +175,7 @@ class  HealthStore(val platformInterface: AndroidPlatformInterface) {
         val permissions = gson.fromJson(permissionsJson, Array<GoogleFitPermission>::class.java)
 
         permissions.forEach { permission ->
-
-            var googleVariable : GoogleFitVariable? = null
-            googleVariable = fitnessVariablesMap[permission.variable]
-            googleVariable = healthVariablesMap[permission.variable]
-            googleVariable = profileVariablesMap[permission.variable]
-            googleVariable = summaryVariablesMap[permission.variable]
-
+            val googleVariable = getVariableByName(permission.variable)
             googleVariable?.let { it ->
                 if(permission.accessType == EnumAccessType.WRITE.value) {
                     result.add(Pair(it.dataType, FitnessOptions.ACCESS_WRITE))
@@ -194,9 +188,21 @@ class  HealthStore(val platformInterface: AndroidPlatformInterface) {
                     result.add(Pair(it.dataType, FitnessOptions.ACCESS_READ))
                 }
             }
-
         }
+
         return result
+    }
+
+    private fun getVariableByName(name : String) : GoogleFitVariable? {
+        return if(healthVariablesMap.containsKey(name)){
+            healthVariablesMap[name]
+        } else if(profileVariablesMap.containsKey(name)){
+            profileVariablesMap[name]
+        } else if(summaryVariablesMap.containsKey(name)){
+            summaryVariablesMap[name]
+        } else {
+            null
+        }
     }
 
     private fun initFitnessOptions(permissionList: List<Pair<DataType, Int>>) {
