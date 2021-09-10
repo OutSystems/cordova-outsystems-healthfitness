@@ -44,11 +44,7 @@ class HealthKitManager {
     var healthKitTypesToRead = Set<HKObjectType>()
     var healthKitTypesToWrite = Set<HKSampleType>()
 
-    private enum HealthKitAuthorizationError: Error {
-        case notAvailableOnDevice
-        case dataTypeNotAvailable
-        case notAuthorizedByUser
-    }
+
 
     func getData() -> String {
         return "Test String as result"
@@ -59,7 +55,7 @@ class HealthKitManager {
         return !filtered.isEmpty
     }
     
-    func parseCustomPermissons(customPermissions:String){
+    func parseCustomPermissons(customPermissions:String) -> Bool {
         if let permissions = customPermissions.decode(string: customPermissions) as PermissionsArray?{
             for element in permissions {
                 let variable = element.variable
@@ -76,14 +72,19 @@ class HealthKitManager {
                     } else {
                         healthKitTypesToRead.insert(allVariablesDictToRead[variable]!)
                     }
+                } else {
+                    return false
                 }
             }
         }
+        
+        return true
     }
     
     func processVariables(dictToRead:[String: HKObjectType],
                         dictToWrite:[String: HKSampleType],
-                        groupPermissions:GroupPermissions) {
+                        groupPermissions:GroupPermissions)
+    {
         if (groupPermissions.accessType == "WRITE") {
             for item in dictToWrite { healthKitTypesToWrite.insert(item.value) }
         } else if (groupPermissions.accessType == "READWRITE") {
@@ -103,7 +104,7 @@ class HealthKitManager {
                             completion: @escaping (Bool, Error?) -> Void) {
         
         guard HKHealthStore.isHealthDataAvailable() else {
-          completion(false, HealthKitAuthorizationError.notAvailableOnDevice)
+            completion(false, HealthKitAuthorizationErrors.notAvailableOnDevice as? Error)
           return
         }
         
@@ -135,13 +136,16 @@ class HealthKitManager {
                                   groupPermissions: profile)
         }
         
-        self.parseCustomPermissons(customPermissions: customPermissions)
-
+        let permissonsOK = self.parseCustomPermissons(customPermissions: customPermissions)
+        if !permissonsOK {
+            return completion(false, HealthKitAuthorizationErrors.dataTypeNotAvailable as? Error)
+        }
+        
         HKHealthStore().requestAuthorization(toShare: healthKitTypesToWrite,
                                              read: healthKitTypesToRead) { (success, error) in
             
             guard let error = error else {
-                return completion(false, HealthKitAuthorizationError.notAuthorizedByUser)
+                return completion(false, HealthKitAuthorizationErrors.notAuthorizedByUser as? Error)
             }
             
             if success {
@@ -160,5 +164,5 @@ extension String {
         let data: Data? = string.data(using: .utf8)
         return try! JSONDecoder().decode(T.self, from: data!)
     }
-    
+
 }

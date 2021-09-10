@@ -27,6 +27,11 @@ class OSHealthFitness: CordovaImplementation {
                                    profileVariables:profileVariables,
                                    summaryVariables:summaryVariables)
         { [self] (authorized, error) in
+            
+            if let err = error {
+                self.sendResult(result: "", error:err.localizedDescription , callBackID: self.callbackId)
+            }
+            
             if authorized {
                 self.sendResult(result: "", error: "", callBackID: self.callbackId)
             }
