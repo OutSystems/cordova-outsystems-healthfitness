@@ -9,4 +9,7 @@ The changes documented here do not include those from the original repository.
 ## [Unreleased]
 
 ## 2021-09-10
+- Added code to check for google play services (https://outsystemsrd.atlassian.net/browse/RMET-830)
+
+## 2021-09-10
 - Implemented RequestPermissions for Android (https://outsystemsrd.atlassian.net/browse/RMET-971)

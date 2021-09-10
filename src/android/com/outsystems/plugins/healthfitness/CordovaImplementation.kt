@@ -65,4 +65,6 @@ abstract  class CordovaImplementation : CordovaPlugin(), AndroidPlatformInterfac
         }
     }
 
+    abstract override fun areGooglePlayServicesAvailable(callbackContext: CallbackContext): Boolean
+
 }

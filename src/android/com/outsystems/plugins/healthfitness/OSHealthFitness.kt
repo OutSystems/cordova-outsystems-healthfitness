@@ -6,6 +6,8 @@ import android.content.pm.PackageManager
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
+import com.google.android.gms.common.ConnectionResult
+import com.google.android.gms.common.GoogleApiAvailability
 import com.google.android.gms.fitness.FitnessOptions
 import com.google.android.gms.fitness.data.*
 import com.outsystems.plugins.healthfitness.store.HealthStore
@@ -38,6 +40,11 @@ class OSHealthFitness : CordovaImplementation() {
         callbackContext: CallbackContext
     ): Boolean {
         this.callbackContext = callbackContext
+
+        if(!areGooglePlayServicesAvailable(callbackContext)) {
+            return false;
+        }
+
         when (action) {
             "requestPermissions" -> {
                 initAndRequestPermissions(args)
@@ -109,6 +116,24 @@ class OSHealthFitness : CordovaImplementation() {
         }
     }
 
+    override fun areGooglePlayServicesAvailable(callbackContext: CallbackContext): Boolean {
+        val googleApiAvailability = GoogleApiAvailability.getInstance()
+        val status = googleApiAvailability.isGooglePlayServicesAvailable(cordova.activity)
+
+        if (status != ConnectionResult.SUCCESS) {
+            var result: Pair<Int, String>? = null
+            result = if (googleApiAvailability.isUserResolvableError(status)) {
+                googleApiAvailability.getErrorDialog(cordova.activity, status, 1).show()
+                Pair(HealthFitnessError.GOOGLE_SERVICES_ERROR_RESOLVABLE.code, HealthFitnessError.GOOGLE_SERVICES_ERROR_RESOLVABLE.message)
+            } else {
+                Pair(HealthFitnessError.GOOGLE_SERVICES_ERROR.code, HealthFitnessError.GOOGLE_SERVICES_ERROR.message)
+            }
+            sendPluginResult(null, result)
+            return false
+        }
+        return true
+    }
+
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onRequestPermissionResult(
         requestCode: Int,
@@ -118,7 +143,7 @@ class OSHealthFitness : CordovaImplementation() {
         when (requestCode) {
             ACTIVITY_LOCATION_PERMISSIONS_REQUEST_CODE -> {
                 // If request is cancelled, the result arrays are empty.
-                if (grantResults.size > 0 &&
+                if (grantResults.isNotEmpty() &&
                     grantResults[0] == PackageManager.PERMISSION_GRANTED
                 ) {
                     checkAndGrantPermissions()
