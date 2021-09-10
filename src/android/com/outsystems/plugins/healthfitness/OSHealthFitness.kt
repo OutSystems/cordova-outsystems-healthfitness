@@ -43,7 +43,7 @@ class OSHealthFitness : CordovaImplementation() {
                 initAndRequestPermissions(args)
             }
             "getData" -> {
-                getData()
+                getData(args)
             }
         }
         return true
@@ -95,8 +95,8 @@ class OSHealthFitness : CordovaImplementation() {
 
     //Get steps by day
     @RequiresApi(api = Build.VERSION_CODES.O)
-    private fun getData() {
-        healthStore!!.getData()
+    private fun getData(args : JSONArray) {
+        healthStore?.getData(args)
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -104,7 +104,7 @@ class OSHealthFitness : CordovaImplementation() {
         super.onActivityResult(requestCode, resultCode, intent)
         when (requestCode) {
             GOOGLE_FIT_PERMISSIONS_REQUEST_CODE -> {
-                healthStore!!.getData()
+
             }
         }
     }

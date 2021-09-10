@@ -271,7 +271,8 @@ class  HealthStore(val platformInterface: AndroidPlatformInterface) {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    fun getData() {
+    fun getData(args : JSONArray) {
+
         val endTime = LocalDateTime.of(2021,9,10,0,0,0).atZone(ZoneId.systemDefault())
         val startTime = endTime.minusDays(7)
 
@@ -281,6 +282,7 @@ class  HealthStore(val platformInterface: AndroidPlatformInterface) {
             .setType(DataSource.TYPE_DERIVED)
             .setStreamName("estimated_steps")
             .build()
+
         val readRequest = DataReadRequest.Builder()
 //            .read(DataType.TYPE_STEP_COUNT_DELTA)
             .setTimeRange(startTime.toEpochSecond(), endTime.toEpochSecond(), TimeUnit.SECONDS)
@@ -289,7 +291,9 @@ class  HealthStore(val platformInterface: AndroidPlatformInterface) {
             .aggregate(datasource)
 //            .aggregate(DataType.AGGREGATE_STEP_COUNT_DELTA)
             .build()
+
         val account = GoogleSignIn.getAccountForExtension(context, fitnessOptions)
+
         var resultVariable: String? = null
         Log.d(
             "Start date",
@@ -299,6 +303,7 @@ class  HealthStore(val platformInterface: AndroidPlatformInterface) {
             "END date",
             endTime.dayOfMonth.toString() + "-" + endTime.month.toString() +  "-" + endTime.year.toString()
         )
+
         Fitness.getHistoryClient(context, account).readData(readRequest)
             .addOnSuccessListener { dataReadResponse: DataReadResponse ->
 //                resultVariable = dataReadResponse.dataSets[0].dataPoints.firstOrNull()
