@@ -20,13 +20,6 @@ class OSHealthFitness: CordovaImplementation {
         let profileVariables = command.arguments[4] as? String ?? ""
         let summaryVariables = command.arguments[5] as? String ?? ""
         
-        print(customPermissions)
-        print(allVariables)
-        print(fitnessVariables)
-        print(healthVariables)
-        print(profileVariables)
-        print(summaryVariables)
-        
         plugin?.requestPermissions(customPermissions:customPermissions,
                                    allVariables:allVariables,
                                    fitnessVariables:fitnessVariables,

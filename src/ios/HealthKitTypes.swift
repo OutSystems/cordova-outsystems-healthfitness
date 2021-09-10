@@ -7,7 +7,7 @@ enum HealthTypeEnum: String
 {
     case stepCount = "STEPS",
          heartRate = "HEARTRATE",
-         bodyMass = "WEIGTH",
+         bodyMass = "WEIGHT",
          height = "HEIGTH",
          sleepAnalysis = "SLEEP",
          activeEnergyBurned = "CALORIES_BURNNED"
@@ -46,12 +46,4 @@ class GroupPermissions: Codable {
         self.accessType = accessType
     }
     
-}
-
-enum HKVariablesGroup: Error {
-    case all
-    case profile 
-    case fitness
-    case summary
-    case health
 }

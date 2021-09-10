@@ -5,12 +5,14 @@ class HealthKitManager {
     lazy var allVariablesDictToRead: [String: HKObjectType] =
         [HealthTypeEnum.stepCount.rawValue:HKObjectType.quantityType(forIdentifier: .stepCount)!,
          HealthTypeEnum.heartRate.rawValue:HKObjectType.quantityType(forIdentifier: .heartRate)!,
+         HealthTypeEnum.bodyMass.rawValue:HKObjectType.quantityType(forIdentifier: .bodyMass)!,
          HealthTypeEnum.activeEnergyBurned.rawValue:HKObjectType.quantityType(forIdentifier:HKQuantityTypeIdentifier.activeEnergyBurned)!,
          HealthTypeEnum.height.rawValue:HKObjectType.quantityType(forIdentifier: .height)!]
     
     lazy var allVariablesDictToWrite: [String: HKSampleType] =
         [HealthTypeEnum.stepCount.rawValue:HKSampleType.quantityType(forIdentifier: .stepCount)!,
          HealthTypeEnum.heartRate.rawValue:HKSampleType.quantityType(forIdentifier: .heartRate)!,
+         HealthTypeEnum.bodyMass.rawValue:HKSampleType.quantityType(forIdentifier: .bodyMass)!,
          HealthTypeEnum.activeEnergyBurned.rawValue:HKSampleType.quantityType(forIdentifier:HKQuantityTypeIdentifier.activeEnergyBurned)!,
          HealthTypeEnum.height.rawValue:HKSampleType.quantityType(forIdentifier: .height)!]
     
@@ -52,14 +54,20 @@ class HealthKitManager {
         return "Test String as result"
     }
     
+    func isValidField(dict:[String: Any], variable:String) -> Bool {
+        let filtered = dict.filter { $0.key == variable }
+        return !filtered.isEmpty
+    }
+    
     func parseCustomPermissons(customPermissions:String){
-        let data: Data? = customPermissions.data(using: .utf8)
-        if let permissions = try? JSONDecoder().decode(PermissionsArray.self, from: data!) {
-            
-            
+        if let permissions = customPermissions.decode(string: customPermissions) as PermissionsArray?{
             for element in permissions {
                 let variable = element.variable
-                if (!variable.isEmpty) {
+                
+                let existVariableToRead = isValidField(dict: allVariablesDictToRead, variable: variable)
+                let existVariableToWrite = isValidField(dict: allVariablesDictToWrite, variable: variable)
+                
+                if (!variable.isEmpty && existVariableToRead && existVariableToWrite) {
                     if (element.accessType == "WRITE") {
                         healthKitTypesToWrite.insert(allVariablesDictToWrite[variable]!)
                     }else if (element.accessType == "READWRITE") {
@@ -69,121 +77,20 @@ class HealthKitManager {
                         healthKitTypesToRead.insert(allVariablesDictToRead[variable]!)
                     }
                 }
-
-            }
-        }
-        
-    }
-    
-    func parseAllVariablesPermissons(allVariables:String){
-        let data: Data? = allVariables.data(using: .utf8)
-        if let groupPermissions = try? JSONDecoder().decode(GroupPermissions.self, from: data!) {
-            if (groupPermissions.isActive) {
-                
-                if (groupPermissions.accessType == "WRITE") {
-                    for item in allVariablesDictToWrite {
-                        healthKitTypesToWrite.insert(item.value)
-                    }
-                    
-                } else if (groupPermissions.accessType == "READWRITE") {
-                    
-                    for item in allVariablesDictToRead {
-                        healthKitTypesToRead.insert(item.value)
-                    }
-                    for item in allVariablesDictToWrite {
-                        healthKitTypesToWrite.insert(item.value)
-                    }
-                } else {
-                    for item in allVariablesDictToRead {
-                        healthKitTypesToRead.insert(item.value)
-                    }
-                }
-                    
-            }
-            
-        }
-        
-    }
-    
-    func parseFitnessVariablesPermissons(fitnessVariables:String){
-        let data: Data? = fitnessVariables.data(using: .utf8)
-        if let groupPermissions = try? JSONDecoder().decode(GroupPermissions.self, from: data!) {
-            if (groupPermissions.isActive) {
-                if (groupPermissions.accessType == "WRITE") {
-                    
-                    for item in allVariablesDictToWrite {
-                        healthKitTypesToWrite.insert(item.value)
-                    }
-                    
-                } else if (groupPermissions.accessType == "READWRITE") {
-                    
-                    for item in allVariablesDictToRead {
-                        healthKitTypesToRead.insert(item.value)
-                    }
-                    for item in allVariablesDictToWrite {
-                        healthKitTypesToWrite.insert(item.value)
-                    }
-                } else {
-                    for item in allVariablesDictToRead {
-                        healthKitTypesToRead.insert(item.value)
-                    }
-                }
             }
         }
     }
     
-    func parseHealthVariablesPermissons(healthVariables:String){
-        let data: Data? = healthVariables.data(using: .utf8)
-        if let groupPermissions = try? JSONDecoder().decode(GroupPermissions.self, from: data!) {
-            if (groupPermissions.isActive) {
-                if (groupPermissions.accessType == "WRITE") {
-                    
-                    for item in allVariablesDictToWrite {
-                        healthKitTypesToWrite.insert(item.value)
-                    }
-                    
-                } else if (groupPermissions.accessType == "READWRITE") {
-                    
-                    for item in allVariablesDictToRead {
-                        healthKitTypesToRead.insert(item.value)
-                    }
-                    for item in allVariablesDictToWrite {
-                        healthKitTypesToWrite.insert(item.value)
-                    }
-                } else {
-                    for item in allVariablesDictToRead {
-                        healthKitTypesToRead.insert(item.value)
-                    }
-                }
-            }
-        }
-    }
-    
-    func parseProfileVariablesPermissons(profileVariables:String){
-        
-        let data: Data? = profileVariables.data(using: .utf8)
-        if let groupPermissions = try? JSONDecoder().decode(GroupPermissions.self, from: data!) {
-        
-            if (groupPermissions.isActive) {
-                if (groupPermissions.accessType == "WRITE") {
-                    for item in allVariablesDictToWrite {
-                        healthKitTypesToWrite.insert(item.value)
-                    }
-                    
-                } else if (groupPermissions.accessType == "READWRITE") {
-                    
-                    for item in allVariablesDictToRead {
-                        healthKitTypesToRead.insert(item.value)
-                    }
-                    for item in allVariablesDictToWrite {
-                        healthKitTypesToWrite.insert(item.value)
-                    }
-                } else {
-                    for item in allVariablesDictToRead {
-                        healthKitTypesToRead.insert(item.value)
-                    }
-                }
-            }
+    func processVariables(dictToRead:[String: HKObjectType],
+                        dictToWrite:[String: HKSampleType],
+                        groupPermissions:GroupPermissions) {
+        if (groupPermissions.accessType == "WRITE") {
+            for item in dictToWrite { healthKitTypesToWrite.insert(item.value) }
+        } else if (groupPermissions.accessType == "READWRITE") {
+            for item in dictToRead { healthKitTypesToRead.insert(item.value) }
+            for item in dictToWrite { healthKitTypesToWrite.insert(item.value) }
+        } else {
+            for item in dictToRead { healthKitTypesToRead.insert(item.value) }
         }
     }
     
@@ -200,14 +107,35 @@ class HealthKitManager {
           return
         }
         
-        let teste = customPermissions.decode(string: customPermissions) as PermissionsArray?
-        print(teste!)
+        let all = allVariables.decode(string: allVariables) as GroupPermissions
+        if all.isActive {
+            self.processVariables(dictToRead: allVariablesDictToRead,
+                                  dictToWrite: allVariablesDictToWrite,
+                                  groupPermissions: all)
+        }
         
-        parseCustomPermissons(customPermissions: customPermissions)
-        parseAllVariablesPermissons(allVariables: allVariables)
-        parseFitnessVariablesPermissons(fitnessVariables: fitnessVariables)
-        parseHealthVariablesPermissons(healthVariables: healthVariables)
-        parseProfileVariablesPermissons(profileVariables: profileVariables)
+        let fitness = fitnessVariables.decode(string: fitnessVariables) as GroupPermissions
+        if fitness.isActive {
+            self.processVariables(dictToRead: fitnessVariablesDictToRead,
+                                  dictToWrite: fitnessVariablesDictToWrite,
+                                  groupPermissions: fitness)
+        }
+        
+        let health = healthVariables.decode(string: healthVariables) as GroupPermissions
+        if health.isActive {
+            self.processVariables(dictToRead: healthVariablesDictToRead,
+                                  dictToWrite: healthVariablesDictToWrite,
+                                  groupPermissions: health)
+        }
+        
+        let profile = profileVariables.decode(string: profileVariables) as GroupPermissions
+        if profile.isActive {
+            self.processVariables(dictToRead: profileVariablesDictToRead,
+                                  dictToWrite: profileVariablesDictToWrite,
+                                  groupPermissions: profile)
+        }
+        
+        self.parseCustomPermissons(customPermissions: customPermissions)
 
         HKHealthStore().requestAuthorization(toShare: healthKitTypesToWrite,
                                              read: healthKitTypesToRead) { (success, error) in
