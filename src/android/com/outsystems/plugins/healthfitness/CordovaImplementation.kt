@@ -24,15 +24,15 @@ abstract  class CordovaImplementation : CordovaPlugin(), AndroidPlatformInterfac
         super.initialize(cordova, webView)
     }
 
-     override fun getContext(): Context {
+    override fun getContext(): Context {
         return cordova.context
     }
 
-     override fun getActivity(): Activity {
+    override fun getActivity(): Activity {
         return cordova.activity
     }
 
-     fun onPermissionResult(
+    fun onPermissionResult(
         requestCode: Int, permissions: Array<String>,
         grantResults: IntArray
     ) {
