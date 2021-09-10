@@ -51,18 +51,6 @@ class  HealthStore(val platformInterface: AndroidPlatformInterface) {
     private var account: GoogleSignInAccount? = null
     private val gson: Gson by lazy { Gson() }
 
-    private val googleFitVariablesMap: Map<String, GoogleFitVariable> by lazy {
-        mapOf(
-            "HEART_RATE" to GoogleFitVariable(DataType.TYPE_HEART_RATE_BPM),
-            "STEPS" to GoogleFitVariable(DataType.TYPE_STEP_COUNT_DELTA),
-            "HEIGHT" to GoogleFitVariable(DataType.TYPE_HEIGHT),
-            "WEIGHT" to GoogleFitVariable(DataType.TYPE_WEIGHT),
-            "CALORIES_BURNED" to GoogleFitVariable(DataType.TYPE_CALORIES_EXPENDED),
-            "SLEEP" to GoogleFitVariable(DataType.TYPE_SLEEP_SEGMENT),
-            "HEIGHT_SUMMARY" to GoogleFitVariable(DataType.AGGREGATE_HEIGHT_SUMMARY),
-            "WEIGHT_SUMMARY" to GoogleFitVariable(DataType.AGGREGATE_WEIGHT_SUMMARY)
-        )
-    }
     private val fitnessVariablesMap: Map<String, GoogleFitVariable> by lazy {
         mapOf(
             "STEPS" to GoogleFitVariable(DataType.TYPE_STEP_COUNT_DELTA),
@@ -165,8 +153,17 @@ class  HealthStore(val platformInterface: AndroidPlatformInterface) {
 
     private fun parseAllVariablesPermissions(allVariablesPermissions: GoogleFitGroupPermission?): MutableList<Pair<DataType, Int>> {
         val result: MutableList<Pair<DataType, Int>> = mutableListOf()
-        googleFitVariablesMap.forEach { variable ->
-            allVariablesPermissions?.let {
+        allVariablesPermissions?.let {
+            fitnessVariablesMap.forEach { variable ->
+                processAccessType(variable, result, it)
+            }
+            healthVariablesMap.forEach { variable ->
+                processAccessType(variable, result, it)
+            }
+            profileVariablesMap.forEach { variable ->
+                processAccessType(variable, result, it)
+            }
+            summaryVariablesMap.forEach { variable ->
                 processAccessType(variable, result, it)
             }
         }
@@ -176,20 +173,28 @@ class  HealthStore(val platformInterface: AndroidPlatformInterface) {
     private fun parseCustomPermissions(permissionsJson : String, permissionList: List<Pair<DataType, Int>>) : List<Pair<DataType, Int>> {
         val result: MutableList<Pair<DataType, Int>> = mutableListOf()
         val permissions = gson.fromJson(permissionsJson, Array<GoogleFitPermission>::class.java)
+
         permissions.forEach { permission ->
-            googleFitVariablesMap[permission.variable]?.let { googleVariable ->
+
+            var googleVariable : GoogleFitVariable? = null
+            googleVariable = fitnessVariablesMap[permission.variable]
+            googleVariable = healthVariablesMap[permission.variable]
+            googleVariable = profileVariablesMap[permission.variable]
+            googleVariable = summaryVariablesMap[permission.variable]
+
+            googleVariable?.let { it ->
                 if(permission.accessType == EnumAccessType.WRITE.value) {
-                    result.add(Pair(googleVariable.dataType, FitnessOptions.ACCESS_WRITE))
+                    result.add(Pair(it.dataType, FitnessOptions.ACCESS_WRITE))
                 }
                 else if(permission.accessType == EnumAccessType.READWRITE.value){
-                    result.add(Pair(googleVariable.dataType, FitnessOptions.ACCESS_READ))
-                    result.add(Pair(googleVariable.dataType, FitnessOptions.ACCESS_WRITE))
+                    result.add(Pair(it.dataType, FitnessOptions.ACCESS_READ))
+                    result.add(Pair(it.dataType, FitnessOptions.ACCESS_WRITE))
                 }
                 else {
-                    result.add(Pair(googleVariable.dataType, FitnessOptions.ACCESS_READ))
+                    result.add(Pair(it.dataType, FitnessOptions.ACCESS_READ))
                 }
-
             }
+
         }
         return result
     }
