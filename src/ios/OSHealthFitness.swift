@@ -37,16 +37,33 @@ class OSHealthFitness: CordovaImplementation {
         }
     }
     
-    @objc(getData:)
-    func getData(command: CDVInvokedUrlCommand) {
+    @objc(queryData:)
+    func queryData(command: CDVInvokedUrlCommand) {
         callbackId = command.callbackId
-    
-        if let resultStr = plugin?.getData() {
-            self.sendResult(result: resultStr, error: "", callBackID: callbackId)
-        } else {
-            self.sendResult(result: "", error: "Data is empty", callBackID: callbackId)
+
+        if let startDateInput = command.arguments[0] as? String,
+           let endDateInput = command.arguments[1] as? String,
+           let dataType = command.arguments[2] as? String {
+
+            let startDate = Date(startDateInput)
+            let endDate = Date(endDateInput)
+
+            if let resultStr = plugin?.queryData(dataType: dataType, startDate: startDate, endDate: endDate) {
+                self.sendResult(result: resultStr, error: nil, callBackID: callbackId)
+            } else {
+                self.sendResult(result: nil, error: "Data is empty", callBackID: callbackId)
+            }
         }
-        
     }
     
+}
+
+extension Date {
+    init(_ dateString:String) {
+        let dateStringFormatter = DateFormatter()
+        dateStringFormatter.dateFormat = "dd-MM-yyyy"
+        dateStringFormatter.locale = NSLocale(localeIdentifier: "en_US_POSIX") as Locale
+        let date = dateStringFormatter.date(from: dateString)!
+        self.init(timeInterval:0, since:date)
+    }
 }
