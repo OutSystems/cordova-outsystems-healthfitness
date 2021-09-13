@@ -2,11 +2,6 @@
 import Foundation
 
 class HealthFitnessPlugin {
-
-    func getData() -> String {
-        let healthKitManager = HealthKitManager()
-        return healthKitManager.getData()
-    }
     
     func requestPermissions(customPermissions:String,
                             allVariables:String,
@@ -33,6 +28,37 @@ class HealthFitnessPlugin {
         
         }
          
+    }
+
+    func queryData(dataType: String, startDate: Date, endDate: Date) -> String {
+        let healthKitManager = HealthKitManager()
+        var finalResult: String?
+        var finalError: Error?
+        
+        healthKitManager.queryData(dataType: dataType, startDate: startDate, endDate: endDate) { result, error in
+            
+            if error != nil {
+                finalError = error
+            } else {
+                let encoder = JSONEncoder()
+                encoder.outputFormatting = .prettyPrinted
+                let data = try! encoder.encode(result)
+                print(String(data: data, encoding: .utf8)!)
+                finalResult = String(data: data, encoding: .utf8)!
+            }
+            
+        }
+        
+        if finalResult != nil {
+            return finalResult!
+        }
+        else if finalError != nil {
+            return finalError!.localizedDescription
+        }
+        else {
+            return "Empty result"
+        }
+        
     }
     
 }
