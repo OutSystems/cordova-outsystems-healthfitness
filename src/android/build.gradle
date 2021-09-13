@@ -1,0 +1,24 @@
+buildscript {
+    repositories {
+        google()
+        jcenter()
+    }
+
+    dependencies {
+        classpath 'com.android.tools.build:gradle:3.4.2'
+    }
+}
+
+dependencies{
+    implementation("com.google.android.gms:play-services-fitness:20.0.0")
+    implementation("com.google.android.gms:play-services-auth:19.2.0")
+    implementation("com.google.code.gson:gson:2.8.8")
+}
+
+android {
+    buildTypes {
+        debug {
+            // do not upload debug versions to crashlytics
+        }
+    }
+}

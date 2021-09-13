@@ -1,5 +1,29 @@
 var exec = require('cordova/exec');
 
-exports.coolMethod = function (arg0, success, error) {
-    exec(success, error, 'HealthFitness', 'coolMethod', [arg0]);
+exports.requestPermissions = function (success, error, params) {
+
+    const { 
+        customPermissions, 
+        allVariables, 
+        fitnessVariables, 
+        healthVariables, 
+        profileVariables, 
+        summaryVariables 
+    } = params;
+
+    var args = [customPermissions, allVariables, fitnessVariables, healthVariables, profileVariables, summaryVariables];
+
+    exec(success, error, 'OSHealthFitness', 'requestPermissions', args);
+};
+
+exports.getData = function (success, error, params) {
+    exec(success, error, 'OSHealthFitness', 'getData', [params]);
+};
+
+exports.updateData = function (success, error) {
+    exec(success, error, 'OSHealthFitness', 'updateData');
+};
+
+exports.enableBackgroundJob = function (success, error) {
+    exec(success, error, 'OSHealthFitness', 'enableBackgroundJob');
 };
