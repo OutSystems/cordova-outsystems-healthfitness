@@ -3,13 +3,11 @@
   <name>HealthFitness</name>
   <description>Health &amp; Fitness cordova plugin for OutSystems applications.</description>
   <author>OutSystems Inc</author>
-  <js-module name="HealthFitness" src="www/HealthFitness.js">
+  <js-module name="OSHealthFitness" src="www/OSHealthFitness.js">
     <clobbers target="cordova.plugins.OSHealthFitness"/>
   </js-module>
   <platform name="android">
-
     <config-file parent="/*" target="res/xml/config.xml">
-
       <feature name="OSHealthFitness">
         <param name="android-package" value="com.outsystems.plugins.healthfitness.OSHealthFitness"/>
       </feature> 
@@ -19,9 +17,8 @@
       <preference name="GradlePluginKotlinVersion" value="1.3.50" />
       <preference name="AndroidXEnabled" value="true"/>
 
-      <service
-              android:name="com.outsystems.plugins.healthfitness.MyDataUpdateService"
-              android:exported="true"/>
+      <service android:name="com.outsystems.plugins.healthfitness.MyDataUpdateService"
+               android:exported="true"/>
   
     </config-file>
     <config-file parent="/*" target="AndroidManifest.xml">
@@ -50,12 +47,54 @@
   </platform>
   <platform name="ios">
     <config-file parent="/*" target="config.xml">
-      <feature name="HealthFitness">
-        <param name="ios-package" value="HealthFitness"/>
-      </feature>
+			<feature name="OSHealthFitness">
+				<param name="ios-package" value="OSHealthFitness" />
+			</feature>
+			<preference name="deployment-target" value="12" />
+      <preference name="UseSwiftLanguageVersion" value="5" />
+		</config-file>
+
+		<!-- Hooks -->
+		<hook type="before_plugin_install" src="hooks/install_prerequisites.js"/>
+    <hook type="after_plugin_add" src="hooks/add_swift_support.js" /> 
+
+    <!-- iOS Permissions -->
+    <preference name="HEALTH_SHARE_DESCRIPTION" default="App needs to shared health data" />
+    <config-file target="*-Info.plist" parent="NSHealthShareUsageDescription">
+        <string>$HEALTH_SHARE_DESCRIPTION</string>
     </config-file>
-    <source-file src="src/ios/HealthFitness.m"/>
-    <header-file src="src/ios/HealthFitness.h"/>
+
+    <preference name="HEALTH_UPDATE_DESCRIPTION" default="App needs to use health data" />
+    <config-file target="*-Info.plist" parent="NSHealthUpdateUsageDescription">
+        <string>$HEALTH_UPDATE_DESCRIPTION</string>
+    </config-file>
+
+    <!-- Entitlements -->
+    <config-file target="*/Entitlements-Debug.plist" parent="com.apple.developer.healthkit">
+      <true/>
+    </config-file>
+
+    <config-file target="*/Entitlements-Release.plist" parent="com.apple.developer.healthkit">
+      <true/>
+    </config-file>
+
+    <config-file target="*/Entitlements-Debug.plist" parent="com.apple.developer.healthkit.background-delivery">
+      <true/>
+    </config-file>
+
+    <config-file target="*/Entitlements-Release.plist" parent="com.apple.developer.healthkit.background-delivery">
+      <true/>
+    </config-file>
+      
+		<!-- iOS Source Files -->
+		<source-file src="src/ios/OSHealthFitness.swift" />
+		<source-file src="src/ios/HealthKitManager.swift" />
+    <source-file src="src/ios/HealthFitnessPlugin.swift" />
+    <source-file src="src/ios/CordovaImplementation.swift" />
+    <source-file src="src/ios/HealthKitTypes.swift" />
+    <source-file src="src/ios/IOSPlatformInterface.swift" />
+    <source-file src="src/ios/AuthorizationErrors.swift" />
+    
   </platform>
 
 </plugin>
