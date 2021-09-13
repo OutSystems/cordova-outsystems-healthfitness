@@ -44,8 +44,16 @@ class OSHealthFitness: CordovaImplementation {
         let variable = command.arguments[0] as? String ?? ""
         let value = command.arguments[1] as? String ?? ""
         
-        plugin?.writeData(variable: variable, value: value) { result,error in
-            self.sendResult(result: "", error: "", callBackID: self.callbackId)
+        plugin?.writeData(variable: variable, value: value) { success,error in
+            
+            if let err = error {
+                self.sendResult(result: "", error:err.localizedDescription , callBackID: self.callbackId)
+            }
+            
+            if success {
+                self.sendResult(result: "", error: "", callBackID: self.callbackId)
+            }
+            
         }
     
     }

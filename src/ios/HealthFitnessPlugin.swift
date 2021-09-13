@@ -3,11 +3,13 @@ import Foundation
 
 class HealthFitnessPlugin {
 
-    func writeData(variable:String, value:String, completion: @escaping (Bool, Error?) -> Void) {
-        let healthKitManager = HealthKitManager()
+    func writeData(variable:String,
+                   value:String,
+                   completion: @escaping (Bool, NSError?) -> Void) {
         
+        let healthKitManager = HealthKitManager()
         healthKitManager.writeData(variable: variable,
-                                   value: variable) { (error) in
+                                   value: value) { (success, error) in
             
             if let error = error {
                 completion(false,error)
@@ -23,7 +25,7 @@ class HealthFitnessPlugin {
                             healthVariables:String,
                             profileVariables:String,
                             summaryVariables:String,
-                            completion: @escaping (Bool, HealthKitAuthorizationErrors?) -> Void) {
+                            completion: @escaping (Bool, HealthKitErrors?) -> Void) {
         
         let healthKitManager = HealthKitManager()
         healthKitManager.authorizeHealthKit(customPermissions: customPermissions,
