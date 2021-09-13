@@ -14,9 +14,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.fitness.Fitness
 import com.google.android.gms.fitness.FitnessOptions
-import com.google.android.gms.fitness.data.DataSource
-import com.google.android.gms.fitness.data.DataType
-import com.google.android.gms.fitness.data.Field
+import com.google.android.gms.fitness.data.*
 import com.google.android.gms.fitness.request.DataReadRequest
 import com.google.android.gms.fitness.request.DataUpdateListenerRegistrationRequest
 import com.google.android.gms.fitness.request.SensorRequest
@@ -110,7 +108,7 @@ class  HealthStore(val platformInterface: AndroidPlatformInterface) {
             if(summaryVariablesPermissions.isActive){
                 appendPermissions(summaryVariablesPermissions, permissionList, EnumVariableGroup.SUMMARY)
             }
-            parseCustomPermissions(customPermissions, permissionList)
+            permissionList.addAll(parseCustomPermissions(customPermissions, permissionList))
         }
         initFitnessOptions(permissionList)
     }
@@ -194,7 +192,9 @@ class  HealthStore(val platformInterface: AndroidPlatformInterface) {
     }
 
     private fun getVariableByName(name : String) : GoogleFitVariable? {
-        return if(healthVariablesMap.containsKey(name)){
+        return if(fitnessVariablesMap.containsKey(name)){
+            fitnessVariablesMap[name]
+        } else if(healthVariablesMap.containsKey(name)){
             healthVariablesMap[name]
         } else if(profileVariablesMap.containsKey(name)){
             profileVariablesMap[name]
@@ -216,13 +216,18 @@ class  HealthStore(val platformInterface: AndroidPlatformInterface) {
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     fun requestGoogleFitPermissions() {
-        fitnessOptions?.let {
-            GoogleSignIn.requestPermissions(
-                platformInterface.getActivity(),  // your activity
-                OSHealthFitness.GOOGLE_FIT_PERMISSIONS_REQUEST_CODE,  // e.g. 1
-                account,
-                it
-            )
+        if(!checkAllGoogleFitPermissionGranted()){
+            fitnessOptions?.let {
+                GoogleSignIn.requestPermissions(
+                    platformInterface.getActivity(),  // your activity
+                    OSHealthFitness.GOOGLE_FIT_PERMISSIONS_REQUEST_CODE,  // e.g. 1
+                    account,
+                    it
+                )
+            }
+        }
+        else{
+            platformInterface.sendPluginResult("success")
         }
     }
 
