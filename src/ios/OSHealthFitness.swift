@@ -28,7 +28,7 @@ class OSHealthFitness: CordovaImplementation {
                                    summaryVariables:summaryVariables) { [self] (authorized, error) in
             
             if let err = error {
-                self.sendResult(result: "", error:err.localizedDescription , callBackID: self.callbackId)
+                self.sendResult(result: "", error:err.description , callBackID: self.callbackId)
             }
             
             if authorized {
@@ -37,16 +37,17 @@ class OSHealthFitness: CordovaImplementation {
         }
     }
     
-    @objc(getData:)
-    func getData(command: CDVInvokedUrlCommand) {
+    @objc(writeData:)
+    func writeData(command: CDVInvokedUrlCommand) {
         callbackId = command.callbackId
-    
-        if let resultStr = plugin?.getData() {
-            self.sendResult(result: resultStr, error: "", callBackID: callbackId)
-        } else {
-            self.sendResult(result: "", error: "Data is empty", callBackID: callbackId)
-        }
         
+        let variable = command.arguments[0] as? String ?? ""
+        let value = command.arguments[1] as? String ?? ""
+        
+        plugin?.writeData(variable: variable, value: value) { result,error in
+            self.sendResult(result: "", error: "", callBackID: self.callbackId)
+        }
+    
     }
     
 }

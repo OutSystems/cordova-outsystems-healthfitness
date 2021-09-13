@@ -20,6 +20,10 @@ class HealthKitManager {
         [HealthTypeEnum.bodyMass.rawValue:HKObjectType.quantityType(forIdentifier: .bodyMass)!,
          HealthTypeEnum.height.rawValue:HKObjectType.quantityType(forIdentifier: .height)!]
     
+    lazy var profileVariablesQuantityDictToRead: [String: HKQuantityType] =
+        [HealthTypeEnum.bodyMass.rawValue:HKQuantityType.quantityType(forIdentifier: .bodyMass)!,
+         HealthTypeEnum.height.rawValue:HKQuantityType.quantityType(forIdentifier: .height)!]
+    
     lazy var profileVariablesDictToWrite: [String: HKSampleType] =
         [HealthTypeEnum.stepCount.rawValue:HKSampleType.quantityType(forIdentifier: .stepCount)!,
          HealthTypeEnum.height.rawValue:HKSampleType.quantityType(forIdentifier: .height)!]
@@ -40,12 +44,37 @@ class HealthKitManager {
         [HealthTypeEnum.sleepAnalysis.rawValue:HKSampleType.categoryType(forIdentifier: .sleepAnalysis)!,
          HealthTypeEnum.heartRate.rawValue:HKSampleType.quantityType(forIdentifier: .heartRate)!]
     
-
     var healthKitTypesToRead = Set<HKObjectType>()
     var healthKitTypesToWrite = Set<HKSampleType>()
 
-    func getData() -> String {
-        return "Test String as result"
+    func writeData(variable: String,
+                   value: String,
+                   completion: @escaping (Error?) -> Void) {
+                
+        guard let type = profileVariablesQuantityDictToRead[variable] else {
+            fatalError("Step Count Type is no longer available in HealthKit")
+        }
+        
+        let typeUnit:HKUnit = HKUnit.count()
+        let variableQuantity = HKQuantity(unit: typeUnit,
+                                            doubleValue: Double(value)!)
+        
+        let countSample = HKQuantitySample(type: type,
+                                               quantity: variableQuantity,
+                                               start: Date(),
+                                               end: Date())
+        
+        HKHealthStore().save(countSample) { (success, error) in
+            
+            if let error = error {
+                completion(error)
+                print("Error Saving Steps Count Sample: \(error.localizedDescription)")
+            } else {
+                completion(nil)
+                print("Successfully saved Steps Count Sample")
+            }
+        }
+            
     }
     
     func isValidVariable(dict:[String: Any], variable:String) -> Bool {
@@ -86,6 +115,7 @@ class HealthKitManager {
                         dictToWrite:[String: HKSampleType],
                         groupPermissions:GroupPermissions)
     {
+        
         if (groupPermissions.accessType == "WRITE") {
             for item in dictToWrite { healthKitTypesToWrite.insert(item.value) }
         } else if (groupPermissions.accessType == "READWRITE") {
@@ -162,6 +192,7 @@ class HealthKitManager {
     }
     
     func isHealthDataAvailable() -> HealthKitAuthorizationErrors? {
+        
         guard HKHealthStore.isHealthDataAvailable() else {
             return HealthKitAuthorizationErrors.notAvailableOnDevice
         }

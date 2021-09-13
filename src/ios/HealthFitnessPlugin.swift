@@ -3,9 +3,18 @@ import Foundation
 
 class HealthFitnessPlugin {
 
-    func getData() -> String {
+    func writeData(variable:String, value:String, completion: @escaping (Bool, Error?) -> Void) {
         let healthKitManager = HealthKitManager()
-        return healthKitManager.getData()
+        
+        healthKitManager.writeData(variable: variable,
+                                   value: variable) { (error) in
+            
+            if let error = error {
+                completion(false,error)
+            }
+        
+        }
+        
     }
     
     func requestPermissions(customPermissions:String,
