@@ -23,11 +23,10 @@ class HealthKitManager {
         }
         
         if let val = Double(value) {
-            let variableQuantity = HKQuantity(unit: unit,
-                                                doubleValue: val)
+            let variableQuantity = HKQuantity(unit: unit, doubleValue: val)
             
             let countSample = HKQuantitySample(type: type,
-                                                   quantity: variableQuantity,
+                                                quantity: variableQuantity,
                                                    start: Date(),
                                                    end: Date())
             
@@ -37,7 +36,6 @@ class HealthKitManager {
                     completion(false, error as NSError)
                 } else {
                     completion(true, nil)
-                    print("Successfully saved data")
                 }
             }
         }

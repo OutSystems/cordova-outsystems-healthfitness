@@ -33,7 +33,8 @@ class HealthKitTypes {
          HealthTypeEnum.height.rawValue:HKQuantityType.quantityType(forIdentifier: .height)!]
     
     lazy var profileVariablesUnitDictToWrite: [String: HKUnit] =
-        [HealthTypeEnum.bodyMass.rawValue:HKUnit.gramUnit(with: .kilo)]
+        [HealthTypeEnum.bodyMass.rawValue:HKUnit.gramUnit(with: .kilo),
+         HealthTypeEnum.height.rawValue:HKUnit.count()]
     
     // MARK: - Fitness Variables
     lazy var fitnessVariablesDictToRead: [String: HKObjectType] =
@@ -61,7 +62,7 @@ enum HealthTypeEnum: String
     case stepCount = "STEPS",
          heartRate = "HEART_RATE",
          bodyMass = "WEIGHT",
-         height = "HEIGTH",
+         height = "HEIGHT", 
          bloodGlucose = "BLOOD_PRESSURE_GLUCOSE",
          sleepAnalysis = "SLEEP",
          activeEnergyBurned = "CALORIES_BURNED"
