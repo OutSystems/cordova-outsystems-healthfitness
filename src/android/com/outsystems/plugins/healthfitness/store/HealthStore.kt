@@ -24,7 +24,6 @@ import com.outsystems.plugins.healthfitness.AndroidPlatformInterface
 import com.outsystems.plugins.healthfitness.OSHealthFitness
 import com.outsystems.plugins.healthfitness.MyDataUpdateService
 import org.json.JSONArray
-import org.json.JSONObject
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.util.concurrent.TimeUnit
@@ -51,26 +50,26 @@ class  HealthStore(val platformInterface: AndroidPlatformInterface) {
 
     private val fitnessVariablesMap: Map<String, GoogleFitVariable> by lazy {
         mapOf(
-            "STEPS" to GoogleFitVariable(DataType.TYPE_STEP_COUNT_DELTA),
-            "CALORIES_BURNED" to GoogleFitVariable(DataType.TYPE_CALORIES_EXPENDED)
+            "STEPS" to GoogleFitVariable(DataType.TYPE_STEP_COUNT_DELTA, listOf(Field.FIELD_STEPS)),
+            "CALORIES_BURNED" to GoogleFitVariable(DataType.TYPE_CALORIES_EXPENDED, listOf(Field.FIELD_CALORIES))
         )
     }
     private val healthVariablesMap: Map<String, GoogleFitVariable> by lazy {
         mapOf(
-            "HEART_RATE" to GoogleFitVariable(DataType.TYPE_HEART_RATE_BPM),
-            "SLEEP" to GoogleFitVariable(DataType.TYPE_SLEEP_SEGMENT)
+            "HEART_RATE" to GoogleFitVariable(DataType.TYPE_HEART_RATE_BPM, listOf(Field.FIELD_BPM)),
+            "SLEEP" to GoogleFitVariable(DataType.TYPE_SLEEP_SEGMENT, listOf(Field.FIELD_SLEEP_SEGMENT_TYPE))
         )
     }
     private val profileVariablesMap: Map<String, GoogleFitVariable> by lazy {
         mapOf(
-            "HEIGHT" to GoogleFitVariable(DataType.TYPE_HEIGHT),
-            "WEIGHT" to GoogleFitVariable(DataType.TYPE_WEIGHT)
+            "HEIGHT" to GoogleFitVariable(DataType.TYPE_HEIGHT, listOf(Field.FIELD_HEIGHT)),
+            "WEIGHT" to GoogleFitVariable(DataType.TYPE_WEIGHT, listOf(Field.FIELD_WEIGHT))
         )
     }
     private val summaryVariablesMap: Map<String, GoogleFitVariable> by lazy {
         mapOf(
-            "HEIGHT_SUMMARY" to GoogleFitVariable(DataType.AGGREGATE_HEIGHT_SUMMARY),
-            "WEIGHT_SUMMARY" to GoogleFitVariable(DataType.AGGREGATE_WEIGHT_SUMMARY)
+            "HEIGHT_SUMMARY" to GoogleFitVariable(DataType.AGGREGATE_HEIGHT_SUMMARY, listOf(Field.FIELD_HEIGHT)),
+            "WEIGHT_SUMMARY" to GoogleFitVariable(DataType.AGGREGATE_WEIGHT_SUMMARY, listOf(Field.FIELD_WEIGHT))
         )
     }
 
@@ -252,6 +251,56 @@ class  HealthStore(val platformInterface: AndroidPlatformInterface) {
             }
         }
         return true
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    fun updateData(args: JSONArray) {
+
+        //process parameters
+        val variable = args.getString(0)
+        val value = args.getString(1).toFloat()
+
+
+        val dataType = profileVariablesMap[variable]?.dataType
+
+        //profile variables only have 1 field each, so it is safe to get the first entry of the fields list
+        val fieldType = profileVariablesMap[variable]?.fields?.get(0)
+
+        //insert the data
+        val dataSourceWrite = DataSource.Builder()
+            .setAppPackageName(context)
+            .setDataType(dataType)
+            .setType(DataSource.TYPE_RAW)
+            .build()
+
+        val timestamp = System.currentTimeMillis()
+        val valueToWrite = DataPoint.builder(dataSourceWrite)
+            .setTimestamp(timestamp, TimeUnit.MILLISECONDS)
+            .setField(fieldType, value)
+            .build()
+
+        val dataSet = DataSet.builder(dataSourceWrite)
+            .add(valueToWrite)
+            .build()
+
+        var updatedField: Boolean? = null
+
+        Fitness.getHistoryClient(
+            activity,
+            account
+        )
+            .insertData(dataSet)
+            .addOnSuccessListener {
+                updatedField = true
+                Log.i("Access GoogleFit:", "DataSet updated successfully!")
+                //MANDAR sendPluginResult de sucesso
+            }
+            .addOnFailureListener { e ->
+                Log.w("Access GoogleFit:", "There was an error updating the DataSet", e)
+                Log.w("Access GoogleFit:", e.message.toString())
+                Log.w("Access GoogleFit:", e.localizedMessage.toString())
+                //MANDAR sendPluginResult de erro
+            }
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)

@@ -8,8 +8,6 @@ import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
-import com.google.android.gms.fitness.FitnessOptions
-import com.google.android.gms.fitness.data.*
 import com.outsystems.plugins.healthfitness.store.HealthStore
 
 import org.apache.cordova.*
@@ -52,6 +50,9 @@ class OSHealthFitness : CordovaImplementation() {
             "getData" -> {
                 getData(args)
             }
+            "writeData" -> {
+                writeData(args)
+            }
         }
         return true
     }
@@ -78,7 +79,7 @@ class OSHealthFitness : CordovaImplementation() {
     }
 
     private fun checkAllGoogleFitPermissionGranted(): Boolean {
-       return healthStore!!.checkAllGoogleFitPermissionGranted()
+        return healthStore!!.checkAllGoogleFitPermissionGranted()
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -100,10 +101,14 @@ class OSHealthFitness : CordovaImplementation() {
         return false
     }
 
-    //Get steps by day
     @RequiresApi(api = Build.VERSION_CODES.O)
     private fun getData(args : JSONArray) {
         healthStore?.getData(args)
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun writeData(args: JSONArray) {
+        healthStore?.updateData(args)
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
