@@ -28,6 +28,6 @@ exports.enableBackgroundJob = function (success, error) {
     exec(success, error, 'OSHealthFitness', 'enableBackgroundJob');
 };
 
-exports.writeData = function (variable, value, success, error) {
-    exec(success, error, 'OSHealthFitness', 'writeData', [variable,value]);
+exports.writeData = function (success, error, variable, value) {
+    exec(success, error, 'OSHealthFitness', 'writeData', [variable, value]);
 };
