@@ -48,10 +48,18 @@ class OSHealthFitness: CordovaImplementation {
             let startDate = Date(startDateInput)
             let endDate = Date(endDateInput)
 
-            if let resultStr = plugin?.queryData(dataType: dataType, startDate: startDate, endDate: endDate) {
-                self.sendResult(result: resultStr, error: nil, callBackID: callbackId)
-            } else {
-                self.sendResult(result: nil, error: "Data is empty", callBackID: callbackId)
+            plugin?.queryData(dataType: dataType, startDate: startDate, endDate: endDate) { result, error in
+                
+                if error != nil {
+                    self.sendResult(result: nil, error: error?.localizedDescription, callBackID: self.callbackId)
+                }
+                else if result != nil {
+                    self.sendResult(result: result, error: nil, callBackID: self.callbackId)
+                }
+                else {
+                    //Should not happen, but a "catch all"
+                    self.sendResult(result: "An unknow error has occurred while trying to fetch HealthKit Data", error: nil, callBackID: self.callbackId)
+                }
             }
         }
     }

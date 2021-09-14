@@ -30,35 +30,28 @@ class HealthFitnessPlugin {
          
     }
 
-    func queryData(dataType: String, startDate: Date, endDate: Date) -> String {
+    func queryData(dataType: String, startDate: Date, endDate: Date, completion: @escaping(String?, Error?) -> Void) {
         let healthKitManager = HealthKitManager()
         var finalResult: String?
         var finalError: Error?
         
+        //MARK - TODO: Acertar o completion handler
         healthKitManager.queryData(dataType: dataType, startDate: startDate, endDate: endDate) { result, error in
             
             if error != nil {
                 finalError = error
+                print(error!.localizedDescription)
             } else {
+                //MARK - TODO: ver o conteúdo que preciso retornar e transformar o jsonEncoder em uma function
                 let encoder = JSONEncoder()
                 encoder.outputFormatting = .prettyPrinted
                 let data = try! encoder.encode(result)
                 print(String(data: data, encoding: .utf8)!)
                 finalResult = String(data: data, encoding: .utf8)!
+        
             }
-            
+            completion(finalResult,finalError)
         }
-        
-        if finalResult != nil {
-            return finalResult!
-        }
-        else if finalError != nil {
-            return finalError!.localizedDescription
-        }
-        else {
-            return "Empty result"
-        }
-        
     }
     
 }

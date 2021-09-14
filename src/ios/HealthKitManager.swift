@@ -168,6 +168,55 @@ class HealthKitManager {
         return nil
     }
 
+    func queryData(dataType: String, startDate: Date, endDate: Date, completion: @escaping([StepCountInfo], Error?) -> Void) {
+        
+        let healthKitStore = HKHealthStore()
+        //NOS OPTIONS PASSAR AS OPERAÇÕES (SOMA, MÉDIA E ETC). CRIAR PARAMETRO DE ENTRADA
+        let predicate = HKQuery.predicateForSamples(withStart: startDate, end: endDate, options: [.strictStartDate, .strictEndDate])
+        
+        //descriptor
+        let sortDescriptors = [
+            NSSortDescriptor(key: HKSampleSortIdentifierEndDate, ascending: false)
+        ]
+        
+        //MARK - TODO:
+        let stepCountType:HKQuantityType = HKQuantityType.quantityType(forIdentifier: HKQuantityTypeIdentifier.stepCount)!
+        //var stepCountQuery:HKSampleQuery?
+        let stepCountUnit:HKUnit = HKUnit(from: "count")
+        ////
+        
+        //MARK - TODO: Input para o limit
+        let stepCountQuery = HKSampleQuery(sampleType: stepCountType, predicate: predicate, limit: 10, sortDescriptors: sortDescriptors, resultsHandler: { (query, results, error) in
+            guard error == nil else {
+                print(error?.localizedDescription ?? "")
+                return
+            }
+            
+            //MARK - TODO: ajustar os tipos
+            var stepCountInfoArray = [StepCountInfo]()
+            for (_, sample) in results!.enumerated() {
+                guard let currData:HKQuantitySample = sample as? HKQuantitySample else { return }
+                
+                let stepCountInfo = StepCountInfo()
+                stepCountInfo.quantity = currData.quantity.doubleValue(for: stepCountUnit)
+                stepCountInfo.quantityType = "\(currData.quantityType)"
+                stepCountInfo.startDate = "\(currData.startDate)"
+                stepCountInfo.endDate = "\(currData.endDate)"
+                stepCountInfo.metadata = "\(String(describing: currData.metadata))"
+                stepCountInfo.uuid = "\(currData.uuid)"
+                stepCountInfo.sourceRevision = "\(currData.sourceRevision)"
+                stepCountInfo.device = "\(String(describing: currData.device))"
+                
+                stepCountInfoArray.append(stepCountInfo)
+                
+            }
+            completion(stepCountInfoArray,error)
+            
+        })
+        
+        healthKitStore.execute(stepCountQuery)
+    }
+
 }
 
 extension String {
@@ -177,4 +226,15 @@ extension String {
         return try! JSONDecoder().decode(T.self, from: data!)
     }
 
+}
+
+class StepCountInfo: Codable{
+    var quantity: Double = 0
+    var quantityType: String = ""
+    var startDate: String = ""
+    var endDate: String = ""
+    var metadata: String = ""
+    var uuid: String = ""
+    var sourceRevision: String = ""
+    var device: String = ""
 }
