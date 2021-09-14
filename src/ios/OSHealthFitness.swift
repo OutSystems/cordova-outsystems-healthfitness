@@ -58,7 +58,7 @@ class OSHealthFitness: CordovaImplementation {
                 }
                 else {
                     //Should not happen, but a "catch all"
-                    self.sendResult(result: "An unknow error has occurred while trying to fetch HealthKit Data", error: nil, callBackID: self.callbackId)
+                    self.sendResult(result: nil, error: "An unknow error has occurred while trying to fetch HealthKit Data", callBackID: self.callbackId)
                 }
             }
         }
