@@ -2,6 +2,7 @@
 import Foundation
 import HealthKit
 
+
 class HealthKitTypes {
     
     // MARK: - All Variables
@@ -34,7 +35,7 @@ class HealthKitTypes {
     
     lazy var profileVariablesUnitDictToWrite: [String: HKUnit] =
         [HealthTypeEnum.bodyMass.rawValue:HKUnit.gramUnit(with: .kilo),
-         HealthTypeEnum.height.rawValue:HKUnit.count()]
+         HealthTypeEnum.height.rawValue:HKUnit.inch()]
     
     // MARK: - Fitness Variables
     lazy var fitnessVariablesDictToRead: [String: HKObjectType] =
@@ -62,7 +63,7 @@ enum HealthTypeEnum: String
     case stepCount = "STEPS",
          heartRate = "HEART_RATE",
          bodyMass = "WEIGHT",
-         height = "HEIGHT", 
+         height = "HEIGHT",
          bloodGlucose = "BLOOD_PRESSURE_GLUCOSE",
          sleepAnalysis = "SLEEP",
          activeEnergyBurned = "CALORIES_BURNED"
@@ -101,4 +102,14 @@ class GroupPermissions: Codable {
         self.accessType = accessType
     }
     
+}
+
+extension Date {
+    init(_ dateString:String) {
+        let dateStringFormatter = DateFormatter()
+        dateStringFormatter.dateFormat = "dd-MM-yyyy"
+        dateStringFormatter.locale = NSLocale(localeIdentifier: "en_US_POSIX") as Locale
+        let date = dateStringFormatter.date(from: dateString)!
+        self.init(timeInterval:0, since:date)
+    }
 }

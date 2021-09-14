@@ -25,7 +25,7 @@ class HealthFitnessPlugin {
                             healthVariables:String,
                             profileVariables:String,
                             summaryVariables:String,
-                            completion: @escaping (Bool, HealthKitErrors?) -> Void) {
+                            completion: @escaping (Bool, NSError?) -> Void) {
         
         let healthKitManager = HealthKitManager()
         healthKitManager.authorizeHealthKit(customPermissions: customPermissions,

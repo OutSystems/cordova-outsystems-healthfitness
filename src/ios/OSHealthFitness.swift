@@ -28,11 +28,11 @@ class OSHealthFitness: CordovaImplementation {
                                    summaryVariables:summaryVariables) { [self] (authorized, error) in
             
             if let err = error {
-                self.sendResult(result: "", error:err.description , callBackID: self.callbackId)
+                self.sendResult(result: "", error:err , callBackID: self.callbackId)
             }
             
             if authorized {
-                self.sendResult(result: "", error: "", callBackID: self.callbackId)
+                self.sendResult(result: "", error: nil, callBackID: self.callbackId)
             }
         }
     }
@@ -47,15 +47,16 @@ class OSHealthFitness: CordovaImplementation {
         plugin?.writeData(variable: variable, value: value) { success,error in
             
             if let err = error {
-                self.sendResult(result: "", error:err.localizedDescription , callBackID: self.callbackId)
+                self.sendResult(result: "", error:err, callBackID: self.callbackId)
             }
             
             if success {
-                self.sendResult(result: "", error: "", callBackID: self.callbackId)
+                self.sendResult(result: "", error: nil, callBackID: self.callbackId)
             }
             
         }
     
     }
+    
     
 }

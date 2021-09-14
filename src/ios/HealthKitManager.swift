@@ -5,43 +5,7 @@ class HealthKitManager {
     var healthKitTypesToRead = Set<HKObjectType>()
     var healthKitTypesToWrite = Set<HKSampleType>()
     var HKTypes = HealthKitTypes()
-    
-    func writeData(variable: String,
-                   value: String,
-                   completion: @escaping (Bool, NSError?) -> Void) {
-                
-        guard let type = HKTypes.profileVariablesQuantityDictToWrite[variable] else {
-            let error = HealthKitErrors.dataTypeNotAvailable
-            completion(false, error as NSError)
-            return
-        }
         
-        guard let unit = HKTypes.profileVariablesUnitDictToWrite[variable] else {
-            let error = HealthKitErrors.dataTypeNotAvailable
-            completion(false, error as NSError)
-            return
-        }
-        
-        if let val = Double(value) {
-            let variableQuantity = HKQuantity(unit: unit, doubleValue: val)
-            
-            let countSample = HKQuantitySample(type: type,
-                                                quantity: variableQuantity,
-                                                   start: Date(),
-                                                   end: Date())
-            
-            HKHealthStore().save(countSample) { (success, error) in
-                
-                if let error = error {
-                    completion(false, error as NSError)
-                } else {
-                    completion(true, nil)
-                }
-            }
-        }
-       
-    }
-    
     func isValidVariable(dict:[String: Any], variable:String) -> Bool {
         let filtered = dict.filter { $0.key == variable }
         return !filtered.isEmpty
@@ -78,8 +42,7 @@ class HealthKitManager {
     
     func processVariables(dictToRead:[String: HKObjectType],
                         dictToWrite:[String: HKSampleType],
-                        groupPermissions:GroupPermissions)
-    {
+                        groupPermissions:GroupPermissions) {
         
         if (groupPermissions.accessType == "WRITE") {
             for item in dictToWrite { healthKitTypesToWrite.insert(item.value) }
@@ -97,7 +60,7 @@ class HealthKitManager {
                             healthVariables:String,
                             profileVariables:String,
                             summaryVariables:String,
-                            completion: @escaping (Bool, HealthKitErrors?) -> Void) {
+                            completion: @escaping (Bool, NSError?) -> Void) {
         
         var isAuthorizationValid = true
         
@@ -136,7 +99,7 @@ class HealthKitManager {
         let permissonsOK = self.parseCustomPermissons(customPermissions: customPermissions)
         if !permissonsOK {
             isAuthorizationValid = false
-            completion(false, HealthKitErrors.dataTypeNotAvailable)
+            completion(false, HealthKitErrors.dataTypeNotAvailable as NSError)
         }
         
         if (isAuthorizationValid) {
@@ -144,11 +107,11 @@ class HealthKitManager {
                                                  read: healthKitTypesToRead) { (success, error) in
                 
                 if (error != nil) {
-                    return completion(false, HealthKitErrors.notAuthorizedByUser)
+                    return completion(false, HealthKitErrors.notAuthorizedByUser as NSError)
                 }
                 
                 if success {
-                    completion(success,error as? HealthKitErrors)
+                    completion(success,error as NSError?)
                 }
                 
             }
@@ -156,14 +119,64 @@ class HealthKitManager {
         
     }
     
-    func isHealthDataAvailable() -> HealthKitErrors? {
+    func isHealthDataAvailable() -> NSError? {
         
         guard HKHealthStore.isHealthDataAvailable() else {
-            return HealthKitErrors.notAvailableOnDevice
+            return HealthKitErrors.notAvailableOnDevice as NSError
         }
         return nil
     }
+    
+    func writeData(variable: String,
+                   value: String,
+                   completion: @escaping (Bool, NSError?) -> Void) {
+        
+        
+        if let error = self.isHealthDataAvailable() {
+            completion(false, error)
+        }
+                
+        guard let type = HKTypes.profileVariablesQuantityDictToWrite[variable] else {
+            let error = HealthKitErrors.dataTypeNotAvailable
+            completion(false, error as NSError)
+            return
+        }
+        
+        guard let unit = HKTypes.profileVariablesUnitDictToWrite[variable] else {
+            let error = HealthKitErrors.dataTypeNotAvailable
+            completion(false, error as NSError)
+            return
+        }
+        
+        if let val = Double(value) {
+            let variableQuantity = HKQuantity(unit: unit, doubleValue: val)
+            
+            let countSample = HKQuantitySample(type: type,
+                                                quantity: variableQuantity,
+                                                   start: Date(),
+                                                   end: Date())
+            
+            HKHealthStore().save(countSample) { (success, error) in
+                
+                if let error = error {
+                    switch (error as NSError).code {
+                    case 1:
+                        completion(false, HealthKitErrors.notAvailableOnDevice as NSError)
+                    case 5:
+                        completion(false, HealthKitErrors.notAuthorizedByUser as NSError)
+                    default:
+                        completion(false, error as NSError)
+                    }
+                    
+                } else {
+                    completion(true, nil)
+                }
+            }
+        }
+       
+    }
 
+    
 }
 
 extension String {
