@@ -64,7 +64,9 @@ class  HealthStore(val platformInterface: AndroidPlatformInterface) {
     private val profileVariablesMap: Map<String, GoogleFitVariable> by lazy {
         mapOf(
             "HEIGHT" to GoogleFitVariable(DataType.TYPE_HEIGHT, listOf(Field.FIELD_HEIGHT)),
-            "WEIGHT" to GoogleFitVariable(DataType.TYPE_WEIGHT, listOf(Field.FIELD_WEIGHT))
+            "WEIGHT" to GoogleFitVariable(DataType.TYPE_WEIGHT, listOf(Field.FIELD_WEIGHT)),
+            "BODY_FAT_PERCENTAGE" to GoogleFitVariable(DataType.TYPE_BODY_FAT_PERCENTAGE, listOf(Field.FIELD_PERCENTAGE)),
+            "BASAL_METABOLIC_RATE" to GoogleFitVariable(DataType.TYPE_BASAL_METABOLIC_RATE, listOf(Field.FIELD_CALORIES))
         )
     }
     private val summaryVariablesMap: Map<String, GoogleFitVariable> by lazy {
