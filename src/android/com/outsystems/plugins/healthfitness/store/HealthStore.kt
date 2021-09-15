@@ -1,5 +1,6 @@
 package com.outsystems.plugins.healthfitness.store
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.PendingIntent
 import android.content.Context
@@ -14,9 +15,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.fitness.Fitness
 import com.google.android.gms.fitness.FitnessOptions
-import com.google.android.gms.fitness.data.DataSource
-import com.google.android.gms.fitness.data.DataType
-import com.google.android.gms.fitness.data.HealthDataTypes
+import com.google.android.gms.fitness.data.*
 import com.google.android.gms.fitness.request.DataReadRequest
 import com.google.android.gms.fitness.request.DataUpdateListenerRegistrationRequest
 import com.google.android.gms.fitness.request.SensorRequest
@@ -26,6 +25,9 @@ import com.outsystems.plugins.healthfitness.AndroidPlatformInterface
 import com.outsystems.plugins.healthfitness.OSHealthFitness
 import com.outsystems.plugins.healthfitness.MyDataUpdateService
 import org.json.JSONArray
+import java.lang.Integer.max
+import java.text.SimpleDateFormat
+import java.util.*
 import java.util.concurrent.TimeUnit
 
 enum class EnumAccessType(val value : String) {
@@ -56,30 +58,63 @@ class HealthStore(val platformInterface: AndroidPlatformInterface) {
 
     private val fitnessVariablesMap: Map<String, GoogleFitVariable> by lazy {
         mapOf(
-            "STEPS" to GoogleFitVariable(DataType.TYPE_STEP_COUNT_DELTA),
-            "CALORIES_BURNED" to GoogleFitVariable(DataType.TYPE_CALORIES_EXPENDED)
+            "STEPS" to GoogleFitVariable(DataType.TYPE_STEP_COUNT_DELTA, listOf(
+                Field.FIELD_STEPS
+            )),
+            "CALORIES_BURNED" to GoogleFitVariable(DataType.TYPE_CALORIES_EXPENDED, listOf(
+                Field.FIELD_CALORIES
+            )),
+            "PUSH_COUNT" to GoogleFitVariable(DataType.TYPE_ACTIVITY_SEGMENT, listOf(
+                //TODO:
+            )),
+            "MOVE_MINUTES" to GoogleFitVariable(DataType.TYPE_MOVE_MINUTES, listOf(
+                Field.FIELD_DURATION
+            ))
         )
     }
     private val healthVariablesMap: Map<String, GoogleFitVariable> by lazy {
         mapOf(
-            "HEART_RATE" to GoogleFitVariable(DataType.TYPE_HEART_RATE_BPM),
-            "SLEEP" to GoogleFitVariable(DataType.TYPE_SLEEP_SEGMENT),
-            "BLOOD_GLUCOSE" to GoogleFitVariable(HealthDataTypes.TYPE_BLOOD_GLUCOSE),
-            "BLOOD_PRESSURE" to GoogleFitVariable(HealthDataTypes.TYPE_BLOOD_PRESSURE)
+            "HEART_RATE" to GoogleFitVariable(DataType.TYPE_HEART_RATE_BPM, listOf(
+                Field.FIELD_BPM
+            )),
+            "SLEEP" to GoogleFitVariable(DataType.TYPE_SLEEP_SEGMENT, listOf(
+                Field.FIELD_SLEEP_SEGMENT_TYPE
+            )),
+            "BLOOD_GLUCOSE" to GoogleFitVariable(HealthDataTypes.TYPE_BLOOD_GLUCOSE, listOf(
+                HealthFields.FIELD_BLOOD_GLUCOSE_LEVEL
+            )),
+            "BLOOD_PRESSURE" to GoogleFitVariable(HealthDataTypes.TYPE_BLOOD_PRESSURE, listOf(
+                HealthFields.FIELD_BLOOD_PRESSURE_SYSTOLIC,
+                HealthFields.FIELD_BLOOD_PRESSURE_DIASTOLIC
+            )),
+            "HYDRATION" to GoogleFitVariable(DataType.TYPE_HYDRATION, listOf(
+                Field.FIELD_VOLUME
+            )),
+            "NUTRITION" to GoogleFitVariable(DataType.TYPE_NUTRITION, listOf(
+                //TODO:
+            ))
         )
     }
     private val profileVariablesMap: Map<String, GoogleFitVariable> by lazy {
         mapOf(
-            "HEIGHT" to GoogleFitVariable(DataType.TYPE_HEIGHT),
-            "WEIGHT" to GoogleFitVariable(DataType.TYPE_WEIGHT),
-            "BODY_FAT_PERCENTAGE" to GoogleFitVariable(DataType.TYPE_BODY_FAT_PERCENTAGE),
-            "BASAL_METABOLIC_RATE" to GoogleFitVariable(DataType.TYPE_BASAL_METABOLIC_RATE)
+            "HEIGHT" to GoogleFitVariable(DataType.TYPE_HEIGHT, listOf(
+                Field.FIELD_HEIGHT
+            )),
+            "WEIGHT" to GoogleFitVariable(DataType.TYPE_WEIGHT, listOf(
+                Field.FIELD_WEIGHT
+            )),
+            "BODY_FAT_PERCENTAGE" to GoogleFitVariable(DataType.TYPE_BODY_FAT_PERCENTAGE, listOf(
+                Field.FIELD_PERCENTAGE
+            )),
+            "BASAL_METABOLIC_RATE" to GoogleFitVariable(DataType.TYPE_BASAL_METABOLIC_RATE, listOf(
+                Field.FIELD_CALORIES
+            ))
         )
     }
     private val summaryVariablesMap: Map<String, GoogleFitVariable> by lazy {
         mapOf(
-            "HEIGHT_SUMMARY" to GoogleFitVariable(DataType.AGGREGATE_HEIGHT_SUMMARY),
-            "WEIGHT_SUMMARY" to GoogleFitVariable(DataType.AGGREGATE_WEIGHT_SUMMARY)
+            "HEIGHT_SUMMARY" to GoogleFitVariable(DataType.AGGREGATE_HEIGHT_SUMMARY, listOf()),
+            "WEIGHT_SUMMARY" to GoogleFitVariable(DataType.AGGREGATE_WEIGHT_SUMMARY, listOf())
         )
     }
 
@@ -93,7 +128,7 @@ class HealthStore(val platformInterface: AndroidPlatformInterface) {
             "WEEK" to Pair(7, TimeUnit.DAYS),
             "MONTH" to Pair(30, TimeUnit.DAYS),
             "YEAR" to Pair(365, TimeUnit.DAYS)
-        ).withDefault { Pair(1, TimeUnit.DAYS) }
+        )
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -130,7 +165,7 @@ class HealthStore(val platformInterface: AndroidPlatformInterface) {
             if(summaryVariablesPermissions.isActive){
                 appendPermissions(summaryVariablesPermissions, permissionList, EnumVariableGroup.SUMMARY)
             }
-            parseCustomPermissions(customPermissions, permissionList)
+            permissionList.addAll(parseCustomPermissions(customPermissions, permissionList))
         }
         initFitnessOptions(permissionList)
     }
@@ -269,118 +304,108 @@ class HealthStore(val platformInterface: AndroidPlatformInterface) {
         return true
     }
 
-    /*
-    @RequiresApi(api = Build.VERSION_CODES.O)
-    fun getDataAlt(args : JSONArray) {
-
-        val parameters = gson.fromJson(args.getString(0), AdvancedQueryParameters::class.java)
-
-        val end = parameters.endDate
-        val start = parameters.startDate
-
-        val endSeconds = end.atZone(ZoneId.systemDefault()).toEpochSecond()
-        val startSeconds = start.atZone(ZoneId.systemDefault()).toEpochSecond()
-
-        val context = context
-
-        val readRequest = DataReadRequest.Builder()
-            .read(DataType.TYPE_STEP_COUNT_DELTA)
-            .setTimeRange(startSeconds, endSeconds, TimeUnit.SECONDS)
-            .setLimit(1)
-            .build()
-
-        val account = GoogleSignIn.getAccountForExtension(context, fitnessOptions)
-        var resultVariable: Float? = null
-
-        Fitness.getHistoryClient(context, account).readData(readRequest)
-
-            .addOnSuccessListener { dataReadResponse: DataReadResponse ->
-                resultVariable = dataReadResponse.dataSets[0].dataPoints.firstOrNull()
-                    ?.getValue(Field.FIELD_CALORIES)?.asFloat()
-                Log.d(
-                    "Access GoogleFit:",
-                    dataReadResponse.dataSets[0].dataPoints.firstOrNull()
-                        ?.getValue(Field.FIELD_CALORIES).toString()
-                )
-            }
-
-            .addOnFailureListener { dataReadResponse: Exception ->
-                Log.d(
-                    "TAG",
-                    dataReadResponse.message!!
-                )
-            }
-
-        platformInterface.sendPluginResult(resultVariable)
-    }
-*/
-
+    @SuppressLint("SimpleDateFormat")
     @RequiresApi(api = Build.VERSION_CODES.O)
     fun getData(args : JSONArray) {
 
         val parameters = gson.fromJson(args.getString(0), AdvancedQueryParameters::class.java)
-
         val googleFitVariable = getVariableByName(parameters.variable)
 
         googleFitVariable?.let { variable ->
 
             val endTime = parameters.endDate
             val startTime = parameters.startDate
-            val timeUnitLength = parameters.timeUnitLength
-            val timeUnit = timeUnitsMap[parameters.timeUnit]
+
+            //TODO: Remove this
+            val format = SimpleDateFormat("yyyy.MM.dd HH:mm")
+            val timeUnitLength = max(1, parameters.timeUnitLength)
+            val timeUnit = timeUnitsMap.getOrDefault(parameters.timeUnit, Pair(1, TimeUnit.DAYS) )
             val operationType = parameters.operationType
 
-            val readRequest = DataReadRequest.Builder()
+            val requestBuilder = DataReadRequest.Builder()
                 .setTimeRange(
-                    TimeUnit.MILLISECONDS.toSeconds(startTime.time),
-                    TimeUnit.MILLISECONDS.toSeconds(endTime.time),
-                    TimeUnit.SECONDS)
+                    startTime.time,
+                    endTime.time,
+                    TimeUnit.MILLISECONDS)
+                .bucketByTime(timeUnit.first, timeUnit.second)
 
-                //TODO: Multiply the length x bucket size
-                .bucketByTime(timeUnit!!.first * 1, timeUnit.second)
-                .aggregate(variable.dataType)
-                .build()
+            if(variable.dataType == DataType.TYPE_STEP_COUNT_DELTA) {
+                //This is the special case of step count.
+                val datasource = DataSource.Builder()
+                    .setAppPackageName("com.google.android.gms")
+                    .setDataType(variable.dataType)
+                    .setType(DataSource.TYPE_DERIVED)
+                    .setStreamName("estimated_steps")
+                    .build()
+                requestBuilder.read(datasource)
+            }
+            else {
+                requestBuilder.read(variable.dataType)
+            }
 
-            val account = GoogleSignIn.getAccountForExtension(context, fitnessOptions)
 
-            Fitness.getHistoryClient(context, account).readData(readRequest)
+            val fitnessRequest = requestBuilder.build()
+            Fitness
+                .getHistoryClient(context, account)
+                .readData(fitnessRequest)
+
                 .addOnSuccessListener { dataReadResponse: DataReadResponse ->
 
-                    val totalSteps = dataReadResponse.buckets
+                    val responseBlocks : MutableList<AdvancedQueryResponseBlock> = mutableListOf()
 
+                    for(blockIndex in 0 until dataReadResponse.buckets.size){
+                        val bucket = dataReadResponse.buckets[blockIndex]
+                        val responseBlockValues : MutableList<Float> = mutableListOf()
 
-                        .flatMap { it.dataSets }
-                        .flatMap { it.dataPoints }
+                        val valuesFlatMap = bucket.dataSets
+                            .flatMap { it.dataPoints }
 
-                        .forEach {
-                            for (field in it.dataType.fields) {
-
-                                Log.d("STORE","\tField: ${field.name.toString()} Value: ${it.getValue(field)}")
+                        googleFitVariable.fields.forEach { field ->
+                            valuesFlatMap.forEach { dataPoint ->
+                                val valueEntry = dataPoint.getValue(field).toString()
+                                responseBlockValues.add(valueEntry.toFloat())
                             }
                         }
 
-
-/*
-                    when(operationType) {
-
-                        EnumOperationType.MAX.value -> {
-                            result = totalSteps
-                                .maxBy { it.getValue(Field.FIELD_STEPS).asInt() }
-                                .toString()
-                        }
-
-                        EnumOperationType.SUM.value -> {
-                            result = totalSteps
-                                .sumBy { it.getValue(Field.FIELD_STEPS).asInt() }
-                                .toString()
-                        }
-
-
+                        val responseBlock = AdvancedQueryResponseBlock(
+                            blockIndex,
+                            format.format(bucket.getStartTime(TimeUnit.MILLISECONDS)),
+                            format.format(bucket.getEndTime(TimeUnit.MILLISECONDS)),
+                            responseBlockValues
+                        )
+                        responseBlocks.add(responseBlock)
                     }
-*/
-                    Log.d("STORE", "Total steps: $totalSteps")
 
-                    //platformInterface.sendPluginResult(totalSteps)
+
+                    /*
+                    dataReadResponse.buckets
+                        .flatMap { it.dataSets }
+                        .flatMap { it.dataPoints }
+                        .forEach { dataPoint ->
+
+                            googleFitVariable.fields.forEach { field ->
+
+                                Log.d("STORE", "Field ${field.name} = ${dataPoint.getValue(field)}")
+
+                                when(operationType) {
+                                    EnumOperationType.MAX.value -> {
+                                        result = totalSteps
+                                            .maxBy { dataPoint.getValue(field).asInt() }
+                                            .toString()
+                                    }
+                                }
+                            }
+                        }
+                    */
+                    /*
+                    .forEach {
+                        for (field in it.dataType.fields) {
+
+                            Log.d("STORE","\tField: ${field.name.toString()} Value: ${it.getValue(field)}")
+                        }
+                    }
+                    */
+                    //Log.d("STORE", "Total steps: $totalSteps")
                     /*
                     dataReadResponse.buckets.forEach {bu ->
                         bu.dataSets.forEach { dt ->
@@ -393,14 +418,18 @@ class HealthStore(val platformInterface: AndroidPlatformInterface) {
                         }
                     }*/
 
+                    val queryResponse = AdvancedQueryResponse(responseBlocks)
+                    val pluginResponseJson = gson.toJson(queryResponse)
+
+                    Log.d("STORE", "Response $pluginResponseJson")
+                    //platformInterface.sendPluginResult(pluginResponseJson)
+
                 }
 
                 .addOnFailureListener { dataReadResponse: Exception ->
                     Log.d("STORE", dataReadResponse.message!!)
                 }
         }
-
-        platformInterface.sendPluginResult(null, Pair(1, ""))
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
