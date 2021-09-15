@@ -261,6 +261,7 @@ class  HealthStore(val platformInterface: AndroidPlatformInterface) {
 
         //process parameters
         val variable = args.getString(0)
+        //right now we are only writing data which are float values
         val value = args.getString(1).toFloat()
 
         val dataType = profileVariablesMap[variable]?.dataType
@@ -285,15 +286,12 @@ class  HealthStore(val platformInterface: AndroidPlatformInterface) {
             .add(valueToWrite)
             .build()
 
-        var updatedField: Boolean? = null
-
         Fitness.getHistoryClient(
             activity,
             account
         )
             .insertData(dataSet)
             .addOnSuccessListener {
-                updatedField = true
                 Log.i("Access GoogleFit:", "DataSet updated successfully!")
                 platformInterface.sendPluginResult("success", null)
             }
