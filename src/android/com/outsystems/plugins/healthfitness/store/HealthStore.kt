@@ -21,6 +21,7 @@ import com.google.android.gms.fitness.request.SensorRequest
 import com.google.android.gms.fitness.result.DataReadResponse
 import com.google.gson.Gson
 import com.outsystems.plugins.healthfitness.AndroidPlatformInterface
+import com.outsystems.plugins.healthfitness.HealthFitnessError
 import com.outsystems.plugins.healthfitness.OSHealthFitness
 import com.outsystems.plugins.healthfitness.MyDataUpdateService
 import org.json.JSONArray
@@ -228,7 +229,7 @@ class  HealthStore(val platformInterface: AndroidPlatformInterface) {
             //but the onActivityResult is not being called for some reason
         }
         else{
-            platformInterface.sendPluginResult("success")
+            platformInterface.sendPluginResult("success", null)
         }
     }
 
@@ -259,7 +260,6 @@ class  HealthStore(val platformInterface: AndroidPlatformInterface) {
         //process parameters
         val variable = args.getString(0)
         val value = args.getString(1).toFloat()
-
 
         val dataType = profileVariablesMap[variable]?.dataType
 
@@ -293,13 +293,15 @@ class  HealthStore(val platformInterface: AndroidPlatformInterface) {
             .addOnSuccessListener {
                 updatedField = true
                 Log.i("Access GoogleFit:", "DataSet updated successfully!")
-                //MANDAR sendPluginResult de sucesso
+                platformInterface.sendPluginResult("success", null)
             }
             .addOnFailureListener { e ->
                 Log.w("Access GoogleFit:", "There was an error updating the DataSet", e)
-                Log.w("Access GoogleFit:", e.message.toString())
-                Log.w("Access GoogleFit:", e.localizedMessage.toString())
-                //MANDAR sendPluginResult de erro
+                //In this case, what is the error we want to send in the callback?
+                //We could identify the exception that is thrown and send an error accordingly?
+                //Maybe catch that com.google.android.gms.common.api.ApiException: 4: The user must be signed in to make this API call.
+                //For now we will send a generic error message
+                platformInterface.sendPluginResult(null, Pair(HealthFitnessError.WRITE_DATA_ERROR.code, HealthFitnessError.WRITE_DATA_ERROR.message))
             }
     }
 
