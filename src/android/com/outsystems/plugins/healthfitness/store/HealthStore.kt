@@ -227,8 +227,9 @@ class  HealthStore(val platformInterface: AndroidPlatformInterface) {
                     it
                 )
             }
-            //we should also call sendPluginResult in the onActivityResult after the user provides the permissions in the permission dialog
+            //instead of calling sendPluginResult here we should call it in the onActivityResult after the user provides the permissions in the permission dialog
             //but the onActivityResult is not being called for some reason
+            platformInterface.sendPluginResult("success", null)
         }
         else{
             platformInterface.sendPluginResult("success", null)
