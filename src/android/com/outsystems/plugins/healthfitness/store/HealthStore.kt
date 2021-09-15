@@ -50,6 +50,16 @@ enum class EnumOperationType(val value : String){
     MAX("MAX"),
     AVERAGE("AVERAGE"),
 }
+enum class EnumTimeUnit(val value : TimeUnit) {
+    MILLISECOND(TimeUnit.MILLISECONDS),
+    SECOND(TimeUnit.SECONDS),
+    MINUTE(TimeUnit.MINUTES),
+    HOUR(TimeUnit.HOURS),
+    DAY(TimeUnit.DAYS),
+    WEEK(TimeUnit.DAYS),
+    MONTH(TimeUnit.DAYS),
+    YEAR(TimeUnit.DAYS)
+}
 
 class HealthStore(val platformInterface: AndroidPlatformInterface) {
     var context: Context = platformInterface.getContext()
@@ -121,16 +131,28 @@ class HealthStore(val platformInterface: AndroidPlatformInterface) {
         )
     }
 
-    private val timeUnitsMap: Map<String, Pair<Int, TimeUnit>> by lazy {
+    private val timeUnitsForMinMaxAverage: Map<String, EnumTimeUnit> by lazy {
         mapOf(
-            "MILLISECONDS" to Pair(1, TimeUnit.MILLISECONDS),
-            "SECONDS" to Pair(1, TimeUnit.SECONDS),
-            "MINUTE" to Pair(1, TimeUnit.MINUTES),
-            "HOUR" to Pair(1, TimeUnit.HOURS),
-            "DAY" to Pair(1, TimeUnit.DAYS),
-            "WEEK" to Pair(1, TimeUnit.DAYS),
-            "MONTH" to Pair(1, TimeUnit.DAYS),
-            "YEAR" to Pair(1, TimeUnit.DAYS)
+            "MILLISECONDS" to EnumTimeUnit.MILLISECOND,
+            "SECONDS" to EnumTimeUnit.MILLISECOND,
+            "MINUTE" to EnumTimeUnit.SECOND,
+            "HOUR" to EnumTimeUnit.MINUTE,
+            "DAY" to EnumTimeUnit.HOUR,
+            "WEEK" to EnumTimeUnit.DAY,
+            "MONTH" to EnumTimeUnit.WEEK,
+            "YEAR" to EnumTimeUnit.MONTH //TODO: This doesn't work yet
+        )
+    }
+    private val timeUnits: Map<String, EnumTimeUnit> by lazy {
+        mapOf(
+            "MILLISECONDS" to EnumTimeUnit.MILLISECOND,
+            "SECONDS" to EnumTimeUnit.SECOND,
+            "MINUTE" to EnumTimeUnit.MINUTE,
+            "HOUR" to EnumTimeUnit.HOUR,
+            "DAY" to EnumTimeUnit.DAY,
+            "WEEK" to EnumTimeUnit.WEEK,
+            "MONTH" to EnumTimeUnit.MONTH,
+            "YEAR" to EnumTimeUnit.YEAR
         )
     }
 
@@ -321,16 +343,20 @@ class HealthStore(val platformInterface: AndroidPlatformInterface) {
 
             //TODO: Remove this
             val format = SimpleDateFormat("yyyy.MM.dd HH:mm")
-            val timeUnit = timeUnitsMap.getOrDefault(parameters.timeUnit, Pair(1, TimeUnit.DAYS) )
-            val timeUnitLength = max(1, parameters.timeUnitLength)
             val operationType = parameters.operationType
+            val timeUnit = if(operationType == EnumOperationType.SUM.value) {
+                timeUnits.getOrDefault(parameters.timeUnit, EnumTimeUnit.DAY)
+            } else {
+                timeUnitsForMinMaxAverage.getOrDefault(parameters.timeUnit, EnumTimeUnit.DAY)
+            }
+            val timeUnitLength = max(1, parameters.timeUnitLength)
 
             val requestBuilder = DataReadRequest.Builder()
-                .bucketByTime(timeUnit.first, timeUnit.second)
+                .bucketByTime(1, timeUnit.value)
                 .setTimeRange(startTime.time, endTime.time, TimeUnit.MILLISECONDS)
 
             if(variable.dataType == DataType.TYPE_STEP_COUNT_DELTA) {
-                //This is the special case of step count.
+                //This is the special case for step count
                 val datasource = DataSource.Builder()
                     .setAppPackageName("com.google.android.gms")
                     .setDataType(variable.dataType)
@@ -340,7 +366,7 @@ class HealthStore(val platformInterface: AndroidPlatformInterface) {
                 requestBuilder.aggregate(datasource)
             }
             else {
-                requestBuilder.aggregate(variable.dataType)
+                requestBuilder.read(variable.dataType)
             }
 
             val fitnessRequest = requestBuilder.build()
@@ -350,8 +376,18 @@ class HealthStore(val platformInterface: AndroidPlatformInterface) {
 
                     var processedBuckets = listOf<ProcessedBucket>()
 
-                    //TODO: Fix this condition
+                    //TODO:
                     when(parameters.timeUnit) {
+
+                        "MILLISECONDS",
+                        "SECONDS",
+                        "MINUTE",
+                        "HOUR",
+                        "DAY" -> {
+                            processedBuckets = processBucket(
+                                dataReadResponse.buckets)
+                        }
+
                         "WEEK" -> {
                             processedBuckets = processIntoBucketPerWeek(
                                 dataReadResponse.buckets,
@@ -359,6 +395,7 @@ class HealthStore(val platformInterface: AndroidPlatformInterface) {
                                 startTime.time,
                                 endTime.time)
                         }
+
                         "MONTH" -> {
                             processedBuckets = processIntoBucketPerMonth(
                                 dataReadResponse.buckets,
@@ -391,6 +428,38 @@ class HealthStore(val platformInterface: AndroidPlatformInterface) {
         var DEBUG_endDate : String
     )
 
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun processBucket(bucketsPerDay : List<Bucket>) : List<ProcessedBucket> {
+
+        val format = SimpleDateFormat("yyyy.MM.dd HH:mm")
+        val processedBuckets : MutableList<ProcessedBucket> = mutableListOf()
+
+        for(bucket in bucketsPerDay) {
+
+            val dataPointsPerBucket = bucket.dataSets.flatMap { it.dataPoints }
+            if(dataPointsPerBucket.isEmpty()){ continue }
+
+            val startDate = bucket.getStartTime(TimeUnit.MILLISECONDS)
+            val endDate = bucket.getEndTime(TimeUnit.MILLISECONDS)
+            val processedBucket = ProcessedBucket(
+                startDate,
+                endDate,
+                mutableListOf(),
+                mutableListOf(),
+                format.format(startDate),
+                format.format(endDate)
+            )
+
+            dataPointsPerBucket.forEach { dataPoint ->
+                processedBucket.dataPoints.add(dataPoint)
+            }
+
+            processedBuckets.add(processedBucket)
+//                Log.d("POINT",
+//                    "$monthNumber -> ${format.format(dataPoint.getStartTime(TimeUnit.MILLISECONDS))} : ${dataPoint.getValue(Field.FIELD_CALORIES)}")
+        }
+        return processedBuckets
+    }
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun processIntoBucketPerWeek(bucketsPerDay : List<Bucket>,
@@ -515,6 +584,7 @@ class HealthStore(val platformInterface: AndroidPlatformInterface) {
         return processedBuckets.values.toList()
     }
 
+
     private fun processBucketOperation(buckets : List<ProcessedBucket>,
                                        variable : GoogleFitVariable,
                                        operationType : String) : List<ProcessedBucket> {
@@ -533,7 +603,6 @@ class HealthStore(val platformInterface: AndroidPlatformInterface) {
                     val dataPointValue = datePoint.getValue(field).toString().toFloat()
 
                     when(operationType) {
-
                         EnumOperationType.SUM.value -> {
                             resultPerField[field.name] =
                                 resultPerField[field.name]!! + dataPointValue
@@ -554,8 +623,8 @@ class HealthStore(val platformInterface: AndroidPlatformInterface) {
                         EnumOperationType.MIN.value -> {
                             //TODO: Implement this operation
                         }
-
                     }
+
                 }
             }
 
