@@ -1,7 +1,5 @@
 package com.outsystems.plugins.healthfitness.store
 
-import android.R.attr
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.PendingIntent
 import android.content.Context
@@ -28,16 +26,11 @@ import com.outsystems.plugins.healthfitness.MyDataUpdateService
 import org.json.JSONArray
 import java.lang.Integer.max
 import java.text.SimpleDateFormat
-import java.time.DayOfWeek
 import java.time.Instant
-import java.time.LocalDate
 import java.time.ZoneId
 import java.time.temporal.WeekFields
 import java.util.*
 import java.util.concurrent.TimeUnit
-import android.R.attr.firstDayOfWeek
-
-
 
 
 enum class EnumAccessType(val value : String) {
@@ -355,42 +348,10 @@ class HealthStore(val platformInterface: AndroidPlatformInterface) {
                 .readData(fitnessRequest)
                 .addOnSuccessListener { dataReadResponse: DataReadResponse ->
 
-                    val responseBlocks : MutableList<AdvancedQueryResponseBlock> = mutableListOf()
-                    var blockIndex = 0
-                    for(bucket in dataReadResponse.buckets){
-                        val responseBlockValues : MutableList<Float> = mutableListOf()
-                        val valuesFlatMap = bucket.dataSets.flatMap { it.dataPoints }
+                    val bucketsPerWeek = processIntoBucketPerWeek(dataReadResponse.buckets, timeUnitLength, startTime.time, endTime.time)
+                    val resultBuckets = processBucketOperation(bucketsPerWeek, variable, operationType)
 
-                        if(valuesFlatMap.isEmpty()){
-                            continue
-                        }
-
-                        googleFitVariable.fields.forEach { field ->
-                            valuesFlatMap.forEach { dataPoint ->
-                                val valueEntry = dataPoint.getValue(field).toString()
-                                responseBlockValues.add(valueEntry.toFloat())
-                            }
-                        }
-
-                        if(responseBlockValues.isNotEmpty()) {
-                            val responseBlock = AdvancedQueryResponseBlock(
-                                blockIndex,
-                                bucket.getStartTime(TimeUnit.MILLISECONDS),
-                                bucket.getEndTime(TimeUnit.MILLISECONDS),
-                                format.format(bucket.getStartTime(TimeUnit.MILLISECONDS)),
-                                format.format(bucket.getEndTime(TimeUnit.MILLISECONDS)),
-                                responseBlockValues
-                            )
-                            responseBlocks.add(responseBlock)
-                            blockIndex++
-                        }
-                    }
-
-                    val queryResponse = AdvancedQueryResponse(responseBlocks)
-
-                    val convertedResponse = convertToBucketPerWeek(queryResponse, startTime.time, endTime.time)
-
-                    val pluginResponseJson = gson.toJson(convertedResponse)
+                    val pluginResponseJson = gson.toJson("")
                     Log.d("STORE", "Response $pluginResponseJson")
                     //platformInterface.sendPluginResult(pluginResponseJson)
 
@@ -401,78 +362,130 @@ class HealthStore(val platformInterface: AndroidPlatformInterface) {
         }
     }
 
-    data class Aux(
+
+    data class ProcessedBucket(
         val startDate : Long,
         val endDate : Long,
-        var value : Float
+        var dataPoints : MutableList<DataPoint>,
+        var processedDataPoints : MutableList<Float>,
+        var DEBUG_startDate : String,
+        var DEBUG_endDate : String
     )
 
+
     @RequiresApi(Build.VERSION_CODES.O)
-    private fun convertToBucketPerWeek(
-        bucketPerDay : AdvancedQueryResponse, queryStartDate : Long, queryEndDate : Long, operation : EnumOperationType) : AdvancedQueryResponse {
+    private fun processIntoBucketPerWeek(bucketsPerDay : List<Bucket>,
+                                         timeUnitLength : Int,
+                                         queryStartDate : Long,
+                                         queryEndDate : Long) : List<ProcessedBucket> {
 
-        val valuesPerWeek : MutableMap<String, Aux> = mutableMapOf()
+        val format = SimpleDateFormat("yyyy.MM.dd HH:mm")
+        val processedBuckets : MutableMap<String, ProcessedBucket> = mutableMapOf()
 
-        for(day in bucketPerDay.results) {
+        for(bucket in bucketsPerDay) {
 
-            val dataPointDate = Instant
-                .ofEpochMilli(day.startDate)
-                .atZone(ZoneId.systemDefault())
-                .toLocalDate()
+            val dataPointsPerBucket = bucket.dataSets.flatMap { it.dataPoints }
+            if(dataPointsPerBucket.isEmpty()){ continue }
 
-            val weekFields: WeekFields = WeekFields.ISO
-            val weekNumber = dataPointDate.get(weekFields.weekOfWeekBasedYear())
-            val yearNumber = dataPointDate.year
-            val datePointKey = "$weekNumber$yearNumber"
+            dataPointsPerBucket.forEach { dataPoint ->
 
-            if(!valuesPerWeek.containsKey(datePointKey)) {
+                val dataPointDate = Instant
+                    .ofEpochMilli(dataPoint.getStartTime(TimeUnit.MILLISECONDS))
+                    .atZone(ZoneId.systemDefault())
+                    .toLocalDate()
 
-                val c = Calendar.getInstance()
-                c.set(Calendar.WEEK_OF_YEAR, weekNumber)
+                val weekFields: WeekFields = WeekFields.ISO
+                val weekNumber = dataPointDate.get(weekFields.weekOfWeekBasedYear())
+                val yearNumber = dataPointDate.year
+                val dataPointKey = "$weekNumber$yearNumber"
 
-                val firstDayOfWeek = c.firstDayOfWeek
+                if(!processedBuckets.containsKey(dataPointKey)) {
 
-                c[Calendar.DAY_OF_WEEK] = firstDayOfWeek
-                var startDate = c.timeInMillis
-                if(startDate < queryStartDate) { startDate = queryStartDate }
+                    val c = Calendar.getInstance()
+                    c.set(Calendar.WEEK_OF_YEAR, weekNumber)
 
-                c[Calendar.DAY_OF_WEEK] = firstDayOfWeek + 6
-                var endDate = c.timeInMillis
-                if(endDate > queryEndDate) { endDate = queryEndDate }
+                    val firstDayOfWeek = c.firstDayOfWeek
 
-                valuesPerWeek[datePointKey] = Aux(startDate, endDate, 0F)
+                    c[Calendar.DAY_OF_WEEK] = firstDayOfWeek
+                    var startDate = c.timeInMillis
+                    if(startDate < queryStartDate) { startDate = queryStartDate }
+
+                    c[Calendar.DAY_OF_WEEK] = firstDayOfWeek + 6
+                    var endDate = c.timeInMillis
+                    if(endDate > queryEndDate) { endDate = queryEndDate }
+
+                    processedBuckets[dataPointKey] = ProcessedBucket(
+                        startDate,
+                        endDate,
+                        mutableListOf(),
+                        mutableListOf(),
+                        format.format(startDate),
+                        format.format(endDate)
+                    )
+                }
+
+                Log.d("POINT",
+                    "$weekNumber -> ${format.format(dataPoint.getStartTime(TimeUnit.MILLISECONDS))} : ${dataPoint.getValue(Field.FIELD_CALORIES)}")
+
+                processedBuckets[dataPointKey]!!.dataPoints.add(dataPoint)
+
+
+            }
+        }
+        return processedBuckets.values.toList()
+    }
+
+    private fun processBucketOperation(buckets : List<ProcessedBucket>,
+                                       variable : GoogleFitVariable,
+                                       operationType : String) : List<ProcessedBucket> {
+
+        for(bucket in buckets) {
+
+            val resultPerField : MutableMap<String, Float> = mutableMapOf()
+
+            for(datePoint in bucket.dataPoints) {
+                variable.fields.forEach { field ->
+
+                    if(!resultPerField.containsKey(field.name)) {
+                        resultPerField[field.name] = 0F
+                    }
+
+                    val dataPointValue = datePoint.getValue(field).toString().toFloat()
+
+                    when(operationType) {
+
+                        EnumOperationType.SUM.value -> {
+                            resultPerField[field.name] =
+                                resultPerField[field.name]!! + dataPointValue
+                        }
+
+                        EnumOperationType.MAX.value -> {
+                            var maxValue = resultPerField[field.name]!!
+                            if(maxValue < dataPointValue) { maxValue = dataPointValue }
+                            resultPerField[field.name] = maxValue
+                        }
+
+                        EnumOperationType.MIN.value -> {
+                            var minValue = resultPerField[field.name]!!
+                            if(minValue > dataPointValue) { minValue = dataPointValue }
+                            resultPerField[field.name] = minValue
+                        }
+
+                        EnumOperationType.MIN.value -> {
+                            //TODO: Implement this operation
+                        }
+
+                    }
+                }
             }
 
-            valuesPerWeek[datePointKey]!!.value += day.values[0]
+            variable.fields.forEach { field ->
+                bucket.processedDataPoints.add(resultPerField[field.name]!!)
+            }
 
         }
 
-        val responseBlocks : MutableList<AdvancedQueryResponseBlock> = mutableListOf()
-        var blockIndex = 0
-
-        for(key in valuesPerWeek.keys) {
-
-            val responseBlockValues : MutableList<Float> = mutableListOf()
-            val entry = valuesPerWeek[key]!!
-
-            val format = SimpleDateFormat("yyyy.MM.dd HH:mm")
-
-            val responseBlock = AdvancedQueryResponseBlock(
-                blockIndex,
-                entry.startDate,
-                entry.endDate,
-                format.format(entry.startDate),
-                format.format(entry.endDate),
-                mutableListOf(entry.value) //TODO: FIX THIS
-            )
-            responseBlocks.add(responseBlock)
-
-            blockIndex++
-
-
-        }
-
-        return AdvancedQueryResponse(responseBlocks, "")
+        return buckets
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
