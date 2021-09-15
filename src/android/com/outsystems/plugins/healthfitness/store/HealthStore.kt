@@ -348,8 +348,27 @@ class HealthStore(val platformInterface: AndroidPlatformInterface) {
                 .readData(fitnessRequest)
                 .addOnSuccessListener { dataReadResponse: DataReadResponse ->
 
-                    val bucketsPerWeek = processIntoBucketPerWeek(dataReadResponse.buckets, timeUnitLength, startTime.time, endTime.time)
-                    val resultBuckets = processBucketOperation(bucketsPerWeek, variable, operationType)
+                    var processedBuckets = listOf<ProcessedBucket>()
+
+                    //TODO: Fix this condition
+                    when(parameters.timeUnit) {
+                        "WEEK" -> {
+                            processedBuckets = processIntoBucketPerWeek(
+                                dataReadResponse.buckets,
+                                timeUnitLength,
+                                startTime.time,
+                                endTime.time)
+                        }
+                        "MONTH" -> {
+                            processedBuckets = processIntoBucketPerMonth(
+                                dataReadResponse.buckets,
+                                timeUnitLength,
+                                startTime.time,
+                                endTime.time)
+                        }
+                    }
+
+                    val resultBuckets = processBucketOperation(processedBuckets, variable, operationType)
 
                     val pluginResponseJson = gson.toJson("")
                     Log.d("STORE", "Response $pluginResponseJson")
@@ -424,8 +443,69 @@ class HealthStore(val platformInterface: AndroidPlatformInterface) {
                     )
                 }
 
-                Log.d("POINT",
-                    "$weekNumber -> ${format.format(dataPoint.getStartTime(TimeUnit.MILLISECONDS))} : ${dataPoint.getValue(Field.FIELD_CALORIES)}")
+//                Log.d("POINT",
+//                    "$weekNumber -> ${format.format(dataPoint.getStartTime(TimeUnit.MILLISECONDS))} : ${dataPoint.getValue(Field.FIELD_CALORIES)}")
+
+                processedBuckets[dataPointKey]!!.dataPoints.add(dataPoint)
+
+
+            }
+        }
+        return processedBuckets.values.toList()
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun processIntoBucketPerMonth(bucketsPerDay : List<Bucket>,
+                                         timeUnitLength : Int,
+                                         queryStartDate : Long,
+                                         queryEndDate : Long) : List<ProcessedBucket> {
+
+        val format = SimpleDateFormat("yyyy.MM.dd HH:mm")
+        val processedBuckets : MutableMap<String, ProcessedBucket> = mutableMapOf()
+
+        for(bucket in bucketsPerDay) {
+
+            val dataPointsPerBucket = bucket.dataSets.flatMap { it.dataPoints }
+            if(dataPointsPerBucket.isEmpty()){ continue }
+
+            dataPointsPerBucket.forEach { dataPoint ->
+
+                val dataPointDate = Instant
+                    .ofEpochMilli(dataPoint.getStartTime(TimeUnit.MILLISECONDS))
+                    .atZone(ZoneId.systemDefault())
+                    .toLocalDate()
+
+                val monthNumber = dataPointDate.monthValue
+                val yearNumber = dataPointDate.year
+                val dataPointKey = "$monthNumber$yearNumber"
+
+                if(!processedBuckets.containsKey(dataPointKey)) {
+
+                    val c = Calendar.getInstance()
+                    c.set(Calendar.MONTH, monthNumber)
+
+                    val firstDayOfWeek = c.firstDayOfWeek
+
+                    c[Calendar.DAY_OF_WEEK] = firstDayOfWeek
+                    var startDate = c.timeInMillis
+                    if(startDate < queryStartDate) { startDate = queryStartDate }
+
+                    c[Calendar.DAY_OF_WEEK] = firstDayOfWeek + 6
+                    var endDate = c.timeInMillis
+                    if(endDate > queryEndDate) { endDate = queryEndDate }
+
+                    processedBuckets[dataPointKey] = ProcessedBucket(
+                        startDate,
+                        endDate,
+                        mutableListOf(),
+                        mutableListOf(),
+                        format.format(startDate),
+                        format.format(endDate)
+                    )
+                }
+
+//                Log.d("POINT",
+//                    "$monthNumber -> ${format.format(dataPoint.getStartTime(TimeUnit.MILLISECONDS))} : ${dataPoint.getValue(Field.FIELD_CALORIES)}")
 
                 processedBuckets[dataPointKey]!!.dataPoints.add(dataPoint)
 
