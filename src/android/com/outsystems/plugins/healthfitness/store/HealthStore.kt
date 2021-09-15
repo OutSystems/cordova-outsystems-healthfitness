@@ -1,5 +1,6 @@
 package com.outsystems.plugins.healthfitness.store
 
+import android.R.attr
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.PendingIntent
@@ -27,8 +28,17 @@ import com.outsystems.plugins.healthfitness.MyDataUpdateService
 import org.json.JSONArray
 import java.lang.Integer.max
 import java.text.SimpleDateFormat
+import java.time.DayOfWeek
+import java.time.Instant
+import java.time.LocalDate
+import java.time.ZoneId
+import java.time.temporal.WeekFields
 import java.util.*
 import java.util.concurrent.TimeUnit
+import android.R.attr.firstDayOfWeek
+
+
+
 
 enum class EnumAccessType(val value : String) {
     READ("READ"),
@@ -125,11 +135,12 @@ class HealthStore(val platformInterface: AndroidPlatformInterface) {
             "MINUTE" to Pair(1, TimeUnit.MINUTES),
             "HOUR" to Pair(1, TimeUnit.HOURS),
             "DAY" to Pair(1, TimeUnit.DAYS),
-            "WEEK" to Pair(7, TimeUnit.DAYS),
-            "MONTH" to Pair(30, TimeUnit.DAYS),
-            "YEAR" to Pair(365, TimeUnit.DAYS)
+            "WEEK" to Pair(1, TimeUnit.DAYS),
+            "MONTH" to Pair(1, TimeUnit.DAYS),
+            "YEAR" to Pair(1, TimeUnit.DAYS)
         )
     }
+
 
     @RequiresApi(Build.VERSION_CODES.O)
     fun initAndRequestPermissions(args: JSONArray) {
@@ -304,7 +315,6 @@ class HealthStore(val platformInterface: AndroidPlatformInterface) {
         return true
     }
 
-    @SuppressLint("SimpleDateFormat")
     @RequiresApi(api = Build.VERSION_CODES.O)
     fun getData(args : JSONArray) {
 
@@ -318,16 +328,13 @@ class HealthStore(val platformInterface: AndroidPlatformInterface) {
 
             //TODO: Remove this
             val format = SimpleDateFormat("yyyy.MM.dd HH:mm")
-            val timeUnitLength = max(1, parameters.timeUnitLength)
             val timeUnit = timeUnitsMap.getOrDefault(parameters.timeUnit, Pair(1, TimeUnit.DAYS) )
+            val timeUnitLength = max(1, parameters.timeUnitLength)
             val operationType = parameters.operationType
 
             val requestBuilder = DataReadRequest.Builder()
-                .setTimeRange(
-                    startTime.time,
-                    endTime.time,
-                    TimeUnit.MILLISECONDS)
                 .bucketByTime(timeUnit.first, timeUnit.second)
+                .setTimeRange(startTime.time, endTime.time, TimeUnit.MILLISECONDS)
 
             if(variable.dataType == DataType.TYPE_STEP_COUNT_DELTA) {
                 //This is the special case of step count.
@@ -337,28 +344,26 @@ class HealthStore(val platformInterface: AndroidPlatformInterface) {
                     .setType(DataSource.TYPE_DERIVED)
                     .setStreamName("estimated_steps")
                     .build()
-                requestBuilder.read(datasource)
+                requestBuilder.aggregate(datasource)
             }
             else {
-                requestBuilder.read(variable.dataType)
+                requestBuilder.aggregate(variable.dataType)
             }
 
-
             val fitnessRequest = requestBuilder.build()
-            Fitness
-                .getHistoryClient(context, account)
+            Fitness.getHistoryClient(context, account)
                 .readData(fitnessRequest)
-
                 .addOnSuccessListener { dataReadResponse: DataReadResponse ->
 
                     val responseBlocks : MutableList<AdvancedQueryResponseBlock> = mutableListOf()
-
-                    for(blockIndex in 0 until dataReadResponse.buckets.size){
-                        val bucket = dataReadResponse.buckets[blockIndex]
+                    var blockIndex = 0
+                    for(bucket in dataReadResponse.buckets){
                         val responseBlockValues : MutableList<Float> = mutableListOf()
+                        val valuesFlatMap = bucket.dataSets.flatMap { it.dataPoints }
 
-                        val valuesFlatMap = bucket.dataSets
-                            .flatMap { it.dataPoints }
+                        if(valuesFlatMap.isEmpty()){
+                            continue
+                        }
 
                         googleFitVariable.fields.forEach { field ->
                             valuesFlatMap.forEach { dataPoint ->
@@ -367,69 +372,107 @@ class HealthStore(val platformInterface: AndroidPlatformInterface) {
                             }
                         }
 
-                        val responseBlock = AdvancedQueryResponseBlock(
-                            blockIndex,
-                            format.format(bucket.getStartTime(TimeUnit.MILLISECONDS)),
-                            format.format(bucket.getEndTime(TimeUnit.MILLISECONDS)),
-                            responseBlockValues
-                        )
-                        responseBlocks.add(responseBlock)
-                    }
-
-
-                    /*
-                    dataReadResponse.buckets
-                        .flatMap { it.dataSets }
-                        .flatMap { it.dataPoints }
-                        .forEach { dataPoint ->
-
-                            googleFitVariable.fields.forEach { field ->
-
-                                Log.d("STORE", "Field ${field.name} = ${dataPoint.getValue(field)}")
-
-                                when(operationType) {
-                                    EnumOperationType.MAX.value -> {
-                                        result = totalSteps
-                                            .maxBy { dataPoint.getValue(field).asInt() }
-                                            .toString()
-                                    }
-                                }
-                            }
-                        }
-                    */
-                    /*
-                    .forEach {
-                        for (field in it.dataType.fields) {
-
-                            Log.d("STORE","\tField: ${field.name.toString()} Value: ${it.getValue(field)}")
+                        if(responseBlockValues.isNotEmpty()) {
+                            val responseBlock = AdvancedQueryResponseBlock(
+                                blockIndex,
+                                bucket.getStartTime(TimeUnit.MILLISECONDS),
+                                bucket.getEndTime(TimeUnit.MILLISECONDS),
+                                format.format(bucket.getStartTime(TimeUnit.MILLISECONDS)),
+                                format.format(bucket.getEndTime(TimeUnit.MILLISECONDS)),
+                                responseBlockValues
+                            )
+                            responseBlocks.add(responseBlock)
+                            blockIndex++
                         }
                     }
-                    */
-                    //Log.d("STORE", "Total steps: $totalSteps")
-                    /*
-                    dataReadResponse.buckets.forEach {bu ->
-                        bu.dataSets.forEach { dt ->
-                            dt.dataPoints.forEach{ dp ->
-                                Log.d(
-                                    "DATA",
-                                    dp.getValue(Field.FIELD_STEPS).toString()
-                                )
-                            }
-                        }
-                    }*/
 
                     val queryResponse = AdvancedQueryResponse(responseBlocks)
-                    val pluginResponseJson = gson.toJson(queryResponse)
 
+                    val convertedResponse = convertToBucketPerWeek(queryResponse, startTime.time, endTime.time)
+
+                    val pluginResponseJson = gson.toJson(convertedResponse)
                     Log.d("STORE", "Response $pluginResponseJson")
                     //platformInterface.sendPluginResult(pluginResponseJson)
 
                 }
-
                 .addOnFailureListener { dataReadResponse: Exception ->
                     Log.d("STORE", dataReadResponse.message!!)
                 }
         }
+    }
+
+    data class Aux(
+        val startDate : Long,
+        val endDate : Long,
+        var value : Float
+    )
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun convertToBucketPerWeek(
+        bucketPerDay : AdvancedQueryResponse, queryStartDate : Long, queryEndDate : Long, operation : EnumOperationType) : AdvancedQueryResponse {
+
+        val valuesPerWeek : MutableMap<String, Aux> = mutableMapOf()
+
+        for(day in bucketPerDay.results) {
+
+            val dataPointDate = Instant
+                .ofEpochMilli(day.startDate)
+                .atZone(ZoneId.systemDefault())
+                .toLocalDate()
+
+            val weekFields: WeekFields = WeekFields.ISO
+            val weekNumber = dataPointDate.get(weekFields.weekOfWeekBasedYear())
+            val yearNumber = dataPointDate.year
+            val datePointKey = "$weekNumber$yearNumber"
+
+            if(!valuesPerWeek.containsKey(datePointKey)) {
+
+                val c = Calendar.getInstance()
+                c.set(Calendar.WEEK_OF_YEAR, weekNumber)
+
+                val firstDayOfWeek = c.firstDayOfWeek
+
+                c[Calendar.DAY_OF_WEEK] = firstDayOfWeek
+                var startDate = c.timeInMillis
+                if(startDate < queryStartDate) { startDate = queryStartDate }
+
+                c[Calendar.DAY_OF_WEEK] = firstDayOfWeek + 6
+                var endDate = c.timeInMillis
+                if(endDate > queryEndDate) { endDate = queryEndDate }
+
+                valuesPerWeek[datePointKey] = Aux(startDate, endDate, 0F)
+            }
+
+            valuesPerWeek[datePointKey]!!.value += day.values[0]
+
+        }
+
+        val responseBlocks : MutableList<AdvancedQueryResponseBlock> = mutableListOf()
+        var blockIndex = 0
+
+        for(key in valuesPerWeek.keys) {
+
+            val responseBlockValues : MutableList<Float> = mutableListOf()
+            val entry = valuesPerWeek[key]!!
+
+            val format = SimpleDateFormat("yyyy.MM.dd HH:mm")
+
+            val responseBlock = AdvancedQueryResponseBlock(
+                blockIndex,
+                entry.startDate,
+                entry.endDate,
+                format.format(entry.startDate),
+                format.format(entry.endDate),
+                mutableListOf(entry.value) //TODO: FIX THIS
+            )
+            responseBlocks.add(responseBlock)
+
+            blockIndex++
+
+
+        }
+
+        return AdvancedQueryResponse(responseBlocks, "")
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
