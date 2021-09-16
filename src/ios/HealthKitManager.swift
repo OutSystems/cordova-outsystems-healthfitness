@@ -194,7 +194,7 @@ class HealthKitManager {
             case OperationType.average.rawValue:
                 HKOptions = [.discreteAverage]
             default:
-                HKOptions = [.cumulativeSum]
+                HKOptions = []
         }
         return HKOptions
     }
@@ -203,7 +203,7 @@ class HealthKitManager {
         var interval = DateComponents()
         switch timeUnit {
             case TimeUnit.milliseconds.rawValue:
-                interval.second = 1000
+                interval.second = 1
             case TimeUnit.seconds.rawValue:
                 interval.second = 1
             case TimeUnit.minute.rawValue:
@@ -231,7 +231,7 @@ class HealthKitManager {
                  operationType: String,
                  completion: @escaping(AdvancedQueryResponse?, NSError?) -> Void) {
         
-        let variable = "BLOOD_PRESSURE"
+//        let variable = "BLOOD_PRESSURE"
         
         guard let type = HKTypes.allVariablesQuantityDictToQuery[variable] else {
             let error = HealthKitErrors.dataTypeNotAvailable
@@ -342,63 +342,29 @@ class HealthKitManager {
                 }
 
                 results.enumerateStatistics(from: startDate, to: endDate) { statistics, _ in
-                    
+                    resultInfo.block = block
+                    resultInfo.startDate = Int(statistics.startDate.timeIntervalSince1970)
+                    resultInfo.endDate = Int(statistics.endDate.timeIntervalSince1970)
+                    resultInfo.values = []
                     if let maxQuantity = statistics.maximumQuantity() {
-                        resultInfo.block = block
-                        resultInfo.startDate = Int(statistics.startDate.timeIntervalSince1970)
-                        resultInfo.endDate = Int(statistics.endDate.timeIntervalSince1970)
                         floatArray.append(Float(maxQuantity.doubleValue(for: unit)))
                         resultInfo.values = floatArray
                         floatArray.removeAll()
-
-                        let steps = maxQuantity.doubleValue(for: unit)
-                        print("heart rate: \(steps), starDate: \(statistics.startDate), endDate: \(statistics.endDate)")
-
-                        resultInfoArray.append(resultInfo)
-                        
                     } else if let minimumQuantity = statistics.minimumQuantity() {
-                        resultInfo.block = block
-                        resultInfo.startDate = Int(statistics.startDate.timeIntervalSince1970)
-                        resultInfo.endDate = Int(statistics.endDate.timeIntervalSince1970)
                         floatArray.append(Float(minimumQuantity.doubleValue(for: unit)))
                         resultInfo.values = floatArray
                         floatArray.removeAll()
-
-                        let steps = minimumQuantity.doubleValue(for: unit)
-                        print("heart rate: \(steps), starDate: \(statistics.startDate), endDate: \(statistics.endDate)")
-                        resultInfoArray.append(resultInfo)
-                        
                     } else if let averageQuantity = statistics.averageQuantity() {
-                        resultInfo.block = block
-                        resultInfo.startDate = Int(statistics.startDate.timeIntervalSince1970)
-                        resultInfo.endDate = Int(statistics.endDate.timeIntervalSince1970)
-                        
                         floatArray.append(Float(averageQuantity.doubleValue(for: unit)))
                         resultInfo.values = floatArray
                         floatArray.removeAll()
-
-                        let steps = averageQuantity.doubleValue(for: unit)
-                        print("heart rate: \(steps), starDate: \(statistics.startDate), endDate: \(statistics.endDate)")
-
-                        resultInfoArray.append(resultInfo)
-                        block+=1
-                        
                     } else if let sum = statistics.sumQuantity() {
-
-                        resultInfo.block = block
-                        resultInfo.startDate = Int(statistics.startDate.timeIntervalSince1970)
-                        resultInfo.endDate = Int(statistics.endDate.timeIntervalSince1970)
-                        
                         floatArray.append(Float(sum.doubleValue(for: unit)))
                         resultInfo.values = floatArray
                         floatArray.removeAll()
-
-                        let steps = sum.doubleValue(for: unit)
-                        print("Amount of steps: \(steps), starDate: \(statistics.startDate), endDate: \(statistics.endDate)")
-
-                        resultInfoArray.append(resultInfo)
-                        block+=1
                     }
+                    block+=1
+                    resultInfoArray.append(resultInfo)
                 }
 
                 var result = AdvancedQueryResponse()
