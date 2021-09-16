@@ -3,36 +3,35 @@ import Foundation
 
 class CordovaImplementation: CDVPlugin, IOSPlatformInterface {
     
-    func sendResult(result: String?, error: String?, callBackID:String) {
-        var pluginResult = CDVPluginResult (status: CDVCommandStatus_ERROR);
+    func sendResult(result: String?, error: NSError?, callBackID:String) {
+            var pluginResult = CDVPluginResult (status: CDVCommandStatus_ERROR);
         
-        if error != nil {
-            let errorDict = ["code": "0", "message": error]
-            if let jsonData = try?  JSONSerialization.data(withJSONObject: errorDict, options: .prettyPrinted),
-               let json = String(data: jsonData, encoding: String.Encoding.ascii) {
-                print("JSON string = \n\(json)")
-                pluginResult = CDVPluginResult(status: CDVCommandStatus_ERROR, messageAs: json);
+        if let error = error {
+            if !error.localizedDescription.isEmpty {
+                let errorCode = String(error.code)
+                let errorMessage = error.localizedDescription
+                let errorDict = ["code": errorCode, "message": errorMessage]
+                pluginResult = CDVPluginResult(status: CDVCommandStatus_ERROR, messageAs: errorDict);
             }
-            
-        } else {
-            if let result = result {
-                if !result.isEmpty {
-                    pluginResult = CDVPluginResult(status: CDVCommandStatus_OK, messageAs: result)
-                } else {
-                    pluginResult = CDVPluginResult(status: CDVCommandStatus_OK)
-                }
+        } else if let result = result {
+            if result.isEmpty {
+                pluginResult = CDVPluginResult(status: CDVCommandStatus_OK)
+            } else {
+                print(result)
+                pluginResult = CDVPluginResult(status: CDVCommandStatus_OK, messageAs: result)
             }
         }
         
         self.commandDelegate!.send(pluginResult, callbackId: callBackID);
     }
+    
 }
 
 
 class ReactNativeImplementation: IOSPlatformInterface {
     
     // for future implementations we can use react native
-    func sendResult(result: String, error: String, callBackID:String) {
+    func sendResult(result: String?, error: NSError?, callBackID:String) {
     
     }
     

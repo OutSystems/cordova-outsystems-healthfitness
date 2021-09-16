@@ -28,50 +28,67 @@ class OSHealthFitness: CordovaImplementation {
                                    summaryVariables:summaryVariables) { [self] (authorized, error) in
             
             if let err = error {
-                self.sendResult(result: "", error:err.localizedDescription , callBackID: self.callbackId)
+                self.sendResult(result: "", error:err , callBackID: self.callbackId)
             }
             
             if authorized {
-                self.sendResult(result: "", error: "", callBackID: self.callbackId)
+                self.sendResult(result: "", error: nil, callBackID: self.callbackId)
             }
         }
     }
     
-    @objc(queryData:)
-    func queryData(command: CDVInvokedUrlCommand) {
+    @objc(writeData:)
+    func writeData(command: CDVInvokedUrlCommand) {
         callbackId = command.callbackId
-
-        if let startDateInput = command.arguments[0] as? String,
-           let endDateInput = command.arguments[1] as? String,
-           let dataType = command.arguments[2] as? String {
-
-            let startDate = Date(startDateInput)
-            let endDate = Date(endDateInput)
-
-            plugin?.queryData(dataType: dataType, startDate: startDate, endDate: endDate) { result, error in
-                
-                if error != nil {
-                    self.sendResult(result: nil, error: error?.localizedDescription, callBackID: self.callbackId)
-                }
-                else if result != nil {
-                    self.sendResult(result: result, error: nil, callBackID: self.callbackId)
-                }
-                else {
-                    //Should not happen, but a "catch all"
-                    self.sendResult(result: nil, error: "An unknow error has occurred while trying to fetch HealthKit Data", callBackID: self.callbackId)
-                }
+        
+        let variable = command.arguments[0] as? String ?? ""
+        let value = command.arguments[1] as? String ?? ""
+        
+        plugin?.writeData(variable: variable, value: value) { success,error in
+            
+            if let err = error {
+                self.sendResult(result: "", error:err, callBackID: self.callbackId)
             }
+            
+            if success {
+                self.sendResult(result: "", error: nil, callBackID: self.callbackId)
+            }
+            
+        }
+    
+    }
+    
+    @objc(getData:)
+    func getData(command: CDVInvokedUrlCommand) {
+        callbackId = command.callbackId
+        
+        let queryParameters = command.arguments[0] as? String ?? ""
+        if let params = queryParameters.decode(string: queryParameters) as QueryParameters? {
+            
+            if let variable = params.variable,
+            let startDate = params.startDate,
+            let endDate = params.endDate,
+            let timeUnit = params.timeUnit,
+            let operationType = params.operationType {
+
+                plugin?.getData(variable: variable,
+                                startDate: Date(startDate),
+                                endDate: Date(endDate),
+                                timeUnit: timeUnit,
+                                operationType: operationType ) { success, result, error in
+
+                    if error != nil {
+                        self.sendResult(result: nil, error: error, callBackID: self.callbackId)
+                    }
+                    else if success {
+                        self.sendResult(result: result, error: nil, callBackID: self.callbackId)
+                    }
+                }
+            
+            }
+ 
         }
     }
     
-}
-
-extension Date {
-    init(_ dateString:String) {
-        let dateStringFormatter = DateFormatter()
-        dateStringFormatter.dateFormat = "dd-MM-yyyy"
-        dateStringFormatter.locale = NSLocale(localeIdentifier: "en_US_POSIX") as Locale
-        let date = dateStringFormatter.date(from: dateString)!
-        self.init(timeInterval:0, since:date)
-    }
+    
 }

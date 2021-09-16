@@ -2,6 +2,22 @@
 import Foundation
 
 class HealthFitnessPlugin {
+
+    func writeData(variable:String,
+                   value:String,
+                   completion: @escaping (Bool, NSError?) -> Void) {
+        
+        let healthKitManager = HealthKitManager()
+        healthKitManager.writeData(variable: variable,
+                                   value: value) { (success, error) in
+            
+            if let error = error {
+                completion(false,error)
+            }
+        
+        }
+        
+    }
     
     func requestPermissions(customPermissions:String,
                             allVariables:String,
@@ -9,7 +25,7 @@ class HealthFitnessPlugin {
                             healthVariables:String,
                             profileVariables:String,
                             summaryVariables:String,
-                            completion: @escaping (Bool, HealthKitAuthorizationErrors?) -> Void) {
+                            completion: @escaping (Bool, NSError?) -> Void) {
         
         let healthKitManager = HealthKitManager()
         healthKitManager.authorizeHealthKit(customPermissions: customPermissions,
@@ -29,28 +45,33 @@ class HealthFitnessPlugin {
         }
          
     }
-
-    func queryData(dataType: String, startDate: Date, endDate: Date, completion: @escaping(String?, Error?) -> Void) {
+    
+    func getData(variable: String,
+                 startDate: Date,
+                 endDate: Date,
+                 timeUnit: String,
+                 operationType: String,
+                 completion: @escaping(Bool, String?, NSError?) -> Void) {
         let healthKitManager = HealthKitManager()
         var finalResult: String?
-        var finalError: Error?
         
         //MARK - TODO: Acertar o completion handler
-        healthKitManager.queryData(dataType: dataType, startDate: startDate, endDate: endDate) { result, error in
+        healthKitManager.getData(variable: variable,
+                                 startDate: startDate,
+                                 endDate: endDate,
+                                 timeUnit: timeUnit,
+                                 operationType: operationType) { result, error in
             
-            if error != nil {
-                finalError = error
-                print(error!.localizedDescription)
-            } else {
-                //MARK - TODO: ver o conteúdo que preciso retornar e transformar o jsonEncoder em uma function
+            if let error = error {
+                completion(false,nil,error)
+            } else if ((result != nil) && error == nil) {
                 let encoder = JSONEncoder()
                 encoder.outputFormatting = .prettyPrinted
                 let data = try! encoder.encode(result)
-                print(String(data: data, encoding: .utf8)!)
                 finalResult = String(data: data, encoding: .utf8)!
-        
+                completion(true,finalResult,nil)
             }
-            completion(finalResult,finalError)
+            
         }
     }
     
