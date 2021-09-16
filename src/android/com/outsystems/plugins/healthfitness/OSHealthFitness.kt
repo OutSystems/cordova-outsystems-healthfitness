@@ -108,7 +108,12 @@ class OSHealthFitness : CordovaImplementation() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun writeData(args: JSONArray) {
-        healthStore?.updateData(args)
+
+        //process parameters
+        val variable = args.getString(0)
+        val value = args.getString(1)
+
+        healthStore?.updateData(variable, value)
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)

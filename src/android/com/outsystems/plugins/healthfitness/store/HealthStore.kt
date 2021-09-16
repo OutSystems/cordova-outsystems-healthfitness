@@ -258,12 +258,10 @@ class  HealthStore(val platformInterface: AndroidPlatformInterface) {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    fun updateData(args: JSONArray) {
+    fun updateData(variable: String, value: String) {
 
-        //process parameters
-        val variable = args.getString(0)
         //right now we are only writing data which are float values
-        val value = args.getString(1).toFloat()
+        val convertedValue = value.toFloat()
 
         val dataType = profileVariablesMap[variable]?.dataType
 
@@ -280,7 +278,7 @@ class  HealthStore(val platformInterface: AndroidPlatformInterface) {
         val timestamp = System.currentTimeMillis()
         val valueToWrite = DataPoint.builder(dataSourceWrite)
             .setTimestamp(timestamp, TimeUnit.MILLISECONDS)
-            .setField(fieldType, value)
+            .setField(fieldType, convertedValue)
             .build()
 
         val dataSet = DataSet.builder(dataSourceWrite)
