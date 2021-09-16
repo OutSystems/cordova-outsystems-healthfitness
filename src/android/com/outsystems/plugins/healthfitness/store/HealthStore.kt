@@ -331,9 +331,8 @@ class HealthStore(val platformInterface: AndroidPlatformInterface) {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    fun getData(args : JSONArray) {
+    fun getData(parameters : AdvancedQueryParameters) {
 
-        val parameters = gson.fromJson(args.getString(0), AdvancedQueryParameters::class.java)
         val googleFitVariable = getVariableByName(parameters.variable)
 
         googleFitVariable?.let { variable ->

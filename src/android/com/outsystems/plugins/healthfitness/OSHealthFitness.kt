@@ -10,6 +10,8 @@ import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
 import com.google.android.gms.fitness.FitnessOptions
 import com.google.android.gms.fitness.data.*
+import com.google.gson.Gson
+import com.outsystems.plugins.healthfitness.store.AdvancedQueryParameters
 import com.outsystems.plugins.healthfitness.store.HealthStore
 
 import org.apache.cordova.*
@@ -27,6 +29,7 @@ class OSHealthFitness : CordovaImplementation() {
     override var callbackContext: CallbackContext? = null
 
     var healthStore: HealthStore? = null
+    val gson by lazy { Gson() }
 
     override fun initialize(cordova: CordovaInterface, webView: CordovaWebView) {
         super.initialize(cordova, webView)
@@ -103,7 +106,8 @@ class OSHealthFitness : CordovaImplementation() {
     //Get steps by day
     @RequiresApi(api = Build.VERSION_CODES.O)
     private fun getData(args : JSONArray) {
-        healthStore?.getData(args)
+        val parameters = gson.fromJson(args.getString(0), AdvancedQueryParameters::class.java)
+        healthStore?.getData(parameters)
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
