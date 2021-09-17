@@ -25,6 +25,7 @@ import com.outsystems.plugins.healthfitness.OSHealthFitness
 import com.outsystems.plugins.healthfitness.MyDataUpdateService
 import org.json.JSONArray
 import java.lang.Integer.max
+import java.lang.Integer.min
 import java.text.SimpleDateFormat
 import java.time.Instant
 import java.time.ZoneId
@@ -49,6 +50,7 @@ enum class EnumOperationType(val value : String){
     MIN("MIN"),
     MAX("MAX"),
     AVERAGE("AVERAGE"),
+    RAW("RAW"),
 }
 enum class EnumTimeUnit(val value : TimeUnit) {
     MILLISECOND(TimeUnit.MILLISECONDS),
@@ -155,7 +157,6 @@ class HealthStore(val platformInterface: AndroidPlatformInterface) {
             "YEAR" to EnumTimeUnit.YEAR
         )
     }
-
 
     @RequiresApi(Build.VERSION_CODES.O)
     fun initAndRequestPermissions(args: JSONArray) {
@@ -340,10 +341,10 @@ class HealthStore(val platformInterface: AndroidPlatformInterface) {
             val endTime = parameters.endDate
             val startTime = parameters.startDate
 
-            //TODO: Remove this
+            //TODO: Remove. Debug use only
             val format = SimpleDateFormat("yyyy.MM.dd HH:mm")
             val operationType = parameters.operationType
-            val timeUnit = if(operationType == EnumOperationType.SUM.value) {
+            val timeUnit = if(operationType == EnumOperationType.SUM.value || operationType == EnumOperationType.RAW.value) {
                 timeUnits.getOrDefault(parameters.timeUnit, EnumTimeUnit.DAY)
             } else {
                 timeUnitsForMinMaxAverage.getOrDefault(parameters.timeUnit, EnumTimeUnit.DAY)
@@ -362,10 +363,23 @@ class HealthStore(val platformInterface: AndroidPlatformInterface) {
                     .setType(DataSource.TYPE_DERIVED)
                     .setStreamName("estimated_steps")
                     .build()
-                requestBuilder.aggregate(datasource)
+
+                //TODO: Needs refactoring
+                if(operationType == EnumOperationType.RAW.value){
+                    requestBuilder.read(datasource)
+                }
+                else {
+                    requestBuilder.aggregate(datasource)
+                }
             }
             else {
-                requestBuilder.aggregate(variable.dataType)
+                //TODO: Needs refactoring
+                if(operationType == EnumOperationType.RAW.value){
+                    requestBuilder.read(variable.dataType)
+                }
+                else {
+                    requestBuilder.aggregate(variable.dataType)
+                }
             }
 
             val fitnessRequest = requestBuilder.build()
@@ -375,9 +389,8 @@ class HealthStore(val platformInterface: AndroidPlatformInterface) {
 
                     var processedBuckets = listOf<ProcessedBucket>()
 
-                    //TODO:
+                    //TODO: Needs refactoring
                     when(parameters.timeUnit) {
-
                         "MILLISECONDS",
                         "SECONDS",
                         "MINUTE",
@@ -400,12 +413,11 @@ class HealthStore(val platformInterface: AndroidPlatformInterface) {
                                 startTime.time,
                                 endTime.time)
                         }
-
                     }
 
                     val resultBuckets = processBucketOperation(processedBuckets, variable, operationType)
-                    val queryResponse = buildAdvancedQueryResult(resultBuckets)
 
+                    val queryResponse = buildAdvancedQueryResult(resultBuckets)
                     val pluginResponseJson = gson.toJson(queryResponse)
                     Log.d("STORE", "Response $pluginResponseJson")
                     platformInterface.sendPluginResult(pluginResponseJson)
@@ -441,7 +453,7 @@ class HealthStore(val platformInterface: AndroidPlatformInterface) {
 
     data class ProcessedBucket(
         val startDate : Long,
-        val endDate : Long,
+        var endDate : Long,
         var dataPoints : MutableList<DataPoint>,
         var processedDataPoints : MutableList<Float>,
         var DEBUG_startDate : String,
@@ -489,7 +501,9 @@ class HealthStore(val platformInterface: AndroidPlatformInterface) {
 
         val format = SimpleDateFormat("yyyy.MM.dd HH:mm")
         val processedBuckets : MutableMap<String, ProcessedBucket> = mutableMapOf()
+        val weekKeyQueue : ArrayDeque<String> = ArrayDeque()
 
+        //Merge buckets into weeks
         for(bucket in bucketsPerDay) {
 
             val dataPointsPerBucket = bucket.dataSets.flatMap { it.dataPoints }
@@ -523,6 +537,8 @@ class HealthStore(val platformInterface: AndroidPlatformInterface) {
                     var endDate = c.timeInMillis
                     if(endDate > queryEndDate) { endDate = queryEndDate }
 
+                    weekKeyQueue.add(dataPointKey)
+
                     processedBuckets[dataPointKey] = ProcessedBucket(
                         startDate,
                         endDate,
@@ -541,6 +557,24 @@ class HealthStore(val platformInterface: AndroidPlatformInterface) {
             }
 
         }
+
+        //TODO: Needs refactoring
+        //Merge buckets into groups
+        while(!weekKeyQueue.isEmpty()) {
+            val keyAnchor = weekKeyQueue.pop()
+
+            for(i in 1 until min(timeUnitLength, weekKeyQueue.size + 1)) {
+
+                val keyToMergeWithAnchor = weekKeyQueue.pop()
+                val valuesToMerge = processedBuckets[keyToMergeWithAnchor]!!
+
+                processedBuckets[keyAnchor]!!.dataPoints.addAll(valuesToMerge.dataPoints)
+                processedBuckets[keyAnchor]!!.endDate = valuesToMerge.endDate
+
+                processedBuckets.remove(keyToMergeWithAnchor)
+            }
+        }
+
         return processedBuckets.values.toList()
     }
 
@@ -552,7 +586,9 @@ class HealthStore(val platformInterface: AndroidPlatformInterface) {
 
         val format = SimpleDateFormat("yyyy.MM.dd HH:mm")
         val processedBuckets : MutableMap<String, ProcessedBucket> = mutableMapOf()
+        val bucketKeyQueue : ArrayDeque<String> = ArrayDeque()
 
+        //Merge buckets into Months
         for(bucket in bucketsPerDay) {
 
             val dataPointsPerBucket = bucket.dataSets.flatMap { it.dataPoints }
@@ -598,10 +634,26 @@ class HealthStore(val platformInterface: AndroidPlatformInterface) {
 //                    "$monthNumber -> ${format.format(dataPoint.getStartTime(TimeUnit.MILLISECONDS))} : ${dataPoint.getValue(Field.FIELD_CALORIES)}")
 
                 processedBuckets[dataPointKey]!!.dataPoints.add(dataPoint)
-
-
             }
         }
+
+        //TODO: Needs refactoring
+        //Merge buckets into groups
+        while(!bucketKeyQueue.isEmpty()) {
+            val keyAnchor = bucketKeyQueue.pop()
+
+            for(i in 1 until min(timeUnitLength, bucketKeyQueue.size + 1)) {
+
+                val keyToMergeWithAnchor = bucketKeyQueue.pop()
+                val valuesToMerge = processedBuckets[keyToMergeWithAnchor]!!
+
+                processedBuckets[keyAnchor]!!.dataPoints.addAll(valuesToMerge.dataPoints)
+                processedBuckets[keyAnchor]!!.endDate = valuesToMerge.endDate
+
+                processedBuckets.remove(keyToMergeWithAnchor)
+            }
+        }
+
         return processedBuckets.values.toList()
     }
 
@@ -612,38 +664,42 @@ class HealthStore(val platformInterface: AndroidPlatformInterface) {
 
         for(bucket in buckets) {
 
-            val resultPerField : MutableMap<String, Float> = mutableMapOf()
+            val resultPerField : MutableMap<String, MutableList<Float>> = mutableMapOf()
 
             for(datePoint in bucket.dataPoints) {
 
                 variable.fields.forEach { field ->
 
                     if(!resultPerField.containsKey(field.name)) {
-                        resultPerField[field.name] = 0F
+                        resultPerField.put(field.name, mutableListOf(0F))
                     }
 
                     val dataPointValue = datePoint.getValue(field).toString().toFloat()
 
                     when(operationType) {
 
+                        EnumOperationType.RAW.value -> {
+                            resultPerField[field.name]!!.add(dataPointValue)
+                        }
+
                         EnumOperationType.SUM.value -> {
-                            resultPerField[field.name] =
-                                resultPerField[field.name]!! + dataPointValue
+                            resultPerField[field.name]!![0] =
+                                resultPerField[field.name]!![0] + dataPointValue
                         }
 
                         EnumOperationType.MAX.value -> {
-                            var maxValue = resultPerField[field.name]!!
+                            var maxValue = resultPerField[field.name]!![0]
                             if(maxValue < dataPointValue) { maxValue = dataPointValue }
-                            resultPerField[field.name] = maxValue
+                            resultPerField[field.name]!![0] = maxValue
                         }
 
                         EnumOperationType.MIN.value -> {
-                            var minValue = resultPerField[field.name]!!
+                            var minValue = resultPerField[field.name]!![0]
                             if(minValue > dataPointValue) { minValue = dataPointValue }
-                            resultPerField[field.name] = minValue
+                            resultPerField[field.name]!![0] = minValue
                         }
 
-                        EnumOperationType.MIN.value -> {
+                        EnumOperationType.AVERAGE.value -> {
                             //TODO: Implement this operation
                         }
 
@@ -654,7 +710,7 @@ class HealthStore(val platformInterface: AndroidPlatformInterface) {
             }
 
             variable.fields.forEach { field ->
-                bucket.processedDataPoints.add(resultPerField[field.name]!!)
+                bucket.processedDataPoints.addAll(resultPerField[field.name]!!)
             }
 
         }
