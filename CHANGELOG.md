@@ -8,6 +8,9 @@ The changes documented here do not include those from the original repository.
 
 ## [Unreleased]
 
+## 2021-09-15
+- Implemented WriteProfileData for Android (https://outsystemsrd.atlassian.net/browse/RMET-976)
+
 ## 2021-09-13
 - Fixed RequestPermissions for Android (https://outsystemsrd.atlassian.net/browse/RMET-971)
 
