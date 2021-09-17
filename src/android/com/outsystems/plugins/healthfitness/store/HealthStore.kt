@@ -28,6 +28,10 @@ import org.json.JSONArray
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.util.concurrent.TimeUnit
+import com.google.android.gms.fitness.data.DataPoint
+import com.google.android.gms.fitness.data.DataSet
+import java.util.*
+
 
 enum class EnumAccessType(val value : String) {
     READ("READ"),
@@ -301,6 +305,55 @@ class  HealthStore(val platformInterface: AndroidPlatformInterface) {
                 //Maybe catch that com.google.android.gms.common.api.ApiException: 4: The user must be signed in to make this API call.
                 //For now we will send a generic error message
                 platformInterface.sendPluginResult(null, Pair(HealthFitnessError.WRITE_DATA_ERROR.code, HealthFitnessError.WRITE_DATA_ERROR.message))
+            }
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    fun readLastRecord(variable: String) {
+
+        val endTime: Long = Date().time
+        val month = 2592000000
+        val startTime: Long = endTime - month
+
+        var dataType : DataType? = null
+        var fieldType : Field? = null
+
+        if(fitnessVariablesMap.containsKey(variable)){
+            dataType = fitnessVariablesMap[variable]?.dataType
+            fieldType = fitnessVariablesMap[variable]?.fields?.get(0)
+        }
+
+        else if(healthVariablesMap.containsKey(variable)){
+            dataType = healthVariablesMap[variable]?.dataType
+            fieldType = healthVariablesMap[variable]?.fields?.get(0)
+        }
+
+        else if(profileVariablesMap.containsKey(variable)){
+            dataType = profileVariablesMap[variable]?.dataType
+            fieldType = profileVariablesMap[variable]?.fields?.get(0)
+        }
+
+        val readRequest = DataReadRequest.Builder()
+            .read(dataType)
+            .setTimeRange(startTime, endTime, TimeUnit.MILLISECONDS)
+            .setLimit(1)
+            .build()
+
+        Fitness.getHistoryClient(
+            activity, account)
+            .readData(readRequest)
+            .addOnSuccessListener{ dataReadResponse ->
+                for (dataSet in dataReadResponse.dataSets) {
+                    for (dataPoint in dataSet.dataPoints) {
+                        val value = dataPoint.getValue(fieldType)
+                        Log.w("DATA POINT IS", dataPoint.getValue(fieldType).toString());
+                    }
+                }
+                //platformInterface.sendPluginResult(value, null)
+            }
+            .addOnFailureListener { e ->
+                Log.w("Access GoogleFit:", "There was an error updating the DataSet", e)
+                //platformInterface.sendPluginResult(null, Pair(HealthFitnessError.WRITE_DATA_ERROR.code, HealthFitnessError.WRITE_DATA_ERROR.message))
             }
     }
 
