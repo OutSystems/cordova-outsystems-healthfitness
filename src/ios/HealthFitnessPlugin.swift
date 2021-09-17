@@ -65,10 +65,7 @@ class HealthFitnessPlugin {
             if let error = error {
                 completion(false,nil,error)
             } else if ((result != nil) && error == nil) {
-                let encoder = JSONEncoder()
-                encoder.outputFormatting = .prettyPrinted
-                let data = try! encoder.encode(result)
-                finalResult = String(data: data, encoding: .utf8)!
+                finalResult = result?.encode(object:result)
                 completion(true,finalResult,nil)
             }
             

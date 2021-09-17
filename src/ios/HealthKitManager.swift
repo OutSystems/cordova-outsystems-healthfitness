@@ -40,19 +40,49 @@ class HealthKitManager {
         return true
     }
     
-    func processVariables(dictToRead:[String: HKObjectType],
-                        dictToWrite:[String: HKSampleType],
-                        groupPermissions:GroupPermissions) {
-        
-        if (groupPermissions.accessType == "WRITE") {
-            for item in dictToWrite { healthKitTypesToWrite.insert(item.value) }
-        } else if (groupPermissions.accessType == "READWRITE") {
-            for item in dictToRead { healthKitTypesToRead.insert(item.value) }
-            for item in dictToWrite { healthKitTypesToWrite.insert(item.value) }
-        } else {
-            for item in dictToRead { healthKitTypesToRead.insert(item.value) }
+    func fillPermissionSetWithVariables(dict: [String: [HealthKitVariable]],
+                          groupPermissions:GroupPermissions) {
+                
+        for (_, variables) in dict {
+            if variables.count > 1 {
+                for item in variables {
+                    if groupPermissions.accessType == AccessTypeEnum.write.rawValue {
+                        healthKitTypesToWrite.insert(item.sampleType)
+                    } else if (groupPermissions.accessType == AccessTypeEnum.readWrite.rawValue) {
+                        healthKitTypesToWrite.insert(item.sampleType)
+                        healthKitTypesToRead.insert(item.objectType)
+                    } else {
+                        healthKitTypesToRead.insert(item.objectType)
+                    }
+                }
+            } else {
+                if let variable = variables.first {
+                    if groupPermissions.accessType == AccessTypeEnum.write.rawValue {
+                        healthKitTypesToWrite.insert(variable.sampleType)
+                    } else if (groupPermissions.accessType == AccessTypeEnum.readWrite.rawValue) {
+                        healthKitTypesToWrite.insert(variable.sampleType)
+                        healthKitTypesToRead.insert(variable.objectType)
+                    } else {
+                        healthKitTypesToRead.insert(variable.objectType)
+                    }
+                }
+            }
         }
     }
+    
+//    func processVariables(dictToRead:[String: HKObjectType],
+//                          dictToWrite:[String: HKSampleType],
+//                          groupPermissions:GroupPermissions) {
+//
+//        if (groupPermissions.accessType == "WRITE") {
+//            for item in dictToWrite { healthKitTypesToWrite.insert(item.value) }
+//        } else if (groupPermissions.accessType == "READWRITE") {
+//            for item in dictToRead { healthKitTypesToRead.insert(item.value) }
+//            for item in dictToWrite { healthKitTypesToWrite.insert(item.value) }
+//        } else {
+//            for item in dictToRead { healthKitTypesToRead.insert(item.value) }
+//        }
+//    }
     
     func authorizeHealthKit(customPermissions:String,
                             allVariables:String,
@@ -70,30 +100,26 @@ class HealthKitManager {
         
         let all = allVariables.decode(string: allVariables) as GroupPermissions
         if all.isActive {
-            self.processVariables(dictToRead: HKTypes.allVariablesDictToRead,
-                                  dictToWrite: HKTypes.allVariablesDictToWrite,
+            self.fillPermissionSetWithVariables(dict: HKTypes.allVariablesDict,
                                   groupPermissions: all)
         }
         
         let fitness = fitnessVariables.decode(string: fitnessVariables) as GroupPermissions
         if fitness.isActive {
-            self.processVariables(dictToRead: HKTypes.fitnessVariablesDictToRead,
-                                  dictToWrite: HKTypes.fitnessVariablesDictToWrite,
-                                  groupPermissions: fitness)
+            self.fillPermissionSetWithVariables(dict: HKTypes.fitnessVariablesDict,
+                                                groupPermissions: fitness)
         }
         
         let health = healthVariables.decode(string: healthVariables) as GroupPermissions
         if health.isActive {
-            self.processVariables(dictToRead: HKTypes.healthVariablesDictToRead,
-                                  dictToWrite: HKTypes.healthVariablesDictToWrite,
-                                  groupPermissions: health)
+            self.fillPermissionSetWithVariables(dict: HKTypes.healthVariablesDict,
+                                                groupPermissions: health)
         }
         
         let profile = profileVariables.decode(string: profileVariables) as GroupPermissions
         if profile.isActive {
-            self.processVariables(dictToRead: HKTypes.profileVariablesDictToRead,
-                                  dictToWrite: HKTypes.profileVariablesDictToWrite,
-                                  groupPermissions: profile)
+            self.fillPermissionSetWithVariables(dict: HKTypes.profileVariablesDict,
+                                                groupPermissions: profile)
         }
         
         let permissonsOK = self.parseCustomPermissons(customPermissions: customPermissions)
@@ -136,22 +162,29 @@ class HealthKitManager {
             completion(false, error)
         }
                 
-        guard let type = HKTypes.profileVariablesQuantityDictToWrite[variable] else {
+        guard let type = HKTypes.profileVariablesDict[variable] else {
             let error = HealthKitErrors.dataTypeNotAvailable
             completion(false, error as NSError)
             return
         }
         
-        guard let unit = HKTypes.profileVariablesUnitDictToWrite[variable] else {
+        guard let unit = type.first?.unit else {
             let error = HealthKitErrors.dataTypeNotAvailable
             completion(false, error as NSError)
             return
         }
+        
+        guard let quantityType = type.first?.quantityType else {
+            let error = HealthKitErrors.dataTypeNotAvailable
+            completion(false, error as NSError)
+            return
+        }
+        
         
         if let val = Double(value) {
             let variableQuantity = HKQuantity(unit: unit, doubleValue: val)
             
-            let countSample = HKQuantitySample(type: type,
+            let countSample = HKQuantitySample(type: quantityType,
                                                 quantity: variableQuantity,
                                                    start: Date(),
                                                    end: Date())
@@ -323,57 +356,63 @@ class HealthKitManager {
             HKHealthStore().execute(sampleQuery)
 
         } else if let type = types?.first {
-                    
-            let query = HKStatisticsCollectionQuery(quantityType: type.quantityType,
-                                                    quantitySamplePredicate: nil,
-                                                    options: HKOptions,
-                                                    anchorDate: anchorDate,
-                                                    intervalComponents: interval)
-            query.initialResultsHandler = { _, results, error in
-                
-                if error != nil {
-                    completion(nil, error as NSError?)
-                    return
-                }
-                    
-                guard let results = results else {
-                    completion(nil, HealthKitErrors.noResultsForQuery as NSError)
-                    return
-                }
-
-                results.enumerateStatistics(from: startDate, to: endDate) { statistics, _ in
-                    resultInfo.block = block
-                    resultInfo.startDate = Int(statistics.startDate.timeIntervalSince1970)
-                    resultInfo.endDate = Int(statistics.endDate.timeIntervalSince1970)
-                    resultInfo.values = []
-                    if let maxQuantity = statistics.maximumQuantity() {
-                        floatArray.append(Float(maxQuantity.doubleValue(for: unit)))
-                        resultInfo.values = floatArray
-                        floatArray.removeAll()
-                    } else if let minimumQuantity = statistics.minimumQuantity() {
-                        floatArray.append(Float(minimumQuantity.doubleValue(for: unit)))
-                        resultInfo.values = floatArray
-                        floatArray.removeAll()
-                    } else if let averageQuantity = statistics.averageQuantity() {
-                        floatArray.append(Float(averageQuantity.doubleValue(for: unit)))
-                        resultInfo.values = floatArray
-                        floatArray.removeAll()
-                    } else if let sum = statistics.sumQuantity() {
-                        floatArray.append(Float(sum.doubleValue(for: unit)))
-                        resultInfo.values = floatArray
-                        floatArray.removeAll()
-                    }
-                    block+=1
-                    resultInfoArray.append(resultInfo)
-                }
-
-                var result = AdvancedQueryResponse()
-                result.results = resultInfoArray
-                completion(result, nil)
-            }
             
-            HKHealthStore().execute(query)
+            if let quantityType = type.quantityType {
+                
+                let query = HKStatisticsCollectionQuery(quantityType: quantityType,
+                                                        quantitySamplePredicate: nil,
+                                                        options: HKOptions,
+                                                        anchorDate: anchorDate,
+                                                        intervalComponents: interval)
+                query.initialResultsHandler = { _, results, error in
+                    
+                    if error != nil {
+                        completion(nil, error as NSError?)
+                        return
+                    }
+                        
+                    guard let results = results else {
+                        completion(nil, HealthKitErrors.noResultsForQuery as NSError)
+                        return
+                    }
+
+                    results.enumerateStatistics(from: startDate, to: endDate) { statistics, _ in
+                        resultInfo.block = block
+                        resultInfo.startDate = Int(statistics.startDate.timeIntervalSince1970)
+                        resultInfo.endDate = Int(statistics.endDate.timeIntervalSince1970)
+                        resultInfo.values = []
+                        if let maxQuantity = statistics.maximumQuantity() {
+                            floatArray.append(Float(maxQuantity.doubleValue(for: unit)))
+                            resultInfo.values = floatArray
+                            floatArray.removeAll()
+                        } else if let minimumQuantity = statistics.minimumQuantity() {
+                            floatArray.append(Float(minimumQuantity.doubleValue(for: unit)))
+                            resultInfo.values = floatArray
+                            floatArray.removeAll()
+                        } else if let averageQuantity = statistics.averageQuantity() {
+                            floatArray.append(Float(averageQuantity.doubleValue(for: unit)))
+                            resultInfo.values = floatArray
+                            floatArray.removeAll()
+                        } else if let sum = statistics.sumQuantity() {
+                            floatArray.append(Float(sum.doubleValue(for: unit)))
+                            resultInfo.values = floatArray
+                            floatArray.removeAll()
+                        }
+                        block+=1
+                        resultInfoArray.append(resultInfo)
+                    }
+
+                    var result = AdvancedQueryResponse()
+                    result.results = resultInfoArray
+                    completion(result, nil)
+                }
+                
+                HKHealthStore().execute(query)
+            }
+                
         }
+                    
+            
     }
 }
 
