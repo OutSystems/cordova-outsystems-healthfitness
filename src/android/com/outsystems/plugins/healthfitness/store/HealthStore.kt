@@ -14,19 +14,17 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.fitness.Fitness
 import com.google.android.gms.fitness.FitnessOptions
-import com.google.android.gms.fitness.data.DataSource
-import com.google.android.gms.fitness.data.DataType
-import com.google.android.gms.fitness.data.Field
+import com.google.android.gms.fitness.data.*
 import com.google.android.gms.fitness.request.DataReadRequest
 import com.google.android.gms.fitness.request.DataUpdateListenerRegistrationRequest
 import com.google.android.gms.fitness.request.SensorRequest
 import com.google.android.gms.fitness.result.DataReadResponse
 import com.google.gson.Gson
 import com.outsystems.plugins.healthfitness.AndroidPlatformInterface
+import com.outsystems.plugins.healthfitness.HealthFitnessError
 import com.outsystems.plugins.healthfitness.OSHealthFitness
 import com.outsystems.plugins.healthfitness.MyDataUpdateService
 import org.json.JSONArray
-import org.json.JSONObject
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.util.concurrent.TimeUnit
@@ -53,26 +51,28 @@ class  HealthStore(val platformInterface: AndroidPlatformInterface) {
 
     private val fitnessVariablesMap: Map<String, GoogleFitVariable> by lazy {
         mapOf(
-            "STEPS" to GoogleFitVariable(DataType.TYPE_STEP_COUNT_DELTA),
-            "CALORIES_BURNED" to GoogleFitVariable(DataType.TYPE_CALORIES_EXPENDED)
+            "STEPS" to GoogleFitVariable(DataType.TYPE_STEP_COUNT_DELTA, listOf(Field.FIELD_STEPS)),
+            "CALORIES_BURNED" to GoogleFitVariable(DataType.TYPE_CALORIES_EXPENDED, listOf(Field.FIELD_CALORIES))
         )
     }
     private val healthVariablesMap: Map<String, GoogleFitVariable> by lazy {
         mapOf(
-            "HEART_RATE" to GoogleFitVariable(DataType.TYPE_HEART_RATE_BPM),
-            "SLEEP" to GoogleFitVariable(DataType.TYPE_SLEEP_SEGMENT)
+            "HEART_RATE" to GoogleFitVariable(DataType.TYPE_HEART_RATE_BPM, listOf(Field.FIELD_BPM)),
+            "SLEEP" to GoogleFitVariable(DataType.TYPE_SLEEP_SEGMENT, listOf(Field.FIELD_SLEEP_SEGMENT_TYPE))
         )
     }
     private val profileVariablesMap: Map<String, GoogleFitVariable> by lazy {
         mapOf(
-            "HEIGHT" to GoogleFitVariable(DataType.TYPE_HEIGHT),
-            "WEIGHT" to GoogleFitVariable(DataType.TYPE_WEIGHT)
+            "HEIGHT" to GoogleFitVariable(DataType.TYPE_HEIGHT, listOf(Field.FIELD_HEIGHT)),
+            "WEIGHT" to GoogleFitVariable(DataType.TYPE_WEIGHT, listOf(Field.FIELD_WEIGHT)),
+            "BODY_FAT_PERCENTAGE" to GoogleFitVariable(DataType.TYPE_BODY_FAT_PERCENTAGE, listOf(Field.FIELD_PERCENTAGE)),
+            "BASAL_METABOLIC_RATE" to GoogleFitVariable(DataType.TYPE_BASAL_METABOLIC_RATE, listOf(Field.FIELD_CALORIES))
         )
     }
     private val summaryVariablesMap: Map<String, GoogleFitVariable> by lazy {
         mapOf(
-            "HEIGHT_SUMMARY" to GoogleFitVariable(DataType.AGGREGATE_HEIGHT_SUMMARY),
-            "WEIGHT_SUMMARY" to GoogleFitVariable(DataType.AGGREGATE_WEIGHT_SUMMARY)
+            "HEIGHT_SUMMARY" to GoogleFitVariable(DataType.AGGREGATE_HEIGHT_SUMMARY, listOf(Field.FIELD_HEIGHT)),
+            "WEIGHT_SUMMARY" to GoogleFitVariable(DataType.AGGREGATE_WEIGHT_SUMMARY, listOf(Field.FIELD_WEIGHT))
         )
     }
 
@@ -110,7 +110,7 @@ class  HealthStore(val platformInterface: AndroidPlatformInterface) {
             if(summaryVariablesPermissions.isActive){
                 appendPermissions(summaryVariablesPermissions, permissionList, EnumVariableGroup.SUMMARY)
             }
-            parseCustomPermissions(customPermissions, permissionList)
+            permissionList.addAll(parseCustomPermissions(customPermissions, permissionList))
         }
         initFitnessOptions(permissionList)
     }
@@ -194,7 +194,9 @@ class  HealthStore(val platformInterface: AndroidPlatformInterface) {
     }
 
     private fun getVariableByName(name : String) : GoogleFitVariable? {
-        return if(healthVariablesMap.containsKey(name)){
+        return if(fitnessVariablesMap.containsKey(name)){
+            fitnessVariablesMap[name]
+        } else if(healthVariablesMap.containsKey(name)){
             healthVariablesMap[name]
         } else if(profileVariablesMap.containsKey(name)){
             profileVariablesMap[name]
@@ -216,13 +218,21 @@ class  HealthStore(val platformInterface: AndroidPlatformInterface) {
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     fun requestGoogleFitPermissions() {
-        fitnessOptions?.let {
-            GoogleSignIn.requestPermissions(
-                platformInterface.getActivity(),  // your activity
-                OSHealthFitness.GOOGLE_FIT_PERMISSIONS_REQUEST_CODE,  // e.g. 1
-                account,
-                it
-            )
+        if(!checkAllGoogleFitPermissionGranted()){
+            fitnessOptions?.let {
+                GoogleSignIn.requestPermissions(
+                    platformInterface.getActivity(),  // your activity
+                    OSHealthFitness.GOOGLE_FIT_PERMISSIONS_REQUEST_CODE,  // e.g. 1
+                    account,
+                    it
+                )
+            }
+            //instead of calling sendPluginResult here we should call it in the onActivityResult after the user provides the permissions in the permission dialog
+            //but the onActivityResult is not being called for some reason
+            platformInterface.sendPluginResult("success", null)
+        }
+        else{
+            platformInterface.sendPluginResult("success", null)
         }
     }
 
@@ -245,6 +255,53 @@ class  HealthStore(val platformInterface: AndroidPlatformInterface) {
             }
         }
         return true
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    fun updateData(variable: String, value: String) {
+
+        //right now we are only writing data which are float values
+        val convertedValue = value.toFloat()
+
+        val dataType = profileVariablesMap[variable]?.dataType
+
+        //profile variables only have 1 field each, so it is safe to get the first entry of the fields list
+        val fieldType = profileVariablesMap[variable]?.fields?.get(0)
+
+        //insert the data
+        val dataSourceWrite = DataSource.Builder()
+            .setAppPackageName(context)
+            .setDataType(dataType)
+            .setType(DataSource.TYPE_RAW)
+            .build()
+
+        val timestamp = System.currentTimeMillis()
+        val valueToWrite = DataPoint.builder(dataSourceWrite)
+            .setTimestamp(timestamp, TimeUnit.MILLISECONDS)
+            .setField(fieldType, convertedValue)
+            .build()
+
+        val dataSet = DataSet.builder(dataSourceWrite)
+            .add(valueToWrite)
+            .build()
+
+        Fitness.getHistoryClient(
+            activity,
+            account
+        )
+            .insertData(dataSet)
+            .addOnSuccessListener {
+                Log.i("Access GoogleFit:", "DataSet updated successfully!")
+                platformInterface.sendPluginResult("success", null)
+            }
+            .addOnFailureListener { e ->
+                Log.w("Access GoogleFit:", "There was an error updating the DataSet", e)
+                //In this case, what is the error we want to send in the callback?
+                //We could identify the exception that is thrown and send an error accordingly?
+                //Maybe catch that com.google.android.gms.common.api.ApiException: 4: The user must be signed in to make this API call.
+                //For now we will send a generic error message
+                platformInterface.sendPluginResult(null, Pair(HealthFitnessError.WRITE_DATA_ERROR.code, HealthFitnessError.WRITE_DATA_ERROR.message))
+            }
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
