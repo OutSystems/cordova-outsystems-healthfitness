@@ -340,19 +340,17 @@ class HealthStore(val platformInterface: AndroidPlatformInterface) {
 
             val endTime = parameters.endDate
             val startTime = parameters.startDate
-
-            //TODO: Remove. Debug use only
-            val format = SimpleDateFormat("yyyy.MM.dd HH:mm")
+            
             val operationType = parameters.operationType
+            val timeUnitLength = max(1, parameters.timeUnitLength)
+
             val timeUnit = if(operationType == EnumOperationType.SUM.value || operationType == EnumOperationType.RAW.value) {
                 timeUnits.getOrDefault(parameters.timeUnit, EnumTimeUnit.DAY)
             } else {
                 timeUnitsForMinMaxAverage.getOrDefault(parameters.timeUnit, EnumTimeUnit.DAY)
             }
-            val timeUnitLength = max(1, parameters.timeUnitLength)
 
             val requestBuilder = DataReadRequest.Builder()
-                .bucketByTime(1, timeUnit.value)
                 .setTimeRange(startTime.time, endTime.time, TimeUnit.MILLISECONDS)
 
             if(variable.dataType == DataType.TYPE_STEP_COUNT_DELTA) {
@@ -380,6 +378,16 @@ class HealthStore(val platformInterface: AndroidPlatformInterface) {
                 else {
                     requestBuilder.aggregate(variable.dataType)
                 }
+            }
+
+            //TODO: Needs refactoring
+            if(parameters.timeUnit == "WEEK" ||
+                parameters.timeUnit == "MONTH"||
+                parameters.timeUnit == "YEAR") {
+                requestBuilder.bucketByTime(1, timeUnit.value)
+            }
+            else {
+                requestBuilder.bucketByTime(1 * timeUnitLength, timeUnit.value)
             }
 
             val fitnessRequest = requestBuilder.build()
@@ -665,13 +673,17 @@ class HealthStore(val platformInterface: AndroidPlatformInterface) {
         for(bucket in buckets) {
 
             val resultPerField : MutableMap<String, MutableList<Float>> = mutableMapOf()
+            var nResultsPerField = 0
 
             for(datePoint in bucket.dataPoints) {
-
                 variable.fields.forEach { field ->
 
                     if(!resultPerField.containsKey(field.name)) {
-                        resultPerField.put(field.name, mutableListOf(0F))
+                        val results = mutableListOf<Float>()
+                        resultPerField[field.name] = results
+                        if(operationType != EnumOperationType.RAW.value) {
+                            results.add(0F)
+                        }
                     }
 
                     val dataPointValue = datePoint.getValue(field).toString().toFloat()
@@ -679,21 +691,25 @@ class HealthStore(val platformInterface: AndroidPlatformInterface) {
                     when(operationType) {
 
                         EnumOperationType.RAW.value -> {
+                            nResultsPerField += 1
                             resultPerField[field.name]!!.add(dataPointValue)
                         }
 
                         EnumOperationType.SUM.value -> {
+                            nResultsPerField = 1
                             resultPerField[field.name]!![0] =
                                 resultPerField[field.name]!![0] + dataPointValue
                         }
 
                         EnumOperationType.MAX.value -> {
+                            nResultsPerField = 1
                             var maxValue = resultPerField[field.name]!![0]
                             if(maxValue < dataPointValue) { maxValue = dataPointValue }
                             resultPerField[field.name]!![0] = maxValue
                         }
 
                         EnumOperationType.MIN.value -> {
+                            nResultsPerField = 1
                             var minValue = resultPerField[field.name]!![0]
                             if(minValue > dataPointValue) { minValue = dataPointValue }
                             resultPerField[field.name]!![0] = minValue
@@ -706,11 +722,13 @@ class HealthStore(val platformInterface: AndroidPlatformInterface) {
                     }
 
                 }
-
             }
 
-            variable.fields.forEach { field ->
-                bucket.processedDataPoints.addAll(resultPerField[field.name]!!)
+            nResultsPerField /= variable.fields.size
+            for(variableResultIndex in 0 until nResultsPerField) {
+                variable.fields.forEach { field ->
+                    bucket.processedDataPoints.add(resultPerField[field.name]!![variableResultIndex])
+                }
             }
 
         }
