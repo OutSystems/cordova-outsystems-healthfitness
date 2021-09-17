@@ -3,7 +3,7 @@ import Foundation
 
 protocol IOSPlatformInterface {
     
-    func sendResult(result:String,error:String,callBackID:String)
+    func sendResult(result: String, error: NSError?, callBackID:String)
     
 }
 

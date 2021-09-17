@@ -3,11 +3,17 @@ import Foundation
 
 class CordovaImplementation: CDVPlugin, IOSPlatformInterface {
     
-    func sendResult(result: String, error: String, callBackID:String) {
-        var pluginResult = CDVPluginResult (status: CDVCommandStatus_ERROR);
+    func sendResult(result: String, error: NSError?, callBackID:String) {
+            var pluginResult = CDVPluginResult (status: CDVCommandStatus_ERROR);
         
-        if !error.isEmpty {
-            let errorDict = ["code": "0", "message": error]
+        guard let error = error else {
+            return
+        }
+            
+        if !error.localizedDescription.isEmpty {
+            let errorCode = String(error.code)
+            let errorMessage = error.localizedDescription
+            let errorDict = ["code": errorCode, "message": errorMessage]
             pluginResult = CDVPluginResult(status: CDVCommandStatus_ERROR, messageAs: errorDict);
         } else if result.isEmpty {
             pluginResult = CDVPluginResult(status: CDVCommandStatus_OK)
@@ -24,7 +30,7 @@ class CordovaImplementation: CDVPlugin, IOSPlatformInterface {
 class ReactNativeImplementation: IOSPlatformInterface {
     
     // for future implementations we can use react native
-    func sendResult(result: String, error: String, callBackID:String) {
+    func sendResult(result: String, error: NSError?, callBackID:String) {
     
     }
     
