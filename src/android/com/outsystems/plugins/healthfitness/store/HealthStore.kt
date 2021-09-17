@@ -365,7 +365,7 @@ class HealthStore(val platformInterface: AndroidPlatformInterface) {
                 requestBuilder.aggregate(datasource)
             }
             else {
-                requestBuilder.read(variable.dataType)
+                requestBuilder.aggregate(variable.dataType)
             }
 
             val fitnessRequest = requestBuilder.build()
@@ -386,7 +386,6 @@ class HealthStore(val platformInterface: AndroidPlatformInterface) {
                             processedBuckets = processBucket(
                                 dataReadResponse.buckets)
                         }
-
                         "WEEK" -> {
                             processedBuckets = processIntoBucketPerWeek(
                                 dataReadResponse.buckets,
@@ -394,7 +393,6 @@ class HealthStore(val platformInterface: AndroidPlatformInterface) {
                                 startTime.time,
                                 endTime.time)
                         }
-
                         "MONTH" -> {
                             processedBuckets = processIntoBucketPerMonth(
                                 dataReadResponse.buckets,
@@ -402,13 +400,15 @@ class HealthStore(val platformInterface: AndroidPlatformInterface) {
                                 startTime.time,
                                 endTime.time)
                         }
+
                     }
 
                     val resultBuckets = processBucketOperation(processedBuckets, variable, operationType)
+                    val queryResponse = buildAdvancedQueryResult(resultBuckets)
 
-                    val pluginResponseJson = gson.toJson("")
+                    val pluginResponseJson = gson.toJson(queryResponse)
                     Log.d("STORE", "Response $pluginResponseJson")
-                    //platformInterface.sendPluginResult(pluginResponseJson)
+                    platformInterface.sendPluginResult(pluginResponseJson)
 
                 }
                 .addOnFailureListener { dataReadResponse: Exception ->
@@ -417,6 +417,27 @@ class HealthStore(val platformInterface: AndroidPlatformInterface) {
         }
     }
 
+    private fun buildAdvancedQueryResult(resultBuckets : List<ProcessedBucket>) : AdvancedQueryResponse {
+
+        val format = SimpleDateFormat("yyyy.MM.dd HH:mm")
+        var block = 0
+        val blockList : MutableList<AdvancedQueryResponseBlock> = mutableListOf()
+        for(bucket in resultBuckets) {
+            blockList.add(
+                AdvancedQueryResponseBlock(
+                    block,
+                    bucket.startDate / 1000,
+                    bucket.endDate / 1000,
+                    format.format(bucket.startDate),
+                    format.format(bucket.endDate),
+                    bucket.processedDataPoints
+                )
+            )
+            block++
+        }
+        var result = AdvancedQueryResponse(blockList)
+        return result
+    }
 
     data class ProcessedBucket(
         val startDate : Long,
@@ -472,6 +493,7 @@ class HealthStore(val platformInterface: AndroidPlatformInterface) {
         for(bucket in bucketsPerDay) {
 
             val dataPointsPerBucket = bucket.dataSets.flatMap { it.dataPoints }
+
             if(dataPointsPerBucket.isEmpty()){ continue }
 
             dataPointsPerBucket.forEach { dataPoint ->
@@ -516,8 +538,8 @@ class HealthStore(val platformInterface: AndroidPlatformInterface) {
 
                 processedBuckets[dataPointKey]!!.dataPoints.add(dataPoint)
 
-
             }
+
         }
         return processedBuckets.values.toList()
     }
@@ -593,6 +615,7 @@ class HealthStore(val platformInterface: AndroidPlatformInterface) {
             val resultPerField : MutableMap<String, Float> = mutableMapOf()
 
             for(datePoint in bucket.dataPoints) {
+
                 variable.fields.forEach { field ->
 
                     if(!resultPerField.containsKey(field.name)) {
@@ -602,6 +625,7 @@ class HealthStore(val platformInterface: AndroidPlatformInterface) {
                     val dataPointValue = datePoint.getValue(field).toString().toFloat()
 
                     when(operationType) {
+
                         EnumOperationType.SUM.value -> {
                             resultPerField[field.name] =
                                 resultPerField[field.name]!! + dataPointValue
@@ -622,9 +646,11 @@ class HealthStore(val platformInterface: AndroidPlatformInterface) {
                         EnumOperationType.MIN.value -> {
                             //TODO: Implement this operation
                         }
+
                     }
 
                 }
+
             }
 
             variable.fields.forEach { field ->
