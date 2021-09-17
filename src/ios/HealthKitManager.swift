@@ -6,7 +6,7 @@ class HealthKitManager {
     var healthKitTypesToWrite = Set<HKSampleType>()
     var HKTypes = HealthKitTypes()
         
-    func isValidVariable(dict:[String: Any], variable:String) -> Bool {
+    func isValidVariable(dict:[String: [HealthKitVariable]], variable:String) -> Bool {
         let filtered = dict.filter { $0.key == variable }
         return !filtered.isEmpty
     }
@@ -15,22 +15,33 @@ class HealthKitManager {
         if let permissions = customPermissions.decode(string: customPermissions) as PermissionsArray?{
             for element in permissions {
                 let variable = element.variable
-                
-                let existVariableToRead = isValidVariable(dict: HKTypes.allVariablesDictToRead, variable: variable)
-                let existVariableToWrite = isValidVariable(dict: HKTypes.allVariablesDictToWrite, variable: variable)
-                
-                if (!variable.isEmpty) {
-                    if (element.accessType == "WRITE" && existVariableToWrite) {
-                        healthKitTypesToWrite.insert(HKTypes.allVariablesDictToWrite[variable]!)
-                    }else if (element.accessType == "READWRITE") && existVariableToRead && existVariableToWrite {
-                        healthKitTypesToRead.insert(HKTypes.allVariablesDictToRead[variable]!)
-                        healthKitTypesToWrite.insert(HKTypes.allVariablesDictToWrite[variable]!)
-                    } else if (existVariableToRead) {
-                        healthKitTypesToRead.insert(HKTypes.allVariablesDictToRead[variable]!)
-                    } else {
-                        return false
+                let existVariable = isValidVariable(dict: HKTypes.allVariablesDict, variable: variable)
+                if existVariable {
+                    for (_, variables) in HKTypes.allVariablesDict {
+                        if variables.count > 1 {
+                            for item in variables {
+                                if element.accessType == AccessTypeEnum.write.rawValue {
+                                    healthKitTypesToWrite.insert(item.sampleType)
+                                } else if (element.accessType == AccessTypeEnum.readWrite.rawValue) {
+                                    healthKitTypesToWrite.insert(item.sampleType)
+                                    healthKitTypesToRead.insert(item.objectType)
+                                } else {
+                                    healthKitTypesToRead.insert(item.objectType)
+                                }
+                            }
+                        } else {
+                            if let variable = variables.first {
+                                if element.accessType == AccessTypeEnum.write.rawValue {
+                                    healthKitTypesToWrite.insert(variable.sampleType)
+                                } else if (element.accessType == AccessTypeEnum.readWrite.rawValue) {
+                                    healthKitTypesToWrite.insert(variable.sampleType)
+                                    healthKitTypesToRead.insert(variable.objectType)
+                                } else {
+                                    healthKitTypesToRead.insert(variable.objectType)
+                                }
+                            }
+                        }
                     }
-                    
                 } else {
                     return false
                 }
@@ -69,20 +80,6 @@ class HealthKitManager {
             }
         }
     }
-    
-//    func processVariables(dictToRead:[String: HKObjectType],
-//                          dictToWrite:[String: HKSampleType],
-//                          groupPermissions:GroupPermissions) {
-//
-//        if (groupPermissions.accessType == "WRITE") {
-//            for item in dictToWrite { healthKitTypesToWrite.insert(item.value) }
-//        } else if (groupPermissions.accessType == "READWRITE") {
-//            for item in dictToRead { healthKitTypesToRead.insert(item.value) }
-//            for item in dictToWrite { healthKitTypesToWrite.insert(item.value) }
-//        } else {
-//            for item in dictToRead { healthKitTypesToRead.insert(item.value) }
-//        }
-//    }
     
     func authorizeHealthKit(customPermissions:String,
                             allVariables:String,
@@ -156,7 +153,6 @@ class HealthKitManager {
     func writeData(variable: String,
                    value: String,
                    completion: @escaping (Bool, NSError?) -> Void) {
-        
         
         if let error = self.isHealthDataAvailable() {
             completion(false, error)

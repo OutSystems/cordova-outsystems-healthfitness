@@ -112,7 +112,7 @@ class HealthKitTypes {
                                               objectType: HKObjectType.quantityType(forIdentifier: .pushCount)!,
                                               correlationType: nil,
                                               unit: HKUnit.count())
-    
+    // MARK: - All Variables
     lazy var allVariablesDict: [String: [HealthKitVariable]] = [
         HealthTypeEnum.stepCount.rawValue:[stepCount],
         HealthTypeEnum.heartRate.rawValue:[heartRate],
@@ -128,37 +128,6 @@ class HealthKitTypes {
         HealthTypeEnum.dietaryWater.rawValue:[dietaryWater],
         HealthTypeEnum.pushCount.rawValue:[pushCount]
     ]
-    
-    // MARK: - All Variables
-    lazy var allVariablesDictToRead: [String: HKObjectType] =
-        [HealthTypeEnum.stepCount.rawValue:HKObjectType.quantityType(forIdentifier: .stepCount)!,
-         HealthTypeEnum.heartRate.rawValue:HKObjectType.quantityType(forIdentifier: .heartRate)!,
-         HealthTypeEnum.bodyMass.rawValue:HKObjectType.quantityType(forIdentifier: .bodyMass)!,
-         HealthTypeEnum.height.rawValue:HKObjectType.quantityType(forIdentifier: .height)!,
-         HealthTypeEnum.bloodGlucose.rawValue:HKObjectType.quantityType(forIdentifier: .bloodGlucose)!,
-         HealthTypeEnum.pushCount.rawValue:HKObjectType.quantityType(forIdentifier: .pushCount)!,
-         HealthTypeEnum.bodyFatPercentage.rawValue:HKObjectType.quantityType(forIdentifier: .bodyFatPercentage)!,
-         HealthTypeEnum.basalEnergyBurned.rawValue:HKObjectType.quantityType(forIdentifier: .basalEnergyBurned)!,
-         HealthTypeEnum.bodyTemperature.rawValue:HKObjectType.quantityType(forIdentifier: .bodyTemperature)!,
-         HealthTypeEnum.dietaryWater.rawValue:HKObjectType.quantityType(forIdentifier: .dietaryWater)!,
-         HealthTypeEnum.oxygenSaturation.rawValue:HKObjectType.quantityType(forIdentifier: .oxygenSaturation)!,
-         HealthTypeEnum.sleepAnalysis.rawValue:HKObjectType.categoryType(forIdentifier: .sleepAnalysis)!,
-         HealthTypeEnum.activeEnergyBurned.rawValue:HKObjectType.quantityType(forIdentifier:HKQuantityTypeIdentifier.activeEnergyBurned)!]
-    
-    lazy var allVariablesDictToWrite: [String: HKSampleType] =
-        [HealthTypeEnum.stepCount.rawValue:HKSampleType.quantityType(forIdentifier: .stepCount)!,
-         HealthTypeEnum.heartRate.rawValue:HKSampleType.quantityType(forIdentifier: .heartRate)!,
-         HealthTypeEnum.bodyMass.rawValue:HKSampleType.quantityType(forIdentifier: .bodyMass)!,
-         HealthTypeEnum.height.rawValue:HKSampleType.quantityType(forIdentifier: .height)!,
-         HealthTypeEnum.bloodGlucose.rawValue:HKSampleType.quantityType(forIdentifier: .bloodGlucose)!,
-         HealthTypeEnum.pushCount.rawValue:HKSampleType.quantityType(forIdentifier: .pushCount)!,
-         HealthTypeEnum.bodyTemperature.rawValue:HKSampleType.quantityType(forIdentifier: .bodyTemperature)!,
-         HealthTypeEnum.dietaryWater.rawValue:HKSampleType.quantityType(forIdentifier: .dietaryWater)!,
-         HealthTypeEnum.oxygenSaturation.rawValue:HKObjectType.quantityType(forIdentifier: .oxygenSaturation)!,
-         HealthTypeEnum.sleepAnalysis.rawValue:HKSampleType.categoryType(forIdentifier: .sleepAnalysis)!,
-         HealthTypeEnum.bodyFatPercentage.rawValue:HKSampleType.quantityType(forIdentifier: .bodyFatPercentage)!,
-         HealthTypeEnum.basalEnergyBurned.rawValue:HKSampleType.quantityType(forIdentifier: .basalEnergyBurned)!,
-         HealthTypeEnum.activeEnergyBurned.rawValue:HKSampleType.quantityType(forIdentifier: .activeEnergyBurned)!]
 
     lazy var allVariablesQuantityDictToQuery: [String: [HealthKitVariable]] = [
         HealthTypeEnum.bloodPressure.rawValue:[bloodPressureSystolic, bloodPressureDiastolic],
@@ -166,10 +135,6 @@ class HealthKitTypes {
         HealthTypeEnum.heartRate.rawValue:[heartRate],
         HealthTypeEnum.bloodGlucose.rawValue:[bloodGlucose]
     ]
-    
-//    lazy var allVariablesUnitDictToWrite: [String: HKUnit] =
-//        [HealthTypeEnum.bodyMass.rawValue:HKUnit.gramUnit(with: .kilo),
-//         HealthTypeEnum.stepCount.rawValue:HKUnit.count()]
     
     // MARK: - Profile Variables
     lazy var profileVariablesDict: [String: [HealthKitVariable]] =
