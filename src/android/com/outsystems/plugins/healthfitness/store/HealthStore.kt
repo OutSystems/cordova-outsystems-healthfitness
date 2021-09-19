@@ -309,7 +309,7 @@ class  HealthStore(val platformInterface: AndroidPlatformInterface) {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    fun readLastRecord(variable: String) {
+    fun getLastRecord(variable: String) {
 
         val endTime: Long = Date().time
         val month = 2592000000
@@ -343,17 +343,18 @@ class  HealthStore(val platformInterface: AndroidPlatformInterface) {
             activity, account)
             .readData(readRequest)
             .addOnSuccessListener{ dataReadResponse ->
+                var value : Float? = null
                 for (dataSet in dataReadResponse.dataSets) {
                     for (dataPoint in dataSet.dataPoints) {
-                        val value = dataPoint.getValue(fieldType)
+                        value = dataPoint.getValue(fieldType).toString().toFloat()
                         Log.w("DATA POINT IS", dataPoint.getValue(fieldType).toString());
                     }
                 }
-                //platformInterface.sendPluginResult(value, null)
+                platformInterface.sendPluginResult(value, null)
             }
             .addOnFailureListener { e ->
                 Log.w("Access GoogleFit:", "There was an error updating the DataSet", e)
-                //platformInterface.sendPluginResult(null, Pair(HealthFitnessError.WRITE_DATA_ERROR.code, HealthFitnessError.WRITE_DATA_ERROR.message))
+                platformInterface.sendPluginResult(null, Pair(HealthFitnessError.WRITE_DATA_ERROR.code, HealthFitnessError.WRITE_DATA_ERROR.message))
             }
     }
 

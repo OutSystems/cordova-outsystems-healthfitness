@@ -53,6 +53,9 @@ class OSHealthFitness : CordovaImplementation() {
             "writeData" -> {
                 writeData(args)
             }
+            "getLastRecord" -> {
+                getLastRecord(args)
+            }
         }
         return true
     }
@@ -114,6 +117,14 @@ class OSHealthFitness : CordovaImplementation() {
         val value = args.getString(1)
 
         healthStore?.updateData(variable, value)
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun getLastRecord(args: JSONArray) {
+
+        //process parameters
+        val variable = args.getString(0)
+        healthStore?.getLastRecord(variable)
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
