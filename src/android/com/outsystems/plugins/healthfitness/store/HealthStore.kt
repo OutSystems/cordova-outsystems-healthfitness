@@ -343,13 +343,7 @@ class  HealthStore(val platformInterface: AndroidPlatformInterface) {
             activity, account)
             .readData(readRequest)
             .addOnSuccessListener{ dataReadResponse ->
-                var value : Float? = null
-                for (dataSet in dataReadResponse.dataSets) {
-                    for (dataPoint in dataSet.dataPoints) {
-                        value = dataPoint.getValue(fieldType).toString().toFloat()
-                        Log.w("DATA POINT IS", dataPoint.getValue(fieldType).toString());
-                    }
-                }
+                val value = dataReadResponse.dataSets[0].dataPoints[0].getValue(fieldType).toString().toFloat()
                 platformInterface.sendPluginResult(value, null)
             }
             .addOnFailureListener { e ->
