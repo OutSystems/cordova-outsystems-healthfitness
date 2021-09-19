@@ -344,6 +344,7 @@ class  HealthStore(val platformInterface: AndroidPlatformInterface) {
             .readData(readRequest)
             .addOnSuccessListener{ dataReadResponse ->
                 val value = dataReadResponse.dataSets[0].dataPoints[0].getValue(fieldType).toString().toFloat()
+                Log.i("Access GoogleFit:", "DataPoint obtained successfully!")
                 platformInterface.sendPluginResult(value, null)
             }
             .addOnFailureListener { e ->
