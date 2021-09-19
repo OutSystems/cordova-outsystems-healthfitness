@@ -349,7 +349,7 @@ class  HealthStore(val platformInterface: AndroidPlatformInterface) {
             }
             .addOnFailureListener { e ->
                 Log.w("Access GoogleFit:", "There was an error updating the DataSet", e)
-                platformInterface.sendPluginResult(null, Pair(HealthFitnessError.WRITE_DATA_ERROR.code, HealthFitnessError.WRITE_DATA_ERROR.message))
+                platformInterface.sendPluginResult(null, Pair(HealthFitnessError.READ_DATA_ERROR.code, HealthFitnessError.READ_DATA_ERROR.message))
             }
     }
 
