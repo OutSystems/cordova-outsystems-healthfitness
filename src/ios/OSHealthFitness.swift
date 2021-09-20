@@ -77,8 +77,8 @@ class OSHealthFitness: CordovaImplementation {
     
     }
     
-    @objc(advancedQuery:)
-    func advancedQuery(command: CDVInvokedUrlCommand) {
+    @objc(getData:)
+    func getData(command: CDVInvokedUrlCommand) {
         callbackId = command.callbackId
         
         let queryParameters = command.arguments[0] as? String ?? ""
