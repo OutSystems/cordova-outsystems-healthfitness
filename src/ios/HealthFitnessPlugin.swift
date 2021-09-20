@@ -8,15 +8,12 @@ class HealthFitnessPlugin {
                    completion: @escaping (Bool, NSError?) -> Void) {
         
         let healthKitManager = HealthKitManager()
-        healthKitManager.writeData(variable: variable,
-                                   value: value) { (success, error) in
-            
+        healthKitManager.writeData(variable: variable, value: value) { (success, error) in
             if let error = error {
                 completion(false,error)
             } else {
                 completion(true,nil)
             }
-                
         }
         
     }
@@ -43,19 +40,8 @@ class HealthFitnessPlugin {
 
         }
 
-//        let healthKitManager = HealthKitManager()
-//        healthKitManager.getLastRecord(variable: variable) { (result, error) in
-//
-//            if let error = error {
-//                completion(false, 0, error)
-//            } else {
-//                completion(true, result, nil)
-//            }
-//        }
-//
     }
 
-    
     func requestPermissions(customPermissions:String,
                             allVariables:String,
                             fitnessVariables:String,

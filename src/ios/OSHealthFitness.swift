@@ -74,18 +74,7 @@ class OSHealthFitness: CordovaImplementation {
                 self.sendResult(result: result, error: nil, callBackID: self.callbackId)
             }
         }
-        
-//        plugin?.getLastRecord(variable: variable) { success, result, error in
-//            if let err = error {
-//                self.sendResult(result: "", error:err, callBackID: self.callbackId)
-//            }
-//            if let result = result {
-//                if success {
-//                    let dictResult = ["result": result]
-//                    self.sendResultAsDictionary(result: dictResult, error: nil, callBackID: self.callbackId)
-//                }
-//            }
-//        }
+    
     }
     
     @objc(advancedQuery:)
