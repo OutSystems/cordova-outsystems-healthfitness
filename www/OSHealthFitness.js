@@ -16,7 +16,7 @@ exports.requestPermissions = function (success, error, params) {
 };
 
 exports.getData = function (success, error, params) {
-    exec(success, error, 'OSHealthFitness', 'getData', [params]);
+    exec(success, error, 'OSHealthFitness', 'advancedQuery', [params]);
 };
     
 exports.writeData = function (success, error, variable, value) {
