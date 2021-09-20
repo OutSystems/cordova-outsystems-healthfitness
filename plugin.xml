@@ -7,10 +7,11 @@
     <clobbers target="cordova.plugins.OSHealthFitness"/>
   </js-module>
   <platform name="android">
+
     <config-file parent="/*" target="res/xml/config.xml">
       <feature name="OSHealthFitness">
         <param name="android-package" value="com.outsystems.plugins.healthfitness.OSHealthFitness"/>
-      </feature> 
+      </feature>
 
       <preference name="GradlePluginKotlinEnabled" value="true" />
       <preference name="GradlePluginKotlinCodeStyle" value="official" />
@@ -19,14 +20,14 @@
 
       <service android:name="com.outsystems.plugins.healthfitness.MyDataUpdateService"
                android:exported="true"/>
-  
+
     </config-file>
     <config-file parent="/*" target="AndroidManifest.xml">
       <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
       <uses-permission android:name="android.permission.ACTIVITY_RECOGNITION" />
       <uses-permission android:name="android.permission.BODY_SENSORS" />
     </config-file>
-    
+
     <source-file src="src/android/com/outsystems/plugins/healthfitness/OSHealthFitness.kt" target-dir="app/src/main/kotlin/com/outsystems/plugins/healthfitness"/>
     <source-file src="src/android/com/outsystems/plugins/healthfitness/MyDataUpdateService.kt" target-dir="app/src/main/kotlin/com/outsystems/plugins/healthfitness"/>
     <source-file src="src/android/com/outsystems/plugins/healthfitness/CordovaImplementation.kt" target-dir="app/src/main/kotlin/com/outsystems/plugins/healthfitness"/>
@@ -38,7 +39,11 @@
     <source-file src="src/android/com/outsystems/plugins/healthfitness/store/GoogleFitVariable.kt" target-dir="app/src/main/kotlin/com/outsystems/plugins/healthfitness/store"/>
     <source-file src="src/android/com/outsystems/plugins/healthfitness/store/GoogleFitGroupPermission.kt" target-dir="app/src/main/kotlin/com/outsystems/plugins/healthfitness/store"/>
 
-    
+    <source-file src="src/android/com/outsystems/plugins/healthfitness/store/AdvancedQueryParameters.kt" target-dir="app/src/main/kotlin/com/outsystems/plugins/healthfitness/store"/>
+    <source-file src="src/android/com/outsystems/plugins/healthfitness/store/AdvancedQueryResponse.kt" target-dir="app/src/main/kotlin/com/outsystems/plugins/healthfitness/store"/>
+    <source-file src="src/android/com/outsystems/plugins/healthfitness/store/AdvancedQueryResponseBlock.kt" target-dir="app/src/main/kotlin/com/outsystems/plugins/healthfitness/store"/>
+
+
     <framework src="src/android/build.gradle" custom="true" type="gradleReference" />
     <framework src="org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.4.3" />
     <framework src="org.jetbrains.kotlinx:kotlinx-coroutines-android:1.4.3" />
@@ -56,7 +61,7 @@
 
 		<!-- Hooks -->
 		<hook type="before_plugin_install" src="hooks/install_prerequisites.js"/>
-    <hook type="after_plugin_add" src="hooks/add_swift_support.js" /> 
+    <hook type="after_plugin_add" src="hooks/add_swift_support.js" />
 
     <!-- iOS Permissions -->
     <preference name="HEALTH_SHARE_DESCRIPTION" default="App needs to shared health data" />
@@ -85,7 +90,7 @@
     <config-file target="*/Entitlements-Release.plist" parent="com.apple.developer.healthkit.background-delivery">
       <true/>
     </config-file>
-      
+
 		<!-- iOS Source Files -->
 		<source-file src="src/ios/OSHealthFitness.swift" />
 		<source-file src="src/ios/HealthKitManager.swift" />
@@ -94,7 +99,7 @@
     <source-file src="src/ios/HealthKitTypes.swift" />
     <source-file src="src/ios/IOSPlatformInterface.swift" />
     <source-file src="src/ios/AuthorizationErrors.swift" />
-    
+
   </platform>
 
 </plugin>

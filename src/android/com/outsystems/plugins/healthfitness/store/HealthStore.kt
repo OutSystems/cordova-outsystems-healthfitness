@@ -20,6 +20,20 @@ import com.google.android.gms.fitness.request.DataUpdateListenerRegistrationRequ
 import com.google.android.gms.fitness.request.SensorRequest
 import com.google.android.gms.fitness.result.DataReadResponse
 import com.google.gson.Gson
+import com.google.gson.annotations.SerializedName
+import com.outsystems.plugins.healthfitness.AndroidPlatformInterface
+import com.outsystems.plugins.healthfitness.OSHealthFitness
+import com.outsystems.plugins.healthfitness.MyDataUpdateService
+import org.json.JSONArray
+import java.lang.Integer.max
+import java.lang.Integer.min
+import java.sql.Timestamp
+import java.text.SimpleDateFormat
+import java.time.Instant
+import java.time.ZoneId
+import java.time.temporal.WeekFields
+import java.util.*
+import java.util.concurrent.TimeUnit
 import com.outsystems.plugins.healthfitness.AndroidPlatformInterface
 import com.outsystems.plugins.healthfitness.HealthFitnessError
 import com.outsystems.plugins.healthfitness.OSHealthFitness
@@ -44,8 +58,25 @@ enum class EnumVariableGroup(val value : String) {
     PROFILE("PROFILE"),
     SUMMARY("SUMMARY")
 }
+enum class EnumOperationType(val value : String){
+    SUM("SUM"),
+    MIN("MIN"),
+    MAX("MAX"),
+    AVERAGE("AVERAGE"),
+    RAW("RAW"),
+}
+enum class EnumTimeUnit(val value : TimeUnit) {
+    MILLISECOND(TimeUnit.MILLISECONDS),
+    SECOND(TimeUnit.SECONDS),
+    MINUTE(TimeUnit.MINUTES),
+    HOUR(TimeUnit.HOURS),
+    DAY(TimeUnit.DAYS),
+    WEEK(TimeUnit.DAYS),
+    MONTH(TimeUnit.DAYS),
+    YEAR(TimeUnit.DAYS)
+}
 
-class  HealthStore(val platformInterface: AndroidPlatformInterface) {
+class HealthStore(val platformInterface: AndroidPlatformInterface) {
     var context: Context = platformInterface.getContext()
     var activity: Activity = platformInterface.getActivity()
 
@@ -55,28 +86,88 @@ class  HealthStore(val platformInterface: AndroidPlatformInterface) {
 
     private val fitnessVariablesMap: Map<String, GoogleFitVariable> by lazy {
         mapOf(
-            "STEPS" to GoogleFitVariable(DataType.TYPE_STEP_COUNT_DELTA, listOf(Field.FIELD_STEPS)),
-            "CALORIES_BURNED" to GoogleFitVariable(DataType.TYPE_CALORIES_EXPENDED, listOf(Field.FIELD_CALORIES))
+            "STEPS" to GoogleFitVariable(DataType.TYPE_STEP_COUNT_DELTA, listOf(
+                Field.FIELD_STEPS
+            )),
+            "CALORIES_BURNED" to GoogleFitVariable(DataType.TYPE_CALORIES_EXPENDED, listOf(
+                Field.FIELD_CALORIES
+            )),
+            "PUSH_COUNT" to GoogleFitVariable(DataType.TYPE_ACTIVITY_SEGMENT, listOf(
+                //TODO:
+            )),
+            "MOVE_MINUTES" to GoogleFitVariable(DataType.TYPE_MOVE_MINUTES, listOf(
+                Field.FIELD_DURATION
+            ))
         )
     }
     private val healthVariablesMap: Map<String, GoogleFitVariable> by lazy {
         mapOf(
-            "HEART_RATE" to GoogleFitVariable(DataType.TYPE_HEART_RATE_BPM, listOf(Field.FIELD_BPM)),
-            "SLEEP" to GoogleFitVariable(DataType.TYPE_SLEEP_SEGMENT, listOf(Field.FIELD_SLEEP_SEGMENT_TYPE))
+            "HEART_RATE" to GoogleFitVariable(DataType.TYPE_HEART_RATE_BPM, listOf(
+                Field.FIELD_BPM
+            )),
+            "SLEEP" to GoogleFitVariable(DataType.TYPE_SLEEP_SEGMENT, listOf(
+                Field.FIELD_SLEEP_SEGMENT_TYPE
+            )),
+            "BLOOD_GLUCOSE" to GoogleFitVariable(HealthDataTypes.TYPE_BLOOD_GLUCOSE, listOf(
+                HealthFields.FIELD_BLOOD_GLUCOSE_LEVEL
+            )),
+            "BLOOD_PRESSURE" to GoogleFitVariable(HealthDataTypes.TYPE_BLOOD_PRESSURE, listOf(
+                HealthFields.FIELD_BLOOD_PRESSURE_SYSTOLIC,
+                HealthFields.FIELD_BLOOD_PRESSURE_DIASTOLIC
+            )),
+            "HYDRATION" to GoogleFitVariable(DataType.TYPE_HYDRATION, listOf(
+                Field.FIELD_VOLUME
+            )),
+            "NUTRITION" to GoogleFitVariable(DataType.TYPE_NUTRITION, listOf(
+                //TODO:
+            ))
         )
     }
     private val profileVariablesMap: Map<String, GoogleFitVariable> by lazy {
         mapOf(
-            "HEIGHT" to GoogleFitVariable(DataType.TYPE_HEIGHT, listOf(Field.FIELD_HEIGHT)),
-            "WEIGHT" to GoogleFitVariable(DataType.TYPE_WEIGHT, listOf(Field.FIELD_WEIGHT)),
-            "BODY_FAT_PERCENTAGE" to GoogleFitVariable(DataType.TYPE_BODY_FAT_PERCENTAGE, listOf(Field.FIELD_PERCENTAGE)),
-            "BASAL_METABOLIC_RATE" to GoogleFitVariable(DataType.TYPE_BASAL_METABOLIC_RATE, listOf(Field.FIELD_CALORIES))
+            "HEIGHT" to GoogleFitVariable(DataType.TYPE_HEIGHT, listOf(
+                Field.FIELD_HEIGHT
+            )),
+            "WEIGHT" to GoogleFitVariable(DataType.TYPE_WEIGHT, listOf(
+                Field.FIELD_WEIGHT
+            )),
+            "BODY_FAT_PERCENTAGE" to GoogleFitVariable(DataType.TYPE_BODY_FAT_PERCENTAGE, listOf(
+                Field.FIELD_PERCENTAGE
+            )),
+            "BASAL_METABOLIC_RATE" to GoogleFitVariable(DataType.TYPE_BASAL_METABOLIC_RATE, listOf(
+                Field.FIELD_CALORIES
+            ))
         )
     }
     private val summaryVariablesMap: Map<String, GoogleFitVariable> by lazy {
         mapOf(
-            "HEIGHT_SUMMARY" to GoogleFitVariable(DataType.AGGREGATE_HEIGHT_SUMMARY, listOf(Field.FIELD_HEIGHT)),
-            "WEIGHT_SUMMARY" to GoogleFitVariable(DataType.AGGREGATE_WEIGHT_SUMMARY, listOf(Field.FIELD_WEIGHT))
+            "HEIGHT_SUMMARY" to GoogleFitVariable(DataType.AGGREGATE_HEIGHT_SUMMARY, listOf()),
+            "WEIGHT_SUMMARY" to GoogleFitVariable(DataType.AGGREGATE_WEIGHT_SUMMARY, listOf())
+        )
+    }
+
+    private val timeUnitsForMinMaxAverage: Map<String, EnumTimeUnit> by lazy {
+        mapOf(
+            "MILLISECONDS" to EnumTimeUnit.MILLISECOND,
+            "SECONDS" to EnumTimeUnit.MILLISECOND,
+            "MINUTE" to EnumTimeUnit.SECOND,
+            "HOUR" to EnumTimeUnit.MINUTE,
+            "DAY" to EnumTimeUnit.HOUR,
+            "WEEK" to EnumTimeUnit.DAY,
+            "MONTH" to EnumTimeUnit.WEEK,
+            "YEAR" to EnumTimeUnit.MONTH //TODO: This doesn't work yet
+        )
+    }
+    private val timeUnits: Map<String, EnumTimeUnit> by lazy {
+        mapOf(
+            "MILLISECONDS" to EnumTimeUnit.MILLISECOND,
+            "SECONDS" to EnumTimeUnit.SECOND,
+            "MINUTE" to EnumTimeUnit.MINUTE,
+            "HOUR" to EnumTimeUnit.HOUR,
+            "DAY" to EnumTimeUnit.DAY,
+            "WEEK" to EnumTimeUnit.WEEK,
+            "MONTH" to EnumTimeUnit.MONTH,
+            "YEAR" to EnumTimeUnit.YEAR
         )
     }
 
@@ -274,180 +365,492 @@ class  HealthStore(val platformInterface: AndroidPlatformInterface) {
 
         //insert the data
         val dataSourceWrite = DataSource.Builder()
-            .setAppPackageName(context)
-            .setDataType(dataType)
-            .setType(DataSource.TYPE_RAW)
-            .build()
+                .setAppPackageName(context)
+                .setDataType(dataType)
+                .setType(DataSource.TYPE_RAW)
+                .build()
 
         val timestamp = System.currentTimeMillis()
         val valueToWrite = DataPoint.builder(dataSourceWrite)
-            .setTimestamp(timestamp, TimeUnit.MILLISECONDS)
-            .setField(fieldType, convertedValue)
-            .build()
+                .setTimestamp(timestamp, TimeUnit.MILLISECONDS)
+                .setField(fieldType, convertedValue)
+                .build()
 
         val dataSet = DataSet.builder(dataSourceWrite)
-            .add(valueToWrite)
-            .build()
+                .add(valueToWrite)
+                .build()
 
         Fitness.getHistoryClient(
-            activity,
-            account
+                activity,
+                account
         )
-            .insertData(dataSet)
-            .addOnSuccessListener {
-                Log.i("Access GoogleFit:", "DataSet updated successfully!")
-                platformInterface.sendPluginResult("success", null)
-            }
-            .addOnFailureListener { e ->
-                Log.w("Access GoogleFit:", "There was an error updating the DataSet", e)
-                //In this case, what is the error we want to send in the callback?
-                //We could identify the exception that is thrown and send an error accordingly?
-                //Maybe catch that com.google.android.gms.common.api.ApiException: 4: The user must be signed in to make this API call.
-                //For now we will send a generic error message
-                platformInterface.sendPluginResult(null, Pair(HealthFitnessError.WRITE_DATA_ERROR.code, HealthFitnessError.WRITE_DATA_ERROR.message))
-            }
+                .insertData(dataSet)
+                .addOnSuccessListener {
+                    Log.i("Access GoogleFit:", "DataSet updated successfully!")
+                    platformInterface.sendPluginResult("success", null)
+                }
+                .addOnFailureListener { e ->
+                    Log.w("Access GoogleFit:", "There was an error updating the DataSet", e)
+                    //In this case, what is the error we want to send in the callback?
+                    //We could identify the exception that is thrown and send an error accordingly?
+                    //Maybe catch that com.google.android.gms.common.api.ApiException: 4: The user must be signed in to make this API call.
+                    //For now we will send a generic error message
+                    platformInterface.sendPluginResult(null, Pair(HealthFitnessError.WRITE_DATA_ERROR.code, HealthFitnessError.WRITE_DATA_ERROR.message))
+                }
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     fun getLastRecord(variable: String) {
 
-        val endTime: Long = Date().time
+        val endDate: Long = Date().time
         val month = 2592000000
-        val startTime: Long = endTime - month
+        val startDate: Long = endDate - month
 
-        var dataType : DataType? = null
-        var fieldType : Field? = null
-
-        if(fitnessVariablesMap.containsKey(variable)){
-            dataType = fitnessVariablesMap[variable]?.dataType
-            fieldType = fitnessVariablesMap[variable]?.fields?.get(0)
-        }
-
-        else if(healthVariablesMap.containsKey(variable)){
-            dataType = healthVariablesMap[variable]?.dataType
-            fieldType = healthVariablesMap[variable]?.fields?.get(0)
-        }
-
-        else if(profileVariablesMap.containsKey(variable)){
-            dataType = profileVariablesMap[variable]?.dataType
-            fieldType = profileVariablesMap[variable]?.fields?.get(0)
-        }
-
-        val readRequest = DataReadRequest.Builder()
-            .read(dataType)
-            .setTimeRange(startTime, endTime, TimeUnit.MILLISECONDS)
-            .setLimit(1)
-            .build()
-
-        Fitness.getHistoryClient(
-            activity, account)
-            .readData(readRequest)
-            .addOnSuccessListener{ dataReadResponse ->
-                val value = dataReadResponse.dataSets[0].dataPoints[0].getValue(fieldType).toString().toFloat()
-                Log.i("Access GoogleFit:", "DataPoint obtained successfully!")
-                platformInterface.sendPluginResult(value, null)
-            }
-            .addOnFailureListener { e ->
-                Log.w("Access GoogleFit:", "There was an error updating the DataSet", e)
-                platformInterface.sendPluginResult(null, Pair(HealthFitnessError.READ_DATA_ERROR.code, HealthFitnessError.READ_DATA_ERROR.message))
-            }
+        val advancedQueryParameters = AdvancedQueryParameters(
+            variable,
+            Date.from(Instant.ofEpochMilli(startDate)),
+            Date.from(Instant.ofEpochMilli(endDate)),
+            null
+        )
+        advancedQuery(advancedQueryParameters)
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    fun getDataAlt() {
+    fun advancedQuery(parameters : AdvancedQueryParameters) {
 
-        val end = LocalDateTime.now()
-        val start = end.minusDays(1L)
-        val endSeconds = end.atZone(ZoneId.systemDefault()).toEpochSecond()
-        val startSeconds = start.atZone(ZoneId.systemDefault()).toEpochSecond()
-        val context = context
-        val readRequest = DataReadRequest.Builder()
-            .read(DataType.TYPE_CALORIES_EXPENDED)
-            .setTimeRange(startSeconds, endSeconds, TimeUnit.SECONDS)
-            .setLimit(1)
-            .build()
-        val account = GoogleSignIn.getAccountForExtension(context, fitnessOptions)
-        var resultVariable: Float? = null
-        Fitness.getHistoryClient(context, account).readData(readRequest)
-            .addOnSuccessListener { dataReadResponse: DataReadResponse ->
-                resultVariable = dataReadResponse.dataSets[0].dataPoints.firstOrNull()
-                    ?.getValue(Field.FIELD_CALORIES)?.asFloat()
-                Log.d(
-                    "Access GoogleFit:",
-                    dataReadResponse.dataSets[0].dataPoints.firstOrNull()
-                        ?.getValue(Field.FIELD_CALORIES).toString()
-                )
+        val googleFitVariable = getVariableByName(parameters.variable)
+
+        googleFitVariable?.let { variable ->
+
+            val endTime = parameters.endDate
+            val startTime = parameters.startDate
+
+            var operationType : String? = null
+            parameters.operationType?.let{
+                operationType = parameters.operationType
             }
-            .addOnFailureListener { dataReadResponse: Exception ->
-                Log.d(
-                    "TAG",
-                    dataReadResponse.message!!
-                )
+
+            val requestBuilder = DataReadRequest.Builder()
+                .setTimeRange(startTime.time, endTime.time, TimeUnit.MILLISECONDS)
+
+            if(variable.dataType == DataType.TYPE_STEP_COUNT_DELTA) {
+                //This is the special case for step count
+                val datasource = DataSource.Builder()
+                    .setAppPackageName("com.google.android.gms")
+                    .setDataType(variable.dataType)
+                    .setType(DataSource.TYPE_DERIVED)
+                    .setStreamName("estimated_steps")
+                    .build()
+
+                //TODO: Needs refactoring
+                if(operationType == EnumOperationType.RAW.value){
+                    requestBuilder.read(datasource)
+                }
+                else {
+                    requestBuilder.aggregate(datasource)
+                }
             }
-        platformInterface.sendPluginResult(resultVariable)
-    }
+            else {
+                //TODO: Needs refactoring
+                if(operationType == EnumOperationType.RAW.value){
+                    requestBuilder.read(variable.dataType)
+                }
+                else {
+                    requestBuilder.aggregate(variable.dataType)
+                }
+            }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
-    fun getData(args : JSONArray) {
+            var timeUnitLength : Int? = null
+            if(parameters.timeUnit != null) {
+                val timeUnit = if(operationType == EnumOperationType.SUM.value || operationType == EnumOperationType.RAW.value) {
+                    timeUnits.getOrDefault(parameters.timeUnit, EnumTimeUnit.DAY)
+                } else {
+                    timeUnitsForMinMaxAverage.getOrDefault(parameters.timeUnit, EnumTimeUnit.DAY)
+                }
 
-        val endTime = LocalDateTime.of(2021,9,10,0,0,0).atZone(ZoneId.systemDefault())
-        val startTime = endTime.minusDays(7)
-
-        val datasource = DataSource.Builder()
-            .setAppPackageName("com.google.android.gms")
-            .setDataType(DataType.TYPE_STEP_COUNT_DELTA)
-            .setType(DataSource.TYPE_DERIVED)
-            .setStreamName("estimated_steps")
-            .build()
-
-        val readRequest = DataReadRequest.Builder()
-//            .read(DataType.TYPE_STEP_COUNT_DELTA)
-            .setTimeRange(startTime.toEpochSecond(), endTime.toEpochSecond(), TimeUnit.SECONDS)
-//            .setLimit(100)
-            .bucketByTime(1, TimeUnit.DAYS)
-            .aggregate(datasource)
-//            .aggregate(DataType.AGGREGATE_STEP_COUNT_DELTA)
-            .build()
-
-        val account = GoogleSignIn.getAccountForExtension(context, fitnessOptions)
-
-        var resultVariable: String? = null
-        Log.d(
-            "Start date",
-            startTime.dayOfMonth.toString() + "-" + startTime.month.toString() +  "-" + startTime.year.toString()
-        )
-        Log.d(
-            "END date",
-            endTime.dayOfMonth.toString() + "-" + endTime.month.toString() +  "-" + endTime.year.toString()
-        )
-
-        Fitness.getHistoryClient(context, account).readData(readRequest)
-            .addOnSuccessListener { dataReadResponse: DataReadResponse ->
-//                resultVariable = dataReadResponse.dataSets[0].dataPoints.firstOrNull()
-//                    ?.getValue(Field.FIELD_STEPS)?.toString()
-                val totalSteps = dataReadResponse.buckets
-                    .flatMap { it.dataSets }
-                    .flatMap { it.dataPoints }
-                    .sumBy { it.getValue(Field.FIELD_STEPS).asInt() }
-                Log.i("SUM", "Total steps: $totalSteps")
-                dataReadResponse.buckets.forEach {bu ->
-                    bu.dataSets.forEach { dt ->
-                        dt.dataPoints.forEach{ dp ->
-                            Log.d(
-                                "DATA",
-                                dp.getValue(Field.FIELD_STEPS).toString()
-                            )
-                        }
+                parameters.timeUnitLength?.let{
+                    timeUnitLength = max(1, it)
+                    //TODO: Needs refactoring
+                    if(parameters.timeUnit == "WEEK" ||
+                        parameters.timeUnit == "MONTH"||
+                        parameters.timeUnit == "YEAR") {
+                        requestBuilder.bucketByTime(1, timeUnit.value)
+                    }
+                    else {
+                        requestBuilder.bucketByTime(timeUnitLength!!, timeUnit.value)
                     }
                 }
             }
-            .addOnFailureListener { dataReadResponse: Exception ->
-                Log.d(
-                    "TAG",
-                    dataReadResponse.message!!
-                )
+            else {
+                requestBuilder.setLimit(1)
             }
-        platformInterface.sendPluginResult(resultVariable)
+
+            val fitnessRequest = requestBuilder.build()
+            Fitness.getHistoryClient(context, account)
+                .readData(fitnessRequest)
+                .addOnSuccessListener { dataReadResponse: DataReadResponse ->
+
+                    var processedBuckets = listOf<ProcessedBucket>()
+
+                    timeUnitLength?.let {
+                        //TODO: Needs refactoring
+                        when(parameters.timeUnit) {
+                            "WEEK" -> {
+                                processedBuckets = processIntoBucketPerWeek(
+                                    dataReadResponse.buckets,
+                                    it,
+                                    startTime.time,
+                                    endTime.time)
+                            }
+                            "MONTH" -> {
+                                processedBuckets = processIntoBucketPerMonth(
+                                    dataReadResponse.buckets,
+                                    it,
+                                    startTime.time,
+                                    endTime.time)
+                            }
+                            else -> {
+                                processedBuckets = processBucket(dataReadResponse.buckets)
+                            }
+                        }
+                    }
+
+                    if(timeUnitLength == null) {
+                        val values = mutableListOf<Float>()
+
+                        variable.fields.forEach { field ->
+                            values.add(dataReadResponse.dataSets[0].dataPoints[0].getValue(field).toString().toFloat())
+                        }
+
+                        val responseBlock = AdvancedQueryResponseBlock(
+                            0,
+                            startTime.time / 1000,
+                            endTime.time / 1000,
+                            "format.format(startTime.time)",
+                            "format.format(endTime.time)",
+                            values
+                        )
+                        val queryResponse = AdvancedQueryResponse(listOf(responseBlock))
+                        val pluginResponseJson = gson.toJson(queryResponse)
+                        Log.d("STORE", "Response $pluginResponseJson")
+                        platformInterface.sendPluginResult(pluginResponseJson)
+                    }
+                    else {
+                        val resultBuckets = processBucketOperation(processedBuckets, variable, operationType)
+                        val queryResponse = buildAdvancedQueryResult(resultBuckets)
+                        val pluginResponseJson = gson.toJson(queryResponse)
+                        Log.d("STORE", "Response $pluginResponseJson")
+                        platformInterface.sendPluginResult(pluginResponseJson)
+                    }
+                }
+                .addOnFailureListener { dataReadResponse: Exception ->
+                    Log.d("STORE", dataReadResponse.message!!)
+                }
+        }
+    }
+
+    private fun buildAdvancedQueryResult(resultBuckets : List<ProcessedBucket>) : AdvancedQueryResponse {
+
+        val format = SimpleDateFormat("yyyy.MM.dd HH:mm")
+        var block = 0
+        val blockList : MutableList<AdvancedQueryResponseBlock> = mutableListOf()
+        for(bucket in resultBuckets) {
+            blockList.add(
+                AdvancedQueryResponseBlock(
+                    block,
+                    bucket.startDate / 1000,
+                    bucket.endDate / 1000,
+                    format.format(bucket.startDate),
+                    format.format(bucket.endDate),
+                    bucket.processedDataPoints
+                )
+            )
+            block++
+        }
+        var result = AdvancedQueryResponse(blockList)
+        return result
+    }
+
+    data class ProcessedBucket(
+        val startDate : Long,
+        var endDate : Long,
+        var dataPoints : MutableList<DataPoint>,
+        var processedDataPoints : MutableList<Float>,
+        var DEBUG_startDate : String,
+        var DEBUG_endDate : String
+    )
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun processBucket(bucketsPerDay : List<Bucket>) : List<ProcessedBucket> {
+
+        val format = SimpleDateFormat("yyyy.MM.dd HH:mm")
+        val processedBuckets : MutableList<ProcessedBucket> = mutableListOf()
+
+        for(bucket in bucketsPerDay) {
+
+            val dataPointsPerBucket = bucket.dataSets.flatMap { it.dataPoints }
+            if(dataPointsPerBucket.isEmpty()){ continue }
+
+            val startDate = bucket.getStartTime(TimeUnit.MILLISECONDS)
+            val endDate = bucket.getEndTime(TimeUnit.MILLISECONDS)
+            val processedBucket = ProcessedBucket(
+                startDate,
+                endDate,
+                mutableListOf(),
+                mutableListOf(),
+                format.format(startDate),
+                format.format(endDate)
+            )
+
+            dataPointsPerBucket.forEach { dataPoint ->
+                processedBucket.dataPoints.add(dataPoint)
+            }
+
+            processedBuckets.add(processedBucket)
+//                Log.d("POINT",
+//                    "$monthNumber -> ${format.format(dataPoint.getStartTime(TimeUnit.MILLISECONDS))} : ${dataPoint.getValue(Field.FIELD_CALORIES)}")
+        }
+        return processedBuckets
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun processIntoBucketPerWeek(bucketsPerDay : List<Bucket>,
+                                         timeUnitLength : Int,
+                                         queryStartDate : Long,
+                                         queryEndDate : Long) : List<ProcessedBucket> {
+
+        val format = SimpleDateFormat("yyyy.MM.dd HH:mm")
+        val processedBuckets : MutableMap<String, ProcessedBucket> = mutableMapOf()
+        val weekKeyQueue : ArrayDeque<String> = ArrayDeque()
+
+        //Merge buckets into weeks
+        for(bucket in bucketsPerDay) {
+
+            val dataPointsPerBucket = bucket.dataSets.flatMap { it.dataPoints }
+
+            if(dataPointsPerBucket.isEmpty()){ continue }
+
+            dataPointsPerBucket.forEach { dataPoint ->
+
+                val dataPointDate = Instant
+                    .ofEpochMilli(dataPoint.getStartTime(TimeUnit.MILLISECONDS))
+                    .atZone(ZoneId.systemDefault())
+                    .toLocalDate()
+
+                val weekFields: WeekFields = WeekFields.ISO
+                val weekNumber = dataPointDate.get(weekFields.weekOfWeekBasedYear())
+                val yearNumber = dataPointDate.year
+                val dataPointKey = "$weekNumber$yearNumber"
+
+                if(!processedBuckets.containsKey(dataPointKey)) {
+
+                    val c = Calendar.getInstance()
+                    c.set(Calendar.WEEK_OF_YEAR, weekNumber)
+
+                    val firstDayOfWeek = c.firstDayOfWeek
+
+                    c[Calendar.DAY_OF_WEEK] = firstDayOfWeek
+                    var startDate = c.timeInMillis
+                    if(startDate < queryStartDate) { startDate = queryStartDate }
+
+                    c[Calendar.DAY_OF_WEEK] = firstDayOfWeek + 6
+                    var endDate = c.timeInMillis
+                    if(endDate > queryEndDate) { endDate = queryEndDate }
+
+                    weekKeyQueue.add(dataPointKey)
+
+                    processedBuckets[dataPointKey] = ProcessedBucket(
+                        startDate,
+                        endDate,
+                        mutableListOf(),
+                        mutableListOf(),
+                        format.format(startDate),
+                        format.format(endDate)
+                    )
+                }
+
+//                Log.d("POINT",
+//                    "$weekNumber -> ${format.format(dataPoint.getStartTime(TimeUnit.MILLISECONDS))} : ${dataPoint.getValue(Field.FIELD_CALORIES)}")
+
+                processedBuckets[dataPointKey]!!.dataPoints.add(dataPoint)
+
+            }
+
+        }
+
+        //TODO: Needs refactoring
+        //Merge buckets into groups
+        while(!weekKeyQueue.isEmpty()) {
+            val keyAnchor = weekKeyQueue.pop()
+
+            for(i in 1 until min(timeUnitLength, weekKeyQueue.size + 1)) {
+
+                val keyToMergeWithAnchor = weekKeyQueue.pop()
+                val valuesToMerge = processedBuckets[keyToMergeWithAnchor]!!
+
+                processedBuckets[keyAnchor]!!.dataPoints.addAll(valuesToMerge.dataPoints)
+                processedBuckets[keyAnchor]!!.endDate = valuesToMerge.endDate
+
+                processedBuckets.remove(keyToMergeWithAnchor)
+            }
+        }
+
+        return processedBuckets.values.toList()
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun processIntoBucketPerMonth(bucketsPerDay : List<Bucket>,
+                                         timeUnitLength : Int,
+                                         queryStartDate : Long,
+                                         queryEndDate : Long) : List<ProcessedBucket> {
+
+        val format = SimpleDateFormat("yyyy.MM.dd HH:mm")
+        val processedBuckets : MutableMap<String, ProcessedBucket> = mutableMapOf()
+        val bucketKeyQueue : ArrayDeque<String> = ArrayDeque()
+
+        //Merge buckets into Months
+        for(bucket in bucketsPerDay) {
+
+            val dataPointsPerBucket = bucket.dataSets.flatMap { it.dataPoints }
+            if(dataPointsPerBucket.isEmpty()){ continue }
+
+            dataPointsPerBucket.forEach { dataPoint ->
+
+                val dataPointDate = Instant
+                    .ofEpochMilli(dataPoint.getStartTime(TimeUnit.MILLISECONDS))
+                    .atZone(ZoneId.systemDefault())
+                    .toLocalDate()
+
+                val monthNumber = dataPointDate.monthValue
+                val yearNumber = dataPointDate.year
+                val dataPointKey = "$monthNumber$yearNumber"
+
+                if(!processedBuckets.containsKey(dataPointKey)) {
+
+                    val c = Calendar.getInstance()
+                    c.set(Calendar.MONTH, monthNumber)
+
+                    val firstDayOfWeek = c.firstDayOfWeek
+
+                    c[Calendar.DAY_OF_WEEK] = firstDayOfWeek
+                    var startDate = c.timeInMillis
+                    if(startDate < queryStartDate) { startDate = queryStartDate }
+
+                    c[Calendar.DAY_OF_WEEK] = firstDayOfWeek + 6
+                    var endDate = c.timeInMillis
+                    if(endDate > queryEndDate) { endDate = queryEndDate }
+
+                    processedBuckets[dataPointKey] = ProcessedBucket(
+                        startDate,
+                        endDate,
+                        mutableListOf(),
+                        mutableListOf(),
+                        format.format(startDate),
+                        format.format(endDate)
+                    )
+                }
+
+//                Log.d("POINT",
+//                    "$monthNumber -> ${format.format(dataPoint.getStartTime(TimeUnit.MILLISECONDS))} : ${dataPoint.getValue(Field.FIELD_CALORIES)}")
+
+                processedBuckets[dataPointKey]!!.dataPoints.add(dataPoint)
+            }
+        }
+
+        //TODO: Needs refactoring
+        //Merge buckets into groups
+        while(!bucketKeyQueue.isEmpty()) {
+            val keyAnchor = bucketKeyQueue.pop()
+
+            for(i in 1 until min(timeUnitLength, bucketKeyQueue.size + 1)) {
+
+                val keyToMergeWithAnchor = bucketKeyQueue.pop()
+                val valuesToMerge = processedBuckets[keyToMergeWithAnchor]!!
+
+                processedBuckets[keyAnchor]!!.dataPoints.addAll(valuesToMerge.dataPoints)
+                processedBuckets[keyAnchor]!!.endDate = valuesToMerge.endDate
+
+                processedBuckets.remove(keyToMergeWithAnchor)
+            }
+        }
+
+        return processedBuckets.values.toList()
+    }
+
+
+    private fun processBucketOperation(buckets : List<ProcessedBucket>,
+                                       variable : GoogleFitVariable,
+                                       inputOperationType : String?) : List<ProcessedBucket> {
+
+        var operationType = EnumOperationType.RAW.value
+        if(inputOperationType != null) {
+            operationType = inputOperationType
+        }
+
+        for(bucket in buckets) {
+
+            val resultPerField : MutableMap<String, MutableList<Float>> = mutableMapOf()
+            var nResultsPerField = 0
+
+            for(datePoint in bucket.dataPoints) {
+                variable.fields.forEach { field ->
+
+                    if(!resultPerField.containsKey(field.name)) {
+                        val results = mutableListOf<Float>()
+                        resultPerField[field.name] = results
+                        if(operationType != EnumOperationType.RAW.value) {
+                            results.add(0F)
+                        }
+                    }
+
+                    val dataPointValue = datePoint.getValue(field).toString().toFloat()
+
+                    when(operationType) {
+
+                        EnumOperationType.RAW.value -> {
+                            nResultsPerField += 1
+                            resultPerField[field.name]!!.add(dataPointValue)
+                        }
+
+                        EnumOperationType.SUM.value -> {
+                            nResultsPerField = 1
+                            resultPerField[field.name]!![0] =
+                                resultPerField[field.name]!![0] + dataPointValue
+                        }
+
+                        EnumOperationType.MAX.value -> {
+                            nResultsPerField = 1
+                            var maxValue = resultPerField[field.name]!![0]
+                            if(maxValue < dataPointValue) { maxValue = dataPointValue }
+                            resultPerField[field.name]!![0] = maxValue
+                        }
+
+                        EnumOperationType.MIN.value -> {
+                            nResultsPerField = 1
+                            var minValue = resultPerField[field.name]!![0]
+                            if(minValue > dataPointValue) { minValue = dataPointValue }
+                            resultPerField[field.name]!![0] = minValue
+                        }
+
+                        EnumOperationType.AVERAGE.value -> {
+                            //TODO: Implement this operation
+                        }
+
+                    }
+
+                }
+            }
+
+            nResultsPerField /= variable.fields.size
+            for(variableResultIndex in 0 until nResultsPerField) {
+                variable.fields.forEach { field ->
+                    bucket.processedDataPoints.add(resultPerField[field.name]!![variableResultIndex])
+                }
+            }
+
+        }
+
+        return buckets
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)

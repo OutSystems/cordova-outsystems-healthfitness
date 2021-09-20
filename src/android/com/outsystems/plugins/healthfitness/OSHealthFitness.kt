@@ -8,6 +8,8 @@ import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
+import com.google.gson.Gson
+import com.outsystems.plugins.healthfitness.store.AdvancedQueryParameters
 import com.outsystems.plugins.healthfitness.store.HealthStore
 
 import org.apache.cordova.*
@@ -25,6 +27,7 @@ class OSHealthFitness : CordovaImplementation() {
     override var callbackContext: CallbackContext? = null
 
     var healthStore: HealthStore? = null
+    val gson by lazy { Gson() }
 
     override fun initialize(cordova: CordovaInterface, webView: CordovaWebView) {
         super.initialize(cordova, webView)
@@ -48,7 +51,7 @@ class OSHealthFitness : CordovaImplementation() {
                 initAndRequestPermissions(args)
             }
             "getData" -> {
-                getData(args)
+                advancedQuery(args)
             }
             "writeData" -> {
                 writeData(args)
@@ -82,7 +85,7 @@ class OSHealthFitness : CordovaImplementation() {
     }
 
     private fun checkAllGoogleFitPermissionGranted(): Boolean {
-        return healthStore!!.checkAllGoogleFitPermissionGranted()
+       return healthStore!!.checkAllGoogleFitPermissionGranted()
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -105,8 +108,9 @@ class OSHealthFitness : CordovaImplementation() {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    private fun getData(args : JSONArray) {
-        healthStore?.getData(args)
+    private fun advancedQuery(args : JSONArray) {
+        val parameters = gson.fromJson(args.getString(0), AdvancedQueryParameters::class.java)
+        healthStore?.advancedQuery(parameters)
     }
 
     @RequiresApi(Build.VERSION_CODES.O)

@@ -12,8 +12,6 @@ abstract  class CordovaImplementation : CordovaPlugin(), AndroidPlatformInterfac
 
     abstract var callbackContext: CallbackContext?
 
-
-
     abstract override fun execute(
         action: String,
         args: JSONArray,
@@ -48,9 +46,7 @@ abstract  class CordovaImplementation : CordovaPlugin(), AndroidPlatformInterfac
     override fun <T> sendPluginResult(resultVariable: T, error: Pair<Int, String>?) {
         var pluginResult: PluginResult? = null
         resultVariable?.let {
-            val jsonResult = JSONObject()
-            jsonResult.put("result", resultVariable)
-            pluginResult = PluginResult(PluginResult.Status.OK, jsonResult)
+            pluginResult = PluginResult(PluginResult.Status.OK, resultVariable.toString())
             this.callbackContext?.let {
                 it.sendPluginResult(pluginResult)
             }
