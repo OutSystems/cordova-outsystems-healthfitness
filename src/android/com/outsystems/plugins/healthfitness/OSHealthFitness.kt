@@ -8,8 +8,6 @@ import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
-import com.google.android.gms.fitness.FitnessOptions
-import com.google.android.gms.fitness.data.*
 import com.google.gson.Gson
 import com.outsystems.plugins.healthfitness.store.AdvancedQueryParameters
 import com.outsystems.plugins.healthfitness.store.HealthStore
@@ -53,7 +51,7 @@ class OSHealthFitness : CordovaImplementation() {
                 initAndRequestPermissions(args)
             }
             "getData" -> {
-                getData(args)
+                advancedQuery(args)
             }
         }
         return true
@@ -105,9 +103,9 @@ class OSHealthFitness : CordovaImplementation() {
 
     //Get steps by day
     @RequiresApi(api = Build.VERSION_CODES.O)
-    private fun getData(args : JSONArray) {
+    private fun advancedQuery(args : JSONArray) {
         val parameters = gson.fromJson(args.getString(0), AdvancedQueryParameters::class.java)
-        healthStore?.getData(parameters)
+        healthStore?.advancedQuery(parameters)
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)

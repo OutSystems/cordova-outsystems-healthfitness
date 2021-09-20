@@ -20,12 +20,14 @@ import com.google.android.gms.fitness.request.DataUpdateListenerRegistrationRequ
 import com.google.android.gms.fitness.request.SensorRequest
 import com.google.android.gms.fitness.result.DataReadResponse
 import com.google.gson.Gson
+import com.google.gson.annotations.SerializedName
 import com.outsystems.plugins.healthfitness.AndroidPlatformInterface
 import com.outsystems.plugins.healthfitness.OSHealthFitness
 import com.outsystems.plugins.healthfitness.MyDataUpdateService
 import org.json.JSONArray
 import java.lang.Integer.max
 import java.lang.Integer.min
+import java.sql.Timestamp
 import java.text.SimpleDateFormat
 import java.time.Instant
 import java.time.ZoneId
@@ -332,7 +334,25 @@ class HealthStore(val platformInterface: AndroidPlatformInterface) {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    fun getData(parameters : AdvancedQueryParameters) {
+    fun getLastRecord(variable: String) {
+
+        val endDate: Long = Date().time
+        val month = 2592000000
+        val startDate: Long = endDate - month
+
+        val advancedQueryParameters = AdvancedQueryParameters(
+            variable,
+            Date.from(Instant.ofEpochSecond(startDate)),
+            Date.from(Instant.ofEpochSecond(endDate)),
+            null,
+            null,
+            null
+        )
+        advancedQuery(advancedQueryParameters)
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    fun advancedQuery(parameters : AdvancedQueryParameters) {
 
         val googleFitVariable = getVariableByName(parameters.variable)
 
@@ -340,14 +360,10 @@ class HealthStore(val platformInterface: AndroidPlatformInterface) {
 
             val endTime = parameters.endDate
             val startTime = parameters.startDate
-            
-            val operationType = parameters.operationType
-            val timeUnitLength = max(1, parameters.timeUnitLength)
 
-            val timeUnit = if(operationType == EnumOperationType.SUM.value || operationType == EnumOperationType.RAW.value) {
-                timeUnits.getOrDefault(parameters.timeUnit, EnumTimeUnit.DAY)
-            } else {
-                timeUnitsForMinMaxAverage.getOrDefault(parameters.timeUnit, EnumTimeUnit.DAY)
+            var operationType : String? = null
+            parameters.operationType?.let{
+                operationType = parameters.operationType
             }
 
             val requestBuilder = DataReadRequest.Builder()
@@ -380,14 +396,26 @@ class HealthStore(val platformInterface: AndroidPlatformInterface) {
                 }
             }
 
-            //TODO: Needs refactoring
-            if(parameters.timeUnit == "WEEK" ||
-                parameters.timeUnit == "MONTH"||
-                parameters.timeUnit == "YEAR") {
-                requestBuilder.bucketByTime(1, timeUnit.value)
-            }
-            else {
-                requestBuilder.bucketByTime(1 * timeUnitLength, timeUnit.value)
+            var timeUnitLength : Int? = null
+            parameters.timeUnit?.let {
+                val timeUnit = if(operationType == EnumOperationType.SUM.value || operationType == EnumOperationType.RAW.value) {
+                    timeUnits.getOrDefault(parameters.timeUnit, EnumTimeUnit.DAY)
+                } else {
+                    timeUnitsForMinMaxAverage.getOrDefault(parameters.timeUnit, EnumTimeUnit.DAY)
+                }
+                parameters.timeUnitLength = 1//max(1, parameters.timeUnitLength)
+                parameters.timeUnitLength?.let{
+                    timeUnitLength = max(1, it)
+                    //TODO: Needs refactoring
+                    if(parameters.timeUnit == "WEEK" ||
+                        parameters.timeUnit == "MONTH"||
+                        parameters.timeUnit == "YEAR") {
+                        requestBuilder.bucketByTime(1, timeUnit.value)
+                    }
+                    else {
+                        requestBuilder.bucketByTime(timeUnitLength!!, timeUnit.value)
+                    }
+                }
             }
 
             val fitnessRequest = requestBuilder.build()
@@ -397,29 +425,31 @@ class HealthStore(val platformInterface: AndroidPlatformInterface) {
 
                     var processedBuckets = listOf<ProcessedBucket>()
 
-                    //TODO: Needs refactoring
-                    when(parameters.timeUnit) {
-                        "MILLISECONDS",
-                        "SECONDS",
-                        "MINUTE",
-                        "HOUR",
-                        "DAY" -> {
-                            processedBuckets = processBucket(
-                                dataReadResponse.buckets)
-                        }
-                        "WEEK" -> {
-                            processedBuckets = processIntoBucketPerWeek(
-                                dataReadResponse.buckets,
-                                timeUnitLength,
-                                startTime.time,
-                                endTime.time)
-                        }
-                        "MONTH" -> {
-                            processedBuckets = processIntoBucketPerMonth(
-                                dataReadResponse.buckets,
-                                timeUnitLength,
-                                startTime.time,
-                                endTime.time)
+                    timeUnitLength?.let {
+                        //TODO: Needs refactoring
+                        when(parameters.timeUnit) {
+                            "MILLISECONDS",
+                            "SECONDS",
+                            "MINUTE",
+                            "HOUR",
+                            "DAY" -> {
+                                processedBuckets = processBucket(
+                                    dataReadResponse.buckets)
+                            }
+                            "WEEK" -> {
+                                processedBuckets = processIntoBucketPerWeek(
+                                    dataReadResponse.buckets,
+                                    it,
+                                    startTime.time,
+                                    endTime.time)
+                            }
+                            "MONTH" -> {
+                                processedBuckets = processIntoBucketPerMonth(
+                                    dataReadResponse.buckets,
+                                    it,
+                                    startTime.time,
+                                    endTime.time)
+                            }
                         }
                     }
 
@@ -668,7 +698,12 @@ class HealthStore(val platformInterface: AndroidPlatformInterface) {
 
     private fun processBucketOperation(buckets : List<ProcessedBucket>,
                                        variable : GoogleFitVariable,
-                                       operationType : String) : List<ProcessedBucket> {
+                                       inputOperationType : String?) : List<ProcessedBucket> {
+
+        var operationType = EnumOperationType.RAW.value
+        if(inputOperationType != null) {
+            operationType = inputOperationType
+        }
 
         for(bucket in buckets) {
 
