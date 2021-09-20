@@ -15,13 +15,14 @@ exports.requestPermissions = function (success, error, params) {
     exec(success, error, 'OSHealthFitness', 'requestPermissions', args);
 };
 
-exports.queryData = function (success, error, params) {
+exports.getData = function (success, error, params) {
+    exec(success, error, 'OSHealthFitness', 'getData', [params]);
+};
     
-    const startDate = params[0];
-    const endDate = params[1];
-    const type = params[2];
-    
-    var args = [startDate, endDate, type];
-    
-    exec(success, error, 'OSHealthFitness', 'queryData', args);
+exports.writeData = function (success, error, variable, value) {
+    exec(success, error, 'OSHealthFitness', 'writeData', [variable,value]);
+};
+
+exports.getLastRecord = function (success, error, variable) {
+    exec(success, error, 'OSHealthFitness', 'getLastRecord', [variable]);
 };
