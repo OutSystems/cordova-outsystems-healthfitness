@@ -21,30 +21,24 @@ import com.google.android.gms.fitness.request.SensorRequest
 import com.google.android.gms.fitness.result.DataReadResponse
 import com.google.gson.Gson
 import com.google.gson.annotations.SerializedName
-import com.outsystems.plugins.healthfitness.AndroidPlatformInterface
-import com.outsystems.plugins.healthfitness.OSHealthFitness
-import com.outsystems.plugins.healthfitness.MyDataUpdateService
-import org.json.JSONArray
 import java.lang.Integer.max
 import java.lang.Integer.min
 import java.sql.Timestamp
 import java.text.SimpleDateFormat
 import java.time.Instant
-import java.time.ZoneId
 import java.time.temporal.WeekFields
 import java.util.*
-import java.util.concurrent.TimeUnit
-import com.outsystems.plugins.healthfitness.AndroidPlatformInterface
 import com.outsystems.plugins.healthfitness.HealthFitnessError
-import com.outsystems.plugins.healthfitness.OSHealthFitness
-import com.outsystems.plugins.healthfitness.MyDataUpdateService
-import org.json.JSONArray
 import java.time.LocalDateTime
-import java.time.ZoneId
-import java.util.concurrent.TimeUnit
 import com.google.android.gms.fitness.data.DataPoint
 import com.google.android.gms.fitness.data.DataSet
+import com.outsystems.plugins.healthfitness.AndroidPlatformInterface
+import com.outsystems.plugins.healthfitness.MyDataUpdateService
+import com.outsystems.plugins.healthfitness.OSHealthFitness
+import org.json.JSONArray
+import java.time.ZoneId
 import java.util.*
+import java.util.concurrent.TimeUnit
 
 
 enum class EnumAccessType(val value : String) {
@@ -526,8 +520,6 @@ class HealthStore(val platformInterface: AndroidPlatformInterface) {
                             0,
                             startTime.time / 1000,
                             endTime.time / 1000,
-                            "format.format(startTime.time)",
-                            "format.format(endTime.time)",
                             values
                         )
                         val queryResponse = AdvancedQueryResponse(listOf(responseBlock))
@@ -560,8 +552,6 @@ class HealthStore(val platformInterface: AndroidPlatformInterface) {
                     block,
                     bucket.startDate / 1000,
                     bucket.endDate / 1000,
-                    format.format(bucket.startDate),
-                    format.format(bucket.endDate),
                     bucket.processedDataPoints
                 )
             )
