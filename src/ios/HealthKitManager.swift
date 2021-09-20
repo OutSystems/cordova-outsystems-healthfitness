@@ -150,6 +150,66 @@ class HealthKitManager {
         return nil
     }
     
+    func getLastRecord(variable:String,
+                       completion: @escaping (Double?, NSError?) -> Void) {
+        
+        if let error = self.isHealthDataAvailable() {
+            completion(nil, error)
+        }
+        
+        guard let type = HKTypes.allVariablesDict[variable] else {
+            let error = HealthKitErrors.dataTypeNotAvailable
+            completion(nil, error as NSError)
+            return
+        }
+        
+        guard let sampleType = type.first?.sampleType else {
+            let error = HealthKitErrors.dataTypeNotAvailable
+            completion(nil, error as NSError)
+            return
+        }
+        
+        guard let unit = type.first?.unit else {
+            let error = HealthKitErrors.dataTypeNotAvailable
+            completion(nil, error as NSError)
+            return
+        }
+    
+        let mostRecentPredicate = HKQuery.predicateForSamples(withStart: Date.distantPast,
+                                                              end: Date(),
+                                                              options: .strictEndDate)
+        let sortDescriptor = NSSortDescriptor(key: HKSampleSortIdentifierStartDate,
+                                              ascending: false)
+        let limit = 1
+        let sampleQuery = HKSampleQuery(sampleType: sampleType,
+                                        predicate: mostRecentPredicate,
+                                        limit: limit,
+                                        sortDescriptors: [sortDescriptor]) { (query, samples, error) in
+            
+            if let error = error {
+                switch (error as NSError).code {
+                case 1:
+                    completion(nil, HealthKitErrors.notAvailableOnDevice as NSError)
+                case 5:
+                    completion(nil, HealthKitErrors.notAuthorizedByUser as NSError)
+                default:
+                    completion(nil, error as NSError)
+                }
+            }
+            
+            guard let samples = samples else {
+                return
+            }
+            let obj = samples.first as? HKQuantitySample
+            let quant = obj?.quantity.doubleValue(for: unit)
+            completion(quant, nil)
+            
+        }
+        
+        HKHealthStore().execute(sampleQuery)
+        
+    }
+    
     func writeData(variable: String,
                    value: String,
                    completion: @escaping (Bool, NSError?) -> Void) {

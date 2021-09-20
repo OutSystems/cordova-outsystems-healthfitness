@@ -6,6 +6,7 @@ enum HealthKitErrors : Int, CustomNSError, LocalizedError {
     case notAuthorizedByUser = 102
     case variableNotAuthorized = 103
     case noResultsForQuery = 104
+    case errorReadingData = 105
     
     var description: String {
         switch self {
@@ -19,6 +20,8 @@ enum HealthKitErrors : Int, CustomNSError, LocalizedError {
                 return "Variable authorized by the user."
             case .noResultsForQuery:
                 return "Query returned no results."
+            case .errorReadingData
+                return "Error while reading data"
         }
     }
     

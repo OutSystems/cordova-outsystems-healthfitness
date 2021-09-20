@@ -45,17 +45,32 @@ class OSHealthFitness: CordovaImplementation {
         let value = command.arguments[1] as? String ?? ""
         
         plugin?.writeData(variable: variable, value: value) { success,error in
-            
             if let err = error {
                 self.sendResult(result: "", error:err, callBackID: self.callbackId)
             }
-            
             if success {
                 self.sendResult(result: "", error: nil, callBackID: self.callbackId)
             }
-            
         }
+    }
     
+    @objc(getLastRecord:)
+    func getLastRecord(command: CDVInvokedUrlCommand) {
+        callbackId = command.callbackId
+        
+        let variable = command.arguments[0] as? String ?? ""
+        
+        plugin?.getLastRecord(variable: variable) { success, result, error in
+            if let err = error {
+                self.sendResult(result: "", error:err, callBackID: self.callbackId)
+            }
+            if let result = result {
+                if success {
+                    let dictResult = ["result": result]
+                    self.sendResultAsDictionary(result: dictResult, error: nil, callBackID: self.callbackId)
+                }
+            }
+        }
     }
     
     @objc(getData:)

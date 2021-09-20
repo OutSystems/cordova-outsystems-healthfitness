@@ -21,6 +21,22 @@ class HealthFitnessPlugin {
         
     }
     
+    func getLastRecord(variable:String,
+                       completion: @escaping (Bool, Double?, NSError?) -> Void) {
+        
+        let healthKitManager = HealthKitManager()
+        healthKitManager.getLastRecord(variable: variable) { (result, error) in
+            
+            if let error = error {
+                completion(false, 0, error)
+            } else {
+                completion(true, result, nil)
+            }
+        }
+        
+    }
+
+    
     func requestPermissions(customPermissions:String,
                             allVariables:String,
                             fitnessVariables:String,

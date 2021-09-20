@@ -25,3 +25,7 @@ exports.queryData = function (success, error, params) {
     
     exec(success, error, 'OSHealthFitness', 'queryData', args);
 };
+
+exports.getLastRecord = function (success, error, variable) {
+    exec(success, error, 'OSHealthFitness', 'getLastRecord', [variable]);
+};
