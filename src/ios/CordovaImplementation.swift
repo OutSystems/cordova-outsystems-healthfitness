@@ -1,8 +1,7 @@
-
 import Foundation
 
 class CordovaImplementation: CDVPlugin, IOSPlatformInterface {
-    
+
     func sendResult(result: String?, error: NSError?, callBackID:String) {
             var pluginResult = CDVPluginResult (status: CDVCommandStatus_ERROR);
         
@@ -17,7 +16,6 @@ class CordovaImplementation: CDVPlugin, IOSPlatformInterface {
             if result.isEmpty {
                 pluginResult = CDVPluginResult(status: CDVCommandStatus_OK)
             } else {
-                print(result)
                 pluginResult = CDVPluginResult(status: CDVCommandStatus_OK, messageAs: result)
             }
         }

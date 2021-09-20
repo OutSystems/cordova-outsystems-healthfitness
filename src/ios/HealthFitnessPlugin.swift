@@ -21,6 +21,41 @@ class HealthFitnessPlugin {
         
     }
     
+    func getLastRecord(variable:String,
+                       mostRecent:Bool,
+                       completion: @escaping (Bool, String?, NSError?) -> Void) {
+
+        let healthKitManager = HealthKitManager()
+        var finalResult: String?
+        healthKitManager.advancedQuery(variable: variable,
+                                       startDate: Date.distantPast,
+                                       endDate: Date(),
+                                       timeUnit: "DAY",
+                                       operationType: "SUM",
+                                       mostRecent: true) { result, error in
+
+            if let error = error {
+                completion(false,nil,error)
+            } else if ((result != nil) && error == nil) {
+                finalResult = result?.encode(object:result)
+                completion(true,finalResult,nil)
+            }
+
+        }
+
+//        let healthKitManager = HealthKitManager()
+//        healthKitManager.getLastRecord(variable: variable) { (result, error) in
+//
+//            if let error = error {
+//                completion(false, 0, error)
+//            } else {
+//                completion(true, result, nil)
+//            }
+//        }
+//
+    }
+
+    
     func requestPermissions(customPermissions:String,
                             allVariables:String,
                             fitnessVariables:String,
@@ -48,20 +83,23 @@ class HealthFitnessPlugin {
          
     }
     
-    func getData(variable: String,
-                 startDate: Date,
-                 endDate: Date,
-                 timeUnit: String,
-                 operationType: String,
-                 completion: @escaping(Bool, String?, NSError?) -> Void) {
+    func advancedQuery( variable: String,
+                        startDate: Date,
+                        endDate: Date,
+                        timeUnit: String,
+                        operationType: String,
+                        mostRecent:Bool,
+                        completion: @escaping(Bool, String?, NSError?) -> Void) {
+        
         let healthKitManager = HealthKitManager()
         var finalResult: String?
         
-        healthKitManager.getData(variable: variable,
-                                 startDate: startDate,
-                                 endDate: endDate,
-                                 timeUnit: timeUnit,
-                                 operationType: operationType) { result, error in
+        healthKitManager.advancedQuery(variable: variable,
+                                       startDate: startDate,
+                                       endDate: endDate,
+                                       timeUnit: timeUnit,
+                                       operationType: operationType,
+                                       mostRecent: mostRecent) { result, error in
             
             if let error = error {
                 completion(false,nil,error)

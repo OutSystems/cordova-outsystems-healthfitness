@@ -150,6 +150,66 @@ class HealthKitManager {
         return nil
     }
     
+//    func getLastRecord(variable:String,
+//                       completion: @escaping (Double?, NSError?) -> Void) {
+//
+//        if let error = self.isHealthDataAvailable() {
+//            completion(nil, error)
+//        }
+//
+//        guard let type = HKTypes.allVariablesDict[variable] else {
+//            let error = HealthKitErrors.dataTypeNotAvailable
+//            completion(nil, error as NSError)
+//            return
+//        }
+//
+//        guard let sampleType = type.first?.sampleType else {
+//            let error = HealthKitErrors.dataTypeNotAvailable
+//            completion(nil, error as NSError)
+//            return
+//        }
+//
+//        guard let unit = type.first?.unit else {
+//            let error = HealthKitErrors.dataTypeNotAvailable
+//            completion(nil, error as NSError)
+//            return
+//        }
+//
+//        let mostRecentPredicate = HKQuery.predicateForSamples(withStart: Date.distantPast,
+//                                                              end: Date(),
+//                                                              options: .strictEndDate)
+//        let sortDescriptor = NSSortDescriptor(key: HKSampleSortIdentifierStartDate,
+//                                              ascending: false)
+//        let limit = 1
+//        let sampleQuery = HKSampleQuery(sampleType: sampleType,
+//                                        predicate: mostRecentPredicate,
+//                                        limit: limit,
+//                                        sortDescriptors: [sortDescriptor]) { (query, samples, error) in
+//
+//            if let error = error {
+//                switch (error as NSError).code {
+//                case 1:
+//                    completion(nil, HealthKitErrors.notAvailableOnDevice as NSError)
+//                case 5:
+//                    completion(nil, HealthKitErrors.notAuthorizedByUser as NSError)
+//                default:
+//                    completion(nil, error as NSError)
+//                }
+//            }
+//
+//            guard let samples = samples else {
+//                return
+//            }
+//            let obj = samples.first as? HKQuantitySample
+//            let quant = obj?.quantity.doubleValue(for: unit)
+//            completion(quant, nil)
+//
+//        }
+//
+//        HKHealthStore().execute(sampleQuery)
+//
+//    }
+    
     func writeData(variable: String,
                    value: String,
                    completion: @escaping (Bool, NSError?) -> Void) {
@@ -253,12 +313,13 @@ class HealthKitManager {
         return interval
     }
 
-    func getData(variable: String,
-                 startDate: Date,
-                 endDate: Date,
-                 timeUnit: String,
-                 operationType: String,
-                 completion: @escaping(AdvancedQueryResponse?, NSError?) -> Void) {
+    func advancedQuery(variable: String,
+                       startDate: Date,
+                       endDate: Date,
+                       timeUnit: String,
+                       operationType: String,
+                       mostRecent: Bool,
+                       completion: @escaping(AdvancedQueryResponse?, NSError?) -> Void) {
         
 //        let variable = "BLOOD_PRESSURE"
         
@@ -284,7 +345,8 @@ class HealthKitManager {
         let types = HKTypes.allVariablesDict[variable]
         
         var HKOptions = getStatisticOptions(operationType: operationType)
-        let interval = getInterval(timeUnit: timeUnit)
+        
+        var interval = getInterval(timeUnit: timeUnit)
         
         var block = 0
         var resultInfo = AdvancedQueryResponseBlock()
@@ -306,9 +368,17 @@ class HealthKitManager {
                 fatalError("*** Unable to create the start date ***")
             }
             
-            let predicate = HKQuery.predicateForSamples(withStart: startDate, end: endDate, options: [.strictStartDate])
+            var predicate = HKQuery.predicateForSamples(withStart: startDate, end: endDate, options: [.strictEndDate])
+            var limit = 0
             
-            let sampleQuery = HKSampleQuery(sampleType: type, predicate: predicate, limit: 0, sortDescriptors: sortDescriptors)
+            if mostRecent {
+                limit = 1
+                predicate = HKQuery.predicateForSamples(withStart: Date.distantPast, end: endDate, options: [.strictEndDate])
+            } else {
+                predicate = HKQuery.predicateForSamples(withStart: startDate, end: endDate, options: [.strictEndDate])
+            }
+            
+            let sampleQuery = HKSampleQuery(sampleType: type, predicate: predicate, limit: limit, sortDescriptors: sortDescriptors)
                 { (sampleQuery, results, error ) -> Void in
 
                 if let dataList = results as? [HKCorrelation] {
@@ -360,6 +430,15 @@ class HealthKitManager {
                     HKOptions = defaultOption
                 }
                 
+                var newStartDate = Date()
+                if mostRecent {
+                    HKOptions = .mostRecent
+                    newStartDate = Date.distantPast
+                    interval.year = 200
+                } else {
+                    newStartDate = startDate
+                }
+                
                 let query = HKStatisticsCollectionQuery(quantityType: quantityType,
                                                         quantitySamplePredicate: nil,
                                                         options: HKOptions,
@@ -377,30 +456,48 @@ class HealthKitManager {
                         return
                     }
 
-                    results.enumerateStatistics(from: startDate, to: endDate) { statistics, _ in
-                        resultInfo.block = block
-                        resultInfo.startDate = Int(statistics.startDate.timeIntervalSince1970)
-                        resultInfo.endDate = Int(statistics.endDate.timeIntervalSince1970)
-                        resultInfo.values = []
-                        if let maxQuantity = statistics.maximumQuantity() {
-                            floatArray.append(Float(maxQuantity.doubleValue(for: unit)))
-                            resultInfo.values = floatArray
-                            floatArray.removeAll()
-                        } else if let minimumQuantity = statistics.minimumQuantity() {
-                            floatArray.append(Float(minimumQuantity.doubleValue(for: unit)))
-                            resultInfo.values = floatArray
-                            floatArray.removeAll()
-                        } else if let averageQuantity = statistics.averageQuantity() {
-                            floatArray.append(Float(averageQuantity.doubleValue(for: unit)))
-                            resultInfo.values = floatArray
-                            floatArray.removeAll()
-                        } else if let sum = statistics.sumQuantity() {
-                            floatArray.append(Float(sum.doubleValue(for: unit)))
-                            resultInfo.values = floatArray
-                            floatArray.removeAll()
+                    results.enumerateStatistics(from: newStartDate, to: endDate) { statistics, _ in
+                        
+                        if mostRecent {
+                            
+                            if let mostRecentQuantity = statistics.mostRecentQuantity() {
+                                floatArray.append(Float(mostRecentQuantity.doubleValue(for: unit)))
+                                resultInfo.values = floatArray
+                                floatArray.removeAll()
+                                
+                                block+=1
+                                resultInfoArray.append(resultInfo)
+                            }
+                            
+                        } else {
+                            
+                            resultInfo.block = block
+                            resultInfo.startDate = Int(statistics.startDate.timeIntervalSince1970)
+                            resultInfo.endDate = Int(statistics.endDate.timeIntervalSince1970)
+                            resultInfo.values = []
+                            
+                            if let maxQuantity = statistics.maximumQuantity() {
+                                floatArray.append(Float(maxQuantity.doubleValue(for: unit)))
+                                resultInfo.values = floatArray
+                                floatArray.removeAll()
+                            } else if let minimumQuantity = statistics.minimumQuantity() {
+                                floatArray.append(Float(minimumQuantity.doubleValue(for: unit)))
+                                resultInfo.values = floatArray
+                                floatArray.removeAll()
+                            } else if let averageQuantity = statistics.averageQuantity() {
+                                floatArray.append(Float(averageQuantity.doubleValue(for: unit)))
+                                resultInfo.values = floatArray
+                                floatArray.removeAll()
+                            } else if let sum = statistics.sumQuantity() {
+                                floatArray.append(Float(sum.doubleValue(for: unit)))
+                                resultInfo.values = floatArray
+                                floatArray.removeAll()
+                            }
+                            
+                            block+=1
+                            resultInfoArray.append(resultInfo)
                         }
-                        block+=1
-                        resultInfoArray.append(resultInfo)
+                       
                     }
 
                     var result = AdvancedQueryResponse()
@@ -412,7 +509,6 @@ class HealthKitManager {
             }
                 
         }
-                    
             
     }
 }
