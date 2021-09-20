@@ -45,18 +45,68 @@ class OSHealthFitness: CordovaImplementation {
         let value = command.arguments[1] as? String ?? ""
         
         plugin?.writeData(variable: variable, value: value) { success,error in
-            
             if let err = error {
                 self.sendResult(result: "", error:err, callBackID: self.callbackId)
             }
-            
             if success {
                 self.sendResult(result: "", error: nil, callBackID: self.callbackId)
             }
-            
+        }
+    }
+    
+    @objc(getLastRecord:)
+    func getLastRecord(command: CDVInvokedUrlCommand) {
+        callbackId = command.callbackId
+        
+        let variable = command.arguments[0] as? String ?? ""
+        
+        plugin?.advancedQuery(variable: variable,
+                        startDate: Date(),
+                        endDate: Date(),
+                        timeUnit: "DAY",
+                        operationType: "",
+                        mostRecent:true) { success, result, error in
+
+            if error != nil {
+                self.sendResult(result: nil, error: error, callBackID: self.callbackId)
+            }
+            else if success {
+                self.sendResult(result: result, error: nil, callBackID: self.callbackId)
+            }
         }
     
     }
     
+    @objc(getData:)
+    func getData(command: CDVInvokedUrlCommand) {
+        callbackId = command.callbackId
+        
+        let queryParameters = command.arguments[0] as? String ?? ""
+        if let params = queryParameters.decode(string: queryParameters) as QueryParameters? {
+                
+            let variable = params.variable ?? ""
+            let startDate = params.startDate ?? ""
+            let endDate = params.endDate ?? ""
+            let timeUnit = params.timeUnit ?? ""
+            let operationType = params.operationType ?? ""
+                
+            plugin?.advancedQuery(variable: variable,
+                            startDate: Date(startDate),
+                            endDate: Date(endDate),
+                            timeUnit: timeUnit,
+                            operationType: operationType,
+                            mostRecent:false) { success, result, error in
+
+                if error != nil {
+                    self.sendResult(result: nil, error: error, callBackID: self.callbackId)
+                }
+                else if success {
+                    self.sendResult(result: result, error: nil, callBackID: self.callbackId)
+                }
+            }
+     
+        }
+            
+    }
     
 }

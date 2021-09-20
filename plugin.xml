@@ -99,7 +99,9 @@
     <source-file src="src/ios/HealthKitTypes.swift" />
     <source-file src="src/ios/IOSPlatformInterface.swift" />
     <source-file src="src/ios/AuthorizationErrors.swift" />
-
+    <source-file src="src/ios/String+Extension.swift" />
+    <source-file src="src/ios/Date+Extension.swift" />
+    
   </platform>
 
 </plugin>
