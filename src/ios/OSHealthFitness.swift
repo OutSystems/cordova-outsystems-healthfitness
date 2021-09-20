@@ -64,31 +64,29 @@ class OSHealthFitness: CordovaImplementation {
         
         let queryParameters = command.arguments[0] as? String ?? ""
         if let params = queryParameters.decode(string: queryParameters) as QueryParameters? {
-            
-            if let variable = params.variable,
-            let startDate = params.startDate,
-            let endDate = params.endDate,
-            let timeUnit = params.timeUnit,
-            let operationType = params.operationType {
+                
+            let variable = params.variable ?? ""
+            let startDate = params.startDate ?? ""
+            let endDate = params.endDate ?? ""
+            let timeUnit = params.timeUnit ?? ""
+            let operationType = params.operationType ?? ""
+                
+            plugin?.getData(variable: variable,
+                            startDate: Date(startDate),
+                            endDate: Date(endDate),
+                            timeUnit: timeUnit,
+                            operationType: operationType ) { success, result, error in
 
-                plugin?.getData(variable: variable,
-                                startDate: Date(startDate),
-                                endDate: Date(endDate),
-                                timeUnit: timeUnit,
-                                operationType: operationType ) { success, result, error in
-
-                    if error != nil {
-                        self.sendResult(result: nil, error: error, callBackID: self.callbackId)
-                    }
-                    else if success {
-                        self.sendResult(result: result, error: nil, callBackID: self.callbackId)
-                    }
+                if error != nil {
+                    self.sendResult(result: nil, error: error, callBackID: self.callbackId)
                 }
-            
+                else if success {
+                    self.sendResult(result: result, error: nil, callBackID: self.callbackId)
+                }
             }
- 
+     
         }
+            
     }
-    
     
 }

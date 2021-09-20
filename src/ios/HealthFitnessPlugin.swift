@@ -13,8 +13,10 @@ class HealthFitnessPlugin {
             
             if let error = error {
                 completion(false,error)
+            } else {
+                completion(true,nil)
             }
-        
+                
         }
         
     }
@@ -55,7 +57,6 @@ class HealthFitnessPlugin {
         let healthKitManager = HealthKitManager()
         var finalResult: String?
         
-        //MARK - TODO: Acertar o completion handler
         healthKitManager.getData(variable: variable,
                                  startDate: startDate,
                                  endDate: endDate,

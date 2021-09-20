@@ -7,9 +7,9 @@ enum HealthTypeEnum: String
 {
     case stepCount = "STEPS",
          heartRate = "HEART_RATE",
-         bodyMass = "WEIGHT",
+         weight = "WEIGHT",
          height = "HEIGHT",
-         bloodGlucose = "BLOOD_PRESSURE_GLUCOSE",
+         bloodGlucose = "BLOOD_GLUCOSE",
          bloodPressure = "BLOOD_PRESSURE",
          sleepAnalysis = "SLEEP",
          oxygenSaturation = "OXYGEN_SATURATION",
@@ -18,7 +18,9 @@ enum HealthTypeEnum: String
          basalEnergyBurned = "BASAL_METABOLIC_RATE",
          bodyTemperature = "BODY_TEMPERATURE",
          dietaryWater = "HYDRATION",
-         pushCount = "PUSH_COUNT"
+         dietaryEnergyConsumed = "NUTRITION",
+         pushCount = "PUSH_COUNT",
+         appleMoveTime = "MOVE_MINUTES"
 }
 
 class HealthKitTypes {
@@ -27,7 +29,8 @@ class HealthKitTypes {
                                            sampleType: HKSampleType.quantityType(forIdentifier: .stepCount)!,
                                            objectType: HKObjectType.quantityType(forIdentifier: .stepCount)!,
                                            correlationType: nil,
-                                           unit: HKUnit.count())
+                                           unit: HKUnit.count(),
+                                           defaultOption: .cumulativeSum)
 
     let heartRate = HealthKitVariable.init(quantityType: HKQuantityType.quantityType(forIdentifier:HKQuantityTypeIdentifier.heartRate)!,
                                            sampleType: HKSampleType.quantityType(forIdentifier: .heartRate)!,
@@ -39,7 +42,7 @@ class HealthKitTypes {
                                                     sampleType: HKSampleType.quantityType(forIdentifier: .bodyMass)!,
                                                     objectType: HKObjectType.quantityType(forIdentifier: .bodyMass)!,
                                                     correlationType: nil,
-                                                    unit: HKUnit.count())
+                                                    unit: HKUnit.gramUnit(with: .kilo))
     
     let height = HealthKitVariable.init(quantityType: HKQuantityType.quantityType(forIdentifier:HKQuantityTypeIdentifier.height)!,
                                                     sampleType: HKSampleType.quantityType(forIdentifier: .height)!,
@@ -112,11 +115,12 @@ class HealthKitTypes {
                                               objectType: HKObjectType.quantityType(forIdentifier: .pushCount)!,
                                               correlationType: nil,
                                               unit: HKUnit.count())
+    
     // MARK: - All Variables
     lazy var allVariablesDict: [String: [HealthKitVariable]] = [
         HealthTypeEnum.stepCount.rawValue:[stepCount],
         HealthTypeEnum.heartRate.rawValue:[heartRate],
-        HealthTypeEnum.bodyMass.rawValue:[bodyMass],
+        HealthTypeEnum.weight.rawValue:[bodyMass],
         HealthTypeEnum.height.rawValue:[height],
         HealthTypeEnum.bloodGlucose.rawValue:[bloodGlucose],
         HealthTypeEnum.bloodPressure.rawValue:[bloodPressureSystolic, bloodPressureDiastolic],
@@ -138,7 +142,7 @@ class HealthKitTypes {
     
     // MARK: - Profile Variables
     lazy var profileVariablesDict: [String: [HealthKitVariable]] =
-        [HealthTypeEnum.stepCount.rawValue:[stepCount],
+        [HealthTypeEnum.weight.rawValue:[bodyMass],
          HealthTypeEnum.bodyFatPercentage.rawValue:[bodyFatPercentage],
          HealthTypeEnum.basalEnergyBurned.rawValue:[basalEnergyBurned],
          HealthTypeEnum.height.rawValue:[height]]
@@ -220,7 +224,8 @@ struct HealthKitVariable {
     var objectType: HKObjectType
     var correlationType: HKCorrelationType?
     var unit: HKUnit
-    var optionsAllowed: HKStatisticsOptions?
+    var optionsAllowed: [HKStatisticsOptions]?
+    var defaultOption: HKStatisticsOptions?
 }
 
 enum TimeUnit: String {

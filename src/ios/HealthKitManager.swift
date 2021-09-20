@@ -158,7 +158,7 @@ class HealthKitManager {
             completion(false, error)
         }
                 
-        guard let type = HKTypes.profileVariablesDict[variable] else {
+        guard let type = HKTypes.allVariablesDict[variable] else {
             let error = HealthKitErrors.dataTypeNotAvailable
             completion(false, error as NSError)
             return
@@ -262,7 +262,7 @@ class HealthKitManager {
         
 //        let variable = "BLOOD_PRESSURE"
         
-        guard let type = HKTypes.allVariablesQuantityDictToQuery[variable] else {
+        guard let type = HKTypes.allVariablesDict[variable] else {
             let error = HealthKitErrors.dataTypeNotAvailable
             completion(nil, error as NSError)
             return
@@ -281,9 +281,9 @@ class HealthKitManager {
         let anchorComponents = getCalendarComponent(date: startDate)
         let anchorDate = Calendar.current.date(from: anchorComponents)!
         
-        let types = HKTypes.allVariablesQuantityDictToQuery[variable]
+        let types = HKTypes.allVariablesDict[variable]
         
-        let HKOptions = getStatisticOptions(operationType: operationType)
+        var HKOptions = getStatisticOptions(operationType: operationType)
         let interval = getInterval(timeUnit: timeUnit)
         
         var block = 0
@@ -306,7 +306,8 @@ class HealthKitManager {
                 fatalError("*** Unable to create the start date ***")
             }
             
-            let predicate = HKQuery.predicateForSamples(withStart: startDate, end: endDate, options: [])
+            let predicate = HKQuery.predicateForSamples(withStart: startDate, end: endDate, options: [.strictStartDate])
+            
             let sampleQuery = HKSampleQuery(sampleType: type, predicate: predicate, limit: 0, sortDescriptors: sortDescriptors)
                 { (sampleQuery, results, error ) -> Void in
 
@@ -315,10 +316,10 @@ class HealthKitManager {
                         for item in dataList {
                             let bloodPressureSystolic = (item.objects(for: (types?[0].quantityType)!))
                             let bloodPressureDiastolic = (item.objects(for: (types?[1].quantityType)!))
-                                                        
+
                             if let data = bloodPressureSystolic.first {
                                 let obj = data as? HKQuantitySample
-                                
+
                                 if let startDate = obj?.startDate {
                                     resultInfo.startDate = Int(startDate.timeIntervalSince1970)
                                 }
@@ -329,7 +330,7 @@ class HealthKitManager {
                                     floatArray.append(Float(quantity))
                                 }
                             }
-                            
+
                             if let dataDiastolic = bloodPressureDiastolic.first {
                                 let obj = dataDiastolic as? HKQuantitySample
                                 if let quantity = obj?.quantity.doubleValue(for: HKUnit.millimeterOfMercury()) {
@@ -338,7 +339,7 @@ class HealthKitManager {
                             }
                             resultInfo.block = block
                             resultInfo.values = floatArray
-                          
+
                         }
                         resultInfoArray.append(resultInfo)
                         block+=1
@@ -354,6 +355,10 @@ class HealthKitManager {
         } else if let type = types?.first {
             
             if let quantityType = type.quantityType {
+                
+                if let defaultOption = type.defaultOption {
+                    HKOptions = defaultOption
+                }
                 
                 let query = HKStatisticsCollectionQuery(quantityType: quantityType,
                                                         quantitySamplePredicate: nil,
