@@ -399,6 +399,12 @@ class HealthKitManager {
                         if mostRecent {
                             
                             if let mostRecentQuantity = statistics.mostRecentQuantity() {
+                                
+                                resultInfo.block = block
+                                resultInfo.startDate = Int(statistics.startDate.timeIntervalSince1970)
+                                resultInfo.endDate = Int(statistics.endDate.timeIntervalSince1970)
+                                resultInfo.values = []
+                                
                                 floatArray.append(Float(mostRecentQuantity.doubleValue(for: unit)))
                                 resultInfo.values = floatArray
                                 floatArray.removeAll()
