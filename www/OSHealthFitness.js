@@ -31,3 +31,7 @@ exports.enableBackgroundJob = function (success, error) {
 exports.writeData = function (success, error, variable, value) {
     exec(success, error, 'OSHealthFitness', 'writeData', [variable, value]);
 };
+
+exports.getLastRecord = function (success, error, variable) {
+    exec(success, error, 'OSHealthFitness', 'getLastRecord', [variable]);
+};
