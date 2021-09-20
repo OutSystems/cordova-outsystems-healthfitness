@@ -34,6 +34,17 @@ import java.time.ZoneId
 import java.time.temporal.WeekFields
 import java.util.*
 import java.util.concurrent.TimeUnit
+import com.outsystems.plugins.healthfitness.AndroidPlatformInterface
+import com.outsystems.plugins.healthfitness.HealthFitnessError
+import com.outsystems.plugins.healthfitness.OSHealthFitness
+import com.outsystems.plugins.healthfitness.MyDataUpdateService
+import org.json.JSONArray
+import java.time.LocalDateTime
+import java.time.ZoneId
+import java.util.concurrent.TimeUnit
+import com.google.android.gms.fitness.data.DataPoint
+import com.google.android.gms.fitness.data.DataSet
+import java.util.*
 
 
 enum class EnumAccessType(val value : String) {
@@ -302,13 +313,21 @@ class HealthStore(val platformInterface: AndroidPlatformInterface) {
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     fun requestGoogleFitPermissions() {
-        fitnessOptions?.let {
-            GoogleSignIn.requestPermissions(
-                platformInterface.getActivity(),  // your activity
-                OSHealthFitness.GOOGLE_FIT_PERMISSIONS_REQUEST_CODE,  // e.g. 1
-                account,
-                it
-            )
+        if(!checkAllGoogleFitPermissionGranted()){
+            fitnessOptions?.let {
+                GoogleSignIn.requestPermissions(
+                    platformInterface.getActivity(),  // your activity
+                    OSHealthFitness.GOOGLE_FIT_PERMISSIONS_REQUEST_CODE,  // e.g. 1
+                    account,
+                    it
+                )
+            }
+            //instead of calling sendPluginResult here we should call it in the onActivityResult after the user provides the permissions in the permission dialog
+            //but the onActivityResult is not being called for some reason
+            platformInterface.sendPluginResult("success", null)
+        }
+        else{
+            platformInterface.sendPluginResult("success", null)
         }
     }
 
@@ -331,6 +350,53 @@ class HealthStore(val platformInterface: AndroidPlatformInterface) {
             }
         }
         return true
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    fun updateData(variable: String, value: String) {
+
+        //right now we are only writing data which are float values
+        val convertedValue = value.toFloat()
+
+        val dataType = profileVariablesMap[variable]?.dataType
+
+        //profile variables only have 1 field each, so it is safe to get the first entry of the fields list
+        val fieldType = profileVariablesMap[variable]?.fields?.get(0)
+
+        //insert the data
+        val dataSourceWrite = DataSource.Builder()
+                .setAppPackageName(context)
+                .setDataType(dataType)
+                .setType(DataSource.TYPE_RAW)
+                .build()
+
+        val timestamp = System.currentTimeMillis()
+        val valueToWrite = DataPoint.builder(dataSourceWrite)
+                .setTimestamp(timestamp, TimeUnit.MILLISECONDS)
+                .setField(fieldType, convertedValue)
+                .build()
+
+        val dataSet = DataSet.builder(dataSourceWrite)
+                .add(valueToWrite)
+                .build()
+
+        Fitness.getHistoryClient(
+                activity,
+                account
+        )
+                .insertData(dataSet)
+                .addOnSuccessListener {
+                    Log.i("Access GoogleFit:", "DataSet updated successfully!")
+                    platformInterface.sendPluginResult("success", null)
+                }
+                .addOnFailureListener { e ->
+                    Log.w("Access GoogleFit:", "There was an error updating the DataSet", e)
+                    //In this case, what is the error we want to send in the callback?
+                    //We could identify the exception that is thrown and send an error accordingly?
+                    //Maybe catch that com.google.android.gms.common.api.ApiException: 4: The user must be signed in to make this API call.
+                    //For now we will send a generic error message
+                    platformInterface.sendPluginResult(null, Pair(HealthFitnessError.WRITE_DATA_ERROR.code, HealthFitnessError.WRITE_DATA_ERROR.message))
+                }
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -880,5 +946,6 @@ class HealthStore(val platformInterface: AndroidPlatformInterface) {
                 Log.i("Access GoogleFit:", "DataUpdateListener registered")
             }
     }
+
 
 }

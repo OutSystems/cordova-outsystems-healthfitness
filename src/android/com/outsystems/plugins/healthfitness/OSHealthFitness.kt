@@ -53,6 +53,12 @@ class OSHealthFitness : CordovaImplementation() {
             "getData" -> {
                 advancedQuery(args)
             }
+            "writeData" -> {
+                writeData(args)
+            }
+            "getLastRecord" -> {
+                getLastRecord(args)
+            }
         }
         return true
     }
@@ -101,7 +107,6 @@ class OSHealthFitness : CordovaImplementation() {
         return false
     }
 
-    //Get steps by day
     @RequiresApi(api = Build.VERSION_CODES.O)
     private fun advancedQuery(args : JSONArray) {
         val parameters = gson.fromJson(args.getString(0), AdvancedQueryParameters::class.java)
@@ -109,7 +114,18 @@ class OSHealthFitness : CordovaImplementation() {
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
+    private fun writeData(args: JSONArray) {
+
+        //process parameters
+        val variable = args.getString(0)
+        val value = args.getString(1)
+
+        healthStore?.updateData(variable, value)
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun getLastRecord(args: JSONArray) {
+
         //process parameters
         val variable = args.getString(0)
         healthStore?.getLastRecord(variable)

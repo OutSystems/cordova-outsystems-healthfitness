@@ -1,0 +1,62 @@
+import Foundation
+
+@objc(OSHealthFitness)
+class OSHealthFitness: CordovaImplementation {
+    var plugin: HealthFitnessPlugin?
+    var callbackId:String=""
+    
+    override func pluginInitialize() {
+        plugin = HealthFitnessPlugin()
+    }
+    
+    @objc(requestPermissions:)
+    func requestPermissions(command: CDVInvokedUrlCommand) {
+        callbackId = command.callbackId
+        
+        let customPermissions = command.arguments[0] as? String ?? ""
+        let allVariables = command.arguments[1] as? String ?? ""
+        let fitnessVariables = command.arguments[2] as? String ?? ""
+        let healthVariables = command.arguments[3] as? String ?? ""
+        let profileVariables = command.arguments[4] as? String ?? ""
+        let summaryVariables = command.arguments[5] as? String ?? ""
+        
+        plugin?.requestPermissions(customPermissions:customPermissions,
+                                   allVariables:allVariables,
+                                   fitnessVariables:fitnessVariables,
+                                   healthVariables:healthVariables,
+                                   profileVariables:profileVariables,
+                                   summaryVariables:summaryVariables) { [self] (authorized, error) in
+            
+            if let err = error {
+                self.sendResult(result: "", error:err , callBackID: self.callbackId)
+            }
+            
+            if authorized {
+                self.sendResult(result: "", error: nil, callBackID: self.callbackId)
+            }
+        }
+    }
+    
+    @objc(writeData:)
+    func writeData(command: CDVInvokedUrlCommand) {
+        callbackId = command.callbackId
+        
+        let variable = command.arguments[0] as? String ?? ""
+        let value = command.arguments[1] as? String ?? ""
+        
+        plugin?.writeData(variable: variable, value: value) { success,error in
+            
+            if let err = error {
+                self.sendResult(result: "", error:err, callBackID: self.callbackId)
+            }
+            
+            if success {
+                self.sendResult(result: "", error: nil, callBackID: self.callbackId)
+            }
+            
+        }
+    
+    }
+    
+    
+}
