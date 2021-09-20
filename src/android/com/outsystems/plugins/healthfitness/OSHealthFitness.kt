@@ -108,6 +108,13 @@ class OSHealthFitness : CordovaImplementation() {
         healthStore?.advancedQuery(parameters)
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun getLastRecord(args: JSONArray) {
+        //process parameters
+        val variable = args.getString(0)
+        healthStore?.getLastRecord(variable)
+    }
+
     @RequiresApi(api = Build.VERSION_CODES.O)
     override fun onActivityResult(requestCode: Int, resultCode: Int, intent: Intent) {
         super.onActivityResult(requestCode, resultCode, intent)

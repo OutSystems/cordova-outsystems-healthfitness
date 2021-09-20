@@ -342,10 +342,8 @@ class HealthStore(val platformInterface: AndroidPlatformInterface) {
 
         val advancedQueryParameters = AdvancedQueryParameters(
             variable,
-            Date.from(Instant.ofEpochSecond(startDate)),
-            Date.from(Instant.ofEpochSecond(endDate)),
-            null,
-            null,
+            Date.from(Instant.ofEpochMilli(startDate)),
+            Date.from(Instant.ofEpochMilli(endDate)),
             null
         )
         advancedQuery(advancedQueryParameters)
@@ -397,13 +395,13 @@ class HealthStore(val platformInterface: AndroidPlatformInterface) {
             }
 
             var timeUnitLength : Int? = null
-            parameters.timeUnit?.let {
+            if(parameters.timeUnit != null) {
                 val timeUnit = if(operationType == EnumOperationType.SUM.value || operationType == EnumOperationType.RAW.value) {
                     timeUnits.getOrDefault(parameters.timeUnit, EnumTimeUnit.DAY)
                 } else {
                     timeUnitsForMinMaxAverage.getOrDefault(parameters.timeUnit, EnumTimeUnit.DAY)
                 }
-                parameters.timeUnitLength = 1//max(1, parameters.timeUnitLength)
+
                 parameters.timeUnitLength?.let{
                     timeUnitLength = max(1, it)
                     //TODO: Needs refactoring
@@ -417,6 +415,9 @@ class HealthStore(val platformInterface: AndroidPlatformInterface) {
                     }
                 }
             }
+            else {
+                requestBuilder.setLimit(1)
+            }
 
             val fitnessRequest = requestBuilder.build()
             Fitness.getHistoryClient(context, account)
@@ -428,14 +429,6 @@ class HealthStore(val platformInterface: AndroidPlatformInterface) {
                     timeUnitLength?.let {
                         //TODO: Needs refactoring
                         when(parameters.timeUnit) {
-                            "MILLISECONDS",
-                            "SECONDS",
-                            "MINUTE",
-                            "HOUR",
-                            "DAY" -> {
-                                processedBuckets = processBucket(
-                                    dataReadResponse.buckets)
-                            }
                             "WEEK" -> {
                                 processedBuckets = processIntoBucketPerWeek(
                                     dataReadResponse.buckets,
@@ -450,16 +443,39 @@ class HealthStore(val platformInterface: AndroidPlatformInterface) {
                                     startTime.time,
                                     endTime.time)
                             }
+                            else -> {
+                                processedBuckets = processBucket(dataReadResponse.buckets)
+                            }
                         }
                     }
 
-                    val resultBuckets = processBucketOperation(processedBuckets, variable, operationType)
+                    if(timeUnitLength == null) {
+                        val values = mutableListOf<Float>()
 
-                    val queryResponse = buildAdvancedQueryResult(resultBuckets)
-                    val pluginResponseJson = gson.toJson(queryResponse)
-                    Log.d("STORE", "Response $pluginResponseJson")
-                    platformInterface.sendPluginResult(pluginResponseJson)
+                        variable.fields.forEach { field ->
+                            values.add(dataReadResponse.dataSets[0].dataPoints[0].getValue(field).toString().toFloat())
+                        }
 
+                        val responseBlock = AdvancedQueryResponseBlock(
+                            0,
+                            startTime.time / 1000,
+                            endTime.time / 1000,
+                            "format.format(startTime.time)",
+                            "format.format(endTime.time)",
+                            values
+                        )
+                        val queryResponse = AdvancedQueryResponse(listOf(responseBlock))
+                        val pluginResponseJson = gson.toJson(queryResponse)
+                        Log.d("STORE", "Response $pluginResponseJson")
+                        platformInterface.sendPluginResult(pluginResponseJson)
+                    }
+                    else {
+                        val resultBuckets = processBucketOperation(processedBuckets, variable, operationType)
+                        val queryResponse = buildAdvancedQueryResult(resultBuckets)
+                        val pluginResponseJson = gson.toJson(queryResponse)
+                        Log.d("STORE", "Response $pluginResponseJson")
+                        platformInterface.sendPluginResult(pluginResponseJson)
+                    }
                 }
                 .addOnFailureListener { dataReadResponse: Exception ->
                     Log.d("STORE", dataReadResponse.message!!)

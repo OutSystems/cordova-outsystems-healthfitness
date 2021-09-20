@@ -8,6 +8,6 @@ data class AdvancedQueryParameters (
     @SerializedName("StartDate") val startDate : Date,
     @SerializedName("EndDate") val endDate : Date,
     @SerializedName("TimeUnit") val timeUnit : String?,
-    @SerializedName("TimeUnitLength") var timeUnitLength : Int?,
-    @SerializedName("OperationType") val operationType : String?
+    @SerializedName("TimeUnitLength") var timeUnitLength : Int? = 1,
+    @SerializedName("OperationType") val operationType : String? = EnumOperationType.RAW.value
 )
