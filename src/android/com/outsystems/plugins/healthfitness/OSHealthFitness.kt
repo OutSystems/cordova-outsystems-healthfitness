@@ -118,7 +118,7 @@ class OSHealthFitness : CordovaImplementation() {
 
         //process parameters
         val variable = args.getString(0)
-        val value = args.getString(1)
+        val value = args.getDouble(1).toFloat()
 
         healthStore?.updateData(variable, value)
     }
