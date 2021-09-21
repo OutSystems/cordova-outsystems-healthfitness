@@ -87,7 +87,7 @@ class HealthStore(val platformInterface: AndroidPlatformInterface) {
                 Field.FIELD_CALORIES
             )),
             "PUSH_COUNT" to GoogleFitVariable(DataType.TYPE_ACTIVITY_SEGMENT, listOf(
-                //TODO:
+                //TODO: different from iOS
             )),
             "MOVE_MINUTES" to GoogleFitVariable(DataType.TYPE_MOVE_MINUTES, listOf(
                 Field.FIELD_DURATION
@@ -113,7 +113,7 @@ class HealthStore(val platformInterface: AndroidPlatformInterface) {
                 Field.FIELD_VOLUME
             )),
             "NUTRITION" to GoogleFitVariable(DataType.TYPE_NUTRITION, listOf(
-                //TODO:
+                //TODO: different from iOS
             ))
         )
     }
@@ -542,6 +542,10 @@ class HealthStore(val platformInterface: AndroidPlatformInterface) {
                 }
                 .addOnFailureListener { dataReadResponse: Exception ->
                     Log.d("STORE", dataReadResponse.message!!)
+                    platformInterface.sendPluginResult(
+                        null,
+                        Pair(HealthFitnessError.READ_DATA_ERROR.code, HealthFitnessError.READ_DATA_ERROR.message)
+                    )
                 }
         }
     }
