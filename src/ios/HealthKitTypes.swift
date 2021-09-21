@@ -78,37 +78,37 @@ class HealthKitTypes {
                                                         sampleType: HKSampleType.quantityType(forIdentifier: .oxygenSaturation)!,
                                                         objectType: HKObjectType.quantityType(forIdentifier: .oxygenSaturation)!,
                                                         correlationType: nil,
-                                                        unit: HKUnit.count())
+                                                        unit: HKUnit.percent())
 
     let activeEnergyBurned = HealthKitVariable.init(quantityType: HKQuantityType.quantityType(forIdentifier:HKQuantityTypeIdentifier.activeEnergyBurned)!,
                                                     sampleType: HKSampleType.quantityType(forIdentifier: .activeEnergyBurned)!,
                                                     objectType: HKObjectType.quantityType(forIdentifier: .activeEnergyBurned)!,
                                                     correlationType: nil,
-                                                    unit: HKUnit.count())
+                                                    unit: HKUnit.kilocalorie())
     
     let bodyFatPercentage = HealthKitVariable.init(quantityType: HKQuantityType.quantityType(forIdentifier:HKQuantityTypeIdentifier.bodyFatPercentage)!,
                                                     sampleType: HKSampleType.quantityType(forIdentifier: .bodyFatPercentage)!,
                                                     objectType: HKObjectType.quantityType(forIdentifier: .bodyFatPercentage)!,
                                                     correlationType: nil,
-                                                    unit: HKUnit.count())
+                                                    unit: HKUnit.percent())
     
     let basalEnergyBurned = HealthKitVariable.init(quantityType: HKQuantityType.quantityType(forIdentifier:HKQuantityTypeIdentifier.basalEnergyBurned)!,
                                                     sampleType: HKSampleType.quantityType(forIdentifier: .basalEnergyBurned)!,
                                                     objectType: HKObjectType.quantityType(forIdentifier: .basalEnergyBurned)!,
                                                     correlationType: nil,
-                                                    unit: HKUnit.count())
+                                                    unit: HKUnit.kilocalorie())
     
     let bodyTemperature = HealthKitVariable.init(quantityType: HKQuantityType.quantityType(forIdentifier:HKQuantityTypeIdentifier.bodyTemperature)!,
                                                     sampleType: HKSampleType.quantityType(forIdentifier: .bodyTemperature)!,
                                                     objectType: HKObjectType.quantityType(forIdentifier: .bodyTemperature)!,
                                                     correlationType: nil,
-                                                    unit: HKUnit.count())
+                                                    unit: HKUnit.degreeCelsius())
     
     let dietaryWater = HealthKitVariable.init(quantityType: HKQuantityType.quantityType(forIdentifier:HKQuantityTypeIdentifier.dietaryWater)!,
                                               sampleType: HKSampleType.quantityType(forIdentifier: .dietaryWater)!,
                                               objectType: HKObjectType.quantityType(forIdentifier: .dietaryWater)!,
                                               correlationType: nil,
-                                              unit: HKUnit.count())
+                                              unit: HKUnit.liter())
     
     let pushCount = HealthKitVariable.init(quantityType: HKQuantityType.quantityType(forIdentifier:HKQuantityTypeIdentifier.pushCount)!,
                                               sampleType: HKSampleType.quantityType(forIdentifier: .pushCount)!,
