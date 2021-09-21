@@ -1,6 +1,7 @@
 package com.outsystems.plugins.healthfitness
 
 import android.Manifest
+import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
@@ -134,9 +135,16 @@ class OSHealthFitness : CordovaImplementation() {
     @RequiresApi(api = Build.VERSION_CODES.O)
     override fun onActivityResult(requestCode: Int, resultCode: Int, intent: Intent) {
         super.onActivityResult(requestCode, resultCode, intent)
-        when (requestCode) {
-            GOOGLE_FIT_PERMISSIONS_REQUEST_CODE -> {
-
+        when (resultCode) {
+            Activity.RESULT_OK -> when (requestCode) {
+                GOOGLE_FIT_PERMISSIONS_REQUEST_CODE -> sendPluginResult("success", null)
+                else -> {
+                    // Result wasn't from Google Fit
+                }
+            }
+            else -> {
+                // Permission not granted
+                sendPluginResult(null, Pair(HealthFitnessError.PERMISSIONS_NOT_GRANTED_ERROR.code, HealthFitnessError.PERMISSIONS_NOT_GRANTED_ERROR.message))
             }
         }
     }

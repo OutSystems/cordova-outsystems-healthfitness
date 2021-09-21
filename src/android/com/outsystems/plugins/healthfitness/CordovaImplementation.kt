@@ -20,6 +20,7 @@ abstract  class CordovaImplementation : CordovaPlugin(), AndroidPlatformInterfac
 
     override fun initialize(cordova: CordovaInterface, webView: CordovaWebView) {
         super.initialize(cordova, webView)
+        cordova.setActivityResultCallback(this)
     }
 
      override fun getContext(): Context {
