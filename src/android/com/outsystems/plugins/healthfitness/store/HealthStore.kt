@@ -374,9 +374,11 @@ class HealthStore(val platformInterface: AndroidPlatformInterface) {
                 .add(valueToWrite)
                 .build()
 
+        val lastAccount = GoogleSignIn.getLastSignedInAccount(context)
+
         Fitness.getHistoryClient(
                 activity,
-                account
+                lastAccount
         )
                 .insertData(dataSet)
                 .addOnSuccessListener {
@@ -479,8 +481,10 @@ class HealthStore(val platformInterface: AndroidPlatformInterface) {
                 requestBuilder.setLimit(1)
             }
 
+            val lastAccount = GoogleSignIn.getLastSignedInAccount(context)
+
             val fitnessRequest = requestBuilder.build()
-            Fitness.getHistoryClient(context, account)
+            Fitness.getHistoryClient(context, lastAccount)
                 .readData(fitnessRequest)
                 .addOnSuccessListener { dataReadResponse: DataReadResponse ->
 
@@ -513,7 +517,11 @@ class HealthStore(val platformInterface: AndroidPlatformInterface) {
                         val values = mutableListOf<Float>()
 
                         variable.fields.forEach { field ->
-                            values.add(dataReadResponse.dataSets[0].dataPoints[0].getValue(field).toString().toFloat())
+                            dataReadResponse.dataSets
+                                .flatMap { it.dataPoints }
+                                .forEach { dataPoint ->
+                                    values.add(dataPoint.getValue(field).toString().toFloat())
+                                }
                         }
 
                         val responseBlock = AdvancedQueryResponseBlock(
