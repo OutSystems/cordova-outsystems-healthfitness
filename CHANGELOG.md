@@ -9,6 +9,9 @@ The changes documented here do not include those from the original repository.
 ## [Unreleased]
 
 ## 2021-09-15
+- Using getLastSignedInAccount for Android (https://outsystemsrd.atlassian.net/browse/RMET-1022)
+
+## 2021-09-15
 - Implemented getLastRecord for Android (https://outsystemsrd.atlassian.net/browse/RMET-831)
 
 ## 2021-09-15
