@@ -42,7 +42,7 @@ class OSHealthFitness: CordovaImplementation {
         callbackId = command.callbackId
         
         let variable = command.arguments[0] as? String ?? ""
-        let value = command.arguments[1] as? String ?? ""
+        let value = command.arguments[1] as? Double ?? 0
         
         plugin?.writeData(variable: variable, value: value) { success,error in
             if let err = error {

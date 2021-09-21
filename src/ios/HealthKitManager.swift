@@ -126,11 +126,12 @@ class HealthKitManager {
         }
         
         if (isAuthorizationValid) {
-            HKHealthStore().requestAuthorization(toShare: healthKitTypesToWrite,
-                                                 read: healthKitTypesToRead) { (success, error) in
+            
+            self.requestAuthorization(setToWrite:healthKitTypesToWrite,
+                                       setToRead:healthKitTypesToRead) { (success, error) in
                 
                 if (error != nil) {
-                    return completion(false, HealthKitErrors.notAuthorizedByUser as NSError)
+                    return completion(false, error as NSError?)
                 }
                 
                 if success {
@@ -138,6 +139,26 @@ class HealthKitManager {
                 }
                 
             }
+            
+        }
+        
+    }
+    
+    func requestAuthorization(setToWrite: Set<HKSampleType>,
+                              setToRead: Set<HKObjectType>,
+                               completion: @escaping (Bool, NSError?) -> Void) {
+        
+        HKHealthStore().requestAuthorization(toShare: setToWrite,
+                                                read: setToRead) { (success, error) in
+            
+            if (error != nil) {
+                return completion(false, HealthKitErrors.notAuthorizedByUser as NSError)
+            }
+            
+            if success {
+                completion(success,error as NSError?)
+            }
+            
         }
         
     }
@@ -151,7 +172,7 @@ class HealthKitManager {
     }
     
     func writeData(variable: String,
-                   value: String,
+                   value: Double?,
                    completion: @escaping (Bool, NSError?) -> Void) {
         
         if let error = self.isHealthDataAvailable() {
@@ -162,6 +183,13 @@ class HealthKitManager {
             let error = HealthKitErrors.dataTypeNotAvailable
             completion(false, error as NSError)
             return
+        }
+        
+        if let objectType = type.first?.objectType {
+            let authStatus = HKHealthStore().authorizationStatus(for: objectType)
+            if authStatus == .sharingDenied {
+                completion(false, HealthKitErrors.variableHasWriteDenied as NSError)
+            }
         }
         
         guard let unit = type.first?.unit else {
@@ -177,13 +205,13 @@ class HealthKitManager {
         }
         
         
-        if let val = Double(value) {
+        if let val = value {
             let variableQuantity = HKQuantity(unit: unit, doubleValue: val)
             
             let countSample = HKQuantitySample(type: quantityType,
-                                                quantity: variableQuantity,
-                                                   start: Date(),
-                                                   end: Date())
+                                           quantity: variableQuantity,
+                                              start: Date(),
+                                                end: Date())
             
             HKHealthStore().save(countSample) { (success, error) in
                 
@@ -265,6 +293,13 @@ class HealthKitManager {
             let error = HealthKitErrors.dataTypeNotAvailable
             completion(nil, error as NSError)
             return
+        }
+        
+        if let objectType = type.first?.objectType {
+            let authStatus = HKHealthStore().authorizationStatus(for: objectType)
+            if authStatus == .notDetermined {
+                completion(nil, HealthKitErrors.variableNotAuthorized as NSError)
+            }
         }
 
         guard let unit = type.first?.unit else {
