@@ -27,7 +27,7 @@ abstract  class CordovaImplementation : CordovaPlugin(), AndroidPlatformInterfac
     override fun getActivity(): Activity {
         return cordova.activity
     }
-    override fun setAsActivityResultCallback() {
+    fun setAsActivityResultCallback() {
         cordova.setActivityResultCallback(this)
     }
 

@@ -9,7 +9,6 @@ interface AndroidPlatformInterface {
 
     fun getContext(): Context
     fun getActivity(): Activity
-    fun setAsActivityResultCallback()
 
     fun onRequestPermissionResult(
         requestCode: Int,

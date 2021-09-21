@@ -68,6 +68,7 @@ class OSHealthFitness : CordovaImplementation() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun initAndRequestPermissions(args : JSONArray) {
+        setAsActivityResultCallback()
         healthStore?.initAndRequestPermissions(args)
         checkAndGrantPermissions()
     }
