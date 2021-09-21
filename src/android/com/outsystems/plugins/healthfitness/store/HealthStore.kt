@@ -309,6 +309,7 @@ class HealthStore(val platformInterface: AndroidPlatformInterface) {
     fun requestGoogleFitPermissions() {
         if(!checkAllGoogleFitPermissionGranted()){
             fitnessOptions?.let {
+                platformInterface.setAsActivityResultCallback()
                 GoogleSignIn.requestPermissions(
                     platformInterface.getActivity(),  // your activity
                     OSHealthFitness.GOOGLE_FIT_PERMISSIONS_REQUEST_CODE,  // e.g. 1
