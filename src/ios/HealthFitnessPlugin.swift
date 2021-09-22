@@ -3,7 +3,7 @@ import Foundation
 class HealthFitnessPlugin {
 
     func writeData(variable:String,
-                   value:String,
+                   value:Double,
                    completion: @escaping (Bool, NSError?) -> Void) {
         
         let healthKitManager = HealthKitManager()
@@ -20,7 +20,7 @@ class HealthFitnessPlugin {
     func getLastRecord(variable:String,
                        mostRecent:Bool,
                        completion: @escaping (Bool, String?, NSError?) -> Void) {
-
+        
         let healthKitManager = HealthKitManager()
         var finalResult: String?
         healthKitManager.advancedQuery(variable: variable,
