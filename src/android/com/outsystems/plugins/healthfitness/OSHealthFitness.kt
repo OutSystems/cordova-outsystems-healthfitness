@@ -1,6 +1,7 @@
 package com.outsystems.plugins.healthfitness
 
 import android.Manifest
+import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
@@ -67,6 +68,7 @@ class OSHealthFitness : CordovaImplementation() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun initAndRequestPermissions(args : JSONArray) {
+        setAsActivityResultCallback()
         healthStore?.initAndRequestPermissions(args)
         checkAndGrantPermissions()
     }
@@ -118,7 +120,7 @@ class OSHealthFitness : CordovaImplementation() {
 
         //process parameters
         val variable = args.getString(0)
-        val value = args.getString(1)
+        val value = args.getDouble(1).toFloat()
 
         healthStore?.updateData(variable, value)
     }
@@ -134,9 +136,16 @@ class OSHealthFitness : CordovaImplementation() {
     @RequiresApi(api = Build.VERSION_CODES.O)
     override fun onActivityResult(requestCode: Int, resultCode: Int, intent: Intent) {
         super.onActivityResult(requestCode, resultCode, intent)
-        when (requestCode) {
-            GOOGLE_FIT_PERMISSIONS_REQUEST_CODE -> {
-
+        when (resultCode) {
+            Activity.RESULT_OK -> when (requestCode) {
+                GOOGLE_FIT_PERMISSIONS_REQUEST_CODE -> sendPluginResult("success", null)
+                else -> {
+                    // Result wasn't from Google Fit
+                }
+            }
+            else -> {
+                // Permission not granted
+                sendPluginResult(null, Pair(HealthFitnessError.PERMISSIONS_NOT_GRANTED_ERROR.code, HealthFitnessError.PERMISSIONS_NOT_GRANTED_ERROR.message))
             }
         }
     }
