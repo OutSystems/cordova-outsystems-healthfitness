@@ -20,16 +20,13 @@ import com.google.android.gms.fitness.request.DataUpdateListenerRegistrationRequ
 import com.google.android.gms.fitness.request.SensorRequest
 import com.google.android.gms.fitness.result.DataReadResponse
 import com.google.gson.Gson
-import com.google.gson.annotations.SerializedName
 import java.lang.Integer.max
 import java.lang.Integer.min
-import java.sql.Timestamp
 import java.text.SimpleDateFormat
 import java.time.Instant
 import java.time.temporal.WeekFields
 import java.util.*
 import com.outsystems.plugins.healthfitness.HealthFitnessError
-import java.time.LocalDateTime
 import com.google.android.gms.fitness.data.DataPoint
 import com.google.android.gms.fitness.data.DataSet
 import com.outsystems.plugins.healthfitness.AndroidPlatformInterface
@@ -37,7 +34,6 @@ import com.outsystems.plugins.healthfitness.MyDataUpdateService
 import com.outsystems.plugins.healthfitness.OSHealthFitness
 import org.json.JSONArray
 import java.time.ZoneId
-import java.util.*
 import java.util.concurrent.TimeUnit
 
 
@@ -82,15 +78,39 @@ class HealthStore(val platformInterface: AndroidPlatformInterface) {
         mapOf(
             "STEPS" to GoogleFitVariable(DataType.TYPE_STEP_COUNT_DELTA, listOf(
                 Field.FIELD_STEPS
+            ),
+            listOf(
+                EnumOperationType.RAW.value,
+                EnumOperationType.AVERAGE.value,
+                EnumOperationType.SUM.value,
+                EnumOperationType.MAX.value,
+                EnumOperationType.MIN.value
             )),
             "CALORIES_BURNED" to GoogleFitVariable(DataType.TYPE_CALORIES_EXPENDED, listOf(
                 Field.FIELD_CALORIES
+            ),
+            listOf(
+                EnumOperationType.RAW.value,
+                EnumOperationType.AVERAGE.value,
+                EnumOperationType.SUM.value,
+                EnumOperationType.MAX.value,
+                EnumOperationType.MIN.value
             )),
             "PUSH_COUNT" to GoogleFitVariable(DataType.TYPE_ACTIVITY_SEGMENT, listOf(
-                //TODO: different from iOS
+                //TODO: possible different from iOS
+            ),
+            listOf(
+
             )),
             "MOVE_MINUTES" to GoogleFitVariable(DataType.TYPE_MOVE_MINUTES, listOf(
                 Field.FIELD_DURATION
+            ),
+            listOf(
+                EnumOperationType.RAW.value,
+                EnumOperationType.AVERAGE.value,
+                EnumOperationType.SUM.value,
+                EnumOperationType.MAX.value,
+                EnumOperationType.MIN.value
             ))
         )
     }
@@ -98,22 +118,56 @@ class HealthStore(val platformInterface: AndroidPlatformInterface) {
         mapOf(
             "HEART_RATE" to GoogleFitVariable(DataType.TYPE_HEART_RATE_BPM, listOf(
                 Field.FIELD_BPM
+            ),
+            listOf(
+                EnumOperationType.RAW.value,
+                EnumOperationType.AVERAGE.value,
+                EnumOperationType.MAX.value,
+                EnumOperationType.MIN.value
             )),
             "SLEEP" to GoogleFitVariable(DataType.TYPE_SLEEP_SEGMENT, listOf(
                 Field.FIELD_SLEEP_SEGMENT_TYPE
+            ),
+            listOf(
+                EnumOperationType.RAW.value,
+                EnumOperationType.AVERAGE.value,
+                EnumOperationType.MAX.value,
+                EnumOperationType.MIN.value
             )),
             "BLOOD_GLUCOSE" to GoogleFitVariable(HealthDataTypes.TYPE_BLOOD_GLUCOSE, listOf(
                 HealthFields.FIELD_BLOOD_GLUCOSE_LEVEL
+            ),
+            listOf(
+                EnumOperationType.RAW.value,
+                EnumOperationType.AVERAGE.value,
+                EnumOperationType.MAX.value,
+                EnumOperationType.MIN.value
             )),
             "BLOOD_PRESSURE" to GoogleFitVariable(HealthDataTypes.TYPE_BLOOD_PRESSURE, listOf(
                 HealthFields.FIELD_BLOOD_PRESSURE_SYSTOLIC,
                 HealthFields.FIELD_BLOOD_PRESSURE_DIASTOLIC
+            ),
+            listOf(
+                EnumOperationType.RAW.value,
+                EnumOperationType.AVERAGE.value,
+                EnumOperationType.MAX.value,
+                EnumOperationType.MIN.value
             )),
             "HYDRATION" to GoogleFitVariable(DataType.TYPE_HYDRATION, listOf(
                 Field.FIELD_VOLUME
+            ),
+            listOf(
+                EnumOperationType.RAW.value,
+                EnumOperationType.SUM.value,
+                EnumOperationType.AVERAGE.value,
+                EnumOperationType.MAX.value,
+                EnumOperationType.MIN.value
             )),
             "NUTRITION" to GoogleFitVariable(DataType.TYPE_NUTRITION, listOf(
-                //TODO: different from iOS
+                //TODO: possible different from iOS
+            ),
+            listOf(
+
             ))
         )
     }
@@ -121,22 +175,45 @@ class HealthStore(val platformInterface: AndroidPlatformInterface) {
         mapOf(
             "HEIGHT" to GoogleFitVariable(DataType.TYPE_HEIGHT, listOf(
                 Field.FIELD_HEIGHT
+            ),
+            listOf(
+                EnumOperationType.RAW.value,
+                EnumOperationType.AVERAGE.value,
+                EnumOperationType.MAX.value,
+                EnumOperationType.MIN.value
             )),
             "WEIGHT" to GoogleFitVariable(DataType.TYPE_WEIGHT, listOf(
                 Field.FIELD_WEIGHT
+            ),
+            listOf(
+                EnumOperationType.RAW.value,
+                EnumOperationType.AVERAGE.value,
+                EnumOperationType.MAX.value,
+                EnumOperationType.MIN.value
             )),
             "BODY_FAT_PERCENTAGE" to GoogleFitVariable(DataType.TYPE_BODY_FAT_PERCENTAGE, listOf(
                 Field.FIELD_PERCENTAGE
+            ),
+            listOf(
+                EnumOperationType.RAW.value,
+                EnumOperationType.AVERAGE.value,
+                EnumOperationType.MAX.value,
+                EnumOperationType.MIN.value
             )),
             "BASAL_METABOLIC_RATE" to GoogleFitVariable(DataType.TYPE_BASAL_METABOLIC_RATE, listOf(
-                Field.FIELD_CALORIES
+            ),
+            listOf(
+                EnumOperationType.RAW.value,
+                EnumOperationType.AVERAGE.value,
+                EnumOperationType.MAX.value,
+                EnumOperationType.MIN.value
             ))
         )
     }
     private val summaryVariablesMap: Map<String, GoogleFitVariable> by lazy {
         mapOf(
-            "HEIGHT_SUMMARY" to GoogleFitVariable(DataType.AGGREGATE_HEIGHT_SUMMARY, listOf()),
-            "WEIGHT_SUMMARY" to GoogleFitVariable(DataType.AGGREGATE_WEIGHT_SUMMARY, listOf())
+            "HEIGHT_SUMMARY" to GoogleFitVariable(DataType.AGGREGATE_HEIGHT_SUMMARY, listOf(), listOf()),
+            "WEIGHT_SUMMARY" to GoogleFitVariable(DataType.AGGREGATE_WEIGHT_SUMMARY, listOf(), listOf())
         )
     }
 
@@ -410,143 +487,154 @@ class HealthStore(val platformInterface: AndroidPlatformInterface) {
     @RequiresApi(api = Build.VERSION_CODES.O)
     fun advancedQuery(parameters : AdvancedQueryParameters) {
 
-        val googleFitVariable = getVariableByName(parameters.variable)
-
-        googleFitVariable?.let { variable ->
-
-            val endTime = parameters.endDate
-            val startTime = parameters.startDate
-
-            var operationType : String? = null
-            parameters.operationType?.let{
-                operationType = parameters.operationType
-            }
-
-            val requestBuilder = DataReadRequest.Builder()
-                .setTimeRange(startTime.time, endTime.time, TimeUnit.MILLISECONDS)
-
-            if(variable.dataType == DataType.TYPE_STEP_COUNT_DELTA) {
-                //This is the special case for step count
-                val datasource = DataSource.Builder()
-                    .setAppPackageName("com.google.android.gms")
-                    .setDataType(variable.dataType)
-                    .setType(DataSource.TYPE_DERIVED)
-                    .setStreamName("estimated_steps")
-                    .build()
-
-                //TODO: Needs refactoring
-                if(operationType == EnumOperationType.RAW.value){
-                    requestBuilder.read(datasource)
-                }
-                else {
-                    requestBuilder.aggregate(datasource)
-                }
-            }
-            else {
-                //TODO: Needs refactoring
-                if(operationType == EnumOperationType.RAW.value){
-                    requestBuilder.read(variable.dataType)
-                }
-                else {
-                    requestBuilder.aggregate(variable.dataType)
-                }
-            }
-
-            var timeUnitLength : Int? = null
-            if(parameters.timeUnit != null) {
-                val timeUnit = if(operationType == EnumOperationType.SUM.value || operationType == EnumOperationType.RAW.value) {
-                    timeUnits.getOrDefault(parameters.timeUnit, EnumTimeUnit.DAY)
-                } else {
-                    timeUnitsForMinMaxAverage.getOrDefault(parameters.timeUnit, EnumTimeUnit.DAY)
-                }
-
-                parameters.timeUnitLength?.let{
-                    timeUnitLength = max(1, it)
-                    //TODO: Needs refactoring
-                    if(parameters.timeUnit == "WEEK" ||
-                        parameters.timeUnit == "MONTH"||
-                        parameters.timeUnit == "YEAR") {
-                        requestBuilder.bucketByTime(1, timeUnit.value)
-                    }
-                    else {
-                        requestBuilder.bucketByTime(timeUnitLength!!, timeUnit.value)
-                    }
-                }
-            }
-            else {
-                requestBuilder.setLimit(1)
-            }
-
-            val lastAccount = GoogleSignIn.getLastSignedInAccount(context)
-
-            val fitnessRequest = requestBuilder.build()
-            Fitness.getHistoryClient(context, lastAccount)
-                .readData(fitnessRequest)
-                .addOnSuccessListener { dataReadResponse: DataReadResponse ->
-
-                    var processedBuckets = listOf<ProcessedBucket>()
-
-                    timeUnitLength?.let {
-                        //TODO: Needs refactoring
-                        when(parameters.timeUnit) {
-                            "WEEK" -> {
-                                processedBuckets = processIntoBucketPerWeek(
-                                    dataReadResponse.buckets,
-                                    it,
-                                    startTime.time,
-                                    endTime.time)
-                            }
-                            "MONTH" -> {
-                                processedBuckets = processIntoBucketPerMonth(
-                                    dataReadResponse.buckets,
-                                    it,
-                                    startTime.time,
-                                    endTime.time)
-                            }
-                            else -> {
-                                processedBuckets = processBucket(dataReadResponse.buckets)
-                            }
-                        }
-                    }
-
-                    if(timeUnitLength == null) {
-                        val values = mutableListOf<Float>()
-
-                        variable.fields.forEach { field ->
-                            dataReadResponse.dataSets
-                                .flatMap { it.dataPoints }
-                                .forEach { dataPoint ->
-                                    values.add(dataPoint.getValue(field).toString().toFloat())
-                                }
-                        }
-
-                        val responseBlock = AdvancedQueryResponseBlock(
-                            0,
-                            startTime.time / 1000,
-                            endTime.time / 1000,
-                            values
-                        )
-                        val queryResponse = AdvancedQueryResponse(listOf(responseBlock))
-                        val pluginResponseJson = gson.toJson(queryResponse)
-                        Log.d("STORE", "Response $pluginResponseJson")
-                        platformInterface.sendPluginResult(pluginResponseJson)
-                    }
-                    else {
-                        val resultBuckets = processBucketOperation(processedBuckets, variable, operationType)
-                        val queryResponse = buildAdvancedQueryResult(resultBuckets)
-                        val pluginResponseJson = gson.toJson(queryResponse)
-                        Log.d("STORE", "Response $pluginResponseJson")
-                        platformInterface.sendPluginResult(pluginResponseJson)
-                    }
-                }
-                .addOnFailureListener { dataReadResponse: Exception ->
-                    Log.d("STORE", dataReadResponse.message!!)
-                    platformInterface.sendPluginResult(
-                        null,
-                        Pair(HealthFitnessError.READ_DATA_ERROR.code, HealthFitnessError.READ_DATA_ERROR.message)
-                    )
-                }
+        val variable = getVariableByName(parameters.variable)
+        if(variable == null) {
+            platformInterface.sendPluginResult(
+                null,
+                Pair(HealthFitnessError.VARIABLE_NOT_AVAILABLE.code, HealthFitnessError.VARIABLE_NOT_AVAILABLE.message))
+            return
         }
+
+        val endTime = parameters.endDate
+        val startTime = parameters.startDate
+
+        var operationType : String? = null
+        parameters.operationType?.let{
+            operationType = parameters.operationType
+        }
+
+        if(!variable.allowedOperations.contains(operationType)) {
+            platformInterface.sendPluginResult(
+                null,
+                Pair(HealthFitnessError.OPERATION_NOT_ALLOWED.code, HealthFitnessError.OPERATION_NOT_ALLOWED.message))
+            return
+        }
+
+
+        val requestBuilder = DataReadRequest.Builder()
+            .setTimeRange(startTime.time, endTime.time, TimeUnit.MILLISECONDS)
+
+        if(variable!!.dataType == DataType.TYPE_STEP_COUNT_DELTA) {
+            //This is the special case for step count
+            val datasource = DataSource.Builder()
+                .setAppPackageName("com.google.android.gms")
+                .setDataType(variable.dataType)
+                .setType(DataSource.TYPE_DERIVED)
+                .setStreamName("estimated_steps")
+                .build()
+
+            //TODO: Needs refactoring
+            if(operationType == EnumOperationType.RAW.value){
+                requestBuilder.read(datasource)
+            }
+            else {
+                requestBuilder.aggregate(datasource)
+            }
+        }
+        else {
+            //TODO: Needs refactoring
+            if(operationType == EnumOperationType.RAW.value){
+                requestBuilder.read(variable.dataType)
+            }
+            else {
+                requestBuilder.aggregate(variable.dataType)
+            }
+        }
+
+        var timeUnitLength : Int? = null
+        if(parameters.timeUnit != null) {
+            val timeUnit = if(operationType == EnumOperationType.SUM.value || operationType == EnumOperationType.RAW.value) {
+                timeUnits.getOrDefault(parameters.timeUnit, EnumTimeUnit.DAY)
+            } else {
+                timeUnitsForMinMaxAverage.getOrDefault(parameters.timeUnit, EnumTimeUnit.DAY)
+            }
+
+            parameters.timeUnitLength?.let{
+                timeUnitLength = max(1, it)
+                //TODO: Needs refactoring
+                if(parameters.timeUnit == "WEEK" ||
+                    parameters.timeUnit == "MONTH"||
+                    parameters.timeUnit == "YEAR") {
+                    requestBuilder.bucketByTime(1, timeUnit.value)
+                }
+                else {
+                    requestBuilder.bucketByTime(timeUnitLength!!, timeUnit.value)
+                }
+            }
+        }
+        else {
+            requestBuilder.setLimit(1)
+        }
+
+        val lastAccount = GoogleSignIn.getLastSignedInAccount(context)
+
+        val fitnessRequest = requestBuilder.build()
+        Fitness.getHistoryClient(context, lastAccount)
+            .readData(fitnessRequest)
+            .addOnSuccessListener { dataReadResponse: DataReadResponse ->
+
+                var processedBuckets = listOf<ProcessedBucket>()
+
+                timeUnitLength?.let {
+                    //TODO: Needs refactoring
+                    when(parameters.timeUnit) {
+                        "WEEK" -> {
+                            processedBuckets = processIntoBucketPerWeek(
+                                dataReadResponse.buckets,
+                                it,
+                                startTime.time,
+                                endTime.time)
+                        }
+                        "MONTH" -> {
+                            processedBuckets = processIntoBucketPerMonth(
+                                dataReadResponse.buckets,
+                                it,
+                                startTime.time,
+                                endTime.time)
+                        }
+                        else -> {
+                            processedBuckets = processBucket(dataReadResponse.buckets)
+                        }
+                    }
+                }
+
+                if(timeUnitLength == null) {
+                    val values = mutableListOf<Float>()
+
+                    variable.fields.forEach { field ->
+                        dataReadResponse.dataSets
+                            .flatMap { it.dataPoints }
+                            .forEach { dataPoint ->
+                                values.add(dataPoint.getValue(field).toString().toFloat())
+                            }
+                    }
+
+                    val responseBlock = AdvancedQueryResponseBlock(
+                        0,
+                        startTime.time / 1000,
+                        endTime.time / 1000,
+                        values
+                    )
+                    val queryResponse = AdvancedQueryResponse(listOf(responseBlock))
+                    val pluginResponseJson = gson.toJson(queryResponse)
+                    Log.d("STORE", "Response $pluginResponseJson")
+                    platformInterface.sendPluginResult(pluginResponseJson)
+                }
+                else {
+                    val resultBuckets = processBucketOperation(processedBuckets, variable, operationType)
+                    val queryResponse = buildAdvancedQueryResult(resultBuckets)
+                    val pluginResponseJson = gson.toJson(queryResponse)
+                    Log.d("STORE", "Response $pluginResponseJson")
+                    platformInterface.sendPluginResult(pluginResponseJson)
+                }
+            }
+            .addOnFailureListener { dataReadResponse: Exception ->
+                Log.d("STORE", dataReadResponse.message!!)
+                platformInterface.sendPluginResult(
+                    null,
+                    Pair(HealthFitnessError.READ_DATA_ERROR.code, HealthFitnessError.READ_DATA_ERROR.message)
+                )
+            }
     }
 
     private fun buildAdvancedQueryResult(resultBuckets : List<ProcessedBucket>) : AdvancedQueryResponse {
