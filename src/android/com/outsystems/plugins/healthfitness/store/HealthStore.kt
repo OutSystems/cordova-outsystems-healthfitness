@@ -481,8 +481,9 @@ class HealthStore(val platformInterface: AndroidPlatformInterface) {
         queryInformation.setTimeUnitGrouping(parameters.timeUnitLength)
         queryInformation.setLimit(parameters.limit)
 
+        val lastAccount = GoogleSignIn.getLastSignedInAccount(context)
         val fitnessRequest = queryInformation.getDataReadRequest()
-        Fitness.getHistoryClient(context, account)
+        Fitness.getHistoryClient(context, lastAccount)
             .readData(fitnessRequest)
             .addOnSuccessListener { dataReadResponse: DataReadResponse ->
 
