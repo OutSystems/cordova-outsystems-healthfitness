@@ -15,16 +15,12 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.fitness.Fitness
 import com.google.android.gms.fitness.FitnessOptions
 import com.google.android.gms.fitness.data.*
-import com.google.android.gms.fitness.request.DataReadRequest
 import com.google.android.gms.fitness.request.DataUpdateListenerRegistrationRequest
 import com.google.android.gms.fitness.request.SensorRequest
 import com.google.android.gms.fitness.result.DataReadResponse
 import com.google.gson.Gson
-import java.lang.Integer.max
-import java.lang.Integer.min
 import java.text.SimpleDateFormat
 import java.time.Instant
-import java.time.temporal.WeekFields
 import java.util.*
 import com.outsystems.plugins.healthfitness.HealthFitnessError
 import com.google.android.gms.fitness.data.DataPoint
@@ -33,7 +29,6 @@ import com.outsystems.plugins.healthfitness.AndroidPlatformInterface
 import com.outsystems.plugins.healthfitness.MyDataUpdateService
 import com.outsystems.plugins.healthfitness.OSHealthFitness
 import org.json.JSONArray
-import java.time.ZoneId
 import java.util.concurrent.TimeUnit
 
 
@@ -55,15 +50,15 @@ enum class EnumOperationType(val value : String){
     AVERAGE("AVERAGE"),
     RAW("RAW"),
 }
-enum class EnumTimeUnit(val value : TimeUnit) {
-    MILLISECOND(TimeUnit.MILLISECONDS),
-    SECOND(TimeUnit.SECONDS),
-    MINUTE(TimeUnit.MINUTES),
-    HOUR(TimeUnit.HOURS),
-    DAY(TimeUnit.DAYS),
-    WEEK(TimeUnit.DAYS),
-    MONTH(TimeUnit.DAYS),
-    YEAR(TimeUnit.DAYS)
+enum class EnumTimeUnit(val value : Pair<String, TimeUnit>) {
+    MILLISECOND(Pair("MILLISECONDS", TimeUnit.MILLISECONDS)),
+    SECOND(Pair("SECONDS", TimeUnit.SECONDS)),
+    MINUTE(Pair("MINUTE", TimeUnit.MINUTES)),
+    HOUR(Pair("HOUR", TimeUnit.HOURS)),
+    DAY(Pair("DAY", TimeUnit.DAYS)),
+    WEEK(Pair("WEEK", TimeUnit.DAYS)),
+    MONTH(Pair("MONTH", TimeUnit.DAYS)),
+    YEAR(Pair("YEAR", TimeUnit.DAYS))
 }
 
 class HealthStore(val platformInterface: AndroidPlatformInterface) {
@@ -214,31 +209,6 @@ class HealthStore(val platformInterface: AndroidPlatformInterface) {
         mapOf(
             "HEIGHT_SUMMARY" to GoogleFitVariable(DataType.AGGREGATE_HEIGHT_SUMMARY, listOf(), listOf()),
             "WEIGHT_SUMMARY" to GoogleFitVariable(DataType.AGGREGATE_WEIGHT_SUMMARY, listOf(), listOf())
-        )
-    }
-
-    private val timeUnitsForMinMaxAverage: Map<String, EnumTimeUnit> by lazy {
-        mapOf(
-            "MILLISECONDS" to EnumTimeUnit.MILLISECOND,
-            "SECONDS" to EnumTimeUnit.MILLISECOND,
-            "MINUTE" to EnumTimeUnit.SECOND,
-            "HOUR" to EnumTimeUnit.MINUTE,
-            "DAY" to EnumTimeUnit.HOUR,
-            "WEEK" to EnumTimeUnit.DAY,
-            "MONTH" to EnumTimeUnit.WEEK,
-            "YEAR" to EnumTimeUnit.MONTH //TODO: This doesn't work yet
-        )
-    }
-    private val timeUnits: Map<String, EnumTimeUnit> by lazy {
-        mapOf(
-            "MILLISECONDS" to EnumTimeUnit.MILLISECOND,
-            "SECONDS" to EnumTimeUnit.SECOND,
-            "MINUTE" to EnumTimeUnit.MINUTE,
-            "HOUR" to EnumTimeUnit.HOUR,
-            "DAY" to EnumTimeUnit.DAY,
-            "WEEK" to EnumTimeUnit.WEEK,
-            "MONTH" to EnumTimeUnit.MONTH,
-            "YEAR" to EnumTimeUnit.YEAR
         )
     }
 
@@ -479,7 +449,7 @@ class HealthStore(val platformInterface: AndroidPlatformInterface) {
             variable,
             Date.from(Instant.ofEpochMilli(startDate)),
             Date.from(Instant.ofEpochMilli(endDate)),
-            null
+            limit = 1
         )
         advancedQuery(advancedQueryParameters)
     }
@@ -488,6 +458,9 @@ class HealthStore(val platformInterface: AndroidPlatformInterface) {
     fun advancedQuery(parameters : AdvancedQueryParameters) {
 
         val variable = getVariableByName(parameters.variable)
+        val endDate = parameters.endDate
+        val startDate = parameters.startDate
+
         if(variable == null) {
             platformInterface.sendPluginResult(
                 null,
@@ -495,112 +468,29 @@ class HealthStore(val platformInterface: AndroidPlatformInterface) {
             return
         }
 
-        val endTime = parameters.endDate
-        val startTime = parameters.startDate
-
-        var operationType : String? = null
-        parameters.operationType?.let{
-            operationType = parameters.operationType
-        }
-
-        if(!variable.allowedOperations.contains(operationType)) {
+        if(!variable.allowedOperations.contains(parameters.operationType)) {
             platformInterface.sendPluginResult(
                 null,
                 Pair(HealthFitnessError.OPERATION_NOT_ALLOWED.code, HealthFitnessError.OPERATION_NOT_ALLOWED.message))
             return
         }
 
+        val queryInformation = AdvancedQuery(variable, startDate, endDate)
+        queryInformation.setOperationType(parameters.operationType)
+        queryInformation.setTimeUnit(parameters.timeUnit)
+        queryInformation.setTimeUnitGrouping(parameters.timeUnitLength)
+        queryInformation.setLimit(parameters.limit)
 
-        val requestBuilder = DataReadRequest.Builder()
-            .setTimeRange(startTime.time, endTime.time, TimeUnit.MILLISECONDS)
-
-        if(variable!!.dataType == DataType.TYPE_STEP_COUNT_DELTA) {
-            //This is the special case for step count
-            val datasource = DataSource.Builder()
-                .setAppPackageName("com.google.android.gms")
-                .setDataType(variable.dataType)
-                .setType(DataSource.TYPE_DERIVED)
-                .setStreamName("estimated_steps")
-                .build()
-
-            //TODO: Needs refactoring
-            if(operationType == EnumOperationType.RAW.value){
-                requestBuilder.read(datasource)
-            }
-            else {
-                requestBuilder.aggregate(datasource)
-            }
-        }
-        else {
-            //TODO: Needs refactoring
-            if(operationType == EnumOperationType.RAW.value){
-                requestBuilder.read(variable.dataType)
-            }
-            else {
-                requestBuilder.aggregate(variable.dataType)
-            }
-        }
-
-        var timeUnitLength : Int? = null
-        if(parameters.timeUnit != null) {
-            val timeUnit = if(operationType == EnumOperationType.SUM.value || operationType == EnumOperationType.RAW.value) {
-                timeUnits.getOrDefault(parameters.timeUnit, EnumTimeUnit.DAY)
-            } else {
-                timeUnitsForMinMaxAverage.getOrDefault(parameters.timeUnit, EnumTimeUnit.DAY)
-            }
-
-            parameters.timeUnitLength?.let{
-                timeUnitLength = max(1, it)
-                //TODO: Needs refactoring
-                if(parameters.timeUnit == "WEEK" ||
-                    parameters.timeUnit == "MONTH"||
-                    parameters.timeUnit == "YEAR") {
-                    requestBuilder.bucketByTime(1, timeUnit.value)
-                }
-                else {
-                    requestBuilder.bucketByTime(timeUnitLength!!, timeUnit.value)
-                }
-            }
-        }
-        else {
-            requestBuilder.setLimit(1)
-        }
-
-        val lastAccount = GoogleSignIn.getLastSignedInAccount(context)
-
-        val fitnessRequest = requestBuilder.build()
-        Fitness.getHistoryClient(context, lastAccount)
+        val fitnessRequest = queryInformation.getDataReadRequest()
+        Fitness.getHistoryClient(context, account)
             .readData(fitnessRequest)
             .addOnSuccessListener { dataReadResponse: DataReadResponse ->
 
-                var processedBuckets = listOf<ProcessedBucket>()
+                val queryResponse: AdvancedQueryResponse
 
-                timeUnitLength?.let {
-                    //TODO: Needs refactoring
-                    when(parameters.timeUnit) {
-                        "WEEK" -> {
-                            processedBuckets = processIntoBucketPerWeek(
-                                dataReadResponse.buckets,
-                                it,
-                                startTime.time,
-                                endTime.time)
-                        }
-                        "MONTH" -> {
-                            processedBuckets = processIntoBucketPerMonth(
-                                dataReadResponse.buckets,
-                                it,
-                                startTime.time,
-                                endTime.time)
-                        }
-                        else -> {
-                            processedBuckets = processBucket(dataReadResponse.buckets)
-                        }
-                    }
-                }
+                if(queryInformation.isSingleResult()) {
 
-                if(timeUnitLength == null) {
                     val values = mutableListOf<Float>()
-
                     variable.fields.forEach { field ->
                         dataReadResponse.dataSets
                             .flatMap { it.dataPoints }
@@ -611,29 +501,24 @@ class HealthStore(val platformInterface: AndroidPlatformInterface) {
 
                     val responseBlock = AdvancedQueryResponseBlock(
                         0,
-                        startTime.time / 1000,
-                        endTime.time / 1000,
+                        startDate.time / 1000,
+                        endDate.time / 1000,
                         values
                     )
-                    val queryResponse = AdvancedQueryResponse(listOf(responseBlock))
-                    val pluginResponseJson = gson.toJson(queryResponse)
-                    Log.d("STORE", "Response $pluginResponseJson")
-                    platformInterface.sendPluginResult(pluginResponseJson)
+                    queryResponse = AdvancedQueryResponse(listOf(responseBlock))
                 }
                 else {
-                    val resultBuckets = processBucketOperation(processedBuckets, variable, operationType)
-                    val queryResponse = buildAdvancedQueryResult(resultBuckets)
-                    val pluginResponseJson = gson.toJson(queryResponse)
-                    Log.d("STORE", "Response $pluginResponseJson")
-                    platformInterface.sendPluginResult(pluginResponseJson)
+                    val resultBuckets = queryInformation.processBuckets(dataReadResponse.buckets)
+                    queryResponse = buildAdvancedQueryResult(resultBuckets)
                 }
+
+                val pluginResponseJson = gson.toJson(queryResponse)
+                Log.d("STORE", "Response $pluginResponseJson")
+                platformInterface.sendPluginResult(pluginResponseJson)
+
             }
             .addOnFailureListener { dataReadResponse: Exception ->
                 Log.d("STORE", dataReadResponse.message!!)
-                platformInterface.sendPluginResult(
-                    null,
-                    Pair(HealthFitnessError.READ_DATA_ERROR.code, HealthFitnessError.READ_DATA_ERROR.message)
-                )
             }
     }
 
@@ -655,288 +540,6 @@ class HealthStore(val platformInterface: AndroidPlatformInterface) {
         }
         var result = AdvancedQueryResponse(blockList)
         return result
-    }
-
-    data class ProcessedBucket(
-        val startDate : Long,
-        var endDate : Long,
-        var dataPoints : MutableList<DataPoint>,
-        var processedDataPoints : MutableList<Float>,
-        var DEBUG_startDate : String,
-        var DEBUG_endDate : String
-    )
-
-    @RequiresApi(Build.VERSION_CODES.O)
-    private fun processBucket(bucketsPerDay : List<Bucket>) : List<ProcessedBucket> {
-
-        val format = SimpleDateFormat("yyyy.MM.dd HH:mm")
-        val processedBuckets : MutableList<ProcessedBucket> = mutableListOf()
-
-        for(bucket in bucketsPerDay) {
-
-            val dataPointsPerBucket = bucket.dataSets.flatMap { it.dataPoints }
-            if(dataPointsPerBucket.isEmpty()){ continue }
-
-            val startDate = bucket.getStartTime(TimeUnit.MILLISECONDS)
-            val endDate = bucket.getEndTime(TimeUnit.MILLISECONDS)
-            val processedBucket = ProcessedBucket(
-                startDate,
-                endDate,
-                mutableListOf(),
-                mutableListOf(),
-                format.format(startDate),
-                format.format(endDate)
-            )
-
-            dataPointsPerBucket.forEach { dataPoint ->
-                processedBucket.dataPoints.add(dataPoint)
-            }
-
-            processedBuckets.add(processedBucket)
-//                Log.d("POINT",
-//                    "$monthNumber -> ${format.format(dataPoint.getStartTime(TimeUnit.MILLISECONDS))} : ${dataPoint.getValue(Field.FIELD_CALORIES)}")
-        }
-        return processedBuckets
-    }
-
-    @RequiresApi(Build.VERSION_CODES.O)
-    private fun processIntoBucketPerWeek(bucketsPerDay : List<Bucket>,
-                                         timeUnitLength : Int,
-                                         queryStartDate : Long,
-                                         queryEndDate : Long) : List<ProcessedBucket> {
-
-        val format = SimpleDateFormat("yyyy.MM.dd HH:mm")
-        val processedBuckets : MutableMap<String, ProcessedBucket> = mutableMapOf()
-        val weekKeyQueue : ArrayDeque<String> = ArrayDeque()
-
-        //Merge buckets into weeks
-        for(bucket in bucketsPerDay) {
-
-            val dataPointsPerBucket = bucket.dataSets.flatMap { it.dataPoints }
-
-            if(dataPointsPerBucket.isEmpty()){ continue }
-
-            dataPointsPerBucket.forEach { dataPoint ->
-
-                val dataPointDate = Instant
-                    .ofEpochMilli(dataPoint.getStartTime(TimeUnit.MILLISECONDS))
-                    .atZone(ZoneId.systemDefault())
-                    .toLocalDate()
-
-                val weekFields: WeekFields = WeekFields.ISO
-                val weekNumber = dataPointDate.get(weekFields.weekOfWeekBasedYear())
-                val yearNumber = dataPointDate.year
-                val dataPointKey = "$weekNumber$yearNumber"
-
-                if(!processedBuckets.containsKey(dataPointKey)) {
-
-                    val c = Calendar.getInstance()
-                    c.set(Calendar.WEEK_OF_YEAR, weekNumber)
-
-                    val firstDayOfWeek = c.firstDayOfWeek
-
-                    c[Calendar.DAY_OF_WEEK] = firstDayOfWeek
-                    var startDate = c.timeInMillis
-                    if(startDate < queryStartDate) { startDate = queryStartDate }
-
-                    c[Calendar.DAY_OF_WEEK] = firstDayOfWeek + 6
-                    var endDate = c.timeInMillis
-                    if(endDate > queryEndDate) { endDate = queryEndDate }
-
-                    weekKeyQueue.add(dataPointKey)
-
-                    processedBuckets[dataPointKey] = ProcessedBucket(
-                        startDate,
-                        endDate,
-                        mutableListOf(),
-                        mutableListOf(),
-                        format.format(startDate),
-                        format.format(endDate)
-                    )
-                }
-
-//                Log.d("POINT",
-//                    "$weekNumber -> ${format.format(dataPoint.getStartTime(TimeUnit.MILLISECONDS))} : ${dataPoint.getValue(Field.FIELD_CALORIES)}")
-
-                processedBuckets[dataPointKey]!!.dataPoints.add(dataPoint)
-
-            }
-
-        }
-
-        //TODO: Needs refactoring
-        //Merge buckets into groups
-        while(!weekKeyQueue.isEmpty()) {
-            val keyAnchor = weekKeyQueue.pop()
-
-            for(i in 1 until min(timeUnitLength, weekKeyQueue.size + 1)) {
-
-                val keyToMergeWithAnchor = weekKeyQueue.pop()
-                val valuesToMerge = processedBuckets[keyToMergeWithAnchor]!!
-
-                processedBuckets[keyAnchor]!!.dataPoints.addAll(valuesToMerge.dataPoints)
-                processedBuckets[keyAnchor]!!.endDate = valuesToMerge.endDate
-
-                processedBuckets.remove(keyToMergeWithAnchor)
-            }
-        }
-
-        return processedBuckets.values.toList()
-    }
-
-    @RequiresApi(Build.VERSION_CODES.O)
-    private fun processIntoBucketPerMonth(bucketsPerDay : List<Bucket>,
-                                         timeUnitLength : Int,
-                                         queryStartDate : Long,
-                                         queryEndDate : Long) : List<ProcessedBucket> {
-
-        val format = SimpleDateFormat("yyyy.MM.dd HH:mm")
-        val processedBuckets : MutableMap<String, ProcessedBucket> = mutableMapOf()
-        val bucketKeyQueue : ArrayDeque<String> = ArrayDeque()
-
-        //Merge buckets into Months
-        for(bucket in bucketsPerDay) {
-
-            val dataPointsPerBucket = bucket.dataSets.flatMap { it.dataPoints }
-            if(dataPointsPerBucket.isEmpty()){ continue }
-
-            dataPointsPerBucket.forEach { dataPoint ->
-
-                val dataPointDate = Instant
-                    .ofEpochMilli(dataPoint.getStartTime(TimeUnit.MILLISECONDS))
-                    .atZone(ZoneId.systemDefault())
-                    .toLocalDate()
-
-                val monthNumber = dataPointDate.monthValue
-                val yearNumber = dataPointDate.year
-                val dataPointKey = "$monthNumber$yearNumber"
-
-                if(!processedBuckets.containsKey(dataPointKey)) {
-
-                    val c = Calendar.getInstance()
-                    c.set(Calendar.MONTH, monthNumber)
-
-                    val firstDayOfWeek = c.firstDayOfWeek
-
-                    c[Calendar.DAY_OF_WEEK] = firstDayOfWeek
-                    var startDate = c.timeInMillis
-                    if(startDate < queryStartDate) { startDate = queryStartDate }
-
-                    c[Calendar.DAY_OF_WEEK] = firstDayOfWeek + 6
-                    var endDate = c.timeInMillis
-                    if(endDate > queryEndDate) { endDate = queryEndDate }
-
-                    processedBuckets[dataPointKey] = ProcessedBucket(
-                        startDate,
-                        endDate,
-                        mutableListOf(),
-                        mutableListOf(),
-                        format.format(startDate),
-                        format.format(endDate)
-                    )
-                }
-
-//                Log.d("POINT",
-//                    "$monthNumber -> ${format.format(dataPoint.getStartTime(TimeUnit.MILLISECONDS))} : ${dataPoint.getValue(Field.FIELD_CALORIES)}")
-
-                processedBuckets[dataPointKey]!!.dataPoints.add(dataPoint)
-            }
-        }
-
-        //TODO: Needs refactoring
-        //Merge buckets into groups
-        while(!bucketKeyQueue.isEmpty()) {
-            val keyAnchor = bucketKeyQueue.pop()
-
-            for(i in 1 until min(timeUnitLength, bucketKeyQueue.size + 1)) {
-
-                val keyToMergeWithAnchor = bucketKeyQueue.pop()
-                val valuesToMerge = processedBuckets[keyToMergeWithAnchor]!!
-
-                processedBuckets[keyAnchor]!!.dataPoints.addAll(valuesToMerge.dataPoints)
-                processedBuckets[keyAnchor]!!.endDate = valuesToMerge.endDate
-
-                processedBuckets.remove(keyToMergeWithAnchor)
-            }
-        }
-
-        return processedBuckets.values.toList()
-    }
-
-
-    private fun processBucketOperation(buckets : List<ProcessedBucket>,
-                                       variable : GoogleFitVariable,
-                                       inputOperationType : String?) : List<ProcessedBucket> {
-
-        var operationType = EnumOperationType.RAW.value
-        if(inputOperationType != null) {
-            operationType = inputOperationType
-        }
-
-        for(bucket in buckets) {
-
-            val resultPerField : MutableMap<String, MutableList<Float>> = mutableMapOf()
-            var nResultsPerField = 0
-
-            for(datePoint in bucket.dataPoints) {
-                variable.fields.forEach { field ->
-
-                    if(!resultPerField.containsKey(field.name)) {
-                        val results = mutableListOf<Float>()
-                        resultPerField[field.name] = results
-                        if(operationType != EnumOperationType.RAW.value) {
-                            results.add(0F)
-                        }
-                    }
-
-                    val dataPointValue = datePoint.getValue(field).toString().toFloat()
-
-                    when(operationType) {
-
-                        EnumOperationType.RAW.value -> {
-                            nResultsPerField += 1
-                            resultPerField[field.name]!!.add(dataPointValue)
-                        }
-
-                        EnumOperationType.SUM.value -> {
-                            nResultsPerField = 1
-                            resultPerField[field.name]!![0] =
-                                resultPerField[field.name]!![0] + dataPointValue
-                        }
-
-                        EnumOperationType.MAX.value -> {
-                            nResultsPerField = 1
-                            var maxValue = resultPerField[field.name]!![0]
-                            if(maxValue < dataPointValue) { maxValue = dataPointValue }
-                            resultPerField[field.name]!![0] = maxValue
-                        }
-
-                        EnumOperationType.MIN.value -> {
-                            nResultsPerField = 1
-                            var minValue = resultPerField[field.name]!![0]
-                            if(minValue > dataPointValue) { minValue = dataPointValue }
-                            resultPerField[field.name]!![0] = minValue
-                        }
-
-                        EnumOperationType.AVERAGE.value -> {
-                            //TODO: Implement this operation
-                        }
-
-                    }
-
-                }
-            }
-
-            nResultsPerField /= variable.fields.size
-            for(variableResultIndex in 0 until nResultsPerField) {
-                variable.fields.forEach { field ->
-                    bucket.processedDataPoints.add(resultPerField[field.name]!![variableResultIndex])
-                }
-            }
-
-        }
-
-        return buckets
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
