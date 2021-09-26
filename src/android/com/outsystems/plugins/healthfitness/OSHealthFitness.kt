@@ -68,12 +68,26 @@ class OSHealthFitness : CordovaImplementation() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun initAndRequestPermissions(args : JSONArray) {
+
+        val customPermissions = args.getString(0)
+        val allVariables = args.getString(1)
+        val fitnessVariables = args.getString(2)
+        val healthVariables = args.getString(3)
+        val profileVariables = args.getString(4)
+        val summaryVariables = args.getString(5)
+
         setAsActivityResultCallback()
-        healthStore?.initAndRequestPermissions(args)
+        healthStore?.initAndRequestPermissions(
+            customPermissions,
+            allVariables,
+            fitnessVariables,
+            healthVariables,
+            profileVariables,
+            summaryVariables)
         checkAndGrantPermissions()
     }
 
-    private fun checkAllPermissionGranted(permissions: Array<String>): Boolean {
+    private fun areAndroidPermissionsGranted(permissions: Array<String>): Boolean {
         permissions.forEach {
             if (ContextCompat.checkSelfPermission(
                     cordova.activity,
@@ -86,27 +100,25 @@ class OSHealthFitness : CordovaImplementation() {
         return true
     }
 
-    private fun checkAllGoogleFitPermissionGranted(): Boolean {
-       return healthStore!!.checkAllGoogleFitPermissionGranted()
-    }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    private fun checkAndGrantPermissions(): Boolean? {
+    private fun checkAndGrantPermissions(){
         val permissions = arrayOf(
             Manifest.permission.ACTIVITY_RECOGNITION,
             Manifest.permission.ACCESS_FINE_LOCATION,
             Manifest.permission.BODY_SENSORS
         )
-        if (checkAllPermissionGranted(permissions)) {
+
+        if (areAndroidPermissionsGranted(permissions)) {
             healthStore?.requestGoogleFitPermissions()
-        } else {
+        }
+        else {
             PermissionHelper.requestPermissions(
                 this,
                 ACTIVITY_LOCATION_PERMISSIONS_REQUEST_CODE,
                 permissions
             )
         }
-        return false
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
