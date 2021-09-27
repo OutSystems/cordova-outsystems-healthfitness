@@ -102,25 +102,36 @@ class HealthKitTypes {
                                                     objectType: HKObjectType.quantityType(forIdentifier: .basalEnergyBurned)!,
                                                     correlationType: nil,
                                                     unit: HKUnit.kilocalorie(),
-                                                    optionsAllowed: [.discreteAverage,.mostRecent,.discreteMax,.discreteMin])
+                                                    optionsAllowed: [.cumulativeSum,.mostRecent])
     
     let bodyTemperature = HealthKitVariable.init(quantityType: HKQuantityType.quantityType(forIdentifier:HKQuantityTypeIdentifier.bodyTemperature)!,
                                                     sampleType: HKSampleType.quantityType(forIdentifier: .bodyTemperature)!,
                                                     objectType: HKObjectType.quantityType(forIdentifier: .bodyTemperature)!,
                                                     correlationType: nil,
-                                                    unit: HKUnit.degreeCelsius())
+                                                    unit: HKUnit.degreeCelsius(),
+                                                    optionsAllowed: [.discreteAverage,.mostRecent,.discreteMax,.discreteMin])
     
     let dietaryWater = HealthKitVariable.init(quantityType: HKQuantityType.quantityType(forIdentifier:HKQuantityTypeIdentifier.dietaryWater)!,
                                               sampleType: HKSampleType.quantityType(forIdentifier: .dietaryWater)!,
                                               objectType: HKObjectType.quantityType(forIdentifier: .dietaryWater)!,
                                               correlationType: nil,
-                                              unit: HKUnit.liter())
+                                              unit: HKUnit.liter(),
+                                              optionsAllowed: [.cumulativeSum,.mostRecent])
     
     let pushCount = HealthKitVariable.init(quantityType: HKQuantityType.quantityType(forIdentifier:HKQuantityTypeIdentifier.pushCount)!,
                                               sampleType: HKSampleType.quantityType(forIdentifier: .pushCount)!,
                                               objectType: HKObjectType.quantityType(forIdentifier: .pushCount)!,
                                               correlationType: nil,
-                                              unit: HKUnit.count())
+                                              unit: HKUnit.count(),
+                                              optionsAllowed: [.cumulativeSum,.mostRecent])
+    
+    let dietaryEnergyConsumed = HealthKitVariable.init(quantityType: HKQuantityType.quantityType(forIdentifier:HKQuantityTypeIdentifier.dietaryEnergyConsumed)!,
+                                              sampleType: HKSampleType.quantityType(forIdentifier: .dietaryEnergyConsumed)!,
+                                              objectType: HKObjectType.quantityType(forIdentifier: .dietaryEnergyConsumed)!,
+                                              correlationType: nil,
+                                              unit: HKUnit.kilocalorie(),
+                                              optionsAllowed: [.cumulativeSum,.mostRecent])
+    
     
     // MARK: - All Variables
     lazy var allVariablesDict: [String: [HealthKitVariable]] = [
@@ -136,14 +147,8 @@ class HealthKitTypes {
         HealthTypeEnum.bodyFatPercentage.rawValue:[bodyFatPercentage],
         HealthTypeEnum.bodyTemperature.rawValue:[bodyTemperature],
         HealthTypeEnum.dietaryWater.rawValue:[dietaryWater],
+        HealthTypeEnum.dietaryEnergyConsumed.rawValue:[dietaryEnergyConsumed],
         HealthTypeEnum.pushCount.rawValue:[pushCount]
-    ]
-
-    lazy var allVariablesQuantityDictToQuery: [String: [HealthKitVariable]] = [
-        HealthTypeEnum.bloodPressure.rawValue:[bloodPressureSystolic, bloodPressureDiastolic],
-        HealthTypeEnum.stepCount.rawValue:[stepCount],
-        HealthTypeEnum.heartRate.rawValue:[heartRate],
-        HealthTypeEnum.bloodGlucose.rawValue:[bloodGlucose]
     ]
     
     // MARK: - Profile Variables
@@ -156,11 +161,18 @@ class HealthKitTypes {
     // MARK: - Fitness Variables
     lazy var fitnessVariablesDict: [String: [HealthKitVariable]] =
         [HealthTypeEnum.stepCount.rawValue:[stepCount],
+         HealthTypeEnum.pushCount.rawValue:[pushCount],
          HealthTypeEnum.activeEnergyBurned.rawValue:[activeEnergyBurned]]
 
     // MARK: - Health Variables
     lazy var healthVariablesDict: [String: [HealthKitVariable]] =
         [HealthTypeEnum.sleepAnalysis.rawValue:[sleepAnalysis],
+         HealthTypeEnum.bloodPressure.rawValue:[bloodPressureSystolic, bloodPressureDiastolic],
+         HealthTypeEnum.bloodGlucose.rawValue:[bloodGlucose],
+         HealthTypeEnum.oxygenSaturation.rawValue:[oxygenSaturation],
+         HealthTypeEnum.bodyTemperature.rawValue:[bodyTemperature],
+         HealthTypeEnum.dietaryEnergyConsumed.rawValue:[dietaryEnergyConsumed],
+         HealthTypeEnum.dietaryWater.rawValue:[dietaryWater],
          HealthTypeEnum.heartRate.rawValue:[heartRate]]
         
 }
