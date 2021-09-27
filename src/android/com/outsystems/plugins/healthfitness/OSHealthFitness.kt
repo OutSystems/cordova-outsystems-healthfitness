@@ -33,6 +33,7 @@ class OSHealthFitness : CordovaImplementation() {
     override fun initialize(cordova: CordovaInterface, webView: CordovaWebView) {
         super.initialize(cordova, webView)
         healthStore = HealthStore(this)
+        setAsActivityResultCallback()
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -76,7 +77,6 @@ class OSHealthFitness : CordovaImplementation() {
         val profileVariables = args.getString(4)
         val summaryVariables = args.getString(5)
 
-        setAsActivityResultCallback()
         healthStore?.initAndRequestPermissions(
             customPermissions,
             allVariables,
