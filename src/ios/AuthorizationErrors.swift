@@ -7,6 +7,7 @@ enum HealthKitErrors : Int, CustomNSError, LocalizedError {
     case variableNotAuthorized = 103
     case noResultsForQuery = 104
     case variableHasWriteDenied = 105
+    case operationNotAllowed = 106
     
     var description: String {
         switch self {
@@ -15,13 +16,15 @@ enum HealthKitErrors : Int, CustomNSError, LocalizedError {
             case .dataTypeNotAvailable:
                 return "Variable not available."
             case .variableHasWriteDenied:
-            return "Variable has write denied."
+                return "Variable has write denied."
             case .notAuthorizedByUser:
                 return "Not authorized by the user."
             case .variableNotAuthorized:
                 return "Variable not authorized by the user."
             case .noResultsForQuery:
                 return "Query returned no results."
+            case .operationNotAllowed:
+                return "Operation not allowed."
         }
     }
     
