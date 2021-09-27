@@ -8,5 +8,8 @@ enum class HealthFitnessError(val code: Int, val message: String) {
     WRITE_VALUE_OUT_OF_RANGE_ERROR(103, "Value provided is out of range for this variable"),
     WRITE_DATA_ERROR(104, "Error while writing data"),
     READ_DATA_ERROR(105, "Error while reading data"),
-    PERMISSIONS_NOT_GRANTED_ERROR(106, "Permissions were not granted")
+    PERMISSIONS_NOT_GRANTED_ERROR(106, "Permissions were not granted"),
+    VARIABLE_NOT_AVAILABLE(107, "Variable not available."),
+    OPERATION_NOT_ALLOWED(108, "Operation not allowed."),
+
 }
