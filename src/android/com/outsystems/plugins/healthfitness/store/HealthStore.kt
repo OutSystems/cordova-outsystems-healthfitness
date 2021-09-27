@@ -1,22 +1,15 @@
 package com.outsystems.plugins.healthfitness.store
 
 import android.app.Activity
-import android.app.PendingIntent
 import android.content.Context
-import android.content.Intent
-import android.content.pm.PackageManager
 import android.os.Build
 import android.util.Log
-import android.widget.Toast
 import androidx.annotation.RequiresApi
-import androidx.core.content.ContextCompat
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.fitness.Fitness
 import com.google.android.gms.fitness.FitnessOptions
 import com.google.android.gms.fitness.data.*
-import com.google.android.gms.fitness.request.DataUpdateListenerRegistrationRequest
-import com.google.android.gms.fitness.request.SensorRequest
 import com.google.android.gms.fitness.result.DataReadResponse
 import com.google.gson.Gson
 import java.text.SimpleDateFormat
@@ -26,7 +19,6 @@ import com.outsystems.plugins.healthfitness.HealthFitnessError
 import com.google.android.gms.fitness.data.DataPoint
 import com.google.android.gms.fitness.data.DataSet
 import com.outsystems.plugins.healthfitness.AndroidPlatformInterface
-import com.outsystems.plugins.healthfitness.MyDataUpdateService
 import com.outsystems.plugins.healthfitness.OSHealthFitness
 import java.util.concurrent.TimeUnit
 
