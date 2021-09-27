@@ -24,7 +24,7 @@ private val timeUnitsForMinMaxAverage: Map<String, EnumTimeUnit> by lazy {
         "DAY" to EnumTimeUnit.HOUR,
         "WEEK" to EnumTimeUnit.DAY,
         "MONTH" to EnumTimeUnit.WEEK,
-        "YEAR" to EnumTimeUnit.MONTH //TODO: This doesn't work yet
+        "YEAR" to EnumTimeUnit.MONTH
     )
 }
 private val timeUnits: Map<String, EnumTimeUnit> by lazy {
@@ -131,6 +131,9 @@ class AdvancedQuery(
             }
             else if(timeUnit!!.value.first == EnumTimeUnit.MONTH.value.first) {
                 bucketProcessor = MonthBucketProcessor(grouping, startDate.time, endDate.time)
+            }
+            else if(timeUnit!!.value.first == EnumTimeUnit.YEAR.value.first) {
+                bucketProcessor = YearBucketProcessor(grouping, startDate.time, endDate.time)
             }
         }
     }
@@ -363,14 +366,88 @@ class AdvancedQuery(
 
                         val c = Calendar.getInstance()
                         c.set(Calendar.MONTH, monthNumber)
+                        c.set(Calendar.YEAR, yearNumber)
+                        c.set(Calendar.DAY_OF_MONTH, 1)
 
-                        val firstDayOfWeek = c.firstDayOfWeek
-
-                        c[Calendar.DAY_OF_WEEK] = firstDayOfWeek
                         var startDate = c.timeInMillis
                         if(startDate < queryStartDate) { startDate = queryStartDate }
 
-                        c[Calendar.DAY_OF_WEEK] = firstDayOfWeek + 6
+                        c.add(Calendar.MONTH, 1)
+                        var endDate = c.timeInMillis
+                        if(endDate > queryEndDate) { endDate = queryEndDate }
+
+                        processedBuckets[dataPointKey] = ProcessedBucket(
+                            startDate,
+                            endDate,
+                            mutableListOf(),
+                            mutableListOf(),
+                            format.format(startDate),
+                            format.format(endDate)
+                        )
+                    }
+
+//                Log.d("POINT",
+//                    "$monthNumber -> ${format.format(dataPoint.getStartTime(TimeUnit.MILLISECONDS))} : ${dataPoint.getValue(Field.FIELD_CALORIES)}")
+
+                    processedBuckets[dataPointKey]!!.dataPoints.add(dataPoint)
+                }
+            }
+
+            //TODO: Needs refactoring
+            //Merge buckets into groups
+            while(!bucketKeyQueue.isEmpty()) {
+                val keyAnchor = bucketKeyQueue.pop()
+
+                for(i in 1 until Integer.min(timeUnitLength, bucketKeyQueue.size + 1)) {
+
+                    val keyToMergeWithAnchor = bucketKeyQueue.pop()
+                    val valuesToMerge = processedBuckets[keyToMergeWithAnchor]!!
+
+                    processedBuckets[keyAnchor]!!.dataPoints.addAll(valuesToMerge.dataPoints)
+                    processedBuckets[keyAnchor]!!.endDate = valuesToMerge.endDate
+
+                    processedBuckets.remove(keyToMergeWithAnchor)
+                }
+            }
+
+            return processedBuckets.values.toList()
+        }
+    }
+
+    private class YearBucketProcessor(val timeUnitLength : Int, queryStartDate : Long, queryEndDate : Long) :
+        BucketProcessor(queryStartDate, queryEndDate) {
+        @RequiresApi(Build.VERSION_CODES.O)
+        override fun process(buckets: List<Bucket>): List<ProcessedBucket> {
+            val format = SimpleDateFormat("yyyy.MM.dd HH:mm")
+            val processedBuckets : MutableMap<String, ProcessedBucket> = mutableMapOf()
+            val bucketKeyQueue : ArrayDeque<String> = ArrayDeque()
+
+            //Merge buckets into Years
+            for(bucket in buckets) {
+
+                val dataPointsPerBucket = bucket.dataSets.flatMap { it.dataPoints }
+                if(dataPointsPerBucket.isEmpty()){ continue }
+
+                dataPointsPerBucket.forEach { dataPoint ->
+
+                    val dataPointDate = Instant
+                        .ofEpochMilli(dataPoint.getStartTime(TimeUnit.MILLISECONDS))
+                        .atZone(ZoneId.systemDefault())
+                        .toLocalDate()
+
+                    val yearNumber = dataPointDate.year
+                    val dataPointKey = "$yearNumber"
+
+                    if(!processedBuckets.containsKey(dataPointKey)) {
+
+                        val c = Calendar.getInstance()
+                        c.set(Calendar.YEAR, yearNumber)
+                        c.set(Calendar.DAY_OF_YEAR, 1)
+
+                        var startDate = c.timeInMillis
+                        if(startDate < queryStartDate) { startDate = queryStartDate }
+
+                        c.add(Calendar.YEAR, 1)
                         var endDate = c.timeInMillis
                         if(endDate > queryEndDate) { endDate = queryEndDate }
 
