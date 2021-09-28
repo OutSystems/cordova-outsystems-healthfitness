@@ -228,7 +228,7 @@ class AdvancedQuery(
             for(bucket in buckets) {
 
                 val dataPointsPerBucket = bucket.dataSets.flatMap { it.dataPoints }
-                if(dataPointsPerBucket.isEmpty()){ continue }
+                //if(dataPointsPerBucket.isEmpty()){ continue }
 
                 val startDate = bucket.getStartTime(TimeUnit.MILLISECONDS)
                 val endDate = bucket.getEndTime(TimeUnit.MILLISECONDS)
@@ -365,9 +365,12 @@ class AdvancedQuery(
                     if(!processedBuckets.containsKey(dataPointKey)) {
 
                         val c = Calendar.getInstance()
-                        c.set(Calendar.MONTH, monthNumber)
+                        c.set(Calendar.MONTH, monthNumber-1)
                         c.set(Calendar.YEAR, yearNumber)
                         c.set(Calendar.DAY_OF_MONTH, 1)
+                        c.set(Calendar.HOUR, 0)
+                        c.set(Calendar.MINUTE, 0)
+                        c.set(Calendar.SECOND, 0)
 
                         var startDate = c.timeInMillis
                         if(startDate < queryStartDate) { startDate = queryStartDate }
@@ -488,6 +491,4 @@ class AdvancedQuery(
             return processedBuckets.values.toList()
         }
     }
-
-
 }

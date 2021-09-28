@@ -76,7 +76,6 @@ class OSHealthFitness : CordovaImplementation() {
         val profileVariables = args.getString(4)
         val summaryVariables = args.getString(5)
 
-        setAsActivityResultCallback()
         healthStore?.initAndRequestPermissions(
             customPermissions,
             allVariables,
@@ -110,6 +109,9 @@ class OSHealthFitness : CordovaImplementation() {
         )
 
         if (areAndroidPermissionsGranted(permissions)) {
+            if(!healthStore!!.areGoogleFitPermissionsGranted()){
+                setAsActivityResultCallback()
+            }
             healthStore?.requestGoogleFitPermissions()
         }
         else {
@@ -147,7 +149,7 @@ class OSHealthFitness : CordovaImplementation() {
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     override fun onActivityResult(requestCode: Int, resultCode: Int, intent: Intent) {
-        super.onActivityResult(requestCode, resultCode, intent)
+        //super.onActivityResult(requestCode, resultCode, intent)
         when (resultCode) {
             Activity.RESULT_OK -> when (requestCode) {
                 GOOGLE_FIT_PERMISSIONS_REQUEST_CODE -> sendPluginResult("success", null)

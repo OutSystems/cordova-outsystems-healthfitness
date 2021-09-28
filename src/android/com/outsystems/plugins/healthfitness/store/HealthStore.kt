@@ -381,6 +381,10 @@ class HealthStore(val platformInterface: AndroidPlatformInterface) {
         }
     }
 
+    fun areGoogleFitPermissionsGranted(): Boolean {
+        return areGoogleFitPermissionsGranted(account, fitnessOptions);
+    }
+
     private fun areGoogleFitPermissionsGranted(account : GoogleSignInAccount?, options: FitnessOptions?): Boolean {
         account.let {
             options.let {
