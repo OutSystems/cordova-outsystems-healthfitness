@@ -144,6 +144,7 @@ class HealthKitTypes {
         HealthTypeEnum.sleepAnalysis.rawValue:[sleepAnalysis],
         HealthTypeEnum.oxygenSaturation.rawValue:[oxygenSaturation],
         HealthTypeEnum.activeEnergyBurned.rawValue:[activeEnergyBurned],
+        HealthTypeEnum.basalEnergyBurned.rawValue:[basalEnergyBurned],
         HealthTypeEnum.bodyFatPercentage.rawValue:[bodyFatPercentage],
         HealthTypeEnum.bodyTemperature.rawValue:[bodyTemperature],
         HealthTypeEnum.dietaryWater.rawValue:[dietaryWater],

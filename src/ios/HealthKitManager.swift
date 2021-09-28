@@ -460,14 +460,18 @@ class HealthKitManager {
         
         let types = HKTypes.allVariablesDict[variable]
         
+        
         var HKOptions = getStatisticOptions(operationType: operationType)
-        if let optionsAllowed = type.first?.optionsAllowed {
-            if !optionsAllowed.contains(HKOptions) {
-                completion(nil, HealthKitErrors.operationNotAllowed as NSError)
-                return
+        
+        if !mostRecent {
+            if let optionsAllowed = type.first?.optionsAllowed {
+                if !optionsAllowed.contains(HKOptions) {
+                    completion(nil, HealthKitErrors.operationNotAllowed as NSError)
+                    return
+                }
             }
         }
-        
+
         var interval = getInterval(timeUnit: timeUnit, timeUnitLength: timeUnitLength)
         
         var block = 0
