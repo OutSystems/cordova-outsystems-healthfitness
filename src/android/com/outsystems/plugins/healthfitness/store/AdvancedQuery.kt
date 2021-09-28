@@ -1,17 +1,11 @@
 package com.outsystems.plugins.healthfitness.store
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import com.google.android.gms.fitness.data.Bucket
 import com.google.android.gms.fitness.data.DataPoint
 import com.google.android.gms.fitness.data.DataSource
 import com.google.android.gms.fitness.data.DataType
 import com.google.android.gms.fitness.request.DataReadRequest
 import java.text.SimpleDateFormat
-import java.time.Instant
-import java.time.Month
-import java.time.ZoneId
-import java.time.temporal.WeekFields
 import java.util.*
 import java.util.concurrent.TimeUnit
 
@@ -255,7 +249,7 @@ class AdvancedQuery(
 
     private class WeekBucketProcessor(val timeUnitLength : Int, queryStartDate : Long, queryEndDate : Long) :
         BucketProcessor(queryStartDate, queryEndDate) {
-        @RequiresApi(Build.VERSION_CODES.O)
+
         override fun process(buckets: List<Bucket>): List<ProcessedBucket> {
 
             val format = SimpleDateFormat("yyyy.MM.dd HH:mm")
@@ -271,14 +265,14 @@ class AdvancedQuery(
 
                 dataPointsPerBucket.forEach { dataPoint ->
 
-                    val dataPointDate = Instant
-                        .ofEpochMilli(dataPoint.getStartTime(TimeUnit.MILLISECONDS))
-                        .atZone(ZoneId.systemDefault())
-                        .toLocalDate()
+                    val dataPointDate = Date(dataPoint.getStartTime(TimeUnit.MILLISECONDS))
+                    val isoCalendar = Calendar.getInstance()
+                    isoCalendar.time = dataPointDate
+                    isoCalendar.minimalDaysInFirstWeek = 4;
+                    isoCalendar.firstDayOfWeek = Calendar.MONDAY;
 
-                    val weekFields: WeekFields = WeekFields.ISO
-                    val weekNumber = dataPointDate.get(weekFields.weekOfWeekBasedYear())
-                    val yearNumber = dataPointDate.year
+                    val weekNumber = isoCalendar.get(Calendar.WEEK_OF_YEAR);
+                    val yearNumber = isoCalendar.get(Calendar.YEAR);
                     val dataPointKey = "$weekNumber$yearNumber"
 
                     if(!processedBuckets.containsKey(dataPointKey)) {
@@ -320,7 +314,10 @@ class AdvancedQuery(
             while(!weekKeyQueue.isEmpty()) {
                 val keyAnchor = weekKeyQueue.pop()
 
-                for(i in 1 until Integer.min(timeUnitLength, weekKeyQueue.size + 1)) {
+                var limit = weekKeyQueue.size + 1
+                if(timeUnitLength < limit){ limit = timeUnitLength }
+
+                for(i in 1 until limit) {
 
                     val keyToMergeWithAnchor = weekKeyQueue.pop()
                     val valuesToMerge = processedBuckets[keyToMergeWithAnchor]!!
@@ -339,7 +336,7 @@ class AdvancedQuery(
 
     private class MonthBucketProcessor(val timeUnitLength : Int, queryStartDate : Long, queryEndDate : Long) :
         BucketProcessor(queryStartDate, queryEndDate) {
-        @RequiresApi(Build.VERSION_CODES.O)
+
         override fun process(buckets: List<Bucket>): List<ProcessedBucket> {
             val format = SimpleDateFormat("yyyy.MM.dd HH:mm")
             val processedBuckets : MutableMap<String, ProcessedBucket> = mutableMapOf()
@@ -353,13 +350,12 @@ class AdvancedQuery(
 
                 dataPointsPerBucket.forEach { dataPoint ->
 
-                    val dataPointDate = Instant
-                        .ofEpochMilli(dataPoint.getStartTime(TimeUnit.MILLISECONDS))
-                        .atZone(ZoneId.systemDefault())
-                        .toLocalDate()
+                    val dataPointDate = Date(dataPoint.getStartTime(TimeUnit.MILLISECONDS))
+                    val calendar = Calendar.getInstance()
+                    calendar.time = dataPointDate
 
-                    val monthNumber = dataPointDate.monthValue
-                    val yearNumber = dataPointDate.year
+                    val monthNumber = calendar.get(Calendar.MONTH)
+                    val yearNumber = calendar.get(Calendar.YEAR)
                     val dataPointKey = "$monthNumber$yearNumber"
 
                     if(!processedBuckets.containsKey(dataPointKey)) {
@@ -401,7 +397,10 @@ class AdvancedQuery(
             while(!bucketKeyQueue.isEmpty()) {
                 val keyAnchor = bucketKeyQueue.pop()
 
-                for(i in 1 until Integer.min(timeUnitLength, bucketKeyQueue.size + 1)) {
+                var limit = bucketKeyQueue.size + 1
+                if(timeUnitLength < limit){ limit = timeUnitLength }
+
+                for(i in 1 until limit) {
 
                     val keyToMergeWithAnchor = bucketKeyQueue.pop()
                     val valuesToMerge = processedBuckets[keyToMergeWithAnchor]!!
@@ -419,7 +418,7 @@ class AdvancedQuery(
 
     private class YearBucketProcessor(val timeUnitLength : Int, queryStartDate : Long, queryEndDate : Long) :
         BucketProcessor(queryStartDate, queryEndDate) {
-        @RequiresApi(Build.VERSION_CODES.O)
+
         override fun process(buckets: List<Bucket>): List<ProcessedBucket> {
             val format = SimpleDateFormat("yyyy.MM.dd HH:mm")
             val processedBuckets : MutableMap<String, ProcessedBucket> = mutableMapOf()
@@ -433,12 +432,11 @@ class AdvancedQuery(
 
                 dataPointsPerBucket.forEach { dataPoint ->
 
-                    val dataPointDate = Instant
-                        .ofEpochMilli(dataPoint.getStartTime(TimeUnit.MILLISECONDS))
-                        .atZone(ZoneId.systemDefault())
-                        .toLocalDate()
+                    val dataPointDate = Date(dataPoint.getStartTime(TimeUnit.MILLISECONDS))
+                    val calendar = Calendar.getInstance()
+                    calendar.time = dataPointDate
 
-                    val yearNumber = dataPointDate.year
+                    val yearNumber = calendar.get(Calendar.YEAR)
                     val dataPointKey = "$yearNumber"
 
                     if(!processedBuckets.containsKey(dataPointKey)) {
@@ -476,7 +474,10 @@ class AdvancedQuery(
             while(!bucketKeyQueue.isEmpty()) {
                 val keyAnchor = bucketKeyQueue.pop()
 
-                for(i in 1 until Integer.min(timeUnitLength, bucketKeyQueue.size + 1)) {
+                var limit = bucketKeyQueue.size + 1
+                if(timeUnitLength < limit){ limit = timeUnitLength }
+
+                for(i in 1 until limit) {
 
                     val keyToMergeWithAnchor = bucketKeyQueue.pop()
                     val valuesToMerge = processedBuckets[keyToMergeWithAnchor]!!

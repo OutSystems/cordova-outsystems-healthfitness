@@ -4,17 +4,13 @@ import android.Manifest
 import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
 import com.google.gson.Gson
 import com.outsystems.plugins.healthfitness.store.AdvancedQueryParameters
 import com.outsystems.plugins.healthfitness.store.HealthStore
-
 import org.apache.cordova.*
-
 import org.json.JSONArray
 
 
@@ -35,7 +31,7 @@ class OSHealthFitness : CordovaImplementation() {
         healthStore = HealthStore(this)
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
+
     override fun execute(
         action: String,
         args: JSONArray,
@@ -66,7 +62,7 @@ class OSHealthFitness : CordovaImplementation() {
 
     //create array of permission oauth
 
-    @RequiresApi(Build.VERSION_CODES.O)
+
     private fun initAndRequestPermissions(args : JSONArray) {
 
         val customPermissions = args.getString(0)
@@ -100,7 +96,6 @@ class OSHealthFitness : CordovaImplementation() {
     }
 
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
     private fun checkAndGrantPermissions(){
         val permissions = arrayOf(
             Manifest.permission.ACTIVITY_RECOGNITION,
@@ -123,13 +118,11 @@ class OSHealthFitness : CordovaImplementation() {
         }
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
     private fun advancedQuery(args : JSONArray) {
         val parameters = gson.fromJson(args.getString(0), AdvancedQueryParameters::class.java)
         healthStore?.advancedQuery(parameters)
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     private fun writeData(args: JSONArray) {
 
         //process parameters
@@ -139,7 +132,6 @@ class OSHealthFitness : CordovaImplementation() {
         healthStore?.updateData(variable, value)
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     private fun getLastRecord(args: JSONArray) {
 
         //process parameters
@@ -147,7 +139,6 @@ class OSHealthFitness : CordovaImplementation() {
         healthStore?.getLastRecord(variable)
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
     override fun onActivityResult(requestCode: Int, resultCode: Int, intent: Intent) {
         //super.onActivityResult(requestCode, resultCode, intent)
         when (resultCode) {
@@ -182,7 +173,6 @@ class OSHealthFitness : CordovaImplementation() {
         return true
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     override fun onRequestPermissionResult(
         requestCode: Int,
         permissions: Array<String>,

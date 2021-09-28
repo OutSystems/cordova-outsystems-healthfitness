@@ -3,7 +3,6 @@ package com.outsystems.plugins.healthfitness
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import com.google.android.gms.fitness.data.DataType
 import org.apache.cordova.*
 import org.json.JSONArray
 import org.json.JSONObject
