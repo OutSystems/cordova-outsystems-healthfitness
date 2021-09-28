@@ -33,7 +33,6 @@ class OSHealthFitness : CordovaImplementation() {
     override fun initialize(cordova: CordovaInterface, webView: CordovaWebView) {
         super.initialize(cordova, webView)
         healthStore = HealthStore(this)
-        setAsActivityResultCallback()
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -110,6 +109,9 @@ class OSHealthFitness : CordovaImplementation() {
         )
 
         if (areAndroidPermissionsGranted(permissions)) {
+            if(!healthStore!!.areGoogleFitPermissionsGranted()){
+                setAsActivityResultCallback()
+            }
             healthStore?.requestGoogleFitPermissions()
         }
         else {
@@ -147,7 +149,7 @@ class OSHealthFitness : CordovaImplementation() {
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     override fun onActivityResult(requestCode: Int, resultCode: Int, intent: Intent) {
-        super.onActivityResult(requestCode, resultCode, intent)
+        //super.onActivityResult(requestCode, resultCode, intent)
         when (resultCode) {
             Activity.RESULT_OK -> when (requestCode) {
                 GOOGLE_FIT_PERMISSIONS_REQUEST_CODE -> sendPluginResult("success", null)
