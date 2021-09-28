@@ -1,84 +1,122 @@
 import HealthKit
 
+typealias CompletionHandler = () throws -> HealthKitErrors?
+
 class HealthKitManager {
     
     var healthKitTypesToRead = Set<HKObjectType>()
     var healthKitTypesToWrite = Set<HKSampleType>()
     var HKTypes = HealthKitTypes()
-        
-    func isValidVariable(dict:[String: [HealthKitVariable]], variable:String) -> Bool {
-        let filtered = dict.filter { $0.key == variable }
-        return !filtered.isEmpty
-    }
     
     func parseCustomPermissons(customPermissions:String) -> Bool {
         if let permissions = customPermissions.decode(string: customPermissions) as PermissionsArray?{
             for element in permissions {
                 let variable = element.variable
-                let existVariable = isValidVariable(dict: HKTypes.allVariablesDict, variable: variable)
-                if existVariable {
-                    for (_, variables) in HKTypes.allVariablesDict {
-                        if variables.count > 1 {
-                            for item in variables {
-                                if element.accessType == AccessTypeEnum.write.rawValue {
-                                    healthKitTypesToWrite.insert(item.sampleType)
-                                } else if (element.accessType == AccessTypeEnum.readWrite.rawValue) {
-                                    healthKitTypesToWrite.insert(item.sampleType)
-                                    healthKitTypesToRead.insert(item.objectType)
-                                } else {
-                                    healthKitTypesToRead.insert(item.objectType)
-                                }
-                            }
-                        } else {
-                            if let variable = variables.first {
-                                if element.accessType == AccessTypeEnum.write.rawValue {
-                                    healthKitTypesToWrite.insert(variable.sampleType)
-                                } else if (element.accessType == AccessTypeEnum.readWrite.rawValue) {
-                                    healthKitTypesToWrite.insert(variable.sampleType)
-                                    healthKitTypesToRead.insert(variable.objectType)
-                                } else {
-                                    healthKitTypesToRead.insert(variable.objectType)
-                                }
-                            }
+                
+                if let type = HKTypes.allVariablesDict[variable] {
+                    if type.count > 1 {
+                        for item in type {
+                            let sampleType = item.sampleType
+                            let objectType = item.objectType
+                            
+                            self.fillSets(accessType: element.accessType,
+                                          sampleType: sampleType,
+                                          objectType: objectType)
                         }
+                        
+                    } else {
+                        guard let sampleType = type.first?.sampleType else { return false }
+                        guard let objectType = type.first?.objectType else { return false }
+                        
+                        self.fillSets(accessType: element.accessType,
+                                      sampleType: sampleType,
+                                      objectType: objectType)
+                        
                     }
+        
                 } else {
                     return false
                 }
+            
             }
         }
         
         return true
     }
     
+    func fillSets(accessType:String,
+                  sampleType: HKSampleType,
+                  objectType: HKObjectType) {
+        
+        if (accessType == AccessTypeEnum.readWrite.rawValue) {
+            healthKitTypesToWrite.insert(sampleType)
+            healthKitTypesToRead.insert(objectType)
+        } else if (accessType == AccessTypeEnum.write.rawValue) {
+            healthKitTypesToWrite.insert(sampleType)
+        } else {
+            healthKitTypesToRead.insert(objectType)
+        }
+        
+    }
+    
     func fillPermissionSetWithVariables(dict: [String: [HealthKitVariable]],
-                          groupPermissions:GroupPermissions) {
+                                        groupPermissions:GroupPermissions) {
                 
         for (_, variables) in dict {
             if variables.count > 1 {
                 for item in variables {
-                    if groupPermissions.accessType == AccessTypeEnum.write.rawValue {
-                        healthKitTypesToWrite.insert(item.sampleType)
-                    } else if (groupPermissions.accessType == AccessTypeEnum.readWrite.rawValue) {
-                        healthKitTypesToWrite.insert(item.sampleType)
-                        healthKitTypesToRead.insert(item.objectType)
-                    } else {
-                        healthKitTypesToRead.insert(item.objectType)
-                    }
+                    
+                    let sampleType = item.sampleType
+                    let objectType = item.objectType
+                    
+                    self.fillSets(accessType: groupPermissions.accessType,
+                                  sampleType: sampleType,
+                                  objectType: objectType)
+                }
+                
+            } else {
+                
+                if let variable = variables.first {
+                    let sampleType = variable.sampleType
+                    let objectType = variable.objectType
+                    
+                    self.fillSets(accessType: groupPermissions.accessType,
+                                  sampleType: sampleType,
+                                  objectType: objectType)
+                }
+                
+            }
+        }
+    }
+    
+    func setPermissionsFor(variable: HealthKitVariable){
+        let sampleType = variable.sampleType
+        let objectType = variable.objectType
+     
+        let authStatus = HKHealthStore().authorizationStatus(for: objectType)
+        if (authStatus == .sharingAuthorized) {
+            healthKitTypesToWrite.insert(sampleType)
+        }
+        
+        let authStatusRead = HKHealthStore().authorizationStatus(for: objectType)
+        if !(authStatusRead == .notDetermined) {
+            healthKitTypesToRead.insert(objectType)
+        }
+    }
+    
+    func fillSetsWithHistory(){
+        for (_,item) in HKTypes.allVariablesDict.enumerated() {
+            if item.value.count > 1 {
+                for element in item.value {
+                    setPermissionsFor(variable: element)
                 }
             } else {
-                if let variable = variables.first {
-                    if groupPermissions.accessType == AccessTypeEnum.write.rawValue {
-                        healthKitTypesToWrite.insert(variable.sampleType)
-                    } else if (groupPermissions.accessType == AccessTypeEnum.readWrite.rawValue) {
-                        healthKitTypesToWrite.insert(variable.sampleType)
-                        healthKitTypesToRead.insert(variable.objectType)
-                    } else {
-                        healthKitTypesToRead.insert(variable.objectType)
-                    }
+                if let variable = item.value.first {
+                    setPermissionsFor(variable: variable)
                 }
             }
         }
+        
     }
     
     func authorizeHealthKit(customPermissions:String,
@@ -95,30 +133,32 @@ class HealthKitManager {
             completion(false, error)
         }
         
+        self.fillSetsWithHistory()
+        
         let all = allVariables.decode(string: allVariables) as GroupPermissions
         if all.isActive {
             self.fillPermissionSetWithVariables(dict: HKTypes.allVariablesDict,
                                   groupPermissions: all)
         }
-        
+
         let fitness = fitnessVariables.decode(string: fitnessVariables) as GroupPermissions
         if fitness.isActive {
             self.fillPermissionSetWithVariables(dict: HKTypes.fitnessVariablesDict,
                                                 groupPermissions: fitness)
         }
-        
+
         let health = healthVariables.decode(string: healthVariables) as GroupPermissions
         if health.isActive {
             self.fillPermissionSetWithVariables(dict: HKTypes.healthVariablesDict,
                                                 groupPermissions: health)
         }
-        
+
         let profile = profileVariables.decode(string: profileVariables) as GroupPermissions
         if profile.isActive {
             self.fillPermissionSetWithVariables(dict: HKTypes.profileVariablesDict,
                                                 groupPermissions: profile)
         }
-        
+
         let permissonsOK = self.parseCustomPermissons(customPermissions: customPermissions)
         if !permissonsOK {
             isAuthorizationValid = false
@@ -126,9 +166,12 @@ class HealthKitManager {
         }
         
         if (isAuthorizationValid) {
-            
+
             self.requestAuthorization(setToWrite:healthKitTypesToWrite,
-                                       setToRead:healthKitTypesToRead) { (success, error) in
+                                      setToRead:healthKitTypesToRead) { [self] (success, error) in
+
+                healthKitTypesToWrite.removeAll()
+                healthKitTypesToRead.removeAll()
                 
                 if (error != nil) {
                     return completion(false, error as NSError?)
@@ -144,8 +187,8 @@ class HealthKitManager {
         
     }
     
-    func requestAuthorization(setToWrite: Set<HKSampleType>,
-                              setToRead: Set<HKObjectType>,
+    func requestAuthorization(setToWrite: Set<HKSampleType>?,
+                              setToRead: Set<HKObjectType>?,
                                completion: @escaping (Bool, NSError?) -> Void) {
         
         HKHealthStore().requestAuthorization(toShare: setToWrite,
@@ -187,48 +230,85 @@ class HealthKitManager {
         
         if let objectType = type.first?.objectType {
             let authStatus = HKHealthStore().authorizationStatus(for: objectType)
-            if authStatus == .sharingDenied {
-                completion(false, HealthKitErrors.variableHasWriteDenied as NSError)
-            }
-        }
-        
-        guard let unit = type.first?.unit else {
-            let error = HealthKitErrors.dataTypeNotAvailable
-            completion(false, error as NSError)
-            return
-        }
-        
-        guard let quantityType = type.first?.quantityType else {
-            let error = HealthKitErrors.dataTypeNotAvailable
-            completion(false, error as NSError)
-            return
-        }
-        
-        
-        if let val = value {
-            let variableQuantity = HKQuantity(unit: unit, doubleValue: val)
-            
-            let countSample = HKQuantitySample(type: quantityType,
-                                           quantity: variableQuantity,
-                                              start: Date(),
-                                                end: Date())
-            
-            HKHealthStore().save(countSample) { (success, error) in
+            if authStatus == .sharingDenied || authStatus == .notDetermined {
                 
-                if let error = error {
-                    switch (error as NSError).code {
-                    case 1:
-                        completion(false, HealthKitErrors.notAvailableOnDevice as NSError)
-                    case 5:
-                        completion(false, HealthKitErrors.notAuthorizedByUser as NSError)
-                    default:
-                        completion(false, error as NSError)
+                guard let sampType = type.first?.sampleType else {
+                    let error = HealthKitErrors.dataTypeNotAvailable
+                    completion(false, error as NSError)
+                    return
+                }
+                
+                let tempSetToRead = Set<HKSampleType>()
+                var tempSetToWrite = Set<HKSampleType>()
+                tempSetToWrite.insert(sampType)
+                
+                self.requestAuthorization(setToWrite: tempSetToWrite, setToRead: tempSetToRead) { (success, error) in
+                    
+                    if (error != nil) {
+                        return completion(false, error as NSError?)
                     }
                     
-                } else {
-                    completion(true, nil)
+                    if success {
+                        self.writeData(variable: variable, value: value) { success, error in
+
+                            if (error != nil) {
+                                print("error")
+                                completion(false, HealthKitErrors.notAuthorizedByUser as NSError)
+                            }
+                            
+                            if success {
+                                print("sucess")
+                                completion(true, nil)
+                            }
+                            
+                        }
+                    }
+                    
                 }
+                
+                completion(false, HealthKitErrors.variableHasWriteDenied as NSError)
+            } else {
+                
+                guard let unit = type.first?.unit else {
+                    let error = HealthKitErrors.dataTypeNotAvailable
+                    completion(false, error as NSError)
+                    return
+                }
+                
+                guard let quantityType = type.first?.quantityType else {
+                    let error = HealthKitErrors.dataTypeNotAvailable
+                    completion(false, error as NSError)
+                    return
+                }
+                
+                if let val = value {
+                    let variableQuantity = HKQuantity(unit: unit, doubleValue: val)
+                    
+                    let variableSample = HKQuantitySample(type: quantityType,
+                                                   quantity: variableQuantity,
+                                                      start: Date(),
+                                                        end: Date())
+                    
+                    HKHealthStore().save(variableSample) { (success, error) in
+                        
+                        if let error = error {
+                            switch (error as NSError).code {
+                            case 1:
+                                completion(false, HealthKitErrors.notAvailableOnDevice as NSError)
+                            case 5:
+                                completion(false, HealthKitErrors.notAuthorizedByUser as NSError)
+                            default:
+                                completion(false, error as NSError)
+                            }
+                            
+                        } else {
+                            completion(true, nil)
+                        }
+                    }
+                }
+                
             }
+               
         }
        
     }
@@ -256,29 +336,88 @@ class HealthKitManager {
         return HKOptions
     }
     
-    func getInterval(timeUnit:String) -> DateComponents {
+    func getInterval(timeUnit:String, timeUnitLength:Int) -> DateComponents {
         var interval = DateComponents()
         switch timeUnit {
             case TimeUnit.milliseconds.rawValue:
-                interval.second = 1
+                interval.second = timeUnitLength
             case TimeUnit.seconds.rawValue:
-                interval.second = 1
+                interval.second = timeUnitLength
             case TimeUnit.minute.rawValue:
-                interval.minute = 1
+                interval.minute = timeUnitLength
             case TimeUnit.hour.rawValue:
-                interval.hour = 1
+                interval.hour = timeUnitLength
             case TimeUnit.day.rawValue:
-                interval.day = 1
+                interval.day = timeUnitLength
             case TimeUnit.week.rawValue:
-                interval.weekOfYear = 1
+                interval.weekOfYear = timeUnitLength
             case TimeUnit.month.rawValue:
-                interval.month = 1
+                interval.month = timeUnitLength
             case TimeUnit.year.rawValue:
-                interval.year = 1
+                interval.year = timeUnitLength
             default:
-                interval.day = 1
+                interval.day = timeUnitLength
         }
         return interval
+    }
+    
+    func writeData(variable: String,
+                   value: Double?,
+                   completion: @escaping (_ inner: @escaping CompletionHandler) -> Void) {
+        
+        if let error = self.isHealthDataAvailable() {
+            completion ( { throw error } )
+        }
+        
+        guard let type = HKTypes.allVariablesDict[variable] else {
+            completion ({ throw HealthKitErrors.dataTypeNotAvailable })
+            return
+        }
+        
+        guard let unit = type.first?.unit else {
+            completion ({ throw HealthKitErrors.dataTypeNotAvailable })
+            return
+        }
+        
+        guard let quantityType = type.first?.quantityType else {
+            completion ({ throw HealthKitErrors.dataTypeNotAvailable } )
+            return
+        }
+        
+        if let objectType = type.first?.objectType {
+            let authStatus = HKHealthStore().authorizationStatus(for: objectType)
+            if authStatus == .sharingDenied {
+                completion ( { throw HealthKitErrors.variableHasWriteDenied } )
+                return
+            }
+        }
+        
+        if let val = value {
+            let variableQuantity = HKQuantity(unit: unit, doubleValue: val)
+            
+            let countSample = HKQuantitySample(type: quantityType,
+                                           quantity: variableQuantity,
+                                              start: Date(),
+                                                end: Date())
+            
+            HKHealthStore().save(countSample) { (success, error) in
+                
+                if let error = error {
+                    switch (error as NSError).code {
+                    case 1:
+                        completion ({ throw HealthKitErrors.notAvailableOnDevice })
+                    case 5:
+                        completion ({ throw HealthKitErrors.notAuthorizedByUser })
+                    default:
+                        completion ({ throw error } )
+                    }
+                    
+                } else {
+                    completion ( { nil } )
+                }
+            }
+        }
+        
     }
 
     func advancedQuery(variable: String,
@@ -287,14 +426,18 @@ class HealthKitManager {
                        timeUnit: String,
                        operationType: String,
                        mostRecent: Bool,
+                       timeUnitLength: Int,
                        completion: @escaping(AdvancedQueryResponse?, NSError?) -> Void) {
         
-        guard let type = HKTypes.allVariablesDict[variable] else {
-            let error = HealthKitErrors.dataTypeNotAvailable
-            completion(nil, error as NSError)
-            return
+        if let error = self.isHealthDataAvailable() {
+            completion(nil, error)
         }
         
+        guard let type = HKTypes.allVariablesDict[variable] else {
+            completion(nil, HealthKitErrors.dataTypeNotAvailable as NSError)
+            return
+        }
+    
         if let objectType = type.first?.objectType {
             let authStatus = HKHealthStore().authorizationStatus(for: objectType)
             if authStatus == .notDetermined {
@@ -318,8 +461,14 @@ class HealthKitManager {
         let types = HKTypes.allVariablesDict[variable]
         
         var HKOptions = getStatisticOptions(operationType: operationType)
+        if let optionsAllowed = type.first?.optionsAllowed {
+            if !optionsAllowed.contains(HKOptions) {
+                completion(nil, HealthKitErrors.operationNotAllowed as NSError)
+                return
+            }
+        }
         
-        var interval = getInterval(timeUnit: timeUnit)
+        var interval = getInterval(timeUnit: timeUnit, timeUnitLength: timeUnitLength)
         
         var block = 0
         var resultInfo = AdvancedQueryResponseBlock()
@@ -398,11 +547,7 @@ class HealthKitManager {
         } else if let type = types?.first {
             
             if let quantityType = type.quantityType {
-                
-                if let defaultOption = type.defaultOption {
-                    HKOptions = defaultOption
-                }
-                
+                                
                 var newStartDate = Date()
                 if mostRecent {
                     HKOptions = .mostRecent
@@ -491,5 +636,3 @@ class HealthKitManager {
             
     }
 }
-
-

@@ -57,15 +57,15 @@ class OSHealthFitness: CordovaImplementation {
     @objc(getLastRecord:)
     func getLastRecord(command: CDVInvokedUrlCommand) {
         callbackId = command.callbackId
-        
         let variable = command.arguments[0] as? String ?? ""
         
         plugin?.advancedQuery(variable: variable,
                         startDate: Date(),
                         endDate: Date(),
-                        timeUnit: "DAY",
+                        timeUnit: "",
                         operationType: "",
-                        mostRecent:true) { success, result, error in
+                        mostRecent:true,
+                        timeUnitLength: 1) { success, result, error in
 
             if error != nil {
                 self.sendResult(result: nil, error: error, callBackID: self.callbackId)
@@ -89,13 +89,15 @@ class OSHealthFitness: CordovaImplementation {
             let endDate = params.endDate ?? ""
             let timeUnit = params.timeUnit ?? ""
             let operationType = params.operationType ?? ""
+            let timeUnitLength = params.timeUnitLength ?? 1
                 
             plugin?.advancedQuery(variable: variable,
                             startDate: Date(startDate),
                             endDate: Date(endDate),
                             timeUnit: timeUnit,
                             operationType: operationType,
-                            mostRecent:false) { success, result, error in
+                            mostRecent:false,
+                            timeUnitLength:timeUnitLength) { success, result, error in
 
                 if error != nil {
                     self.sendResult(result: nil, error: error, callBackID: self.callbackId)
