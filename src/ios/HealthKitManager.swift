@@ -53,18 +53,8 @@ class HealthKitManager {
             healthKitTypesToRead.insert(objectType)
         } else if (accessType == AccessTypeEnum.write.rawValue) {
             healthKitTypesToWrite.insert(sampleType)
-            let authStatus = HKHealthStore().authorizationStatus(for: objectType)
-            if (!(authStatus == .notDetermined) && authStatus == .sharingDenied) {
-                healthKitTypesToRead.insert(objectType)
-            }
         } else {
-            let authStatus = HKHealthStore().authorizationStatus(for: objectType)
-            if (authStatus == .sharingAuthorized) {
-                healthKitTypesToRead.insert(objectType)
-                healthKitTypesToWrite.insert(sampleType)
-            } else {
-                healthKitTypesToRead.insert(objectType)
-            }
+            healthKitTypesToRead.insert(objectType)
         }
         
     }
@@ -646,5 +636,3 @@ class HealthKitManager {
             
     }
 }
-
-
