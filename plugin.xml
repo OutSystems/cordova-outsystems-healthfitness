@@ -90,6 +90,15 @@
       <true/>
     </config-file>
 
+    <config-file target="*/Entitlements-Debug.plist" parent="com.apple.developer.healthkit.recalibrate-estimates">
+      <true/>
+    </config-file>
+
+    <config-file target="*/Entitlements-Release.plist" parent="com.apple.developer.healthkit.recalibrate-estimates">
+      <true/>
+    </config-file>
+
+
 		<!-- iOS Source Files -->
 		<source-file src="src/ios/OSHealthFitness.swift" />
 		<source-file src="src/ios/HealthKitManager.swift" />
