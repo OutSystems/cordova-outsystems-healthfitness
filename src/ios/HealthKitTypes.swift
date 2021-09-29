@@ -267,7 +267,8 @@ enum OperationType: String {
     case sum = "SUM",
          average = "AVERAGE",
          min = "MIN",
-         max = "MAX"
+         max = "MAX",
+         raw = "RAW"
 }
 
 enum AccessTypeEnum: String {

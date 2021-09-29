@@ -330,7 +330,7 @@ class HealthKitManager {
                 HKOptions = [.discreteMax]
             case OperationType.average.rawValue:
                 HKOptions = [.discreteAverage]
-        case OperationType.raw.rawValue:
+            case OperationType.raw.rawValue:
                 HKOptions = [.discreteAverage]
             default:
                 HKOptions = []
@@ -396,6 +396,7 @@ class HealthKitManager {
         
         if let val = value {
             let variableQuantity = HKQuantity(unit: unit, doubleValue: val)
+            
             
             let countSample = HKQuantitySample(type: quantityType,
                                            quantity: variableQuantity,
