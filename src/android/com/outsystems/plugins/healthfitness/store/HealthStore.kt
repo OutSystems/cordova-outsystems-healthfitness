@@ -2,24 +2,21 @@ package com.outsystems.plugins.healthfitness.store
 
 import android.app.Activity
 import android.content.Context
-import android.os.Build
 import android.util.Log
-import androidx.annotation.RequiresApi
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.fitness.Fitness
 import com.google.android.gms.fitness.FitnessOptions
 import com.google.android.gms.fitness.data.*
-import com.google.android.gms.fitness.result.DataReadResponse
-import com.google.gson.Gson
-import java.text.SimpleDateFormat
-import java.time.Instant
-import java.util.*
-import com.outsystems.plugins.healthfitness.HealthFitnessError
 import com.google.android.gms.fitness.data.DataPoint
 import com.google.android.gms.fitness.data.DataSet
+import com.google.android.gms.fitness.result.DataReadResponse
+import com.google.gson.Gson
 import com.outsystems.plugins.healthfitness.AndroidPlatformInterface
+import com.outsystems.plugins.healthfitness.HealthFitnessError
 import com.outsystems.plugins.healthfitness.OSHealthFitness
+import java.text.SimpleDateFormat
+import java.util.*
 import java.util.concurrent.TimeUnit
 
 
@@ -217,7 +214,6 @@ class HealthStore(val platformInterface: AndroidPlatformInterface) {
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     fun initAndRequestPermissions(
         customPermissions: String,
         allVariables: String,
@@ -364,7 +360,6 @@ class HealthStore(val platformInterface: AndroidPlatformInterface) {
         return fitnessBuild.build()
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
     fun requestGoogleFitPermissions() {
         if(areGoogleFitPermissionsGranted(account, fitnessOptions)){
             platformInterface.sendPluginResult("success")
@@ -393,7 +388,6 @@ class HealthStore(val platformInterface: AndroidPlatformInterface) {
         }
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
     fun updateData(variableName: String, value: Float) {
 
         //right now we are only writing data which are float values
@@ -454,7 +448,6 @@ class HealthStore(val platformInterface: AndroidPlatformInterface) {
                 }
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
     fun getLastRecord(variable: String) {
 
         val endDate: Long = Date().time
@@ -463,14 +456,13 @@ class HealthStore(val platformInterface: AndroidPlatformInterface) {
 
         val advancedQueryParameters = AdvancedQueryParameters(
             variable,
-            Date.from(Instant.ofEpochMilli(startDate)),
-            Date.from(Instant.ofEpochMilli(endDate)),
+            Date(startDate),
+            Date(endDate),
             limit = 1
         )
         advancedQuery(advancedQueryParameters)
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
     fun advancedQuery(parameters : AdvancedQueryParameters) {
 
         val variable = getVariableByName(parameters.variable)
