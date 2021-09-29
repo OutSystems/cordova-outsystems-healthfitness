@@ -103,10 +103,7 @@ class HealthStore(val platformInterface: AndroidPlatformInterface) {
                 Field.FIELD_BPM
             ),
             listOf(
-                EnumOperationType.RAW.value,
-                EnumOperationType.AVERAGE.value,
-                EnumOperationType.MAX.value,
-                EnumOperationType.MIN.value
+                EnumOperationType.RAW.value
             )),
             "SLEEP" to GoogleFitVariable(DataType.TYPE_SLEEP_SEGMENT, listOf(
                 Field.FIELD_SLEEP_SEGMENT_TYPE
