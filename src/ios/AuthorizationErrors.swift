@@ -8,6 +8,7 @@ enum HealthKitErrors : Int, CustomNSError, LocalizedError {
     case noResultsForQuery = 104
     case variableHasWriteDenied = 105
     case operationNotAllowed = 106
+    case badVariableType = 107
     
     var description: String {
         switch self {
@@ -25,6 +26,9 @@ enum HealthKitErrors : Int, CustomNSError, LocalizedError {
                 return "Query returned no results."
             case .operationNotAllowed:
                 return "Operation not allowed."
+            case .badVariableType:
+                return "Type of data not compatible with variable."
+
         }
     }
     

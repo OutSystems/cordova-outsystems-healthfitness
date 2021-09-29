@@ -56,7 +56,8 @@ class HealthKitTypes {
                                                        sampleType: HKSampleType.quantityType(forIdentifier: .bloodGlucose)!,
                                                        objectType: HKObjectType.quantityType(forIdentifier: .bloodGlucose)!,
                                                        correlationType: nil,
-                                                       unit: HKUnit.count())
+                                                       unit: HKUnit(from: "mg/dL"),
+                                                       optionsAllowed: [.discreteAverage,.mostRecent,.discreteMax,.discreteMin])
     
     let bloodPressureSystolic = HealthKitVariable.init(quantityType: HKQuantityType.quantityType(forIdentifier:HKQuantityTypeIdentifier.bloodPressureSystolic)!,
                                                        sampleType: HKSampleType.quantityType(forIdentifier: .bloodPressureSystolic)!,
@@ -74,7 +75,8 @@ class HealthKitTypes {
                                                sampleType: HKSampleType.categoryType(forIdentifier: .sleepAnalysis)!,
                                                objectType: HKObjectType.categoryType(forIdentifier: .sleepAnalysis)!,
                                                correlationType: nil,
-                                               unit: HKUnit.count())
+                                               unit: HKUnit.count(),
+                                               optionsAllowed: [.discreteAverage,.mostRecent,.discreteMax,.discreteMin])
     
     let oxygenSaturation = HealthKitVariable.init(quantityType: HKQuantityType.quantityType(forIdentifier:HKQuantityTypeIdentifier.oxygenSaturation)!,
                                                         sampleType: HKSampleType.quantityType(forIdentifier: .oxygenSaturation)!,
@@ -88,7 +90,7 @@ class HealthKitTypes {
                                                     objectType: HKObjectType.quantityType(forIdentifier: .activeEnergyBurned)!,
                                                     correlationType: nil,
                                                     unit: HKUnit.kilocalorie(),
-                                                    optionsAllowed: [.discreteAverage,.mostRecent,.discreteMax,.discreteMin])
+                                                    optionsAllowed: [.cumulativeSum,.mostRecent])
     
     let bodyFatPercentage = HealthKitVariable.init(quantityType: HKQuantityType.quantityType(forIdentifier:HKQuantityTypeIdentifier.bodyFatPercentage)!,
                                                     sampleType: HKSampleType.quantityType(forIdentifier: .bodyFatPercentage)!,

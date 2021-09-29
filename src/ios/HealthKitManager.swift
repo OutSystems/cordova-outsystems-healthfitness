@@ -330,6 +330,8 @@ class HealthKitManager {
                 HKOptions = [.discreteMax]
             case OperationType.average.rawValue:
                 HKOptions = [.discreteAverage]
+        case OperationType.raw.rawValue:
+                HKOptions = [.discreteAverage]
             default:
                 HKOptions = []
         }
