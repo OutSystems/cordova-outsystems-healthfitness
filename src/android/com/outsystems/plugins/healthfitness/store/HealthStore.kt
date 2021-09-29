@@ -184,6 +184,7 @@ class HealthStore(val platformInterface: AndroidPlatformInterface) {
                 EnumOperationType.MIN.value
             )),
             "BASAL_METABOLIC_RATE" to GoogleFitVariable(DataType.TYPE_BASAL_METABOLIC_RATE, listOf(
+                Field.FIELD_CALORIES
             ),
             listOf(
                 EnumOperationType.RAW.value,
@@ -425,9 +426,16 @@ class HealthStore(val platformInterface: AndroidPlatformInterface) {
                 .setField(fieldType, value)
                 .build()
 
-        val dataSet = DataSet.builder(dataSourceWrite)
+        var dataSet : DataSet? = null
+
+        try {
+            dataSet = DataSet.builder(dataSourceWrite)
                 .add(valueToWrite)
                 .build()
+        }catch (e : IllegalArgumentException){
+            Log.w("Write to GoogleFit:", "Field out of range", e)
+            platformInterface.sendPluginResult(null, Pair(HealthFitnessError.WRITE_VALUE_OUT_OF_RANGE_ERROR.code, HealthFitnessError.WRITE_VALUE_OUT_OF_RANGE_ERROR.message))
+        }
 
         Fitness.getHistoryClient(
                 activity,
