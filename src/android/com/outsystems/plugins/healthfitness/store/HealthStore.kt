@@ -131,10 +131,7 @@ class HealthStore(val platformInterface: AndroidPlatformInterface) {
                 HealthFields.FIELD_BLOOD_PRESSURE_DIASTOLIC
             ),
             listOf(
-                EnumOperationType.RAW.value,
-                EnumOperationType.AVERAGE.value,
-                EnumOperationType.MAX.value,
-                EnumOperationType.MIN.value
+                EnumOperationType.RAW.value
             )),
             "HYDRATION" to GoogleFitVariable(DataType.TYPE_HYDRATION, listOf(
                 Field.FIELD_VOLUME

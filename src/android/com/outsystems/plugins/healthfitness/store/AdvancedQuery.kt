@@ -271,8 +271,8 @@ class AdvancedQuery(
                     isoCalendar.minimalDaysInFirstWeek = 4;
                     isoCalendar.firstDayOfWeek = Calendar.MONDAY;
 
-                    val weekNumber = isoCalendar.get(Calendar.WEEK_OF_YEAR);
-                    val yearNumber = isoCalendar.get(Calendar.YEAR);
+                    val weekNumber = isoCalendar.get(Calendar.WEEK_OF_YEAR)
+                    val yearNumber = isoCalendar.get(Calendar.YEAR)
                     val dataPointKey = "$weekNumber$yearNumber"
 
                     if(!processedBuckets.containsKey(dataPointKey)) {
@@ -361,7 +361,7 @@ class AdvancedQuery(
                     if(!processedBuckets.containsKey(dataPointKey)) {
 
                         val c = Calendar.getInstance()
-                        c.set(Calendar.MONTH, monthNumber-1)
+                        c.set(Calendar.MONTH, monthNumber)
                         c.set(Calendar.YEAR, yearNumber)
                         c.set(Calendar.DAY_OF_MONTH, 1)
                         c.set(Calendar.HOUR, 0)
