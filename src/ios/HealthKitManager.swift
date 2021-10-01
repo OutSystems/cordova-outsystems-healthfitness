@@ -480,7 +480,7 @@ class HealthKitManager {
         var block = 0
         var resultInfo = AdvancedQueryResponseBlock()
         var resultInfoArray = [AdvancedQueryResponseBlock]()
-        var floatArray = [Float]()
+        var floatArray = [Double]()
         
         if types!.count > 1 {
             guard let type = types?.first?.correlationType else { return }
@@ -526,14 +526,14 @@ class HealthKitManager {
                                     resultInfo.endDate = Int(endDate.timeIntervalSince1970)
                                 }
                                 if let quantity = obj?.quantity.doubleValue(for: HKUnit.millimeterOfMercury()) {
-                                    floatArray.append(Float(quantity))
+                                    floatArray.append(quantity)
                                 }
                             }
 
                             if let dataDiastolic = bloodPressureDiastolic.first {
                                 let obj = dataDiastolic as? HKQuantitySample
                                 if let quantity = obj?.quantity.doubleValue(for: HKUnit.millimeterOfMercury()) {
-                                    floatArray.append(Float(quantity))
+                                    floatArray.append(quantity)
                                 }
                             }
                             resultInfo.block = block
@@ -592,7 +592,12 @@ class HealthKitManager {
                                 resultInfo.endDate = Int(statistics.endDate.timeIntervalSince1970)
                                 resultInfo.values = []
                                 
-                                floatArray.append(Float(mostRecentQuantity.doubleValue(for: unit)))
+                                if unit == HKUnit.percent() {
+                                    floatArray.append(mostRecentQuantity.doubleValue(for: unit) * 100)
+                                } else {
+                                    floatArray.append(mostRecentQuantity.doubleValue(for: unit))
+                                }
+                                
                                 resultInfo.values = floatArray
                                 floatArray.removeAll()
                                 
@@ -608,19 +613,19 @@ class HealthKitManager {
                             resultInfo.values = []
                             
                             if let maxQuantity = statistics.maximumQuantity() {
-                                floatArray.append(Float(maxQuantity.doubleValue(for: unit)))
+                                floatArray.append(maxQuantity.doubleValue(for: unit))
                                 resultInfo.values = floatArray
                                 floatArray.removeAll()
                             } else if let minimumQuantity = statistics.minimumQuantity() {
-                                floatArray.append(Float(minimumQuantity.doubleValue(for: unit)))
+                                floatArray.append(minimumQuantity.doubleValue(for: unit))
                                 resultInfo.values = floatArray
                                 floatArray.removeAll()
                             } else if let averageQuantity = statistics.averageQuantity() {
-                                floatArray.append(Float(averageQuantity.doubleValue(for: unit)))
+                                floatArray.append(averageQuantity.doubleValue(for: unit))
                                 resultInfo.values = floatArray
                                 floatArray.removeAll()
                             } else if let sum = statistics.sumQuantity() {
-                                floatArray.append(Float(sum.doubleValue(for: unit)))
+                                floatArray.append(sum.doubleValue(for: unit))
                                 resultInfo.values = floatArray
                                 floatArray.removeAll()
                             }
