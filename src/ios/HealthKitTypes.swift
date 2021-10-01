@@ -282,7 +282,7 @@ struct AdvancedQueryResponseBlock: Encodable {
     var block: Int?
     var startDate : Int?
     var endDate : Int?
-    var values : [Float]?
+    var values : [Double]?
 }
 
 struct AdvancedQueryResponse: Encodable {
