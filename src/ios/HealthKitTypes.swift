@@ -49,7 +49,7 @@ class HealthKitTypes {
                                                     sampleType: HKSampleType.quantityType(forIdentifier: .height)!,
                                                     objectType: HKObjectType.quantityType(forIdentifier: .height)!,
                                                     correlationType: nil,
-                                                    unit: HKUnit.inch(),
+                                                    unit: HKUnit.meterUnit(with: .centi),
                                                     optionsAllowed: [.discreteAverage,.mostRecent,.discreteMax,.discreteMin])
     
     let bloodGlucose = HealthKitVariable.init(quantityType: HKQuantityType.quantityType(forIdentifier: .bloodGlucose)!,
