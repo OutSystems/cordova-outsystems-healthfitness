@@ -390,7 +390,7 @@ class HealthStore(val platformInterface: AndroidPlatformInterface) {
         if(variable == null) {
             platformInterface.sendPluginResult(
                 null,
-                Pair(HealthFitnessError.VARIABLE_NOT_AVAILABLE.code, HealthFitnessError.VARIABLE_NOT_AVAILABLE.message))
+                Pair(HealthFitnessError.VARIABLE_NOT_AVAILABLE_ERROR.code, HealthFitnessError.VARIABLE_NOT_AVAILABLE_ERROR.message))
             return
         }
 
@@ -400,7 +400,7 @@ class HealthStore(val platformInterface: AndroidPlatformInterface) {
         if(!areGoogleFitPermissionsGranted(lastAccount, options)) {
             platformInterface.sendPluginResult(
                 null,
-                Pair(HealthFitnessError.PERMISSIONS_NOT_GRANTED_ERROR.code, HealthFitnessError.PERMISSIONS_NOT_GRANTED_ERROR.message))
+                Pair(HealthFitnessError.VARIABLE_NOT_AUTHORIZED_ERROR.code, HealthFitnessError.VARIABLE_NOT_AUTHORIZED_ERROR.message))
             return
         }
 
@@ -474,7 +474,7 @@ class HealthStore(val platformInterface: AndroidPlatformInterface) {
         if(variable == null) {
             platformInterface.sendPluginResult(
                 null,
-                Pair(HealthFitnessError.VARIABLE_NOT_AVAILABLE.code, HealthFitnessError.VARIABLE_NOT_AVAILABLE.message))
+                Pair(HealthFitnessError.VARIABLE_NOT_AVAILABLE_ERROR.code, HealthFitnessError.VARIABLE_NOT_AVAILABLE_ERROR.message))
             return
         }
 
@@ -491,7 +491,7 @@ class HealthStore(val platformInterface: AndroidPlatformInterface) {
         if(!areGoogleFitPermissionsGranted(lastAccount, options)) {
             platformInterface.sendPluginResult(
                 null,
-                Pair(HealthFitnessError.PERMISSIONS_NOT_GRANTED_ERROR.code, HealthFitnessError.PERMISSIONS_NOT_GRANTED_ERROR.message))
+                Pair(HealthFitnessError.VARIABLE_NOT_AUTHORIZED_ERROR.code, HealthFitnessError.VARIABLE_NOT_AUTHORIZED_ERROR.message))
             return
         }
 
@@ -538,7 +538,9 @@ class HealthStore(val platformInterface: AndroidPlatformInterface) {
 
             }
             .addOnFailureListener { dataReadResponse: Exception ->
-                Log.d("STORE", dataReadResponse.message!!)
+                platformInterface.sendPluginResult(
+                    null,
+                    Pair(HealthFitnessError.READ_DATA_ERROR.code, HealthFitnessError.READ_DATA_ERROR.message))
             }
     }
 
