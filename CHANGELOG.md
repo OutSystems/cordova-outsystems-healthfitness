@@ -8,6 +8,9 @@ The changes documented here do not include those from the original repository.
 
 ## [Unreleased]
 
+## 2021-10-04
+- Refactorings for Android (https://outsystemsrd.atlassian.net/browse/RMET-1066)
+
 ## 2021-09-21
 - Fixed requestPermissions callback for Android (https://outsystemsrd.atlassian.net/browse/RMET-996)
 

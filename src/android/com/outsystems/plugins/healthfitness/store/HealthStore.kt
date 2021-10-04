@@ -390,7 +390,7 @@ class HealthStore(val platformInterface: AndroidPlatformInterface) {
         if(variable == null) {
             platformInterface.sendPluginResult(
                 null,
-                Pair(HealthFitnessError.VARIABLE_NOT_AVAILABLE.code, HealthFitnessError.VARIABLE_NOT_AVAILABLE.message))
+                Pair(HealthFitnessError.VARIABLE_NOT_AVAILABLE_ERROR.code, HealthFitnessError.VARIABLE_NOT_AVAILABLE_ERROR.message))
             return
         }
 
@@ -400,7 +400,7 @@ class HealthStore(val platformInterface: AndroidPlatformInterface) {
         if(!areGoogleFitPermissionsGranted(lastAccount, options)) {
             platformInterface.sendPluginResult(
                 null,
-                Pair(HealthFitnessError.PERMISSIONS_NOT_GRANTED_ERROR.code, HealthFitnessError.PERMISSIONS_NOT_GRANTED_ERROR.message))
+                Pair(HealthFitnessError.VARIABLE_NOT_AUTHORIZED_ERROR.code, HealthFitnessError.VARIABLE_NOT_AUTHORIZED_ERROR.message))
             return
         }
 
@@ -415,10 +415,21 @@ class HealthStore(val platformInterface: AndroidPlatformInterface) {
                 .build()
 
         val timestamp = System.currentTimeMillis()
-        val valueToWrite = DataPoint.builder(dataSourceWrite)
+        var valueToWrite : DataPoint? = null
+        
+        //if the value to write is height, then we need to convert the value to meters
+        valueToWrite = if(variableName == "HEIGHT"){
+            val convertedValue = value / 100
+            DataPoint.builder(dataSourceWrite)
+                .setTimestamp(timestamp, TimeUnit.MILLISECONDS)
+                .setField(fieldType, convertedValue)
+                .build()
+        } else{
+            DataPoint.builder(dataSourceWrite)
                 .setTimestamp(timestamp, TimeUnit.MILLISECONDS)
                 .setField(fieldType, value)
                 .build()
+        }
 
         var dataSet : DataSet? = null
 
@@ -474,7 +485,7 @@ class HealthStore(val platformInterface: AndroidPlatformInterface) {
         if(variable == null) {
             platformInterface.sendPluginResult(
                 null,
-                Pair(HealthFitnessError.VARIABLE_NOT_AVAILABLE.code, HealthFitnessError.VARIABLE_NOT_AVAILABLE.message))
+                Pair(HealthFitnessError.VARIABLE_NOT_AVAILABLE_ERROR.code, HealthFitnessError.VARIABLE_NOT_AVAILABLE_ERROR.message))
             return
         }
 
@@ -491,7 +502,7 @@ class HealthStore(val platformInterface: AndroidPlatformInterface) {
         if(!areGoogleFitPermissionsGranted(lastAccount, options)) {
             platformInterface.sendPluginResult(
                 null,
-                Pair(HealthFitnessError.PERMISSIONS_NOT_GRANTED_ERROR.code, HealthFitnessError.PERMISSIONS_NOT_GRANTED_ERROR.message))
+                Pair(HealthFitnessError.VARIABLE_NOT_AUTHORIZED_ERROR.code, HealthFitnessError.VARIABLE_NOT_AUTHORIZED_ERROR.message))
             return
         }
 
@@ -532,13 +543,23 @@ class HealthStore(val platformInterface: AndroidPlatformInterface) {
                     queryResponse = buildAdvancedQueryResult(resultBuckets)
                 }
 
+                if(parameters.variable == "HEIGHT"){
+                    queryResponse.results.forEach{ bucket ->
+                        for (i in bucket.values.indices){
+                            bucket.values[i] = bucket.values[i] * 100
+                        }
+                    }
+                }
+
                 val pluginResponseJson = gson.toJson(queryResponse)
                 Log.d("STORE", "Response $pluginResponseJson")
                 platformInterface.sendPluginResult(pluginResponseJson)
 
             }
             .addOnFailureListener { dataReadResponse: Exception ->
-                Log.d("STORE", dataReadResponse.message!!)
+                platformInterface.sendPluginResult(
+                    null,
+                    Pair(HealthFitnessError.READ_DATA_ERROR.code, HealthFitnessError.READ_DATA_ERROR.message))
             }
     }
 

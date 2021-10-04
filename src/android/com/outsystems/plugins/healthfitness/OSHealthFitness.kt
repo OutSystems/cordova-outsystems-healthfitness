@@ -6,11 +6,9 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Build.VERSION.SDK_INT
-import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
-import com.google.android.gms.common.api.Api
 import com.google.gson.Gson
 import com.outsystems.plugins.healthfitness.store.AdvancedQueryParameters
 import com.outsystems.plugins.healthfitness.store.HealthStore
@@ -152,7 +150,7 @@ class OSHealthFitness : CordovaImplementation() {
             }
             else -> {
                 // Permission not granted
-                sendPluginResult(null, Pair(HealthFitnessError.PERMISSIONS_NOT_GRANTED_ERROR.code, HealthFitnessError.PERMISSIONS_NOT_GRANTED_ERROR.message))
+                sendPluginResult(null, Pair(HealthFitnessError.VARIABLE_NOT_AUTHORIZED_ERROR.code, HealthFitnessError.VARIABLE_NOT_AUTHORIZED_ERROR.message))
             }
         }
     }
@@ -165,7 +163,7 @@ class OSHealthFitness : CordovaImplementation() {
             var result: Pair<Int, String>? = null
             result = if (googleApiAvailability.isUserResolvableError(status)) {
                 googleApiAvailability.getErrorDialog(cordova.activity, status, 1).show()
-                Pair(HealthFitnessError.GOOGLE_SERVICES_ERROR_RESOLVABLE.code, HealthFitnessError.GOOGLE_SERVICES_ERROR_RESOLVABLE.message)
+                Pair(HealthFitnessError.GOOGLE_SERVICES_RESOLVABLE_ERROR.code, HealthFitnessError.GOOGLE_SERVICES_RESOLVABLE_ERROR.message)
             } else {
                 Pair(HealthFitnessError.GOOGLE_SERVICES_ERROR.code, HealthFitnessError.GOOGLE_SERVICES_ERROR.message)
             }
