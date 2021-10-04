@@ -42,11 +42,11 @@ class OSHealthFitness: CordovaImplementation {
         callbackId = command.callbackId
         
         guard let variable = command.arguments[0] as? String else {
-            return self.sendResult(result: "", error:HealthKitErrors.badVariableType as NSError, callBackID: self.callbackId)
+            return self.sendResult(result: "", error:HealthKitErrors.badParameterType as NSError, callBackID: self.callbackId)
         }
         
         guard let value = command.arguments[1] as? Double else {
-            return  self.sendResult(result: "", error:HealthKitErrors.badVariableType as NSError, callBackID: self.callbackId)   
+            return  self.sendResult(result: "", error:HealthKitErrors.badParameterType as NSError, callBackID: self.callbackId)
         }
         
         plugin?.writeData(variable: variable, value: value) { success,error in
