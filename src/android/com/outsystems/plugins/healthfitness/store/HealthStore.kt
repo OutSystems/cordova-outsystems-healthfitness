@@ -415,10 +415,21 @@ class HealthStore(val platformInterface: AndroidPlatformInterface) {
                 .build()
 
         val timestamp = System.currentTimeMillis()
-        val valueToWrite = DataPoint.builder(dataSourceWrite)
+        var valueToWrite : DataPoint? = null
+        
+        //if the value to write is height, then we need to convert the value to meters
+        valueToWrite = if(variableName == "HEIGHT"){
+            val convertedValue = value / 100
+            DataPoint.builder(dataSourceWrite)
+                .setTimestamp(timestamp, TimeUnit.MILLISECONDS)
+                .setField(fieldType, convertedValue)
+                .build()
+        } else{
+            DataPoint.builder(dataSourceWrite)
                 .setTimestamp(timestamp, TimeUnit.MILLISECONDS)
                 .setField(fieldType, value)
                 .build()
+        }
 
         var dataSet : DataSet? = null
 
@@ -530,6 +541,14 @@ class HealthStore(val platformInterface: AndroidPlatformInterface) {
                 else {
                     val resultBuckets = queryInformation.processBuckets(dataReadResponse.buckets)
                     queryResponse = buildAdvancedQueryResult(resultBuckets)
+                }
+
+                if(parameters.variable == "HEIGHT"){
+                    queryResponse.results.forEach{ bucket ->
+                        for (i in bucket.values.indices){
+                            bucket.values[i] = bucket.values[i] * 100
+                        }
+                    }
                 }
 
                 val pluginResponseJson = gson.toJson(queryResponse)

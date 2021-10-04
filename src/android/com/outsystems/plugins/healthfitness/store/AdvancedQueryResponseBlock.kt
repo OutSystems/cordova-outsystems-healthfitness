@@ -4,5 +4,5 @@ data class AdvancedQueryResponseBlock (
     val block : Int,
     val startDate : Long,
     val endDate : Long,
-    val values : List<Float>
+    val values : MutableList<Float>
 )
