@@ -49,14 +49,15 @@ class HealthKitTypes {
                                                     sampleType: HKSampleType.quantityType(forIdentifier: .height)!,
                                                     objectType: HKObjectType.quantityType(forIdentifier: .height)!,
                                                     correlationType: nil,
-                                                    unit: HKUnit.inch(),
+                                                    unit: HKUnit.meterUnit(with: .centi),
                                                     optionsAllowed: [.discreteAverage,.mostRecent,.discreteMax,.discreteMin])
     
     let bloodGlucose = HealthKitVariable.init(quantityType: HKQuantityType.quantityType(forIdentifier: .bloodGlucose)!,
                                                        sampleType: HKSampleType.quantityType(forIdentifier: .bloodGlucose)!,
                                                        objectType: HKObjectType.quantityType(forIdentifier: .bloodGlucose)!,
                                                        correlationType: nil,
-                                                       unit: HKUnit.count())
+                                                       unit: HKUnit(from: "mg/dL"),
+                                                       optionsAllowed: [.discreteAverage,.mostRecent,.discreteMax,.discreteMin])
     
     let bloodPressureSystolic = HealthKitVariable.init(quantityType: HKQuantityType.quantityType(forIdentifier:HKQuantityTypeIdentifier.bloodPressureSystolic)!,
                                                        sampleType: HKSampleType.quantityType(forIdentifier: .bloodPressureSystolic)!,
@@ -74,7 +75,8 @@ class HealthKitTypes {
                                                sampleType: HKSampleType.categoryType(forIdentifier: .sleepAnalysis)!,
                                                objectType: HKObjectType.categoryType(forIdentifier: .sleepAnalysis)!,
                                                correlationType: nil,
-                                               unit: HKUnit.count())
+                                               unit: HKUnit.count(),
+                                               optionsAllowed: [.discreteAverage,.mostRecent,.discreteMax,.discreteMin])
     
     let oxygenSaturation = HealthKitVariable.init(quantityType: HKQuantityType.quantityType(forIdentifier:HKQuantityTypeIdentifier.oxygenSaturation)!,
                                                         sampleType: HKSampleType.quantityType(forIdentifier: .oxygenSaturation)!,
@@ -88,7 +90,7 @@ class HealthKitTypes {
                                                     objectType: HKObjectType.quantityType(forIdentifier: .activeEnergyBurned)!,
                                                     correlationType: nil,
                                                     unit: HKUnit.kilocalorie(),
-                                                    optionsAllowed: [.discreteAverage,.mostRecent,.discreteMax,.discreteMin])
+                                                    optionsAllowed: [.cumulativeSum,.mostRecent])
     
     let bodyFatPercentage = HealthKitVariable.init(quantityType: HKQuantityType.quantityType(forIdentifier:HKQuantityTypeIdentifier.bodyFatPercentage)!,
                                                     sampleType: HKSampleType.quantityType(forIdentifier: .bodyFatPercentage)!,
@@ -144,6 +146,7 @@ class HealthKitTypes {
         HealthTypeEnum.sleepAnalysis.rawValue:[sleepAnalysis],
         HealthTypeEnum.oxygenSaturation.rawValue:[oxygenSaturation],
         HealthTypeEnum.activeEnergyBurned.rawValue:[activeEnergyBurned],
+        HealthTypeEnum.basalEnergyBurned.rawValue:[basalEnergyBurned],
         HealthTypeEnum.bodyFatPercentage.rawValue:[bodyFatPercentage],
         HealthTypeEnum.bodyTemperature.rawValue:[bodyTemperature],
         HealthTypeEnum.dietaryWater.rawValue:[dietaryWater],
@@ -264,7 +267,8 @@ enum OperationType: String {
     case sum = "SUM",
          average = "AVERAGE",
          min = "MIN",
-         max = "MAX"
+         max = "MAX",
+         raw = "RAW"
 }
 
 enum AccessTypeEnum: String {
@@ -278,7 +282,7 @@ struct AdvancedQueryResponseBlock: Encodable {
     var block: Int?
     var startDate : Int?
     var endDate : Int?
-    var values : [Float]?
+    var values : [Double]?
 }
 
 struct AdvancedQueryResponse: Encodable {

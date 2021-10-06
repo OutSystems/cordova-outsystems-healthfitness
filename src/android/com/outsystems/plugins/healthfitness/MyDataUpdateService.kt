@@ -19,7 +19,7 @@ import java.util.concurrent.TimeUnit
 
 
 class MyDataUpdateService : IntentService("MyDataUpdateService") {
-    @RequiresApi(Build.VERSION_CODES.O)
+
     override fun onHandleIntent(intent: Intent?) {
         val update = DataUpdateNotification.getDataUpdateNotification(intent)
         // Show the time interval over which the data points were collected.

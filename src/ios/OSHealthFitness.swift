@@ -41,8 +41,13 @@ class OSHealthFitness: CordovaImplementation {
     func writeData(command: CDVInvokedUrlCommand) {
         callbackId = command.callbackId
         
-        let variable = command.arguments[0] as? String ?? ""
-        let value = command.arguments[1] as? Double ?? 0
+        guard let variable = command.arguments[0] as? String else {
+            return self.sendResult(result: "", error:HealthKitErrors.badParameterType as NSError, callBackID: self.callbackId)
+        }
+        
+        guard let value = command.arguments[1] as? Double else {
+            return  self.sendResult(result: "", error:HealthKitErrors.badParameterType as NSError, callBackID: self.callbackId)
+        }
         
         plugin?.writeData(variable: variable, value: value) { success,error in
             if let err = error {
