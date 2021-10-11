@@ -11,6 +11,7 @@ import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
 import com.google.gson.Gson
 import com.outsystems.plugins.healthfitness.store.AdvancedQueryParameters
+import com.outsystems.plugins.healthfitness.store.HealthFitnessManager
 import com.outsystems.plugins.healthfitness.store.HealthStore
 import org.apache.cordova.*
 import org.json.JSONArray
@@ -30,7 +31,8 @@ class OSHealthFitness : CordovaImplementation() {
 
     override fun initialize(cordova: CordovaInterface, webView: CordovaWebView) {
         super.initialize(cordova, webView)
-        healthStore = HealthStore(this)
+        var manager: HealthFitnessManager = HealthFitnessManager(cordova.context)
+        healthStore = HealthStore(this, manager)
     }
 
 

@@ -3,8 +3,6 @@ package com.outsystems.plugins.healthfitness.store
 import android.app.Activity
 import android.content.Context
 import android.util.Log
-import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.fitness.Fitness
 import com.google.android.gms.fitness.FitnessOptions
 import com.google.android.gms.fitness.data.*
@@ -14,7 +12,6 @@ import com.google.android.gms.fitness.result.DataReadResponse
 import com.google.gson.Gson
 import com.outsystems.plugins.healthfitness.AndroidPlatformInterface
 import com.outsystems.plugins.healthfitness.HealthFitnessError
-import com.outsystems.plugins.healthfitness.OSHealthFitness
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.TimeUnit
@@ -49,12 +46,12 @@ enum class EnumTimeUnit(val value : Pair<String, TimeUnit>) {
     YEAR(Pair("YEAR", TimeUnit.DAYS))
 }
 
-class HealthStore(val platformInterface: AndroidPlatformInterface) {
+class HealthStore(val platformInterface: AndroidPlatformInterface, val manager: HealthFitnessManagerInterface) {
     var context: Context = platformInterface.getContext()
     var activity: Activity = platformInterface.getActivity()
 
     private var fitnessOptions: FitnessOptions? = null
-    private var account: GoogleSignInAccount? = null
+    //private var account: GoogleSignInAccount? = null
     private val gson: Gson by lazy { Gson() }
 
     private val fitnessVariablesMap: Map<String, GoogleFitVariable> by lazy {
@@ -250,7 +247,8 @@ class HealthStore(val platformInterface: AndroidPlatformInterface) {
         }
 
         fitnessOptions = createFitnessOptions(permissionList)
-        account = GoogleSignIn.getAccountForExtension(context, fitnessOptions!!)
+        manager.createAccount(context, fitnessOptions!!)
+        //account = GoogleSignIn.getAccountForExtension(context, fitnessOptions!!)
     }
 
     private fun createPermissionsForVariableGroup(
@@ -356,31 +354,18 @@ class HealthStore(val platformInterface: AndroidPlatformInterface) {
     }
 
     fun requestGoogleFitPermissions() {
-        if(areGoogleFitPermissionsGranted(account, fitnessOptions)){
+        if(manager.areGoogleFitPermissionsGranted(fitnessOptions)){
             platformInterface.sendPluginResult("success")
         }
         else{
             fitnessOptions?.let {
-                GoogleSignIn.requestPermissions(
-                    platformInterface.getActivity(),
-                    OSHealthFitness.GOOGLE_FIT_PERMISSIONS_REQUEST_CODE,
-                    account,
-                    it
-                )
+                manager.requestPermissions(platformInterface.getActivity(), it)
             }
         }
     }
 
-    fun areGoogleFitPermissionsGranted(): Boolean {
-        return areGoogleFitPermissionsGranted(account, fitnessOptions);
-    }
-
-    private fun areGoogleFitPermissionsGranted(account : GoogleSignInAccount?, options: FitnessOptions?): Boolean {
-        account.let {
-            options.let {
-                return GoogleSignIn.hasPermissions(account, options)
-            }
-        }
+    fun areGoogleFitPermissionsGranted(): Boolean{
+        return manager.areGoogleFitPermissionsGranted(fitnessOptions)
     }
 
     fun updateData(variableName: String, value: Float) {
@@ -394,10 +379,10 @@ class HealthStore(val platformInterface: AndroidPlatformInterface) {
             return
         }
 
-        val lastAccount = GoogleSignIn.getLastSignedInAccount(context)
+        //val lastAccount = GoogleSignIn.getLastSignedInAccount(context)
         val permissions = createPermissionsForVariable(variable, EnumAccessType.WRITE.value)
         val options = createFitnessOptions(permissions)
-        if(!areGoogleFitPermissionsGranted(lastAccount, options)) {
+        if(!manager.areGoogleFitPermissionsGranted(options)) {
             platformInterface.sendPluginResult(
                 null,
                 Pair(HealthFitnessError.VARIABLE_NOT_AUTHORIZED_ERROR.code, HealthFitnessError.VARIABLE_NOT_AUTHORIZED_ERROR.message))
@@ -442,23 +427,21 @@ class HealthStore(val platformInterface: AndroidPlatformInterface) {
             platformInterface.sendPluginResult(null, Pair(HealthFitnessError.WRITE_VALUE_OUT_OF_RANGE_ERROR.code, HealthFitnessError.WRITE_VALUE_OUT_OF_RANGE_ERROR.message))
         }
 
-        Fitness.getHistoryClient(
-                activity,
-                lastAccount
-        )
-                .insertData(dataSet)
-                .addOnSuccessListener {
-                    Log.i("Access GoogleFit:", "DataSet updated successfully!")
-                    platformInterface.sendPluginResult("success", null)
-                }
-                .addOnFailureListener { e ->
-                    Log.w("Access GoogleFit:", "There was an error updating the DataSet", e)
-                    //In this case, what is the error we want to send in the callback?
-                    //We could identify the exception that is thrown and send an error accordingly?
-                    //Maybe catch that com.google.android.gms.common.api.ApiException: 4: The user must be signed in to make this API call.
-                    //For now we will send a generic error message
-                    platformInterface.sendPluginResult(null, Pair(HealthFitnessError.WRITE_DATA_ERROR.code, HealthFitnessError.WRITE_DATA_ERROR.message))
-                }
+        manager.updateDataOnStore(activity, dataSet,
+            {
+                Log.i("Access GoogleFit:", "DataSet updated successfully!")
+                platformInterface.sendPluginResult("success", null)
+            }
+        ) { e ->
+            Log.w("Access GoogleFit:", "There was an error updating the DataSet", e)
+            platformInterface.sendPluginResult(
+                null,
+                Pair(
+                    HealthFitnessError.WRITE_DATA_ERROR.code,
+                    HealthFitnessError.WRITE_DATA_ERROR.message
+                )
+            )
+        }
     }
 
     fun getLastRecord(variable: String) {
@@ -496,10 +479,10 @@ class HealthStore(val platformInterface: AndroidPlatformInterface) {
             return
         }
 
-        val lastAccount = GoogleSignIn.getLastSignedInAccount(context)
+        //val lastAccount = GoogleSignIn.getLastSignedInAccount(context)
         val permissions = createPermissionsForVariable(variable, EnumAccessType.READ.value)
         val options = createFitnessOptions(permissions)
-        if(!areGoogleFitPermissionsGranted(lastAccount, options)) {
+        if(!manager.areGoogleFitPermissionsGranted(options)) {
             platformInterface.sendPluginResult(
                 null,
                 Pair(HealthFitnessError.VARIABLE_NOT_AUTHORIZED_ERROR.code, HealthFitnessError.VARIABLE_NOT_AUTHORIZED_ERROR.message))
@@ -512,55 +495,53 @@ class HealthStore(val platformInterface: AndroidPlatformInterface) {
         queryInformation.setTimeUnitGrouping(parameters.timeUnitLength)
         queryInformation.setLimit(parameters.limit)
 
-        val fitnessRequest = queryInformation.getDataReadRequest()
-        Fitness.getHistoryClient(context, lastAccount)
-            .readData(fitnessRequest)
-            .addOnSuccessListener { dataReadResponse: DataReadResponse ->
+        manager.getDataFromStore(activity, queryInformation, {
 
-                val queryResponse: AdvancedQueryResponse
+            dataReadResponse: DataReadResponse ->
 
-                if(queryInformation.isSingleResult()) {
+            val queryResponse: AdvancedQueryResponse
 
-                    val values = mutableListOf<Float>()
-                    variable.fields.forEach { field ->
-                        dataReadResponse.dataSets
-                            .flatMap { it.dataPoints }
-                            .forEach { dataPoint ->
-                                values.add(dataPoint.getValue(field).toString().toFloat())
-                            }
-                    }
+            if(queryInformation.isSingleResult()) {
 
-                    val responseBlock = AdvancedQueryResponseBlock(
-                        0,
-                        startDate.time / 1000,
-                        endDate.time / 1000,
-                        values
-                    )
-                    queryResponse = AdvancedQueryResponse(listOf(responseBlock))
-                }
-                else {
-                    val resultBuckets = queryInformation.processBuckets(dataReadResponse.buckets)
-                    queryResponse = buildAdvancedQueryResult(resultBuckets)
-                }
-
-                if(parameters.variable == "HEIGHT"){
-                    queryResponse.results.forEach{ bucket ->
-                        for (i in bucket.values.indices){
-                            bucket.values[i] = bucket.values[i] * 100
+                val values = mutableListOf<Float>()
+                variable.fields.forEach { field ->
+                    dataReadResponse.dataSets
+                        .flatMap { it.dataPoints }
+                        .forEach { dataPoint ->
+                            values.add(dataPoint.getValue(field).toString().toFloat())
                         }
-                    }
                 }
 
-                val pluginResponseJson = gson.toJson(queryResponse)
-                Log.d("STORE", "Response $pluginResponseJson")
-                platformInterface.sendPluginResult(pluginResponseJson)
+                val responseBlock = AdvancedQueryResponseBlock(
+                    0,
+                    startDate.time / 1000,
+                    endDate.time / 1000,
+                    values
+                )
+                queryResponse = AdvancedQueryResponse(listOf(responseBlock))
+            }
+            else {
+                val resultBuckets = queryInformation.processBuckets(dataReadResponse.buckets)
+                queryResponse = buildAdvancedQueryResult(resultBuckets)
+            }
 
+            if(parameters.variable == "HEIGHT"){
+                queryResponse.results.forEach{ bucket ->
+                    for (i in bucket.values.indices){
+                        bucket.values[i] = bucket.values[i] * 100
+                    }
+                }
             }
-            .addOnFailureListener { dataReadResponse: Exception ->
+
+            val pluginResponseJson = gson.toJson(queryResponse)
+            Log.d("STORE", "Response $pluginResponseJson")
+            platformInterface.sendPluginResult(pluginResponseJson)
+        }, {
+                dataReadResponse: Exception ->
                 platformInterface.sendPluginResult(
-                    null,
+                null,
                     Pair(HealthFitnessError.READ_DATA_ERROR.code, HealthFitnessError.READ_DATA_ERROR.message))
-            }
+        })
     }
 
     private fun buildAdvancedQueryResult(resultBuckets : List<ProcessedBucket>) : AdvancedQueryResponse {
