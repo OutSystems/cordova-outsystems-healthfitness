@@ -3,12 +3,10 @@ package com.outsystems.plugins.healthfitness.store
 import android.app.Activity
 import android.content.Context
 import android.util.Log
-import com.google.android.gms.fitness.Fitness
 import com.google.android.gms.fitness.FitnessOptions
 import com.google.android.gms.fitness.data.*
 import com.google.android.gms.fitness.data.DataPoint
 import com.google.android.gms.fitness.data.DataSet
-import com.google.android.gms.fitness.result.DataReadResponse
 import com.google.gson.Gson
 import com.outsystems.plugins.healthfitness.AndroidPlatformInterface
 import com.outsystems.plugins.healthfitness.HealthFitnessError
@@ -59,39 +57,39 @@ class HealthStore(val platformInterface: AndroidPlatformInterface, val manager: 
             "STEPS" to GoogleFitVariable(DataType.TYPE_STEP_COUNT_DELTA, listOf(
                 Field.FIELD_STEPS
             ),
-            listOf(
-                EnumOperationType.RAW.value,
-                EnumOperationType.AVERAGE.value,
-                EnumOperationType.SUM.value,
-                EnumOperationType.MAX.value,
-                EnumOperationType.MIN.value
-            )),
+                listOf(
+                    EnumOperationType.RAW.value,
+                    EnumOperationType.AVERAGE.value,
+                    EnumOperationType.SUM.value,
+                    EnumOperationType.MAX.value,
+                    EnumOperationType.MIN.value
+                )),
             "CALORIES_BURNED" to GoogleFitVariable(DataType.TYPE_CALORIES_EXPENDED, listOf(
                 Field.FIELD_CALORIES
             ),
-            listOf(
-                EnumOperationType.RAW.value,
-                EnumOperationType.AVERAGE.value,
-                EnumOperationType.SUM.value,
-                EnumOperationType.MAX.value,
-                EnumOperationType.MIN.value
-            )),
+                listOf(
+                    EnumOperationType.RAW.value,
+                    EnumOperationType.AVERAGE.value,
+                    EnumOperationType.SUM.value,
+                    EnumOperationType.MAX.value,
+                    EnumOperationType.MIN.value
+                )),
             "PUSH_COUNT" to GoogleFitVariable(DataType.TYPE_ACTIVITY_SEGMENT, listOf(
                 //TODO: possible different from iOS
             ),
-            listOf(
+                listOf(
 
-            )),
+                )),
             "MOVE_MINUTES" to GoogleFitVariable(DataType.TYPE_MOVE_MINUTES, listOf(
                 Field.FIELD_DURATION
             ),
-            listOf(
-                EnumOperationType.RAW.value,
-                EnumOperationType.AVERAGE.value,
-                EnumOperationType.SUM.value,
-                EnumOperationType.MAX.value,
-                EnumOperationType.MIN.value
-            ))
+                listOf(
+                    EnumOperationType.RAW.value,
+                    EnumOperationType.AVERAGE.value,
+                    EnumOperationType.SUM.value,
+                    EnumOperationType.MAX.value,
+                    EnumOperationType.MIN.value
+                ))
         )
     }
     private val healthVariablesMap: Map<String, GoogleFitVariable> by lazy {
@@ -99,50 +97,50 @@ class HealthStore(val platformInterface: AndroidPlatformInterface, val manager: 
             "HEART_RATE" to GoogleFitVariable(DataType.TYPE_HEART_RATE_BPM, listOf(
                 Field.FIELD_BPM
             ),
-            listOf(
-                EnumOperationType.RAW.value
-            )),
+                listOf(
+                    EnumOperationType.RAW.value
+                )),
             "SLEEP" to GoogleFitVariable(DataType.TYPE_SLEEP_SEGMENT, listOf(
                 Field.FIELD_SLEEP_SEGMENT_TYPE
             ),
-            listOf(
-                EnumOperationType.RAW.value,
-                EnumOperationType.AVERAGE.value,
-                EnumOperationType.MAX.value,
-                EnumOperationType.MIN.value
-            )),
+                listOf(
+                    EnumOperationType.RAW.value,
+                    EnumOperationType.AVERAGE.value,
+                    EnumOperationType.MAX.value,
+                    EnumOperationType.MIN.value
+                )),
             "BLOOD_GLUCOSE" to GoogleFitVariable(HealthDataTypes.TYPE_BLOOD_GLUCOSE, listOf(
                 HealthFields.FIELD_BLOOD_GLUCOSE_LEVEL
             ),
-            listOf(
-                EnumOperationType.RAW.value,
-                EnumOperationType.AVERAGE.value,
-                EnumOperationType.MAX.value,
-                EnumOperationType.MIN.value
-            )),
+                listOf(
+                    EnumOperationType.RAW.value,
+                    EnumOperationType.AVERAGE.value,
+                    EnumOperationType.MAX.value,
+                    EnumOperationType.MIN.value
+                )),
             "BLOOD_PRESSURE" to GoogleFitVariable(HealthDataTypes.TYPE_BLOOD_PRESSURE, listOf(
                 HealthFields.FIELD_BLOOD_PRESSURE_SYSTOLIC,
                 HealthFields.FIELD_BLOOD_PRESSURE_DIASTOLIC
             ),
-            listOf(
-                EnumOperationType.RAW.value
-            )),
+                listOf(
+                    EnumOperationType.RAW.value
+                )),
             "HYDRATION" to GoogleFitVariable(DataType.TYPE_HYDRATION, listOf(
                 Field.FIELD_VOLUME
             ),
-            listOf(
-                EnumOperationType.RAW.value,
-                EnumOperationType.SUM.value,
-                EnumOperationType.AVERAGE.value,
-                EnumOperationType.MAX.value,
-                EnumOperationType.MIN.value
-            )),
+                listOf(
+                    EnumOperationType.RAW.value,
+                    EnumOperationType.SUM.value,
+                    EnumOperationType.AVERAGE.value,
+                    EnumOperationType.MAX.value,
+                    EnumOperationType.MIN.value
+                )),
             "NUTRITION" to GoogleFitVariable(DataType.TYPE_NUTRITION, listOf(
                 //TODO: possible different from iOS
             ),
-            listOf(
+                listOf(
 
-            ))
+                ))
         )
     }
     private val profileVariablesMap: Map<String, GoogleFitVariable> by lazy {
@@ -150,39 +148,39 @@ class HealthStore(val platformInterface: AndroidPlatformInterface, val manager: 
             "HEIGHT" to GoogleFitVariable(DataType.TYPE_HEIGHT, listOf(
                 Field.FIELD_HEIGHT
             ),
-            listOf(
-                EnumOperationType.RAW.value,
-                EnumOperationType.AVERAGE.value,
-                EnumOperationType.MAX.value,
-                EnumOperationType.MIN.value
-            )),
+                listOf(
+                    EnumOperationType.RAW.value,
+                    EnumOperationType.AVERAGE.value,
+                    EnumOperationType.MAX.value,
+                    EnumOperationType.MIN.value
+                )),
             "WEIGHT" to GoogleFitVariable(DataType.TYPE_WEIGHT, listOf(
                 Field.FIELD_WEIGHT
             ),
-            listOf(
-                EnumOperationType.RAW.value,
-                EnumOperationType.AVERAGE.value,
-                EnumOperationType.MAX.value,
-                EnumOperationType.MIN.value
-            )),
+                listOf(
+                    EnumOperationType.RAW.value,
+                    EnumOperationType.AVERAGE.value,
+                    EnumOperationType.MAX.value,
+                    EnumOperationType.MIN.value
+                )),
             "BODY_FAT_PERCENTAGE" to GoogleFitVariable(DataType.TYPE_BODY_FAT_PERCENTAGE, listOf(
                 Field.FIELD_PERCENTAGE
             ),
-            listOf(
-                EnumOperationType.RAW.value,
-                EnumOperationType.AVERAGE.value,
-                EnumOperationType.MAX.value,
-                EnumOperationType.MIN.value
-            )),
+                listOf(
+                    EnumOperationType.RAW.value,
+                    EnumOperationType.AVERAGE.value,
+                    EnumOperationType.MAX.value,
+                    EnumOperationType.MIN.value
+                )),
             "BASAL_METABOLIC_RATE" to GoogleFitVariable(DataType.TYPE_BASAL_METABOLIC_RATE, listOf(
                 Field.FIELD_CALORIES
             ),
-            listOf(
-                EnumOperationType.RAW.value,
-                EnumOperationType.AVERAGE.value,
-                EnumOperationType.MAX.value,
-                EnumOperationType.MIN.value
-            ))
+                listOf(
+                    EnumOperationType.RAW.value,
+                    EnumOperationType.AVERAGE.value,
+                    EnumOperationType.MAX.value,
+                    EnumOperationType.MIN.value
+                ))
         )
     }
     private val summaryVariablesMap: Map<String, GoogleFitVariable> by lazy {
@@ -394,14 +392,14 @@ class HealthStore(val platformInterface: AndroidPlatformInterface, val manager: 
 
         //insert the data
         val dataSourceWrite = DataSource.Builder()
-                .setAppPackageName(context)
-                .setDataType(variable.dataType)
-                .setType(DataSource.TYPE_RAW)
-                .build()
+            .setAppPackageName(context)
+            .setDataType(variable.dataType)
+            .setType(DataSource.TYPE_RAW)
+            .build()
 
         val timestamp = System.currentTimeMillis()
         var valueToWrite : DataPoint? = null
-        
+
         //if the value to write is height, then we need to convert the value to meters
         valueToWrite = if(variableName == "HEIGHT"){
             val convertedValue = value / 100
@@ -409,7 +407,8 @@ class HealthStore(val platformInterface: AndroidPlatformInterface, val manager: 
                 .setTimestamp(timestamp, TimeUnit.MILLISECONDS)
                 .setField(fieldType, convertedValue)
                 .build()
-        } else{
+        }
+        else {
             DataPoint.builder(dataSourceWrite)
                 .setTimestamp(timestamp, TimeUnit.MILLISECONDS)
                 .setField(fieldType, value)
@@ -422,7 +421,8 @@ class HealthStore(val platformInterface: AndroidPlatformInterface, val manager: 
             dataSet = DataSet.builder(dataSourceWrite)
                 .add(valueToWrite)
                 .build()
-        }catch (e : IllegalArgumentException){
+        }
+        catch (e : IllegalArgumentException){
             Log.w("Write to GoogleFit:", "Field out of range", e)
             platformInterface.sendPluginResult(null, Pair(HealthFitnessError.WRITE_VALUE_OUT_OF_RANGE_ERROR.code, HealthFitnessError.WRITE_VALUE_OUT_OF_RANGE_ERROR.message))
         }
@@ -431,17 +431,18 @@ class HealthStore(val platformInterface: AndroidPlatformInterface, val manager: 
             {
                 Log.i("Access GoogleFit:", "DataSet updated successfully!")
                 platformInterface.sendPluginResult("success", null)
-            }
-        ) { e ->
-            Log.w("Access GoogleFit:", "There was an error updating the DataSet", e)
-            platformInterface.sendPluginResult(
-                null,
-                Pair(
-                    HealthFitnessError.WRITE_DATA_ERROR.code,
-                    HealthFitnessError.WRITE_DATA_ERROR.message
+            },
+            { e ->
+                Log.w("Access GoogleFit:", "There was an error updating the DataSet", e)
+                platformInterface.sendPluginResult(
+                    null,
+                    Pair(
+                        HealthFitnessError.WRITE_DATA_ERROR.code,
+                        HealthFitnessError.WRITE_DATA_ERROR.message
+                    )
                 )
-            )
-        }
+            }
+        )
     }
 
     fun getLastRecord(variable: String) {
@@ -479,7 +480,6 @@ class HealthStore(val platformInterface: AndroidPlatformInterface, val manager: 
             return
         }
 
-        //val lastAccount = GoogleSignIn.getLastSignedInAccount(context)
         val permissions = createPermissionsForVariable(variable, EnumAccessType.READ.value)
         val options = createFitnessOptions(permissions)
         if(!manager.areGoogleFitPermissionsGranted(options)) {
@@ -495,61 +495,60 @@ class HealthStore(val platformInterface: AndroidPlatformInterface, val manager: 
         queryInformation.setTimeUnitGrouping(parameters.timeUnitLength)
         queryInformation.setLimit(parameters.limit)
 
-        manager.getDataFromStore(activity, queryInformation, {
+        manager.getDataFromStore(activity, queryInformation,
+            { dataReadResponse ->
+                val queryResponse: AdvancedQueryResponse
 
-            dataReadResponse: DataReadResponse ->
+                if(queryInformation.isSingleResult()) {
 
-            val queryResponse: AdvancedQueryResponse
+                    val values = mutableListOf<Float>()
+                    variable.fields.forEach { field ->
+                        dataReadResponse.dataSets
+                            .flatMap { it.dataPoints }
+                            .forEach { dataPoint ->
+                                values.add(dataPoint.getValue(field).toString().toFloat())
+                            }
+                    }
 
-            if(queryInformation.isSingleResult()) {
-
-                val values = mutableListOf<Float>()
-                variable.fields.forEach { field ->
-                    dataReadResponse.dataSets
-                        .flatMap { it.dataPoints }
-                        .forEach { dataPoint ->
-                            values.add(dataPoint.getValue(field).toString().toFloat())
-                        }
+                    val responseBlock = AdvancedQueryResponseBlock(
+                        0,
+                        startDate.time / 1000,
+                        endDate.time / 1000,
+                        values
+                    )
+                    queryResponse = AdvancedQueryResponse(listOf(responseBlock))
+                }
+                else {
+                    val resultBuckets = queryInformation.processBuckets(dataReadResponse.buckets)
+                    queryResponse = buildAdvancedQueryResult(resultBuckets)
                 }
 
-                val responseBlock = AdvancedQueryResponseBlock(
-                    0,
-                    startDate.time / 1000,
-                    endDate.time / 1000,
-                    values
-                )
-                queryResponse = AdvancedQueryResponse(listOf(responseBlock))
-            }
-            else {
-                val resultBuckets = queryInformation.processBuckets(dataReadResponse.buckets)
-                queryResponse = buildAdvancedQueryResult(resultBuckets)
-            }
-
-            if(parameters.variable == "HEIGHT"){
-                queryResponse.results.forEach{ bucket ->
-                    for (i in bucket.values.indices){
-                        bucket.values[i] = bucket.values[i] * 100
+                if(parameters.variable == "HEIGHT"){
+                    queryResponse.results.forEach{ bucket ->
+                        for (i in bucket.values.indices){
+                            bucket.values[i] = bucket.values[i] * 100
+                        }
                     }
                 }
-            }
 
-            val pluginResponseJson = gson.toJson(queryResponse)
-            Log.d("STORE", "Response $pluginResponseJson")
-            platformInterface.sendPluginResult(pluginResponseJson)
-        }, {
-                dataReadResponse: Exception ->
+                val pluginResponseJson = gson.toJson(queryResponse)
+                Log.d("STORE", "Response $pluginResponseJson")
+                platformInterface.sendPluginResult(pluginResponseJson)
+
+            },
+            { e ->
                 platformInterface.sendPluginResult(
-                null,
-                    Pair(HealthFitnessError.READ_DATA_ERROR.code, HealthFitnessError.READ_DATA_ERROR.message))
-        })
+                    null,
+                    Pair(HealthFitnessError.READ_DATA_ERROR.code,
+                        HealthFitnessError.READ_DATA_ERROR.message)
+                )
+            }
+        )
     }
 
-    private fun buildAdvancedQueryResult(resultBuckets : List<ProcessedBucket>) : AdvancedQueryResponse {
-
-        val format = SimpleDateFormat("yyyy.MM.dd HH:mm")
-        var block = 0
-        val blockList : MutableList<AdvancedQueryResponseBlock> = mutableListOf()
-        for(bucket in resultBuckets) {
+    private fun buildAdvancedQueryResult(resultBuckets: List<ProcessedBucket>): AdvancedQueryResponse {
+        val blockList: MutableList<AdvancedQueryResponseBlock> = mutableListOf()
+        for ((block, bucket) in resultBuckets.withIndex()) {
             blockList.add(
                 AdvancedQueryResponseBlock(
                     block,
@@ -558,10 +557,8 @@ class HealthStore(val platformInterface: AndroidPlatformInterface, val manager: 
                     bucket.processedDataPoints
                 )
             )
-            block++
         }
-        var result = AdvancedQueryResponse(blockList)
-        return result
+        return AdvancedQueryResponse(blockList)
     }
 
 }

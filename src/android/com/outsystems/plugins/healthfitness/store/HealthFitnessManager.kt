@@ -14,9 +14,6 @@ import java.lang.Exception
 
 class HealthFitnessManager(val context: Context): HealthFitnessManagerInterface {
 
-    //private var account: GoogleSignInAccount? = null
-
-
     override fun createAccount(context: Context, options: FitnessOptions){
         GoogleSignIn.getAccountForExtension(context, options!!)
     }
@@ -34,13 +31,13 @@ class HealthFitnessManager(val context: Context): HealthFitnessManagerInterface 
         )
     }
 
-    override fun updateDataOnStore(activity: Activity, dataSet: DataSet?, onSuccess: (Void) -> Unit, onFailure: (Exception) -> Unit){
+    override fun updateDataOnStore(activity: Activity, dataSet: DataSet?, onSuccess: () -> Unit, onFailure: (Exception) -> Unit){
         Fitness.getHistoryClient(
             activity,
             getLastAccount()
         )
             .insertData(dataSet)
-            .addOnSuccessListener(onSuccess)
+            .addOnSuccessListener { onSuccess() }
             .addOnFailureListener(onFailure)
     }
 
@@ -51,7 +48,6 @@ class HealthFitnessManager(val context: Context): HealthFitnessManagerInterface 
             .addOnSuccessListener(onSuccess)
             .addOnFailureListener(onFailure)
     }
-
 
     private fun areGoogleFitPermissionsGranted(account : GoogleSignInAccount?, options: FitnessOptions?): Boolean {
         account.let {
@@ -64,6 +60,5 @@ class HealthFitnessManager(val context: Context): HealthFitnessManagerInterface 
     private fun getLastAccount(): GoogleSignInAccount? {
         return GoogleSignIn.getLastSignedInAccount(context)
     }
-
 
 }
