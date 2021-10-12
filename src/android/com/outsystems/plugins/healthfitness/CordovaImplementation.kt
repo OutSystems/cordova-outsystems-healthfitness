@@ -7,7 +7,7 @@ import org.apache.cordova.*
 import org.json.JSONArray
 import org.json.JSONObject
 
-abstract  class CordovaImplementation : CordovaPlugin(), AndroidPlatformInterface {
+abstract class CordovaImplementation : CordovaPlugin(), AndroidPlatformInterface {
 
     abstract var callbackContext: CallbackContext?
 

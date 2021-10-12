@@ -1,12 +1,17 @@
 package com.outsystems.plugins.healthfitness
 
+import com.outsystems.plugins.healthfitness.store.HealthStore
 import org.junit.Test
 
 class RequestPermissionsTest {
 
     @Test
     fun given_InvalidVariable_When_RequestingPermissions_Then_VariableNotAvailableError() {
-        //TODO
+        val platformInterfaceMock = AndroidInterfaceMock()
+        val googleFitMock = HealthFitnessManagerMock()
+        val store = HealthStore(platformInterfaceMock, googleFitMock)
+
+        //store.initAndRequestPermissions()
     }
 
     @Test

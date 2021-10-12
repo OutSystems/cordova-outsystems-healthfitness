@@ -44,7 +44,10 @@ enum class EnumTimeUnit(val value : Pair<String, TimeUnit>) {
     YEAR(Pair("YEAR", TimeUnit.DAYS))
 }
 
-class HealthStore(val platformInterface: AndroidPlatformInterface, val manager: HealthFitnessManagerInterface) {
+class HealthStore(
+    private val platformInterface: AndroidPlatformInterface,
+    private val manager: HealthFitnessManagerInterface) {
+
     var context: Context = platformInterface.getContext()
     var activity: Activity = platformInterface.getActivity()
 
@@ -352,7 +355,7 @@ class HealthStore(val platformInterface: AndroidPlatformInterface, val manager: 
     }
 
     fun requestGoogleFitPermissions() {
-        if(manager.areGoogleFitPermissionsGranted(fitnessOptions)){
+        if(manager.areGoogleFitPermissionsGranted(activity, fitnessOptions)){
             platformInterface.sendPluginResult("success")
         }
         else{
@@ -363,7 +366,7 @@ class HealthStore(val platformInterface: AndroidPlatformInterface, val manager: 
     }
 
     fun areGoogleFitPermissionsGranted(): Boolean{
-        return manager.areGoogleFitPermissionsGranted(fitnessOptions)
+        return manager.areGoogleFitPermissionsGranted(activity, fitnessOptions)
     }
 
     fun updateData(variableName: String, value: Float) {
@@ -380,7 +383,7 @@ class HealthStore(val platformInterface: AndroidPlatformInterface, val manager: 
         //val lastAccount = GoogleSignIn.getLastSignedInAccount(context)
         val permissions = createPermissionsForVariable(variable, EnumAccessType.WRITE.value)
         val options = createFitnessOptions(permissions)
-        if(!manager.areGoogleFitPermissionsGranted(options)) {
+        if(!manager.areGoogleFitPermissionsGranted(activity, options)) {
             platformInterface.sendPluginResult(
                 null,
                 Pair(HealthFitnessError.VARIABLE_NOT_AUTHORIZED_ERROR.code, HealthFitnessError.VARIABLE_NOT_AUTHORIZED_ERROR.message))
@@ -482,7 +485,7 @@ class HealthStore(val platformInterface: AndroidPlatformInterface, val manager: 
 
         val permissions = createPermissionsForVariable(variable, EnumAccessType.READ.value)
         val options = createFitnessOptions(permissions)
-        if(!manager.areGoogleFitPermissionsGranted(options)) {
+        if(!manager.areGoogleFitPermissionsGranted(activity, options)) {
             platformInterface.sendPluginResult(
                 null,
                 Pair(HealthFitnessError.VARIABLE_NOT_AUTHORIZED_ERROR.code, HealthFitnessError.VARIABLE_NOT_AUTHORIZED_ERROR.message))

@@ -5,6 +5,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.fitness.Fitness
 import com.google.android.gms.fitness.FitnessOptions
 import android.content.Context
+import androidx.core.content.ContextCompat
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.fitness.data.DataSet
 import com.google.android.gms.fitness.request.DataReadRequest
@@ -12,21 +13,21 @@ import com.google.android.gms.fitness.result.DataReadResponse
 import com.outsystems.plugins.healthfitness.OSHealthFitness
 import java.lang.Exception
 
-class HealthFitnessManager(val context: Context): HealthFitnessManagerInterface {
+class HealthFitnessManager: HealthFitnessManagerInterface {
 
     override fun createAccount(context: Context, options: FitnessOptions){
-        GoogleSignIn.getAccountForExtension(context, options!!)
+        GoogleSignIn.getAccountForExtension(context, options)
     }
 
-    override fun areGoogleFitPermissionsGranted(options: FitnessOptions?): Boolean {
-        return areGoogleFitPermissionsGranted(getLastAccount(), options)
+    override fun areGoogleFitPermissionsGranted(activity: Activity, options: FitnessOptions?): Boolean {
+        return areGoogleFitPermissionsGranted(getLastAccount(activity), options)
     }
 
     override fun requestPermissions(activity: Activity, fitnessOptions: FitnessOptions){
         GoogleSignIn.requestPermissions(
             activity,
             OSHealthFitness.GOOGLE_FIT_PERMISSIONS_REQUEST_CODE,
-            getLastAccount(),
+            getLastAccount(activity),
             fitnessOptions
         )
     }
@@ -34,7 +35,7 @@ class HealthFitnessManager(val context: Context): HealthFitnessManagerInterface 
     override fun updateDataOnStore(activity: Activity, dataSet: DataSet?, onSuccess: () -> Unit, onFailure: (Exception) -> Unit){
         Fitness.getHistoryClient(
             activity,
-            getLastAccount()
+            getLastAccount(activity)
         )
             .insertData(dataSet)
             .addOnSuccessListener { onSuccess() }
@@ -43,7 +44,7 @@ class HealthFitnessManager(val context: Context): HealthFitnessManagerInterface 
 
     override fun getDataFromStore(activity: Activity, queryInformation: AdvancedQuery, onSuccess: (DataReadResponse) -> Unit, onFailure: (Exception) -> Unit){
         val fitnessRequest = queryInformation.getDataReadRequest()
-        Fitness.getHistoryClient(context, getLastAccount())
+        Fitness.getHistoryClient(activity, getLastAccount(activity))
             .readData(fitnessRequest)
             .addOnSuccessListener(onSuccess)
             .addOnFailureListener(onFailure)
@@ -57,8 +58,8 @@ class HealthFitnessManager(val context: Context): HealthFitnessManagerInterface 
         }
     }
 
-    private fun getLastAccount(): GoogleSignInAccount? {
-        return GoogleSignIn.getLastSignedInAccount(context)
+    private fun getLastAccount(activity: Activity): GoogleSignInAccount? {
+        return GoogleSignIn.getLastSignedInAccount(activity)
     }
 
 }
