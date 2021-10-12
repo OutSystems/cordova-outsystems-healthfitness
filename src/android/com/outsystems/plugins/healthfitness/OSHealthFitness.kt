@@ -31,7 +31,7 @@ class OSHealthFitness : CordovaImplementation() {
 
     override fun initialize(cordova: CordovaInterface, webView: CordovaWebView) {
         super.initialize(cordova, webView)
-        var manager: HealthFitnessManager = HealthFitnessManager(cordova.context)
+        var manager: HealthFitnessManager = HealthFitnessManager()
         healthStore = HealthStore(this, manager)
     }
 

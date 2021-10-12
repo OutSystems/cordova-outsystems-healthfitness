@@ -2,16 +2,19 @@ package com.outsystems.plugins.healthfitness
 
 import android.app.Activity
 import android.content.Context
+import androidx.test.core.app.ApplicationProvider
 import org.apache.cordova.CallbackContext
 
-class AndroidInterfaceMock : AndroidPlatformInterface {
+class AndroidPlatformMock : AndroidPlatformInterface {
+
+    var sendPluginResultCompletion: ((resultVariable: String, error: Pair<Int, String>?) -> Unit)? = null
 
     override fun getContext(): Context {
-        TODO("Not yet implemented")
+        return ApplicationProvider.getApplicationContext<Context>()
     }
 
     override fun getActivity(): Activity {
-        TODO("Not yet implemented")
+        return ApplicationProvider.getApplicationContext<Activity>()
     }
 
     override fun onRequestPermissionResult(
@@ -23,7 +26,7 @@ class AndroidInterfaceMock : AndroidPlatformInterface {
     }
 
     override fun <T> sendPluginResult(resultVariable: T, error: Pair<Int, String>?) {
-        TODO("Not yet implemented")
+        sendPluginResultCompletion?.let { it(resultVariable.toString(), error) }
     }
 
     override fun areGooglePlayServicesAvailable(callbackContext: CallbackContext): Boolean {

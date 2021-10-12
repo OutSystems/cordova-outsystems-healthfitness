@@ -7,7 +7,7 @@ class RequestPermissionsTest {
 
     @Test
     fun given_InvalidVariable_When_RequestingPermissions_Then_VariableNotAvailableError() {
-        val platformInterfaceMock = AndroidInterfaceMock()
+        val platformInterfaceMock = AndroidPlatformMock()
         val googleFitMock = HealthFitnessManagerMock()
         val store = HealthStore(platformInterfaceMock, googleFitMock)
 
