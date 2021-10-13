@@ -12,6 +12,7 @@ import java.lang.Exception
 class HealthFitnessManagerMock: HealthFitnessManagerInterface {
 
     var permissionsGranted : Boolean = true
+    var updateSuccess : Boolean = true
 
     override fun createAccount(options: FitnessOptions) {
         TODO("Not yet implemented")
@@ -26,7 +27,12 @@ class HealthFitnessManagerMock: HealthFitnessManagerInterface {
     }
 
     override fun updateDataOnStore(dataSet: DataSet?, onSuccess: () -> Unit, onFailure: (Exception) -> Unit) {
-        TODO("Not yet implemented")
+        if(updateSuccess){
+            onSuccess()
+        }
+        else{
+            onFailure(Exception())
+        }
     }
 
     override fun getDataFromStore(queryInformation: AdvancedQuery, onSuccess: (DataReadResponse) -> Unit, onFailure: (Exception) -> Unit) {

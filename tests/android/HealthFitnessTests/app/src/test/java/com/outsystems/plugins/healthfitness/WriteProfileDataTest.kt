@@ -64,7 +64,22 @@ class WriteProfileDataTest {
 
     @Test
     fun given_ValidVariableValidValue_When_WritingData_Then_Success() {
-        TODO("Not yet implemented")
+        val platformInterfaceMock = AndroidPlatformMock()
+        platformInterfaceMock.sendPluginResultCompletion = { result, error ->
+            Assert.assertEquals(result, "success")
+        }
+
+        val googleFitMock = HealthFitnessManagerMock()
+        val store = HealthStore(platformInterfaceMock, googleFitMock)
+
+        googleFitMock.permissionsGranted = true
+
+        store.updateData("HEIGHT", 170F)
+    }
+
+    @Test
+    fun given_ValidVariableValidValue_When_WritingData_Then_SomeError() {
+        
     }
 
 }
