@@ -214,7 +214,7 @@ class AdvancedQuery(
         return buckets
     }
 
-    private open class BucketProcessor (val queryStartDate : Long, val queryEndDate : Long) {
+    open class BucketProcessor (val queryStartDate : Long, val queryEndDate : Long) {
         open fun process(buckets : List<Bucket>) : List<ProcessedBucket> {
             val format = SimpleDateFormat("yyyy.MM.dd HH:mm")
             val processedBuckets : MutableList<ProcessedBucket> = mutableListOf()

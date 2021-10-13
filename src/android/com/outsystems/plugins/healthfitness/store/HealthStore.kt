@@ -7,9 +7,12 @@ import com.google.android.gms.fitness.FitnessOptions
 import com.google.android.gms.fitness.data.*
 import com.google.android.gms.fitness.data.DataPoint
 import com.google.android.gms.fitness.data.DataSet
+import com.google.android.gms.fitness.result.DataReadResponse
+import com.google.android.gms.fitness.result.DataReadResult
 import com.google.gson.Gson
 import com.outsystems.plugins.healthfitness.AndroidPlatformInterface
 import com.outsystems.plugins.healthfitness.HealthFitnessError
+import java.lang.NullPointerException
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.TimeUnit
@@ -497,17 +500,24 @@ class HealthStore(
 
         manager.getDataFromStore(queryInformation,
             { dataReadResponse ->
+
                 val queryResponse: AdvancedQueryResponse
 
                 if(queryInformation.isSingleResult()) {
 
                     val values = mutableListOf<Float>()
-                    variable.fields.forEach { field ->
-                        dataReadResponse.dataSets
-                            .flatMap { it.dataPoints }
-                            .forEach { dataPoint ->
-                                values.add(dataPoint.getValue(field).toString().toFloat())
-                            }
+
+                    try {
+                        variable.fields.forEach { field ->
+                            dataReadResponse.dataSets
+                                .flatMap { it.dataPoints }
+                                .forEach { dataPoint ->
+                                    values.add(dataPoint.getValue(field).toString().toFloat())
+                                }
+                        }
+                    }
+                    catch (_ : NullPointerException){
+
                     }
 
                     val responseBlock = AdvancedQueryResponseBlock(

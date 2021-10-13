@@ -1,5 +1,8 @@
 package com.outsystems.plugins.healthfitness
 
+import com.google.gson.Gson
+import com.outsystems.plugins.healthfitness.store.AdvancedQueryParameters
+import com.outsystems.plugins.healthfitness.store.AdvancedQueryResponse
 import com.outsystems.plugins.healthfitness.store.HealthStore
 import org.junit.Assert
 import org.junit.Test
@@ -62,6 +65,27 @@ class SimpleQueryTest {
 
         val googleFitMock = HealthFitnessManagerMock().apply {
             getDataSuccess = false
+        }
+
+        val store = HealthStore(platformInterfaceMock, googleFitMock)
+
+        store.getLastRecord("HEART_RATE")
+
+    }
+
+    @Test
+    fun given_ValidVariable_When_SimpleQuery_Then_Success(){
+
+        val platformInterfaceMock = AndroidPlatformMock().apply {
+            sendPluginResultCompletion = { result, _ ->
+                val response = Gson().fromJson(result, AdvancedQueryResponse::class.java)
+                Assert.assertTrue(response.results.isNotEmpty())
+                Assert.assertTrue(response.results[0].values.isEmpty())
+            }
+        }
+
+        val googleFitMock = HealthFitnessManagerMock().apply {
+            getDataSuccess = true
         }
 
         val store = HealthStore(platformInterfaceMock, googleFitMock)
