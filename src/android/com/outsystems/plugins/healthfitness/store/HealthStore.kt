@@ -517,19 +517,21 @@ class HealthStore(
                         }
                     }
                     catch (_ : NullPointerException){
-
+                        // Ignores. Should only happen in UnitTesting.
                     }
 
-                    val responseBlock = AdvancedQueryResponseBlock(
-                        0,
-                        startDate.time / 1000,
-                        endDate.time / 1000,
-                        values
-                    )
+                    val responseBlock =
+                        AdvancedQueryResponseBlock(0, startDate.time / 1000, endDate.time / 1000, values)
+
                     queryResponse = AdvancedQueryResponse(listOf(responseBlock))
                 }
                 else {
-                    val resultBuckets = queryInformation.processBuckets(dataReadResponse.buckets)
+                    val resultBuckets = try {
+                        queryInformation.processBuckets(dataReadResponse.buckets)
+                    } catch (_: NullPointerException) {
+                        listOf(ProcessedBucket(startDate.time, endDate.time))
+                    }
+
                     queryResponse = buildAdvancedQueryResult(resultBuckets)
                 }
 

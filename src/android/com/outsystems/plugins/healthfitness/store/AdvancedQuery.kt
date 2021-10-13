@@ -37,10 +37,10 @@ private val timeUnits: Map<String, EnumTimeUnit> by lazy {
 data class ProcessedBucket(
     val startDate : Long,
     var endDate : Long,
-    var dataPoints : MutableList<DataPoint>,
-    var processedDataPoints : MutableList<Float>,
-    var DEBUG_startDate : String,
-    var DEBUG_endDate : String
+    var dataPoints : MutableList<DataPoint> = mutableListOf(),
+    var processedDataPoints : MutableList<Float> = mutableListOf(),
+    var DEBUG_startDate : String = "",
+    var DEBUG_endDate : String = ""
 )
 
 class AdvancedQuery(
@@ -214,7 +214,7 @@ class AdvancedQuery(
         return buckets
     }
 
-    open class BucketProcessor (val queryStartDate : Long, val queryEndDate : Long) {
+    private open class BucketProcessor (val queryStartDate : Long, val queryEndDate : Long) {
         open fun process(buckets : List<Bucket>) : List<ProcessedBucket> {
             val format = SimpleDateFormat("yyyy.MM.dd HH:mm")
             val processedBuckets : MutableList<ProcessedBucket> = mutableListOf()
