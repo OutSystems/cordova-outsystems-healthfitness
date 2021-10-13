@@ -7,6 +7,7 @@ pr:
     include:
     - master
     - outsystems
+    - ios-unit-tests
 
 stages:
 - template: 'templates/tests-stage.yml'
