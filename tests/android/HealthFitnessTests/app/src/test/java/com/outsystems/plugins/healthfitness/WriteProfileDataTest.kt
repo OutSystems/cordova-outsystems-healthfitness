@@ -72,6 +72,7 @@ class WriteProfileDataTest {
         val googleFitMock = HealthFitnessManagerMock()
         val store = HealthStore(platformInterfaceMock, googleFitMock)
 
+        googleFitMock.updateSuccess = true
         googleFitMock.permissionsGranted = true
 
         store.updateData("HEIGHT", 170F)
@@ -79,7 +80,22 @@ class WriteProfileDataTest {
 
     @Test
     fun given_ValidVariableValidValue_When_WritingData_Then_SomeError() {
-        
+        val platformInterfaceMock = AndroidPlatformMock()
+        platformInterfaceMock.sendPluginResultCompletion = { result, error ->
+            Assert.assertEquals(result, "null")
+            val code = error?.first
+            val message = error?.second
+            Assert.assertEquals(code, HealthFitnessError.WRITE_DATA_ERROR.code)
+            Assert.assertEquals(message, HealthFitnessError.WRITE_DATA_ERROR.message)
+        }
+
+        val googleFitMock = HealthFitnessManagerMock()
+        val store = HealthStore(platformInterfaceMock, googleFitMock)
+
+        googleFitMock.updateSuccess = false
+        googleFitMock.permissionsGranted = true
+
+        store.updateData("HEIGHT", 170F)
     }
 
 }
