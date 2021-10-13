@@ -2,7 +2,6 @@ package com.outsystems.plugins.healthfitness
 
 import com.outsystems.plugins.healthfitness.store.AdvancedQueryParameters
 import com.outsystems.plugins.healthfitness.store.EnumOperationType
-import com.outsystems.plugins.healthfitness.store.EnumTimeUnit
 import com.outsystems.plugins.healthfitness.store.HealthStore
 import org.junit.Assert
 import org.junit.Test
@@ -49,7 +48,7 @@ class AdvancedQueryTest {
     }
 
     @Test
-    fun given_VariableWithoutPermissions_When_SimpleQuery_Then_VariableNotAuthorizedError() {
+    fun given_VariableWithoutPermissions_When_AdvancedQuery_Then_VariableNotAuthorizedError() {
         val platformInterfaceMock = AndroidPlatformMock().apply {
             sendPluginResultCompletion = { result, error ->
                 Assert.assertEquals(result, "null")
@@ -63,10 +62,32 @@ class AdvancedQueryTest {
             }
         }
 
-        val googleFitMock = HealthFitnessManagerMock()
+        val googleFitMock = HealthFitnessManagerMock().apply {
+            permissionsGranted = false
+        }
         val store = HealthStore(platformInterfaceMock, googleFitMock)
 
-        googleFitMock.permissionsGranted = false
+        val parameters = AdvancedQueryParameters("HEART_RATE", Date(), Date(), null, 1, EnumOperationType.RAW.value, null)
+        store.advancedQuery(parameters)
+    }
+
+    @Test
+    fun given_ValidVariable_When_AdvancedQuery_Then_SomeError(){
+        val platformInterfaceMock = AndroidPlatformMock().apply {
+            sendPluginResultCompletion = { result, error ->
+                Assert.assertEquals(result, "null")
+                val code = error?.first
+                val message = error?.second
+                Assert.assertEquals(code, HealthFitnessError.READ_DATA_ERROR.code)
+                Assert.assertEquals(message, HealthFitnessError.READ_DATA_ERROR.message)
+            }
+        }
+
+        val googleFitMock = HealthFitnessManagerMock().apply {
+            getDataSuccess = false
+        }
+
+        val store = HealthStore(platformInterfaceMock, googleFitMock)
 
         val parameters = AdvancedQueryParameters("HEART_RATE", Date(), Date(), null, 1, EnumOperationType.RAW.value, null)
         store.advancedQuery(parameters)

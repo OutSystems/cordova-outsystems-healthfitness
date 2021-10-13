@@ -1,7 +1,5 @@
 package com.outsystems.plugins.healthfitness
 
-import android.app.Activity
-import android.content.Context
 import com.google.android.gms.fitness.FitnessOptions
 import com.google.android.gms.fitness.data.DataSet
 import com.google.android.gms.fitness.result.DataReadResponse
@@ -12,7 +10,8 @@ import java.lang.Exception
 class HealthFitnessManagerMock: HealthFitnessManagerInterface {
 
     var permissionsGranted : Boolean = true
-    var updateSuccess : Boolean = true
+    var updateDataSuccess : Boolean = true
+    var getDataSuccess : Boolean = true
 
     override fun createAccount(options: FitnessOptions) {
         TODO("Not yet implemented")
@@ -27,7 +26,7 @@ class HealthFitnessManagerMock: HealthFitnessManagerInterface {
     }
 
     override fun updateDataOnStore(dataSet: DataSet?, onSuccess: () -> Unit, onFailure: (Exception) -> Unit) {
-        if(updateSuccess){
+        if(updateDataSuccess){
             onSuccess()
         }
         else{
@@ -36,7 +35,12 @@ class HealthFitnessManagerMock: HealthFitnessManagerInterface {
     }
 
     override fun getDataFromStore(queryInformation: AdvancedQuery, onSuccess: (DataReadResponse) -> Unit, onFailure: (Exception) -> Unit) {
-        TODO("Not yet implemented")
+        if(getDataSuccess){
+            onSuccess(DataReadResponse())
+        }
+        else{
+            onFailure(Exception())
+        }
     }
 
 }

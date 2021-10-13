@@ -1,6 +1,5 @@
 package com.outsystems.plugins.healthfitness
 
-import com.outsystems.plugins.healthfitness.store.HealthFitnessManagerInterface
 import com.outsystems.plugins.healthfitness.store.HealthStore
 import org.junit.Assert
 import org.junit.Test
@@ -94,7 +93,7 @@ class WriteProfileDataTest {
         }
 
         val googleFitMock = HealthFitnessManagerMock().apply {
-            updateSuccess = false
+            updateDataSuccess = false
         }
 
         val store = HealthStore(platformInterfaceMock, googleFitMock)
