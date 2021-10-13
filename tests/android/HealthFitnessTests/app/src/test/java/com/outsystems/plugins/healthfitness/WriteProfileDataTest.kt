@@ -13,7 +13,9 @@ class WriteProfileDataTest {
         platformInterfaceMock.sendPluginResultCompletion = { result, error ->
             Assert.assertEquals(result, "null")
             val code = error?.first
+            val message = error?.second
             Assert.assertEquals(code, HealthFitnessError.VARIABLE_NOT_AVAILABLE_ERROR.code)
+            Assert.assertEquals(message, HealthFitnessError.VARIABLE_NOT_AVAILABLE_ERROR.message)
         }
 
         val googleFitMock = HealthFitnessManagerMock()
@@ -24,7 +26,21 @@ class WriteProfileDataTest {
 
     @Test
     fun given_VariableWithoutPermissions_When_WritingData_Then_VariableNotAuthorizedError() {
-        TODO("Not yet implemented")
+        val platformInterfaceMock = AndroidPlatformMock()
+        platformInterfaceMock.sendPluginResultCompletion = { result, error ->
+            Assert.assertEquals(result, "null")
+            val code = error?.first
+            val message = error?.second
+            Assert.assertEquals(code, HealthFitnessError.VARIABLE_NOT_AUTHORIZED_ERROR.code)
+            Assert.assertEquals(message, HealthFitnessError.VARIABLE_NOT_AUTHORIZED_ERROR.message)
+        }
+
+        val googleFitMock = HealthFitnessManagerMock()
+        val store = HealthStore(platformInterfaceMock, googleFitMock)
+
+        googleFitMock.permissionsGranted = false
+
+        store.updateData("HEIGHT", 170F)
     }
 
     @Test

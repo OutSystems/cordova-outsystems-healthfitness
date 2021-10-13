@@ -11,12 +11,14 @@ import java.lang.Exception
 
 class HealthFitnessManagerMock: HealthFitnessManagerInterface {
 
+    var permissionsGranted : Boolean = true
+
     override fun createAccount(options: FitnessOptions) {
         TODO("Not yet implemented")
     }
 
     override fun areGoogleFitPermissionsGranted(options: FitnessOptions?): Boolean {
-        return true
+        return permissionsGranted
     }
 
     override fun requestPermissions(fitnessOptions: FitnessOptions) {
