@@ -31,10 +31,9 @@ class OSHealthFitness : CordovaImplementation() {
 
     override fun initialize(cordova: CordovaInterface, webView: CordovaWebView) {
         super.initialize(cordova, webView)
-        var manager: HealthFitnessManager = HealthFitnessManager()
+        val manager = HealthFitnessManager(cordova.context, cordova.activity)
         healthStore = HealthStore(this, manager)
     }
-
 
     override fun execute(
         action: String,
@@ -65,8 +64,6 @@ class OSHealthFitness : CordovaImplementation() {
     }
 
     //create array of permission oauth
-
-
     private fun initAndRequestPermissions(args : JSONArray) {
 
         val customPermissions = args.getString(0)
@@ -135,7 +132,6 @@ class OSHealthFitness : CordovaImplementation() {
     }
 
     private fun getLastRecord(args: JSONArray) {
-
         //process parameters
         val variable = args.getString(0)
         healthStore?.getLastRecord(variable)

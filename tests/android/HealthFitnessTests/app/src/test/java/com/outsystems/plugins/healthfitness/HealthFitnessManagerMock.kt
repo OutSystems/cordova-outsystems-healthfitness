@@ -11,38 +11,24 @@ import java.lang.Exception
 
 class HealthFitnessManagerMock: HealthFitnessManagerInterface {
 
-    override fun createAccount(context: Context, options: FitnessOptions) {
+    override fun createAccount(options: FitnessOptions) {
         TODO("Not yet implemented")
     }
 
-    override fun areGoogleFitPermissionsGranted(
-        activity: Activity,
-        options: FitnessOptions?
-    ): Boolean {
+    override fun areGoogleFitPermissionsGranted(options: FitnessOptions?): Boolean {
+        return true
+    }
+
+    override fun requestPermissions(fitnessOptions: FitnessOptions) {
         TODO("Not yet implemented")
     }
 
-    override fun requestPermissions(activity: Activity, fitnessOptions: FitnessOptions) {
+    override fun updateDataOnStore(dataSet: DataSet?, onSuccess: () -> Unit, onFailure: (Exception) -> Unit) {
         TODO("Not yet implemented")
     }
 
-    override fun updateDataOnStore(
-        activity: Activity,
-        dataSet: DataSet?,
-        onSuccess: () -> Unit,
-        onFailure: (Exception) -> Unit
-    ) {
+    override fun getDataFromStore(queryInformation: AdvancedQuery, onSuccess: (DataReadResponse) -> Unit, onFailure: (Exception) -> Unit) {
         TODO("Not yet implemented")
     }
-
-    override fun getDataFromStore(
-        activity: Activity,
-        queryInformation: AdvancedQuery,
-        onSuccess: (DataReadResponse) -> Unit,
-        onFailure: (Exception) -> Unit
-    ) {
-        TODO("Not yet implemented")
-    }
-
 
 }

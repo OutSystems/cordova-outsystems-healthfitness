@@ -8,6 +8,7 @@ interface AndroidPlatformInterface {
 
     fun getContext(): Context
     fun getActivity(): Activity
+    fun getPackageAppName() : String
 
     fun onRequestPermissionResult(
         requestCode: Int,

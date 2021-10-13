@@ -13,38 +13,38 @@ import com.google.android.gms.fitness.result.DataReadResponse
 import com.outsystems.plugins.healthfitness.OSHealthFitness
 import java.lang.Exception
 
-class HealthFitnessManager: HealthFitnessManagerInterface {
+class HealthFitnessManager(var context : Context, var activity : Activity): HealthFitnessManagerInterface {
 
-    override fun createAccount(context: Context, options: FitnessOptions){
+    override fun createAccount(options: FitnessOptions){
         GoogleSignIn.getAccountForExtension(context, options)
     }
 
-    override fun areGoogleFitPermissionsGranted(activity: Activity, options: FitnessOptions?): Boolean {
-        return areGoogleFitPermissionsGranted(getLastAccount(activity), options)
+    override fun areGoogleFitPermissionsGranted(options: FitnessOptions?): Boolean {
+        return areGoogleFitPermissionsGranted(getLastAccount(), options)
     }
 
-    override fun requestPermissions(activity: Activity, fitnessOptions: FitnessOptions){
+    override fun requestPermissions(fitnessOptions: FitnessOptions){
         GoogleSignIn.requestPermissions(
             activity,
             OSHealthFitness.GOOGLE_FIT_PERMISSIONS_REQUEST_CODE,
-            getLastAccount(activity),
+            getLastAccount(),
             fitnessOptions
         )
     }
 
-    override fun updateDataOnStore(activity: Activity, dataSet: DataSet?, onSuccess: () -> Unit, onFailure: (Exception) -> Unit){
+    override fun updateDataOnStore(dataSet: DataSet?, onSuccess: () -> Unit, onFailure: (Exception) -> Unit){
         Fitness.getHistoryClient(
             activity,
-            getLastAccount(activity)
+            getLastAccount()
         )
             .insertData(dataSet)
             .addOnSuccessListener { onSuccess() }
             .addOnFailureListener(onFailure)
     }
 
-    override fun getDataFromStore(activity: Activity, queryInformation: AdvancedQuery, onSuccess: (DataReadResponse) -> Unit, onFailure: (Exception) -> Unit){
+    override fun getDataFromStore(queryInformation: AdvancedQuery, onSuccess: (DataReadResponse) -> Unit, onFailure: (Exception) -> Unit){
         val fitnessRequest = queryInformation.getDataReadRequest()
-        Fitness.getHistoryClient(activity, getLastAccount(activity))
+        Fitness.getHistoryClient(activity, getLastAccount())
             .readData(fitnessRequest)
             .addOnSuccessListener(onSuccess)
             .addOnFailureListener(onFailure)
@@ -58,7 +58,7 @@ class HealthFitnessManager: HealthFitnessManagerInterface {
         }
     }
 
-    private fun getLastAccount(activity: Activity): GoogleSignInAccount? {
+    private fun getLastAccount(): GoogleSignInAccount? {
         return GoogleSignIn.getLastSignedInAccount(activity)
     }
 

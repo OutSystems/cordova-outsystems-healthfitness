@@ -1,20 +1,25 @@
 package com.outsystems.plugins.healthfitness
 
+import androidx.test.ext.junit.runners.AndroidJUnit4
 import android.app.Activity
 import android.content.Context
 import androidx.test.core.app.ApplicationProvider
 import org.apache.cordova.CallbackContext
+import org.junit.runner.RunWith
 
+@RunWith(AndroidJUnit4::class)
 class AndroidPlatformMock : AndroidPlatformInterface {
 
     var sendPluginResultCompletion: ((resultVariable: String, error: Pair<Int, String>?) -> Unit)? = null
 
     override fun getContext(): Context {
-        return ApplicationProvider.getApplicationContext<Context>()
+        return ApplicationProvider.getApplicationContext() // Should not be used in Mock
     }
-
     override fun getActivity(): Activity {
-        return ApplicationProvider.getApplicationContext<Activity>()
+        return Activity() // Should not be used in Mock
+    }
+    override fun getPackageAppName(): String {
+        return "com.outsystems.plugins.healthfitness"
     }
 
     override fun onRequestPermissionResult(
@@ -32,5 +37,4 @@ class AndroidPlatformMock : AndroidPlatformInterface {
     override fun areGooglePlayServicesAvailable(callbackContext: CallbackContext): Boolean {
         TODO("Not yet implemented")
     }
-
 }

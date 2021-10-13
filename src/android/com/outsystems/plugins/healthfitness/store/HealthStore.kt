@@ -48,11 +48,7 @@ class HealthStore(
     private val platformInterface: AndroidPlatformInterface,
     private val manager: HealthFitnessManagerInterface) {
 
-    var context: Context = platformInterface.getContext()
-    var activity: Activity = platformInterface.getActivity()
-
     private var fitnessOptions: FitnessOptions? = null
-    //private var account: GoogleSignInAccount? = null
     private val gson: Gson by lazy { Gson() }
 
     private val fitnessVariablesMap: Map<String, GoogleFitVariable> by lazy {
@@ -248,8 +244,7 @@ class HealthStore(
         }
 
         fitnessOptions = createFitnessOptions(permissionList)
-        manager.createAccount(context, fitnessOptions!!)
-        //account = GoogleSignIn.getAccountForExtension(context, fitnessOptions!!)
+        manager.createAccount(fitnessOptions!!)
     }
 
     private fun createPermissionsForVariableGroup(
@@ -355,18 +350,18 @@ class HealthStore(
     }
 
     fun requestGoogleFitPermissions() {
-        if(manager.areGoogleFitPermissionsGranted(activity, fitnessOptions)){
+        if(manager.areGoogleFitPermissionsGranted(fitnessOptions)){
             platformInterface.sendPluginResult("success")
         }
         else{
             fitnessOptions?.let {
-                manager.requestPermissions(platformInterface.getActivity(), it)
+                manager.requestPermissions(it)
             }
         }
     }
 
     fun areGoogleFitPermissionsGranted(): Boolean{
-        return manager.areGoogleFitPermissionsGranted(activity, fitnessOptions)
+        return manager.areGoogleFitPermissionsGranted(fitnessOptions)
     }
 
     fun updateData(variableName: String, value: Float) {
@@ -383,7 +378,7 @@ class HealthStore(
         //val lastAccount = GoogleSignIn.getLastSignedInAccount(context)
         val permissions = createPermissionsForVariable(variable, EnumAccessType.WRITE.value)
         val options = createFitnessOptions(permissions)
-        if(!manager.areGoogleFitPermissionsGranted(activity, options)) {
+        if(!manager.areGoogleFitPermissionsGranted(options)) {
             platformInterface.sendPluginResult(
                 null,
                 Pair(HealthFitnessError.VARIABLE_NOT_AUTHORIZED_ERROR.code, HealthFitnessError.VARIABLE_NOT_AUTHORIZED_ERROR.message))
@@ -394,8 +389,9 @@ class HealthStore(
         val fieldType = profileVariablesMap[variableName]?.fields?.get(0)
 
         //insert the data
+        val packageName = platformInterface.getPackageAppName()
         val dataSourceWrite = DataSource.Builder()
-            .setAppPackageName(context)
+            .setAppPackageName(packageName)
             .setDataType(variable.dataType)
             .setType(DataSource.TYPE_RAW)
             .build()
@@ -425,12 +421,12 @@ class HealthStore(
                 .add(valueToWrite)
                 .build()
         }
-        catch (e : IllegalArgumentException){
+        catch (e : IllegalArgumentException) {
             Log.w("Write to GoogleFit:", "Field out of range", e)
             platformInterface.sendPluginResult(null, Pair(HealthFitnessError.WRITE_VALUE_OUT_OF_RANGE_ERROR.code, HealthFitnessError.WRITE_VALUE_OUT_OF_RANGE_ERROR.message))
         }
 
-        manager.updateDataOnStore(activity, dataSet,
+        manager.updateDataOnStore(dataSet,
             {
                 Log.i("Access GoogleFit:", "DataSet updated successfully!")
                 platformInterface.sendPluginResult("success", null)
@@ -485,7 +481,7 @@ class HealthStore(
 
         val permissions = createPermissionsForVariable(variable, EnumAccessType.READ.value)
         val options = createFitnessOptions(permissions)
-        if(!manager.areGoogleFitPermissionsGranted(activity, options)) {
+        if(!manager.areGoogleFitPermissionsGranted(options)) {
             platformInterface.sendPluginResult(
                 null,
                 Pair(HealthFitnessError.VARIABLE_NOT_AUTHORIZED_ERROR.code, HealthFitnessError.VARIABLE_NOT_AUTHORIZED_ERROR.message))
@@ -498,7 +494,7 @@ class HealthStore(
         queryInformation.setTimeUnitGrouping(parameters.timeUnitLength)
         queryInformation.setLimit(parameters.limit)
 
-        manager.getDataFromStore(activity, queryInformation,
+        manager.getDataFromStore(queryInformation,
             { dataReadResponse ->
                 val queryResponse: AdvancedQueryResponse
 
