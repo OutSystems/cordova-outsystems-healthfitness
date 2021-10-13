@@ -9,10 +9,10 @@ import com.outsystems.plugins.healthfitness.store.AdvancedQuery
 import com.outsystems.plugins.healthfitness.store.HealthFitnessManagerInterface
 import java.lang.Exception
 
-class HealthFitnessManagerMock(
-    var permissionsGranted : Boolean,
-    var updateSuccess : Boolean
-): HealthFitnessManagerInterface {
+class HealthFitnessManagerMock: HealthFitnessManagerInterface {
+
+    var permissionsGranted : Boolean = true
+    var updateSuccess : Boolean = true
 
     override fun createAccount(options: FitnessOptions) {
         TODO("Not yet implemented")
@@ -37,15 +37,6 @@ class HealthFitnessManagerMock(
 
     override fun getDataFromStore(queryInformation: AdvancedQuery, onSuccess: (DataReadResponse) -> Unit, onFailure: (Exception) -> Unit) {
         TODO("Not yet implemented")
-    }
-
-    data class Builder(
-        private var permissionsGranted : Boolean = true,
-        private var updateSuccess : Boolean = true
-    ) {
-        fun permissionsAreGranted(granted: Boolean) = apply { this.permissionsGranted = granted }
-        fun successOnUpdate(success: Boolean) = apply { this.updateSuccess = success }
-        fun build() = HealthFitnessManagerMock(permissionsGranted, updateSuccess)
     }
 
 }

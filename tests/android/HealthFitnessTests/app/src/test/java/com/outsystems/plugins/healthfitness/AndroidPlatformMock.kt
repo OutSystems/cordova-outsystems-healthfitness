@@ -8,9 +8,9 @@ import org.apache.cordova.CallbackContext
 import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
-class AndroidPlatformMock(
+class AndroidPlatformMock : AndroidPlatformInterface {
+
     var sendPluginResultCompletion: ((resultVariable: String, error: Pair<Int, String>?) -> Unit)? = null
-) : AndroidPlatformInterface {
 
     override fun getContext(): Context {
         return ApplicationProvider.getApplicationContext() // Should not be used in Mock
@@ -37,10 +37,4 @@ class AndroidPlatformMock(
     override fun areGooglePlayServicesAvailable(callbackContext: CallbackContext): Boolean {
         TODO("Not yet implemented")
     }
-
-    data class Builder() {
-        fun pluginResultCompletion(completion : (resultVariable: String, error: Pair<Int, String>?) -> Unit) = apply { this.sendPluginResultCompletion = completion }
-        fun build() = AndroidPlatformMock(sendPluginResultCompletion)
-    }
-
 }
