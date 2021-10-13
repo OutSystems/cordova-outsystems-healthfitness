@@ -39,7 +39,7 @@ stages:
   - ${{ if or(containsValue(parameters.platforms, 'all'), containsValue(parameters.platforms, 'ios')) }}:
     - template: 'ios-tests-job.yml'
       parameters:
-        scheme: 'OSHealthFitnessTests'
+        scheme: 'OSHealthKitTests'
         workingDirectory: 'tests/ios'
         dependsOn: CheckPlatforms
         condition: eq(dependencies.CheckPlatforms.outputs['IOSPlatform.available'], 'true')
