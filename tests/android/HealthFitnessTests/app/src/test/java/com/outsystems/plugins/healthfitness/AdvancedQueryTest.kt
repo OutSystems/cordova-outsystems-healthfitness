@@ -96,7 +96,7 @@ class AdvancedQueryTest {
     }
 
     @Test
-    fun given_ValidVariable_When_SimpleQuery_Then_Success(){
+    fun given_ValidVariable_When_AdvancedQuery_Then_Success(){
 
         val queryDate = Date()
 
