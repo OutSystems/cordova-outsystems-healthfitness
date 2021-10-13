@@ -45,7 +45,21 @@ class WriteProfileDataTest {
 
     @Test
     fun given_ValueOutOfRange_When_WritingData_Then_WriteValueOutOfRangeError() {
-        TODO("Not yet implemented")
+        val platformInterfaceMock = AndroidPlatformMock()
+        platformInterfaceMock.sendPluginResultCompletion = { result, error ->
+            Assert.assertEquals(result, "null")
+            val code = error?.first
+            val message = error?.second
+            Assert.assertEquals(code, HealthFitnessError.WRITE_VALUE_OUT_OF_RANGE_ERROR.code)
+            Assert.assertEquals(message, HealthFitnessError.WRITE_VALUE_OUT_OF_RANGE_ERROR.message)
+        }
+
+        val googleFitMock = HealthFitnessManagerMock()
+        val store = HealthStore(platformInterfaceMock, googleFitMock)
+
+        googleFitMock.permissionsGranted = true
+
+        store.updateData("HEIGHT", 1000F)
     }
 
     @Test

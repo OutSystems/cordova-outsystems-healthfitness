@@ -424,6 +424,7 @@ class HealthStore(
         catch (e : IllegalArgumentException) {
             Log.w("Write to GoogleFit:", "Field out of range", e)
             platformInterface.sendPluginResult(null, Pair(HealthFitnessError.WRITE_VALUE_OUT_OF_RANGE_ERROR.code, HealthFitnessError.WRITE_VALUE_OUT_OF_RANGE_ERROR.message))
+            return
         }
 
         manager.updateDataOnStore(dataSet,
