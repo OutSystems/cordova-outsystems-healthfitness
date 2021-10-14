@@ -16,13 +16,6 @@ import com.outsystems.plugins.healthfitness.store.HealthStore
 import org.apache.cordova.*
 import org.json.JSONArray
 
-
-enum class EnumPermissionAccess {
-    GRANTED,
-    DENIED,
-    FULLY_DENIED
-}
-
 class OSHealthFitness : CordovaImplementation() {
     override var callbackContext: CallbackContext? = null
 
@@ -138,19 +131,7 @@ class OSHealthFitness : CordovaImplementation() {
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, intent: Intent) {
-        //super.onActivityResult(requestCode, resultCode, intent)
-        when (resultCode) {
-            Activity.RESULT_OK -> when (requestCode) {
-                GOOGLE_FIT_PERMISSIONS_REQUEST_CODE -> sendPluginResult("success", null)
-                else -> {
-                    // Result wasn't from Google Fit
-                }
-            }
-            else -> {
-                // Permission not granted
-                sendPluginResult(null, Pair(HealthFitnessError.VARIABLE_NOT_AUTHORIZED_ERROR.code, HealthFitnessError.VARIABLE_NOT_AUTHORIZED_ERROR.message))
-            }
-        }
+        healthStore?.handleActivityResult(requestCode, resultCode, intent)
     }
 
     override fun areGooglePlayServicesAvailable(callbackContext: CallbackContext): Boolean {
@@ -192,6 +173,5 @@ class OSHealthFitness : CordovaImplementation() {
 
     companion object {
         const val ACTIVITY_LOCATION_PERMISSIONS_REQUEST_CODE = 1
-        const val GOOGLE_FIT_PERMISSIONS_REQUEST_CODE = 2
     }
 }

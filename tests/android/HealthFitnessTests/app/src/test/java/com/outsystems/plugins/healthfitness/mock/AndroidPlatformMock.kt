@@ -1,9 +1,10 @@
-package com.outsystems.plugins.healthfitness
+package com.outsystems.plugins.healthfitness.mock
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import android.app.Activity
 import android.content.Context
 import androidx.test.core.app.ApplicationProvider
+import com.outsystems.plugins.healthfitness.AndroidPlatformInterface
 import org.apache.cordova.CallbackContext
 import org.junit.runner.RunWith
 

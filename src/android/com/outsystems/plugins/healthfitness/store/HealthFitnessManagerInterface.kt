@@ -11,7 +11,7 @@ interface HealthFitnessManagerInterface {
 
     fun createAccount(options: FitnessOptions)
     fun areGoogleFitPermissionsGranted(options: FitnessOptions?): Boolean
-    fun requestPermissions(fitnessOptions: FitnessOptions)
+    fun requestPermissions(fitnessOptions: FitnessOptions, resultCode : Int)
     fun updateDataOnStore(dataSet: DataSet?, onSuccess: () -> Unit, onFailure: (Exception) -> Unit)
     fun getDataFromStore(queryInformation: AdvancedQuery, onSuccess: (DataReadResponse) -> Unit, onFailure: (Exception) -> Unit)
 

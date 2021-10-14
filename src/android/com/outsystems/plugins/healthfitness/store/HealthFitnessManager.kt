@@ -23,10 +23,10 @@ class HealthFitnessManager(var context : Context, var activity : Activity): Heal
         return areGoogleFitPermissionsGranted(getLastAccount(), options)
     }
 
-    override fun requestPermissions(fitnessOptions: FitnessOptions){
+    override fun requestPermissions(fitnessOptions: FitnessOptions, resultCode : Int){
         GoogleSignIn.requestPermissions(
             activity,
-            OSHealthFitness.GOOGLE_FIT_PERMISSIONS_REQUEST_CODE,
+            resultCode,
             getLastAccount(),
             fitnessOptions
         )

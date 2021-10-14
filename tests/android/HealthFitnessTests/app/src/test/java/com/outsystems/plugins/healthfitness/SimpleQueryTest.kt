@@ -1,7 +1,8 @@
 package com.outsystems.plugins.healthfitness
 
 import com.google.gson.Gson
-import com.outsystems.plugins.healthfitness.store.AdvancedQueryParameters
+import com.outsystems.plugins.healthfitness.mock.AndroidPlatformMock
+import com.outsystems.plugins.healthfitness.mock.HealthFitnessManagerMock
 import com.outsystems.plugins.healthfitness.store.AdvancedQueryResponse
 import com.outsystems.plugins.healthfitness.store.HealthStore
 import org.junit.Assert

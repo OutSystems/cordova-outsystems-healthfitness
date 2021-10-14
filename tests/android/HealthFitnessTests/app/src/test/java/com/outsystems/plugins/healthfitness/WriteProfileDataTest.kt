@@ -1,5 +1,7 @@
 package com.outsystems.plugins.healthfitness
 
+import com.outsystems.plugins.healthfitness.mock.AndroidPlatformMock
+import com.outsystems.plugins.healthfitness.mock.HealthFitnessManagerMock
 import com.outsystems.plugins.healthfitness.store.HealthStore
 import org.junit.Assert
 import org.junit.Test

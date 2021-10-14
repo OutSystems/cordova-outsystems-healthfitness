@@ -2,6 +2,7 @@ package com.outsystems.plugins.healthfitness.store
 
 import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.util.Log
 import com.google.android.gms.fitness.FitnessOptions
 import com.google.android.gms.fitness.data.*
@@ -12,6 +13,7 @@ import com.google.android.gms.fitness.result.DataReadResult
 import com.google.gson.Gson
 import com.outsystems.plugins.healthfitness.AndroidPlatformInterface
 import com.outsystems.plugins.healthfitness.HealthFitnessError
+import com.outsystems.plugins.healthfitness.OSHealthFitness
 import java.lang.NullPointerException
 import java.text.SimpleDateFormat
 import java.util.*
@@ -327,16 +329,24 @@ class HealthStore(
 
         permissions.forEach { permission ->
             val googleVariable = getVariableByName(permission.variable)
-            googleVariable?.let { it ->
-                if(permission.accessType == EnumAccessType.WRITE.value) {
-                    result.add(Pair(it.dataType, FitnessOptions.ACCESS_WRITE))
+
+            if(googleVariable == null) {
+                platformInterface.sendPluginResult(
+                    null,
+                    Pair(HealthFitnessError.VARIABLE_NOT_AVAILABLE_ERROR.code, HealthFitnessError.VARIABLE_NOT_AVAILABLE_ERROR.message))
+                return listOf()
+            }
+
+            when(permission.accessType) {
+                EnumAccessType.WRITE.value -> {
+                    result.add(Pair(googleVariable.dataType, FitnessOptions.ACCESS_WRITE))
                 }
-                else if(permission.accessType == EnumAccessType.READWRITE.value){
-                    result.add(Pair(it.dataType, FitnessOptions.ACCESS_READ))
-                    result.add(Pair(it.dataType, FitnessOptions.ACCESS_WRITE))
+                EnumAccessType.READWRITE.value -> {
+                    result.add(Pair(googleVariable.dataType, FitnessOptions.ACCESS_READ))
+                    result.add(Pair(googleVariable.dataType, FitnessOptions.ACCESS_WRITE))
                 }
-                else {
-                    result.add(Pair(it.dataType, FitnessOptions.ACCESS_READ))
+                else -> {
+                    result.add(Pair(googleVariable.dataType, FitnessOptions.ACCESS_READ))
                 }
             }
         }
@@ -358,7 +368,22 @@ class HealthStore(
         }
         else{
             fitnessOptions?.let {
-                manager.requestPermissions(it)
+                manager.requestPermissions(it, GOOGLE_FIT_PERMISSIONS_REQUEST_CODE)
+            }
+        }
+    }
+
+    fun handleActivityResult(requestCode: Int, resultCode: Int, intent: Intent){
+        when (resultCode) {
+            Activity.RESULT_OK -> when (requestCode) {
+                GOOGLE_FIT_PERMISSIONS_REQUEST_CODE -> platformInterface.sendPluginResult("success", null)
+                else -> {
+                    // Result wasn't from Google Fit
+                }
+            }
+            else -> {
+                // Permission not granted
+                platformInterface.sendPluginResult(null, Pair(HealthFitnessError.VARIABLE_NOT_AUTHORIZED_ERROR.code, HealthFitnessError.VARIABLE_NOT_AUTHORIZED_ERROR.message))
             }
         }
     }
@@ -571,6 +596,10 @@ class HealthStore(
             )
         }
         return AdvancedQueryResponse(blockList)
+    }
+
+    companion object {
+        const val GOOGLE_FIT_PERMISSIONS_REQUEST_CODE = 2
     }
 
 }
