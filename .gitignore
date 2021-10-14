@@ -2,4 +2,11 @@
 **/.gradle
 **/.idea
 .DS_Store
+
+*.pbxuser
+xcuserdata
+!xcshareddata
+!xcschemes
+
 **/node_modules
+

@@ -1,14 +1,20 @@
 import Foundation
+import HealthKit
 
 class HealthFitnessPlugin {
     
-    let healthKitManager = HealthKitManager()
+    let healthKitManager:HealthKitManager?
+    
+    init() {
+        let store = HKHealthStore()
+        self.healthKitManager = HealthKitManager(store: store)
+    }
     
     func writeData(variable:String,
                    value:Double,
                    completion: @escaping (Bool, NSError?) -> Void) {
         
-        healthKitManager.writeData(variable: variable, value: value) { (inner: CompletionHandler) -> Void in
+        healthKitManager?.writeData(variable: variable, value: value) { (inner: CompletionHandler) -> Void in
             do {
                 _ = try inner()
                 completion(true, nil)
@@ -24,7 +30,7 @@ class HealthFitnessPlugin {
                        completion: @escaping (Bool, String?, NSError?) -> Void) {
         
         var finalResult: String?
-        healthKitManager.advancedQuery(variable: variable,
+        healthKitManager?.advancedQuery(variable: variable,
                                        startDate: Date.distantPast,
                                        endDate: Date(),
                                        timeUnit: "",
@@ -51,7 +57,7 @@ class HealthFitnessPlugin {
                             summaryVariables:String,
                             completion: @escaping (Bool, NSError?) -> Void) {
         
-        healthKitManager.authorizeHealthKit(customPermissions: customPermissions,
+        healthKitManager?.authorizeHealthKit(customPermissions: customPermissions,
                                             allVariables:allVariables,
                                             fitnessVariables:fitnessVariables,
                                             healthVariables:healthVariables,
@@ -79,7 +85,7 @@ class HealthFitnessPlugin {
                         completion: @escaping(Bool, String?, NSError?) -> Void) {
         var finalResult: String?
         
-        healthKitManager.advancedQuery(variable: variable,
+        healthKitManager?.advancedQuery(variable: variable,
                                        startDate: startDate,
                                        endDate: endDate,
                                        timeUnit: timeUnit,

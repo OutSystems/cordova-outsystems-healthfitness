@@ -212,7 +212,7 @@ class GroupPermissions: Codable {
         self.isActive = isActive
         self.accessType = accessType
     }
-    
+
 }
 
 // MARK: - QueryParameters
@@ -249,7 +249,6 @@ struct HealthKitVariable {
     var correlationType: HKCorrelationType?
     var unit: HKUnit
     var optionsAllowed: [HKStatisticsOptions]?
-    //var defaultOption: HKStatisticsOptions?
 }
 
 enum TimeUnit: String {
