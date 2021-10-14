@@ -13,6 +13,7 @@ import java.lang.Exception
 class HealthFitnessManagerMock: HealthFitnessManagerInterface {
 
     var permissionsGranted : Boolean = true
+    var permissionsGrantedOnRequest : Boolean = true
     var updateDataSuccess : Boolean = true
     var getDataSuccess : Boolean = true
     var store : HealthStore? = null
@@ -25,12 +26,12 @@ class HealthFitnessManagerMock: HealthFitnessManagerInterface {
         return permissionsGranted
     }
 
-    override fun requestPermissions(fitnessOptions: FitnessOptions, resultCode : Int) {
-        if(permissionsGranted){
-            store?.handleActivityResult(Activity.RESULT_OK, resultCode, Intent())
+    override fun requestPermissions(fitnessOptions: FitnessOptions, requestCode : Int) {
+        if(permissionsGrantedOnRequest){
+            store?.handleActivityResult(requestCode, Activity.RESULT_OK, Intent())
         }
         else {
-            store?.handleActivityResult(Activity.RESULT_CANCELED, resultCode, Intent())
+            store?.handleActivityResult(requestCode, Activity.RESULT_CANCELED, Intent())
         }
     }
 

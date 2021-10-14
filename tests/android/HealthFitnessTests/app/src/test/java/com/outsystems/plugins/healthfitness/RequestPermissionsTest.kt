@@ -48,7 +48,36 @@ class RequestPermissionsTest {
     }
 
     @Test
-    fun given_PermissionsDenied_When_RequestingPermissions_Then_VariableNotAuthorizedError() {
+    fun given_PermissionsGranted_When_RequestingPermissions_Then_Success() {
+        var wasSuccessCalled = false
+        val platformInterfaceMock = AndroidPlatformMock().apply {
+            sendPluginResultCompletion = { result, _ ->
+                Assert.assertEquals(result, "success")
+                wasSuccessCalled = true
+            }
+        }
+
+        val googleFitMock = HealthFitnessManagerMock()
+        val store = HealthStore(platformInterfaceMock, googleFitMock)
+
+        val customPermissions = arrayOf(GoogleFitPermission("HEART_RATE", "READ"))
+        val customPermissionsJson = gson.toJson(customPermissions)
+
+        store.initAndRequestPermissions(
+            customPermissionsJson,
+            groupPermissionsJson,
+            groupPermissionsJson,
+            groupPermissionsJson,
+            groupPermissionsJson,
+            groupPermissionsJson
+        )
+        store.requestGoogleFitPermissions()
+
+        Assert.assertTrue(wasSuccessCalled)
+    }
+
+    @Test
+    fun given_PermissionsNotGranted_When_RequestingPermissions_UserDenies_Then_VariableNotAuthorizedError() {
         var wasThrownError = false
         val platformInterfaceMock = AndroidPlatformMock().apply {
             sendPluginResultCompletion = { result, error ->
@@ -63,6 +92,7 @@ class RequestPermissionsTest {
 
         val googleFitMock = HealthFitnessManagerMock().apply {
             permissionsGranted = false
+            permissionsGrantedOnRequest = false
         }
         val store = HealthStore(platformInterfaceMock, googleFitMock)
         googleFitMock.store = store // This is a bit of a hack so the store code is tested.
@@ -84,7 +114,7 @@ class RequestPermissionsTest {
     }
 
     @Test
-    fun given_PermissionsGranted_When_RequestingPermissions_Then_Success() {
+    fun given_PermissionsNotGranted_When_RequestingPermissions_UserGrants_Then_Success() {
         var wasSuccessCalled = false
         val platformInterfaceMock = AndroidPlatformMock().apply {
             sendPluginResultCompletion = { result, _ ->
@@ -93,8 +123,12 @@ class RequestPermissionsTest {
             }
         }
 
-        val googleFitMock = HealthFitnessManagerMock()
+        val googleFitMock = HealthFitnessManagerMock().apply {
+            permissionsGranted = false
+            permissionsGrantedOnRequest = true
+        }
         val store = HealthStore(platformInterfaceMock, googleFitMock)
+        googleFitMock.store = store // This is a bit of a hack so the store code is tested.
 
         val customPermissions = arrayOf(GoogleFitPermission("HEART_RATE", "READ"))
         val customPermissionsJson = gson.toJson(customPermissions)

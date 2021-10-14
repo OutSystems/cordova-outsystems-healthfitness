@@ -375,10 +375,16 @@ class HealthStore(
 
     fun handleActivityResult(requestCode: Int, resultCode: Int, intent: Intent){
         when (resultCode) {
-            Activity.RESULT_OK -> when (requestCode) {
-                GOOGLE_FIT_PERMISSIONS_REQUEST_CODE -> platformInterface.sendPluginResult("success", null)
-                else -> {
-                    // Result wasn't from Google Fit
+            Activity.RESULT_OK -> {
+
+                when (requestCode) {
+                    GOOGLE_FIT_PERMISSIONS_REQUEST_CODE -> platformInterface.sendPluginResult(
+                        "success",
+                        null
+                    )
+                    else -> {
+                        // Result wasn't from Google Fit
+                    }
                 }
             }
             else -> {

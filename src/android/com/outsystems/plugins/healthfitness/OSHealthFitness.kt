@@ -131,6 +131,7 @@ class OSHealthFitness : CordovaImplementation() {
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, intent: Intent) {
+        //super.onActivityResult(requestCode, resultCode, intent)
         healthStore?.handleActivityResult(requestCode, resultCode, intent)
     }
 
