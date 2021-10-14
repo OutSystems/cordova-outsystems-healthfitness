@@ -16,6 +16,53 @@ class OSHealthKitTestsTests: XCTestCase {
         self.manager = StubHealthKitStore()
     }
     
+    func test_Given_PermissionsNotGranted_When_RequestingPermissions_Then_SomeError () throws {
+        let stub = StubHealthKitStore()
+        stub.setDidPermissionsGrantWithoutError(false)
+        let testSubject = HealthKitManager(store: stub)
+
+        let customPermissions = "[{\"Variable\":\"STEPS\",\"AccessType\":\"READ\"}]"
+        let commonObject = "{\"IsActive\":false,\"AccessType\":\"\"}"
+        testSubject.authorizeHealthKit(customPermissions: customPermissions,
+                                       allVariables: commonObject,
+                                       fitnessVariables: commonObject,
+                                       healthVariables: commonObject,
+                                       profileVariables: commonObject,
+                                       summaryVariables: commonObject) { (authorized, error) in
+            
+            if (error != nil) {
+                XCTAssertEqual(error as? HealthKitErrors, .authorizationError)
+            } else {
+                XCTFail("Did not throw error")
+            }
+            
+        }
+    }
+    
+    func test_Given_PermissionsNotGranted_When_RequestingPermissions_UserGrants_Then_Success() throws {
+        let stub = StubHealthKitStore()
+        stub.setDidPermissionsGrantWithoutError(true)
+        let testSubject = HealthKitManager(store: stub)
+
+        let customPermissions = "[{\"Variable\":\"STEPS\",\"AccessType\":\"READ\"}]"
+        let commonObject = "{\"IsActive\":false,\"AccessType\":\"\"}"
+        testSubject.authorizeHealthKit(customPermissions: customPermissions,
+                                       allVariables: commonObject,
+                                       fitnessVariables: commonObject,
+                                       healthVariables: commonObject,
+                                       profileVariables: commonObject,
+                                       summaryVariables: commonObject) { (authorized, error) in
+            
+            if (error != nil) {
+                XCTFail("Did throw error")
+            } else if (authorized) {
+                XCTAssertEqual(authorized, true)
+            }
+            
+        }
+    }
+    
+    
     // MARK: - Permissions Tests
     func test_Given_InvalidVariable_When_RequestingPermissions_Then_VariableNotAvailableError() throws {
         let stub = StubHealthKitStore()

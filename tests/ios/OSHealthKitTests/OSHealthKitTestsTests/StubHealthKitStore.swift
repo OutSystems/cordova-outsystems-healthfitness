@@ -11,6 +11,7 @@ import HealthKit
 public class StubHealthKitStore: HealthKitManagerProtocol {
     
     var didExecuteSimpleQuery = false
+    var didPermissionsGrantWithoutError = false
     var didWriteSteps = false
     var didAdvancedQuery = false
     var currentAuthorizationStatus: HKAuthorizationStatus = .notDetermined
@@ -18,7 +19,13 @@ public class StubHealthKitStore: HealthKitManagerProtocol {
     public func requestAuthorization(setToWrite: Set<HKSampleType>?,
                                      setToRead: Set<HKObjectType>?,
                                      completion: @escaping (Bool, NSError?) -> Void) {
-        completion(true, nil)
+        if didPermissionsGrantWithoutError {
+            completion(true, nil)
+        } else {
+            completion(false, HealthKitErrors.authorizationError as NSError)
+        }
+        
+        
     }
     
     func executeAdvancedQuery(quantityType: HKQuantityType, options: HKStatisticsOptions, anchorDate: Date, interval: DateComponents, newStartDate: Date, completion: @escaping (Result<HKStatisticsCollection?, Error>) -> Void) {
@@ -70,5 +77,10 @@ public class StubHealthKitStore: HealthKitManagerProtocol {
     public func setDidAdvancedQuery(_ value:Bool) {
         self.didAdvancedQuery = value
     }
+    
+    public func setDidPermissionsGrantWithoutError(_ value:Bool) {
+        self.didPermissionsGrantWithoutError = value
+    }
+    
     
 }
