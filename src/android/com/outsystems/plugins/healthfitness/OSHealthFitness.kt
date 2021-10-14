@@ -11,16 +11,10 @@ import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
 import com.google.gson.Gson
 import com.outsystems.plugins.healthfitness.store.AdvancedQueryParameters
+import com.outsystems.plugins.healthfitness.store.HealthFitnessManager
 import com.outsystems.plugins.healthfitness.store.HealthStore
 import org.apache.cordova.*
 import org.json.JSONArray
-
-
-enum class EnumPermissionAccess {
-    GRANTED,
-    DENIED,
-    FULLY_DENIED
-}
 
 class OSHealthFitness : CordovaImplementation() {
     override var callbackContext: CallbackContext? = null
@@ -30,9 +24,9 @@ class OSHealthFitness : CordovaImplementation() {
 
     override fun initialize(cordova: CordovaInterface, webView: CordovaWebView) {
         super.initialize(cordova, webView)
-        healthStore = HealthStore(this)
+        val manager = HealthFitnessManager(cordova.context, cordova.activity)
+        healthStore = HealthStore(this, manager)
     }
-
 
     override fun execute(
         action: String,
@@ -63,8 +57,6 @@ class OSHealthFitness : CordovaImplementation() {
     }
 
     //create array of permission oauth
-
-
     private fun initAndRequestPermissions(args : JSONArray) {
 
         val customPermissions = args.getString(0)
@@ -133,7 +125,6 @@ class OSHealthFitness : CordovaImplementation() {
     }
 
     private fun getLastRecord(args: JSONArray) {
-
         //process parameters
         val variable = args.getString(0)
         healthStore?.getLastRecord(variable)
@@ -141,18 +132,7 @@ class OSHealthFitness : CordovaImplementation() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, intent: Intent) {
         //super.onActivityResult(requestCode, resultCode, intent)
-        when (resultCode) {
-            Activity.RESULT_OK -> when (requestCode) {
-                GOOGLE_FIT_PERMISSIONS_REQUEST_CODE -> sendPluginResult("success", null)
-                else -> {
-                    // Result wasn't from Google Fit
-                }
-            }
-            else -> {
-                // Permission not granted
-                sendPluginResult(null, Pair(HealthFitnessError.VARIABLE_NOT_AUTHORIZED_ERROR.code, HealthFitnessError.VARIABLE_NOT_AUTHORIZED_ERROR.message))
-            }
-        }
+        healthStore?.handleActivityResult(requestCode, resultCode, intent)
     }
 
     override fun areGooglePlayServicesAvailable(callbackContext: CallbackContext): Boolean {
@@ -194,6 +174,5 @@ class OSHealthFitness : CordovaImplementation() {
 
     companion object {
         const val ACTIVITY_LOCATION_PERMISSIONS_REQUEST_CODE = 1
-        const val GOOGLE_FIT_PERMISSIONS_REQUEST_CODE = 2
     }
 }
