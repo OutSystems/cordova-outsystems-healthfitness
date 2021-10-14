@@ -7,7 +7,7 @@ import org.apache.cordova.*
 import org.json.JSONArray
 import org.json.JSONObject
 
-abstract  class CordovaImplementation : CordovaPlugin(), AndroidPlatformInterface {
+abstract class CordovaImplementation : CordovaPlugin(), AndroidPlatformInterface {
 
     abstract var callbackContext: CallbackContext?
 
@@ -20,12 +20,17 @@ abstract  class CordovaImplementation : CordovaPlugin(), AndroidPlatformInterfac
     override fun initialize(cordova: CordovaInterface, webView: CordovaWebView) {
         super.initialize(cordova, webView)
     }
+
     override fun getContext(): Context {
         return cordova.context
     }
     override fun getActivity(): Activity {
         return cordova.activity
     }
+    override fun getPackageAppName(): String {
+        return cordova.context.packageName
+    }
+
     fun setAsActivityResultCallback() {
         cordova.setActivityResultCallback(this)
     }

@@ -8,7 +8,10 @@ The changes documented here do not include those from the original repository.
 
 ## [Version 1.0.0]
 
-## 2021-10-04
+## 2021-10-14
+- Unit Tests for Android (https://outsystemsrd.atlassian.net/browse/RMET-1048)
+
+## 2021-10-04<>
 - Refactorings for Android (https://outsystemsrd.atlassian.net/browse/RMET-1066)
 
 ## 2021-09-21
