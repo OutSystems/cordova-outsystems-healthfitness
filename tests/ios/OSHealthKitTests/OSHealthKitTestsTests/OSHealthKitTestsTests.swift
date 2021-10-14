@@ -70,7 +70,7 @@ class OSHealthKitTestsTests: XCTestCase {
     func test_Given_ValidVariableValidValue_When_WritingData_Then_Success() throws {
         let stub = StubHealthKitStore()
         stub.setAuthorizationStatus(status: .sharingAuthorized)
-        stub.setDidWriteSteps(value: true)
+        stub.setDidWriteSteps(true)
         
         let testSubject = HealthKitManager(store: stub)
         testSubject.writeData(variable: "BODY_FAT_PERCENTAGE", value: 10) { (inner: CompletionHandler) -> Void in
@@ -85,7 +85,7 @@ class OSHealthKitTestsTests: XCTestCase {
     func test_Given_ValidVariableValidValue_When_WritingData_Then_SomeError() throws {
         let stub = StubHealthKitStore()
         stub.setAuthorizationStatus(status: .sharingAuthorized)
-        stub.setDidWriteSteps(value: false)
+        stub.setDidWriteSteps(false)
         
         let testSubject = HealthKitManager(store: stub)
         testSubject.writeData(variable: "BODY_FAT_PERCENTAGE", value: 10) { (inner: CompletionHandler) -> Void in
@@ -98,7 +98,133 @@ class OSHealthKitTestsTests: XCTestCase {
         }
     }
     
+    // MARK: SimpleQuery
+    func test_Given_ValidVariable_When_SimpleQuery_Then_SomeError() throws {
+        let stub = StubHealthKitStore()
+        stub.setAuthorizationStatus(status: .sharingAuthorized)
+        stub.setDidAdvancedQuery(false)
+        let testSubject = HealthKitManager(store: stub)
+        
+        testSubject.advancedQuery(variable: "STEPS",
+                                  startDate: Date.distantPast,
+                                  endDate: Date(),
+                                  timeUnit: "DAY",
+                                  operationType: "SUM",
+                                  mostRecent: true,
+                                  timeUnitLength: 0) { result, error in
+            
+            if let error = error {
+                XCTAssertEqual(error as? HealthKitErrors, .errorWhileReading)
+            } else {
+                XCTFail("Did not throw error")
+            }
+        }
+    }
+    
+    func test_Given_ValidVariable_When_SimpleQuery_Then_Success() throws {
+        let stub = StubHealthKitStore()
+        stub.setAuthorizationStatus(status: .sharingAuthorized)
+        stub.setDidAdvancedQuery(true)
+        let testSubject = HealthKitManager(store: stub)
+        
+        testSubject.advancedQuery(variable: "STEPS",
+                                  startDate: Date.distantPast,
+                                  endDate: Date(),
+                                  timeUnit: "DAY",
+                                  operationType: "SUM",
+                                  mostRecent: true,
+                                  timeUnitLength: 0) { result, error in
+            
+            XCTAssertEqual(error, nil)
+ 
+        }
+    }
+    
+    func test_Given_InvalidVariable_When_SimpleQuery_Then_VariableNotAvailableError() throws {
+        let stub = StubHealthKitStore()
+        stub.setAuthorizationStatus(status: .notDetermined)
+        stub.setDidAdvancedQuery(true)
+        let testSubject = HealthKitManager(store: stub)
+        
+        testSubject.advancedQuery(variable: "Test",
+                                  startDate: Date.distantPast,
+                                  endDate: Date(),
+                                  timeUnit: "DAY",
+                                  operationType: "SUM",
+                                  mostRecent: true,
+                                  timeUnitLength: 0) { result, error in
+            
+            if let error = error {
+                XCTAssertEqual(error as? HealthKitErrors, .variableNotAvailable)
+            } else {
+                XCTFail("Did not throw error")
+            }
+        }
+    }
+    
+    func test_Given_VariableWithoutPermissions_When_SimpleQuery_Then_VariableNotAuthorizedError() throws {
+        let stub = StubHealthKitStore()
+        stub.setAuthorizationStatus(status: .notDetermined)
+        stub.setDidAdvancedQuery(true)
+        let testSubject = HealthKitManager(store: stub)
+        
+        testSubject.advancedQuery(variable: "STEPS",
+                                  startDate: Date.distantPast,
+                                  endDate: Date(),
+                                  timeUnit: "DAY",
+                                  operationType: "SUM",
+                                  mostRecent: true,
+                                  timeUnitLength: 0) { result, error in
+            
+            if let error = error {
+                XCTAssertEqual(error as? HealthKitErrors, .variableNotAuthorized)
+            } else {
+                XCTFail("Did not throw error")
+            }
+        }
+    }
+    
     // MARK: AdvancedQuery Tests
+    func test_Given_ValidVariable_When_AdvancedQuery_Then_SomeError() throws {
+        let stub = StubHealthKitStore()
+        stub.setAuthorizationStatus(status: .sharingAuthorized)
+        stub.setDidAdvancedQuery(false)
+        let testSubject = HealthKitManager(store: stub)
+        
+        testSubject.advancedQuery(variable: "HEART_RATE",
+                                  startDate: Date(),
+                                  endDate: Date(),
+                                  timeUnit: "DAY",
+                                  operationType: "SUM",
+                                  mostRecent: false,
+                                  timeUnitLength: 0) { result, error in
+            
+            if let error = error {
+                XCTAssertEqual(error as? HealthKitErrors, .operationNotAllowed)
+            } else {
+                XCTFail("Did not throw error")
+            }
+        }
+    }
+    
+    func test_Given_ValidVariable_When_AdvancedQuery_Then_Success() throws {
+        let stub = StubHealthKitStore()
+        stub.setAuthorizationStatus(status: .sharingAuthorized)
+        stub.setDidAdvancedQuery(true)
+        let testSubject = HealthKitManager(store: stub)
+        
+        testSubject.advancedQuery(variable: "HEART_RATE",
+                                  startDate: Date(),
+                                  endDate: Date(),
+                                  timeUnit: "DAY",
+                                  operationType: "AVERAGE",
+                                  mostRecent: false,
+                                  timeUnitLength: 0) { result, error in
+            
+            XCTAssertEqual(error, nil)
+        }
+    }
+    
     func test_Given_InvalidOperation_When_AdvancedQuery_Then_OperationNotAllowedError() throws {
         let stub = StubHealthKitStore()
         stub.setAuthorizationStatus(status: .sharingAuthorized)
@@ -136,28 +262,6 @@ class OSHealthKitTestsTests: XCTestCase {
             
             if let error = error {
                 XCTAssertEqual(error as? HealthKitErrors, .variableNotAvailable)
-            } else {
-                XCTFail("Did not throw error")
-            }
-        }
-        
-    }
-    
-    func test_Given_VariableWithoutPermissions_When_SimpleQuery_Then_VariableNotAuthorizedError() throws {
-        let stub = StubHealthKitStore()
-        stub.setAuthorizationStatus(status: .notDetermined)
-        let testSubject = HealthKitManager(store: stub)
-        
-        testSubject.advancedQuery(variable: "STEPS",
-                                  startDate: Date(),
-                                  endDate: Date(),
-                                  timeUnit: "DAY",
-                                  operationType: "SUM",
-                                  mostRecent: false,
-                                  timeUnitLength: 0) { result, error in
-            
-            if let error = error {
-                XCTAssertEqual(error as? HealthKitErrors, .variableNotAuthorized)
             } else {
                 XCTFail("Did not throw error")
             }

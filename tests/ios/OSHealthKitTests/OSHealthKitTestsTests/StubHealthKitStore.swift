@@ -22,7 +22,12 @@ public class StubHealthKitStore: HealthKitManagerProtocol {
     }
     
     func executeAdvancedQuery(quantityType: HKQuantityType, options: HKStatisticsOptions, anchorDate: Date, interval: DateComponents, newStartDate: Date, completion: @escaping (Result<HKStatisticsCollection?, Error>) -> Void) {
-        didAdvancedQuery = true
+        
+        if didAdvancedQuery {
+            completion(.success(nil))
+        } else {
+            completion(.failure(HealthKitErrors.errorWhileReading))
+        }
     }
     
     public func executeSimpleQuery(sample: HKSampleType,
@@ -30,8 +35,12 @@ public class StubHealthKitStore: HealthKitManagerProtocol {
                                    limit: Int,
                                    sortDescriptors: [NSSortDescriptor],
                                    completion: @escaping (Result<[HKCorrelation]?, Error>) -> Void) {
-        didExecuteSimpleQuery = true
-        completion(.success(nil))
+        
+        if didExecuteSimpleQuery {
+            completion(.success(nil))
+        } else {
+            completion(.failure(HealthKitErrors.errorWhileReading))
+        }
     }
     
     
@@ -54,8 +63,12 @@ public class StubHealthKitStore: HealthKitManagerProtocol {
         self.currentAuthorizationStatus = status
     }
     
-    public func setDidWriteSteps(value:Bool) {
+    public func setDidWriteSteps(_ value:Bool) {
         self.didWriteSteps = value
+    }
+
+    public func setDidAdvancedQuery(_ value:Bool) {
+        self.didAdvancedQuery = value
     }
     
 }

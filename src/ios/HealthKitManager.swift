@@ -550,6 +550,7 @@ class HealthKitManager {
             let authStatus = self.store?.checkAuthorizationStatus(for: objectType)
             if authStatus == .notDetermined {
                 completion(nil, HealthKitErrors.variableNotAuthorized as NSError)
+                return
             }
         }
 
