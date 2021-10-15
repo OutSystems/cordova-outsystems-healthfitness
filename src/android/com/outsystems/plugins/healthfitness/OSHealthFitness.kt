@@ -1,7 +1,6 @@
 package com.outsystems.plugins.healthfitness
 
 import android.Manifest
-import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
@@ -35,7 +34,7 @@ class OSHealthFitness : CordovaImplementation() {
     ): Boolean {
         this.callbackContext = callbackContext
 
-        if(!areGooglePlayServicesAvailable(callbackContext)) {
+        if(!areGooglePlayServicesAvailable()) {
             return false;
         }
 
@@ -135,7 +134,7 @@ class OSHealthFitness : CordovaImplementation() {
         healthStore?.handleActivityResult(requestCode, resultCode, intent)
     }
 
-    override fun areGooglePlayServicesAvailable(callbackContext: CallbackContext): Boolean {
+    override fun areGooglePlayServicesAvailable(): Boolean {
         val googleApiAvailability = GoogleApiAvailability.getInstance()
         val status = googleApiAvailability.isGooglePlayServicesAvailable(cordova.activity)
 
