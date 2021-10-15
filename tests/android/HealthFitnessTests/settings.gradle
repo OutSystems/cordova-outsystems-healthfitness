@@ -1,4 +1,12 @@
 include ':app'
+
 include ':CordovaLib'
-project(':CordovaLib').projectDir =  new File(settingsDir,'../node_modules/cordova-android/framework/')
+project(':CordovaLib').projectDir =  new File(settingsDir,'../../../src/android/node_modules/cordova-android/framework/')
+
+include ':Core'
+project(':Core').projectDir =  new File(settingsDir,'../../../src/android/Core')
+
+include ':HealthFitness'
+project(':HealthFitness').projectDir =  new File(settingsDir,'../../../src/android/HealthFitness')
+
 rootProject.name = "HealthFitnessTests"

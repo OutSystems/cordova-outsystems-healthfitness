@@ -5,12 +5,9 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.fitness.Fitness
 import com.google.android.gms.fitness.FitnessOptions
 import android.content.Context
-import androidx.core.content.ContextCompat
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.fitness.data.DataSet
-import com.google.android.gms.fitness.request.DataReadRequest
 import com.google.android.gms.fitness.result.DataReadResponse
-import com.outsystems.plugins.healthfitness.OSHealthFitness
 import java.lang.Exception
 
 class HealthFitnessManager(var context : Context, var activity : Activity): HealthFitnessManagerInterface {

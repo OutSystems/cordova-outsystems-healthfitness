@@ -27,10 +27,6 @@ android {
         }
     }
 
-    sourceSets {
-        main.java.srcDirs += '../../../../src/android'
-    }
-
     testOptions {
         unitTests.includeAndroidResources = true
     }
@@ -47,8 +43,11 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
 
-    implementation project(':CordovaLib')
-    testImplementation project(':CordovaLib')
+    implementation project(':Core')
+    testImplementation project(':Core')
+
+    implementation project(':HealthFitness')
+    testImplementation project(':HealthFitness')
 
     implementation "androidx.core:core-ktx:1.6.0"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"

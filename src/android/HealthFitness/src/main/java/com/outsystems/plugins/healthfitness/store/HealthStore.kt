@@ -1,21 +1,16 @@
 package com.outsystems.plugins.healthfitness.store
 
 import android.app.Activity
-import android.content.Context
 import android.content.Intent
 import android.util.Log
 import com.google.android.gms.fitness.FitnessOptions
 import com.google.android.gms.fitness.data.*
 import com.google.android.gms.fitness.data.DataPoint
 import com.google.android.gms.fitness.data.DataSet
-import com.google.android.gms.fitness.result.DataReadResponse
-import com.google.android.gms.fitness.result.DataReadResult
 import com.google.gson.Gson
-import com.outsystems.plugins.healthfitness.AndroidPlatformInterface
+import com.outsystems.plugins.core.AndroidPlatformInterface
 import com.outsystems.plugins.healthfitness.HealthFitnessError
-import com.outsystems.plugins.healthfitness.OSHealthFitness
 import java.lang.NullPointerException
-import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.TimeUnit
 

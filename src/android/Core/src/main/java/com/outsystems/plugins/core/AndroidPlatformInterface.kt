@@ -1,4 +1,4 @@
-package com.outsystems.plugins.healthfitness
+package com.outsystems.plugins.core
 
 import android.app.Activity
 import android.content.Context
@@ -16,6 +16,6 @@ interface AndroidPlatformInterface {
         grantResults: IntArray)
 
     fun <T> sendPluginResult(resultVariable: T, error: Pair<Int, String>? = null)
-    fun areGooglePlayServicesAvailable(callbackContext: CallbackContext): Boolean
+    fun areGooglePlayServicesAvailable(): Boolean
 
 }
