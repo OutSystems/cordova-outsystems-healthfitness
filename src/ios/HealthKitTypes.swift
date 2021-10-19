@@ -158,12 +158,12 @@ class HealthKitTypes {
                                               correlationType: nil,
                                               unit: HKUnit.kilocalorie())
     
-    @available(iOS 14.5, *)
-    lazy var moveMinutes = HealthKitVariable.init(quantityType: HKQuantityType.quantityType(forIdentifier:HKQuantityTypeIdentifier.appleMoveTime)!,
-                                                               sampleType: HKSampleType.quantityType(forIdentifier: .appleMoveTime)!,
-                                                               objectType: HKObjectType.quantityType(forIdentifier: .appleMoveTime)!,
-                                                               correlationType: nil,
-                                                               unit: HKUnit.kilocalorie())
+//    @available(iOS 14.5, *)
+//    lazy var moveMinutes = HealthKitVariable.init(quantityType: HKQuantityType.quantityType(forIdentifier:HKQuantityTypeIdentifier.appleMoveTime)!,
+//                                                               sampleType: HKSampleType.quantityType(forIdentifier: .appleMoveTime)!,
+//                                                               objectType: HKObjectType.quantityType(forIdentifier: .appleMoveTime)!,
+//                                                               correlationType: nil,
+//                                                               unit: HKUnit.kilocalorie())
     
     
     // MARK: - All Variables
