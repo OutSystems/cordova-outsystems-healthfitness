@@ -5,9 +5,9 @@ import android.content.Intent
 import com.google.android.gms.fitness.FitnessOptions
 import com.google.android.gms.fitness.data.DataSet
 import com.google.android.gms.fitness.result.DataReadResponse
-import com.outsystems.plugins.healthfitness.store.AdvancedQuery
-import com.outsystems.plugins.healthfitness.store.HealthFitnessManagerInterface
-import com.outsystems.plugins.healthfitness.store.HealthStore
+import com.outsystems.plugins.healthfitnesslib.store.AdvancedQuery
+import com.outsystems.plugins.healthfitnesslib.store.HealthFitnessManagerInterface
+import com.outsystems.plugins.healthfitnesslib.store.HealthStore
 import java.lang.Exception
 
 class HealthFitnessManagerMock: HealthFitnessManagerInterface {

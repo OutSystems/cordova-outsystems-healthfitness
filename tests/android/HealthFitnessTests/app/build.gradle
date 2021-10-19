@@ -34,20 +34,20 @@ android {
 
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
-    implementation 'androidx.appcompat:appcompat:1.1.0'
-    implementation 'androidx.test:core-ktx:1.3.0'
+    implementation 'androidx.appcompat:appcompat:1.3.1'
+    implementation 'androidx.test:core-ktx:1.4.0'
 
     testImplementation 'org.jetbrains.kotlin:kotlin-test'
     testImplementation 'androidx.test.ext:junit-ktx:1.1.3'
 
-    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.3'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
 
-    implementation project(':Core')
-    testImplementation project(':Core')
+    implementation project(':OSCore')
+    testImplementation project(':OSCore')
 
-    implementation project(':HealthFitness')
-    testImplementation project(':HealthFitness')
+    implementation project(':OSHealthFitnessLib')
+    testImplementation project(':OSHealthFitnessLib')
 
     implementation "androidx.core:core-ktx:1.6.0"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"

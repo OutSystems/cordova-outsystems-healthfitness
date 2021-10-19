@@ -1,2 +1,0 @@
-include ':HealthFitness'
-rootProject.name = "HealthFitness"

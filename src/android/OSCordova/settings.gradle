@@ -1,0 +1,5 @@
+include ':OSCore'
+project(':OSCore').projectDir =  new File(settingsDir,'../OSCore')
+include ':CordovaLib'
+project(':CordovaLib').projectDir =  new File(settingsDir,'../node_modules/cordova-android/framework/')
+rootProject.name = "OSCordova"

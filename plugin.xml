@@ -28,25 +28,27 @@
       <uses-permission android:name="android.permission.BODY_SENSORS" />
     </config-file>
 
-    <!-- Health&Fitness Cordova -->
+    <!-- HealthFitness Plugin -->
     <source-file src="src/android/com/outsystems/plugins/healthfitness/OSHealthFitness.kt" target-dir="app/src/main/kotlin/com/outsystems/plugins/healthfitness"/>
 
-    <!-- Core Android Library --> 
-    <source-file src="src/android/Core/src/main/java/com/outsystems/plugins/core/AndroidPlatformInterface.kt" target-dir="app/src/main/kotlin/com/outsystems/plugins/healthfitness"/>
-    <source-file src="src/android/Core/src/main/java/com/outsystems/plugins/core/cordova/CordovaImplementation.kt" target-dir="app/src/main/kotlin/com/outsystems/plugins/healthfitness"/>
+    <!-- OS Core Library --> 
+    <source-file src="src/android/OSCore/src/main/java/com/outsystems/plugins/core/AndroidPlatformInterface.kt" target-dir="app/src/main/kotlin/com/outsystems/plugins/healthfitness"/>
     
-    <!-- Health&Fitness Cordova -->
-    <source-file src="src/android/HealthFitness/src/main/java/com/outsystems/plugins/healthfitness/HealthFitnessError.kt" target-dir="app/src/main/kotlin/com/outsystems/plugins/healthfitness"/>
-    <source-file src="src/android/HealthFitness/src/main/java/com/outsystems/plugins/healthfitness/store/AdvancedQuery.kt" target-dir="app/src/main/kotlin/com/outsystems/plugins/healthfitness/store"/>
-    <source-file src="src/android/HealthFitness/src/main/java/com/outsystems/plugins/healthfitness/store/AdvancedQueryParameters.kt" target-dir="app/src/main/kotlin/com/outsystems/plugins/healthfitness/store"/>
-    <source-file src="src/android/HealthFitness/src/main/java/com/outsystems/plugins/healthfitness/store/AdvancedQueryResponse.kt" target-dir="app/src/main/kotlin/com/outsystems/plugins/healthfitness/store"/>
-    <source-file src="src/android/HealthFitness/src/main/java/com/outsystems/plugins/healthfitness/store/AdvancedQueryResponseBlock.kt" target-dir="app/src/main/kotlin/com/outsystems/plugins/healthfitness/store"/>
-    <source-file src="src/android/HealthFitness/src/main/java/com/outsystems/plugins/healthfitness/store/GoogleFitGroupPermission.kt" target-dir="app/src/main/kotlin/com/outsystems/plugins/healthfitness/store"/>
-    <source-file src="src/android/HealthFitness/src/main/java/com/outsystems/plugins/healthfitness/store/GoogleFitPermission.kt" target-dir="app/src/main/kotlin/com/outsystems/plugins/healthfitness/store"/>
-    <source-file src="src/android/HealthFitness/src/main/java/com/outsystems/plugins/healthfitness/store/GoogleFitVariable.kt" target-dir="app/src/main/kotlin/com/outsystems/plugins/healthfitness/store"/>
-    <source-file src="src/android/HealthFitness/src/main/java/com/outsystems/plugins/healthfitness/store/HealthFitnessManager.kt" target-dir="app/src/main/kotlin/com/outsystems/plugins/healthfitness/store"/>
-    <source-file src="src/android/HealthFitness/src/main/java/com/outsystems/plugins/healthfitness/store/HealthFitnessManagerInterface.kt" target-dir="app/src/main/kotlin/com/outsystems/plugins/healthfitness/store"/>
-    <source-file src="src/android/HealthFitness/src/main/java/com/outsystems/plugins/healthfitness/store/HealthStore.kt" target-dir="app/src/main/kotlin/com/outsystems/plugins/healthfitness/store"/>
+    <!-- OS Cordova Library -->
+    <source-file src="src/android/OSCordova/src/main/java/com/outsystems/plugins/oscordova/CordovaImplementation.kt" target-dir="app/src/main/kotlin/com/outsystems/plugins/healthfitness"/>
+    
+    <!-- OS Health Fitness Library -->
+    <source-file src="src/android/OSHealthFitnessLib/src/main/java/com/outsystems/plugins/healthfitnesslib/HealthFitnessError.kt" target-dir="app/src/main/kotlin/com/outsystems/plugins/healthfitness"/>
+    <source-file src="src/android/OSHealthFitnessLib/src/main/java/com/outsystems/plugins/healthfitnesslib/store/AdvancedQuery.kt" target-dir="app/src/main/kotlin/com/outsystems/plugins/healthfitness/store"/>
+    <source-file src="src/android/OSHealthFitnessLib/src/main/java/com/outsystems/plugins/healthfitnesslib/store/AdvancedQueryParameters.kt" target-dir="app/src/main/kotlin/com/outsystems/plugins/healthfitness/store"/>
+    <source-file src="src/android/OSHealthFitnessLib/src/main/java/com/outsystems/plugins/healthfitnesslib/store/AdvancedQueryResponse.kt" target-dir="app/src/main/kotlin/com/outsystems/plugins/healthfitness/store"/>
+    <source-file src="src/android/OSHealthFitnessLib/src/main/java/com/outsystems/plugins/healthfitnesslib/store/AdvancedQueryResponseBlock.kt" target-dir="app/src/main/kotlin/com/outsystems/plugins/healthfitness/store"/>
+    <source-file src="src/android/OSHealthFitnessLib/src/main/java/com/outsystems/plugins/healthfitnesslib/store/GoogleFitGroupPermission.kt" target-dir="app/src/main/kotlin/com/outsystems/plugins/healthfitness/store"/>
+    <source-file src="src/android/OSHealthFitnessLib/src/main/java/com/outsystems/plugins/healthfitnesslib/store/GoogleFitPermission.kt" target-dir="app/src/main/kotlin/com/outsystems/plugins/healthfitness/store"/>
+    <source-file src="src/android/OSHealthFitnessLib/src/main/java/com/outsystems/plugins/healthfitnesslib/store/GoogleFitVariable.kt" target-dir="app/src/main/kotlin/com/outsystems/plugins/healthfitness/store"/>
+    <source-file src="src/android/OSHealthFitnessLib/src/main/java/com/outsystems/plugins/healthfitnesslib/store/HealthFitnessManager.kt" target-dir="app/src/main/kotlin/com/outsystems/plugins/healthfitness/store"/>
+    <source-file src="src/android/OSHealthFitnessLib/src/main/java/com/outsystems/plugins/healthfitnesslib/store/HealthFitnessManagerInterface.kt" target-dir="app/src/main/kotlin/com/outsystems/plugins/healthfitness/store"/>
+    <source-file src="src/android/OSHealthFitnessLib/src/main/java/com/outsystems/plugins/healthfitnesslib/store/HealthStore.kt" target-dir="app/src/main/kotlin/com/outsystems/plugins/healthfitness/store"/>
 
     <framework src="src/android/build.gradle" custom="true" type="gradleReference" />
     <framework src="org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.4.3" />
