@@ -65,12 +65,12 @@ class OSHealthFitness: CordovaImplementation {
         let variable = command.arguments[0] as? String ?? ""
         
         plugin?.advancedQuery(variable: variable,
-                        startDate: Date(),
-                        endDate: Date(),
-                        timeUnit: "",
-                        operationType: "",
-                        mostRecent:true,
-                        timeUnitLength: 1) { success, result, error in
+                              startDate: Date.distantPast,
+                              endDate: Date(),
+                              timeUnit: "",
+                              operationType: "MOST_RECENT",
+                              mostRecent:true,
+                              timeUnitLength: 1) { success, result, error in
 
             if error != nil {
                 self.sendResult(result: nil, error: error, callBackID: self.callbackId)

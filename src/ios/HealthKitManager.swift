@@ -319,6 +319,17 @@ class HealthKitManager {
                 HKOptions = [.discreteAverage]
             case OperationType.raw.rawValue:
                 HKOptions = [.discreteAverage]
+            case OperationType.mostRecent.rawValue:
+                if (UIDevice.current.systemVersion.compare("13.0", options: NSString.CompareOptions.numeric) != ComparisonResult.orderedAscending) {
+                    if #available(iOS 13, *) {
+                        HKOptions = [.mostRecent]
+                    } else {
+                        HKOptions = []
+                    }
+                    
+                } else {
+                    HKOptions = []
+                }
             default:
                 HKOptions = []
         }
@@ -536,11 +547,17 @@ class HealthKitManager {
                        mostRecent: Bool,
                        timeUnitLength: Int,
                        completion: @escaping(AdvancedQueryResponse?, NSError?) -> Void) {
-    
+        
         if let error = self.isHealthDataAvailable() {
             completion(nil, error)
         }
         
+        if (!(UIDevice.current.systemVersion.compare("13.0", options: NSString.CompareOptions.numeric) != ComparisonResult.orderedAscending) &&
+            OperationType.mostRecent.rawValue == operationType)
+        {
+            return completion(nil, HealthKitErrors.notAvailableOnDevice as NSError)
+        }
+
         guard let type = self.HKTypes.allVariablesDict[variable] else {
             completion(nil, HealthKitErrors.variableNotAvailable as NSError)
             return
@@ -550,7 +567,6 @@ class HealthKitManager {
             let authStatus = self.store?.checkAuthorizationStatus(for: objectType)
             if authStatus == .notDetermined {
                 completion(nil, HealthKitErrors.variableNotAuthorized as NSError)
-                return
             }
         }
 
@@ -562,17 +578,21 @@ class HealthKitManager {
         
         let anchorDate = Calendar.current.date(from: self.getCalendarComponent(date: startDate))!
         let types = self.HKTypes.allVariablesDict[variable]
-        var HKOptions = self.getStatisticOptions(operationType: operationType)
+        let operations = self.getStatisticOptions(operationType: operationType)
         
-        if !mostRecent {
+        if !(OperationType.mostRecent.rawValue == operationType) {
             if let optionsAllowed = type.first?.optionsAllowed {
-                if !optionsAllowed.contains(HKOptions) {
+                if !optionsAllowed.contains(operations) {
                     completion(nil, HealthKitErrors.operationNotAllowed as NSError)
                     return
                 }
             }
         }
+        
         var interval = self.getInterval(timeUnit: timeUnit, timeUnitLength: timeUnitLength)
+        if OperationType.mostRecent.rawValue == operationType {
+            interval.year = 200
+        }
             
         if let correlationType = types?.first?.correlationType {
             
@@ -587,7 +607,7 @@ class HealthKitManager {
             var predicate = HKQuery.predicateForSamples(withStart: startDate, end: endDate, options: [.strictEndDate])
             var limit = 0
             
-            if mostRecent {
+            if OperationType.mostRecent.rawValue == operationType {
                 limit = 1
                 predicate = HKQuery.predicateForSamples(withStart: Date.distantPast, end: endDate, options: [.strictEndDate])
             }
@@ -621,26 +641,17 @@ class HealthKitManager {
             
             if let quantityType = type.quantityType {
                                 
-                var newStartDate = Date()
-                if mostRecent {
-                    HKOptions = .mostRecent
-                    newStartDate = Date.distantPast
-                    interval.year = 200
-                } else {
-                    newStartDate = startDate
-                }
-                
                 self.store?.executeAdvancedQuery(quantityType: quantityType,
-                                                 options: HKOptions,
+                                                 options: operations,
                                                  anchorDate: anchorDate,
                                                  interval: interval,
-                                                 newStartDate: newStartDate) { results in
+                                                 newStartDate: startDate) { results in
                     switch results {
                         case .failure:
                             completion(nil, HealthKitErrors.errorWhileReading as NSError)
                         case .success(let data):
                             if let data = data {
-                                let result = self.processAdvancedQueryResult(newStartDate: newStartDate,
+                                let result = self.processAdvancedQueryResult(newStartDate: startDate,
                                                                              endDate: endDate,
                                                                              mostRecent: mostRecent,
                                                                              unit: unit,
