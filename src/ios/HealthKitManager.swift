@@ -555,7 +555,7 @@ class HealthKitManager {
         if (!(UIDevice.current.systemVersion.compare("13.0", options: NSString.CompareOptions.numeric) != ComparisonResult.orderedAscending) &&
             OperationType.mostRecent.rawValue == operationType)
         {
-            return completion(nil, HealthKitErrors.notAvailableOnDevice as NSError)
+            return completion(nil, HealthKitErrors.featureNotAvailable as NSError)
         }
 
         guard let type = self.HKTypes.allVariablesDict[variable] else {

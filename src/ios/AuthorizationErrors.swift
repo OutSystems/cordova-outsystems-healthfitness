@@ -30,7 +30,7 @@ public enum HealthKitErrors : Int, CustomNSError, LocalizedError {
             case .operationNotAllowed:
                 return "Operation not allowed."
             case .featureNotAvailable:
-                return "Feature not available on device."
+                return "This feature is only available for iOS 13 and above."
             case .badParameterType:
                 return "Invalid parameter."
             case .errorWhileReading:
