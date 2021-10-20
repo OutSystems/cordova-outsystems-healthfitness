@@ -1,0 +1,12 @@
+{
+  "name": "com.outsystems.plugins.healthfitness",
+  "version": "0.0.1",
+  "description": "iOS Unit Tests for the plugin OSHealthFitness",
+  "dependencies": {
+      "cordova-ios": "5.1.1"
+  },
+  "scripts": {
+      "test": "xcodebuild test -scheme OSHealthFitnessTests -destination 'platform=iOS Simulator,name=iPhone 5s'"
+  },
+  "author": "OutSystems Inc"
+}

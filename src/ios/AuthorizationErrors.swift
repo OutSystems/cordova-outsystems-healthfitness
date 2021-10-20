@@ -1,6 +1,8 @@
 import Foundation
 
-enum HealthKitErrors : Int, CustomNSError, LocalizedError {
+typealias CompletionHandler = () throws -> HealthKitErrors?
+
+public enum HealthKitErrors : Int, CustomNSError, LocalizedError {
     case variableNotAvailable = 100
     case variableNotAuthorized = 101
     case operationNotAllowed = 102
@@ -10,6 +12,7 @@ enum HealthKitErrors : Int, CustomNSError, LocalizedError {
     case badParameterType = 106
     case authorizationError = 107
     case notAvailableOnDevice = 108
+    case unitNotAvailable = 109
     
     var description: String {
         switch self {
@@ -31,11 +34,12 @@ enum HealthKitErrors : Int, CustomNSError, LocalizedError {
                 return "Error while reading data."
             case .errorWhileWriting:
                 return "Error while writing data."
-
+            case .unitNotAvailable:
+                return "Variable not available."
         }
     }
     
-    var errorDescription: String? {
+    public var errorDescription: String? {
         return description == "" ? NSLocalizedString(String(rawValue), comment: "") : description
     }
         

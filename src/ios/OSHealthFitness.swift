@@ -74,8 +74,7 @@ class OSHealthFitness: CordovaImplementation {
 
             if error != nil {
                 self.sendResult(result: nil, error: error, callBackID: self.callbackId)
-            }
-            else if success {
+            } else if success {
                 self.sendResult(result: result, error: nil, callBackID: self.callbackId)
             }
         }
