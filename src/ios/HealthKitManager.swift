@@ -1,5 +1,6 @@
 import Foundation
 import HealthKit
+import UIKit
 
 protocol HealthKitManagerProtocol {
     
@@ -566,7 +567,7 @@ class HealthKitManager {
         if let objectType = type.first?.objectType {
             let authStatus = self.store?.checkAuthorizationStatus(for: objectType)
             if authStatus == .notDetermined {
-                completion(nil, HealthKitErrors.variableNotAuthorized as NSError)
+                return completion(nil, HealthKitErrors.variableNotAuthorized as NSError)
             }
         }
 
