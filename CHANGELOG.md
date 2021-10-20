@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 The changes documented here do not include those from the original repository.
 
 ## [Unreleased]
+
+## 2021-10-20
+- Fixed compatibility issue with MABS 7 (https://outsystemsrd.atlassian.net/browse/RMET-1168)
 ## 2021-10-14
 - Unit Tests for iOS (https://outsystemsrd.atlassian.net/browse/RMET-1049)
 
