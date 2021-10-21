@@ -23,116 +23,147 @@ enum HealthTypeEnum: String
 }
 
 class HealthKitTypes {
+    
+    lazy var cumulativeSumOperations:[HKStatisticsOptions] = {
+        return [.cumulativeSum]
+    }()
+    lazy var averageOperations:[HKStatisticsOptions] = {
+        return [.discreteAverage,.discreteMax,.discreteMin]
+    }()
 
-    let stepCount = HealthKitVariable.init(quantityType: HKQuantityType.quantityType(forIdentifier:HKQuantityTypeIdentifier.stepCount)!,
+    init() {
+        stepCount.optionsAllowed = cumulativeSumOperations
+        heartRate.optionsAllowed = averageOperations
+        bodyMass.optionsAllowed = averageOperations
+        height.optionsAllowed = averageOperations
+        sleepAnalysis.optionsAllowed = averageOperations
+        oxygenSaturation.optionsAllowed = averageOperations
+        activeEnergyBurned.optionsAllowed = cumulativeSumOperations
+        basalEnergyBurned.optionsAllowed = cumulativeSumOperations
+        bodyFatPercentage.optionsAllowed = averageOperations
+        bodyTemperature.optionsAllowed = averageOperations
+        dietaryWater.optionsAllowed = cumulativeSumOperations
+        dietaryEnergyConsumed.optionsAllowed = cumulativeSumOperations
+        pushCount.optionsAllowed = cumulativeSumOperations
+        
+        bloodGlucose.optionsAllowed = nil
+        bloodPressureSystolic.optionsAllowed = nil
+        bloodPressureDiastolic.optionsAllowed = nil
+        
+//        if #available(iOS 14.5, *) {
+//            allVariablesDict[HealthTypeEnum.moveMinutes.rawValue] = [moveMinutes]
+//        }
+        
+    }
+    
+    var stepCount = HealthKitVariable.init(quantityType: HKQuantityType.quantityType(forIdentifier:HKQuantityTypeIdentifier.stepCount)!,
                                            sampleType: HKSampleType.quantityType(forIdentifier: .stepCount)!,
                                            objectType: HKObjectType.quantityType(forIdentifier: .stepCount)!,
                                            correlationType: nil,
                                            unit: HKUnit.count(),
-                                           optionsAllowed: [.cumulativeSum,.mostRecent])
+                                           optionsAllowed: nil)
 
-    let heartRate = HealthKitVariable.init(quantityType: HKQuantityType.quantityType(forIdentifier:HKQuantityTypeIdentifier.heartRate)!,
+    var heartRate = HealthKitVariable.init(quantityType: HKQuantityType.quantityType(forIdentifier:HKQuantityTypeIdentifier.heartRate)!,
                                            sampleType: HKSampleType.quantityType(forIdentifier: .heartRate)!,
                                            objectType: HKObjectType.quantityType(forIdentifier: .heartRate)!,
                                            correlationType: nil,
                                            unit: HKUnit(from: "count/min"),
-                                           optionsAllowed: [.discreteAverage,.mostRecent,.discreteMax,.discreteMin])
+                                           optionsAllowed: nil)
     
-    let bodyMass = HealthKitVariable.init(quantityType: HKQuantityType.quantityType(forIdentifier:HKQuantityTypeIdentifier.bodyMass)!,
+    var bodyMass = HealthKitVariable.init(quantityType: HKQuantityType.quantityType(forIdentifier:HKQuantityTypeIdentifier.bodyMass)!,
                                                     sampleType: HKSampleType.quantityType(forIdentifier: .bodyMass)!,
                                                     objectType: HKObjectType.quantityType(forIdentifier: .bodyMass)!,
                                                     correlationType: nil,
                                                     unit: HKUnit.gramUnit(with: .kilo),
-                                                    optionsAllowed: [.discreteAverage,.mostRecent,.discreteMax,.discreteMin])
+                                                    optionsAllowed: nil)
     
-    let height = HealthKitVariable.init(quantityType: HKQuantityType.quantityType(forIdentifier:HKQuantityTypeIdentifier.height)!,
+    var height = HealthKitVariable.init(quantityType: HKQuantityType.quantityType(forIdentifier:HKQuantityTypeIdentifier.height)!,
                                                     sampleType: HKSampleType.quantityType(forIdentifier: .height)!,
                                                     objectType: HKObjectType.quantityType(forIdentifier: .height)!,
                                                     correlationType: nil,
                                                     unit: HKUnit.meterUnit(with: .centi),
-                                                    optionsAllowed: [.discreteAverage,.mostRecent,.discreteMax,.discreteMin])
+                                                    optionsAllowed: nil)
     
-    let bloodGlucose = HealthKitVariable.init(quantityType: HKQuantityType.quantityType(forIdentifier: .bloodGlucose)!,
+    var bloodGlucose = HealthKitVariable.init(quantityType: HKQuantityType.quantityType(forIdentifier: .bloodGlucose)!,
                                                        sampleType: HKSampleType.quantityType(forIdentifier: .bloodGlucose)!,
                                                        objectType: HKObjectType.quantityType(forIdentifier: .bloodGlucose)!,
                                                        correlationType: nil,
                                                        unit: HKUnit(from: "mg/dL"),
-                                                       optionsAllowed: [.discreteAverage,.mostRecent,.discreteMax,.discreteMin])
+                                                       optionsAllowed: nil)
     
-    let bloodPressureSystolic = HealthKitVariable.init(quantityType: HKQuantityType.quantityType(forIdentifier:HKQuantityTypeIdentifier.bloodPressureSystolic)!,
+    var bloodPressureSystolic = HealthKitVariable.init(quantityType: HKQuantityType.quantityType(forIdentifier:HKQuantityTypeIdentifier.bloodPressureSystolic)!,
                                                        sampleType: HKSampleType.quantityType(forIdentifier: .bloodPressureSystolic)!,
                                                        objectType: HKObjectType.quantityType(forIdentifier: .bloodPressureSystolic)!,
                                                        correlationType: HKCorrelationType.correlationType(forIdentifier: .bloodPressure)!,
                                                        unit: HKUnit.count())
     
-    let bloodPressureDiastolic = HealthKitVariable.init(quantityType: HKQuantityType.quantityType(forIdentifier:HKQuantityTypeIdentifier.bloodPressureDiastolic)!,
+    var bloodPressureDiastolic = HealthKitVariable.init(quantityType: HKQuantityType.quantityType(forIdentifier:HKQuantityTypeIdentifier.bloodPressureDiastolic)!,
                                                         sampleType: HKSampleType.quantityType(forIdentifier: .bloodPressureDiastolic)!,
                                                         objectType: HKObjectType.quantityType(forIdentifier: .bloodPressureDiastolic)!,
                                                         correlationType: HKCorrelationType.correlationType(forIdentifier: .bloodPressure)!,
                                                         unit: HKUnit.count())
     
-    let sleepAnalysis = HealthKitVariable.init(quantityType: nil, // TODO Verify
+    var sleepAnalysis = HealthKitVariable.init(quantityType: nil, // TODO Verify
                                                sampleType: HKSampleType.categoryType(forIdentifier: .sleepAnalysis)!,
                                                objectType: HKObjectType.categoryType(forIdentifier: .sleepAnalysis)!,
                                                correlationType: nil,
                                                unit: HKUnit.count(),
-                                               optionsAllowed: [.discreteAverage,.mostRecent,.discreteMax,.discreteMin])
+                                               optionsAllowed: nil)
     
-    let oxygenSaturation = HealthKitVariable.init(quantityType: HKQuantityType.quantityType(forIdentifier:HKQuantityTypeIdentifier.oxygenSaturation)!,
+    var oxygenSaturation = HealthKitVariable.init(quantityType: HKQuantityType.quantityType(forIdentifier:HKQuantityTypeIdentifier.vo2Max)!,
                                                         sampleType: HKSampleType.quantityType(forIdentifier: .oxygenSaturation)!,
                                                         objectType: HKObjectType.quantityType(forIdentifier: .oxygenSaturation)!,
                                                         correlationType: nil,
-                                                        unit: HKUnit.percent(),
-                                                        optionsAllowed: [.discreteAverage,.mostRecent,.discreteMax,.discreteMin])
+                                                        unit: HKUnit.percent())
 
-    let activeEnergyBurned = HealthKitVariable.init(quantityType: HKQuantityType.quantityType(forIdentifier:HKQuantityTypeIdentifier.activeEnergyBurned)!,
+    var activeEnergyBurned = HealthKitVariable.init(quantityType: HKQuantityType.quantityType(forIdentifier:HKQuantityTypeIdentifier.activeEnergyBurned)!,
                                                     sampleType: HKSampleType.quantityType(forIdentifier: .activeEnergyBurned)!,
                                                     objectType: HKObjectType.quantityType(forIdentifier: .activeEnergyBurned)!,
                                                     correlationType: nil,
-                                                    unit: HKUnit.kilocalorie(),
-                                                    optionsAllowed: [.cumulativeSum,.mostRecent])
+                                                    unit: HKUnit.kilocalorie())
     
-    let bodyFatPercentage = HealthKitVariable.init(quantityType: HKQuantityType.quantityType(forIdentifier:HKQuantityTypeIdentifier.bodyFatPercentage)!,
+    var bodyFatPercentage = HealthKitVariable.init(quantityType: HKQuantityType.quantityType(forIdentifier:HKQuantityTypeIdentifier.bodyFatPercentage)!,
                                                     sampleType: HKSampleType.quantityType(forIdentifier: .bodyFatPercentage)!,
                                                     objectType: HKObjectType.quantityType(forIdentifier: .bodyFatPercentage)!,
                                                     correlationType: nil,
-                                                    unit: HKUnit.percent(),
-                                                    optionsAllowed: [.discreteAverage,.mostRecent,.discreteMax,.discreteMin])
+                                                    unit: HKUnit.percent())
     
-    let basalEnergyBurned = HealthKitVariable.init(quantityType: HKQuantityType.quantityType(forIdentifier:HKQuantityTypeIdentifier.basalEnergyBurned)!,
+    var basalEnergyBurned = HealthKitVariable.init(quantityType: HKQuantityType.quantityType(forIdentifier:HKQuantityTypeIdentifier.basalEnergyBurned)!,
                                                     sampleType: HKSampleType.quantityType(forIdentifier: .basalEnergyBurned)!,
                                                     objectType: HKObjectType.quantityType(forIdentifier: .basalEnergyBurned)!,
                                                     correlationType: nil,
-                                                    unit: HKUnit.kilocalorie(),
-                                                    optionsAllowed: [.cumulativeSum,.mostRecent])
+                                                    unit: HKUnit.kilocalorie())
     
-    let bodyTemperature = HealthKitVariable.init(quantityType: HKQuantityType.quantityType(forIdentifier:HKQuantityTypeIdentifier.bodyTemperature)!,
+    var bodyTemperature = HealthKitVariable.init(quantityType: HKQuantityType.quantityType(forIdentifier:HKQuantityTypeIdentifier.bodyTemperature)!,
                                                     sampleType: HKSampleType.quantityType(forIdentifier: .bodyTemperature)!,
                                                     objectType: HKObjectType.quantityType(forIdentifier: .bodyTemperature)!,
                                                     correlationType: nil,
-                                                    unit: HKUnit.degreeCelsius(),
-                                                    optionsAllowed: [.discreteAverage,.mostRecent,.discreteMax,.discreteMin])
+                                                    unit: HKUnit.degreeCelsius())
     
-    let dietaryWater = HealthKitVariable.init(quantityType: HKQuantityType.quantityType(forIdentifier:HKQuantityTypeIdentifier.dietaryWater)!,
+    var dietaryWater = HealthKitVariable.init(quantityType: HKQuantityType.quantityType(forIdentifier:HKQuantityTypeIdentifier.dietaryWater)!,
                                               sampleType: HKSampleType.quantityType(forIdentifier: .dietaryWater)!,
                                               objectType: HKObjectType.quantityType(forIdentifier: .dietaryWater)!,
                                               correlationType: nil,
-                                              unit: HKUnit.liter(),
-                                              optionsAllowed: [.cumulativeSum,.mostRecent])
+                                              unit: HKUnit.liter())
     
-    let pushCount = HealthKitVariable.init(quantityType: HKQuantityType.quantityType(forIdentifier:HKQuantityTypeIdentifier.pushCount)!,
+    var pushCount = HealthKitVariable.init(quantityType: HKQuantityType.quantityType(forIdentifier:HKQuantityTypeIdentifier.pushCount)!,
                                               sampleType: HKSampleType.quantityType(forIdentifier: .pushCount)!,
                                               objectType: HKObjectType.quantityType(forIdentifier: .pushCount)!,
                                               correlationType: nil,
-                                              unit: HKUnit.count(),
-                                              optionsAllowed: [.cumulativeSum,.mostRecent])
+                                              unit: HKUnit.count())
     
-    let dietaryEnergyConsumed = HealthKitVariable.init(quantityType: HKQuantityType.quantityType(forIdentifier:HKQuantityTypeIdentifier.dietaryEnergyConsumed)!,
+    var dietaryEnergyConsumed = HealthKitVariable.init(quantityType: HKQuantityType.quantityType(forIdentifier:HKQuantityTypeIdentifier.dietaryEnergyConsumed)!,
                                               sampleType: HKSampleType.quantityType(forIdentifier: .dietaryEnergyConsumed)!,
                                               objectType: HKObjectType.quantityType(forIdentifier: .dietaryEnergyConsumed)!,
                                               correlationType: nil,
-                                              unit: HKUnit.kilocalorie(),
-                                              optionsAllowed: [.cumulativeSum,.mostRecent])
+                                              unit: HKUnit.kilocalorie())
+    
+//    @available(iOS 14.5, *)
+//    lazy var moveMinutes = HealthKitVariable.init(quantityType: HKQuantityType.quantityType(forIdentifier:HKQuantityTypeIdentifier.appleMoveTime)!,
+//                                                               sampleType: HKSampleType.quantityType(forIdentifier: .appleMoveTime)!,
+//                                                               objectType: HKObjectType.quantityType(forIdentifier: .appleMoveTime)!,
+//                                                               correlationType: nil,
+//                                                               unit: HKUnit.kilocalorie())
     
     
     // MARK: - All Variables
@@ -212,7 +243,7 @@ class GroupPermissions: Codable {
         self.isActive = isActive
         self.accessType = accessType
     }
-
+    
 }
 
 // MARK: - QueryParameters
@@ -249,6 +280,7 @@ struct HealthKitVariable {
     var correlationType: HKCorrelationType?
     var unit: HKUnit
     var optionsAllowed: [HKStatisticsOptions]?
+    //var defaultOption: HKStatisticsOptions?
 }
 
 enum TimeUnit: String {
@@ -267,7 +299,8 @@ enum OperationType: String {
          average = "AVERAGE",
          min = "MIN",
          max = "MAX",
-         raw = "RAW"
+         raw = "RAW",
+         mostRecent = "MOST_RECENT"
 }
 
 enum AccessTypeEnum: String {

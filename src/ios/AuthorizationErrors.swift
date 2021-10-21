@@ -13,6 +13,7 @@ public enum HealthKitErrors : Int, CustomNSError, LocalizedError {
     case authorizationError = 107
     case notAvailableOnDevice = 108
     case unitNotAvailable = 109
+    case featureNotAvailable = 110
     
     var description: String {
         switch self {
@@ -28,6 +29,8 @@ public enum HealthKitErrors : Int, CustomNSError, LocalizedError {
                 return "Variable not authorized."
             case .operationNotAllowed:
                 return "Operation not allowed."
+            case .featureNotAvailable:
+                return "This feature is only available for iOS 13 and above."
             case .badParameterType:
                 return "Invalid parameter."
             case .errorWhileReading:
