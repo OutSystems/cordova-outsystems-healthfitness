@@ -1,3 +1,0 @@
-include ':OSCore'
-project(':OSCore').projectDir =  new File(settingsDir,'../OSCore')
-rootProject.name = "OSHealthFitnessLib"

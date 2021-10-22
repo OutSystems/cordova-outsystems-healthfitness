@@ -1,9 +1,2 @@
 include ':app'
-
-include ':OSCore'
-project(':OSCore').projectDir =  new File(settingsDir,'../../../src/android/OSCore')
-
-include ':OSHealthFitnessLib'
-project(':OSHealthFitnessLib').projectDir =  new File(settingsDir,'../../../src/android/OSHealthFitnessLib')
-
 rootProject.name = "HealthFitnessTests"
