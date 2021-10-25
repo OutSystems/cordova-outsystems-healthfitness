@@ -4,7 +4,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import android.app.Activity
 import android.content.Context
 import androidx.test.core.app.ApplicationProvider
-import com.outsystems.plugins.healthfitness.AndroidPlatformInterface
+import com.outsystems.plugins.core.AndroidPlatformInterface
 import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
@@ -35,6 +35,7 @@ class AndroidPlatformMock : AndroidPlatformInterface {
     }
 
     override fun areGooglePlayServicesAvailable(): Boolean {
-        TODO("Not yet implemented")
+        // Does nothing
+        return true
     }
 }

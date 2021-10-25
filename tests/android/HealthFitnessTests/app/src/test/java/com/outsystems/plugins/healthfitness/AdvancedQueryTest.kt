@@ -3,10 +3,11 @@ package com.outsystems.plugins.healthfitness
 import com.google.gson.Gson
 import com.outsystems.plugins.healthfitness.mock.AndroidPlatformMock
 import com.outsystems.plugins.healthfitness.mock.HealthFitnessManagerMock
-import com.outsystems.plugins.healthfitness.store.AdvancedQueryParameters
-import com.outsystems.plugins.healthfitness.store.AdvancedQueryResponse
-import com.outsystems.plugins.healthfitness.store.EnumOperationType
-import com.outsystems.plugins.healthfitness.store.HealthStore
+import com.outsystems.plugins.healthfitnesslib.store.AdvancedQueryParameters
+import com.outsystems.plugins.healthfitnesslib.store.AdvancedQueryResponse
+import com.outsystems.plugins.healthfitnesslib.store.EnumOperationType
+import com.outsystems.plugins.healthfitnesslib.store.HealthStore
+import com.outsystems.plugins.healthfitnesslib.HealthFitnessError
 import org.junit.Assert
 import org.junit.Test
 import java.util.*

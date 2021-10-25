@@ -9,9 +9,11 @@ import androidx.core.content.ContextCompat
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
 import com.google.gson.Gson
-import com.outsystems.plugins.healthfitness.store.AdvancedQueryParameters
-import com.outsystems.plugins.healthfitness.store.HealthFitnessManager
-import com.outsystems.plugins.healthfitness.store.HealthStore
+import com.outsystems.plugins.healthfitnesslib.HealthFitnessError
+import com.outsystems.plugins.healthfitnesslib.store.AdvancedQueryParameters
+import com.outsystems.plugins.healthfitnesslib.store.HealthFitnessManager
+import com.outsystems.plugins.healthfitnesslib.store.HealthStore
+import com.outsystems.plugins.oscordova.CordovaImplementation
 import org.apache.cordova.*
 import org.json.JSONArray
 

@@ -3,9 +3,10 @@ package com.outsystems.plugins.healthfitness
 import com.google.gson.Gson
 import com.outsystems.plugins.healthfitness.mock.AndroidPlatformMock
 import com.outsystems.plugins.healthfitness.mock.HealthFitnessManagerMock
-import com.outsystems.plugins.healthfitness.store.GoogleFitGroupPermission
-import com.outsystems.plugins.healthfitness.store.GoogleFitPermission
-import com.outsystems.plugins.healthfitness.store.HealthStore
+import com.outsystems.plugins.healthfitnesslib.HealthFitnessError
+import com.outsystems.plugins.healthfitnesslib.store.GoogleFitGroupPermission
+import com.outsystems.plugins.healthfitnesslib.store.GoogleFitPermission
+import com.outsystems.plugins.healthfitnesslib.store.HealthStore
 import org.junit.Assert
 import org.junit.Test
 
