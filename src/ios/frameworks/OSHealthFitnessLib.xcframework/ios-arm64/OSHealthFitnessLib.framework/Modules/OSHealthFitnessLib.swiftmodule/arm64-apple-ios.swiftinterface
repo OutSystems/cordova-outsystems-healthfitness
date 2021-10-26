@@ -1,12 +1,11 @@
 // swift-interface-format-version: 1.0
-// swift-compiler-version: Apple Swift version 5.5 effective-4.2 (swiftlang-1300.0.31.1 clang-1300.0.29.1)
+// swift-compiler-version: Apple Swift version 5.3.1 effective-4.2 (swiftlang-1200.0.41 clang-1200.0.32.8)
 // swift-module-flags: -target arm64-apple-ios12.0 -enable-objc-interop -enable-library-evolution -swift-version 4.2 -enforce-exclusivity=checked -O -module-name OSHealthFitnessLib
 import Foundation
 import HealthKit
 @_exported import OSHealthFitnessLib
 import Swift
 import UIKit
-import _Concurrency
 public enum HealthKitErrors : Swift.Int, Foundation.CustomNSError, Foundation.LocalizedError {
   case variableNotAvailable
   case variableNotAuthorized
@@ -22,16 +21,16 @@ public enum HealthKitErrors : Swift.Int, Foundation.CustomNSError, Foundation.Lo
   public var errorDescription: Swift.String? {
     get
   }
-  public init?(rawValue: Swift.Int)
   public typealias RawValue = Swift.Int
+  public init?(rawValue: Swift.Int)
   public var rawValue: Swift.Int {
     get
   }
 }
-extension Swift.String {
+extension String {
   public func decode<T>(string: Swift.String) -> T where T : Swift.Decodable
 }
-extension Swift.Encodable {
+extension Encodable {
   public func encode<T>(object: T) -> Swift.String where T : Swift.Encodable
 }
 open class HealthFitnessPlugin {
@@ -48,10 +47,10 @@ open class HealthFitnessPlugin {
   final public let timeUnit: Swift.String?, operationType: Swift.String?
   final public let timeUnitLength: Swift.Int?
   @objc deinit
-  public func encode(to encoder: Swift.Encoder) throws
   required public init(from decoder: Swift.Decoder) throws
+  public func encode(to encoder: Swift.Encoder) throws
 }
-extension Foundation.Date {
+extension Date {
   public init(_ dateString: Swift.String)
 }
 extension OSHealthFitnessLib.HealthKitErrors : Swift.Equatable {}
