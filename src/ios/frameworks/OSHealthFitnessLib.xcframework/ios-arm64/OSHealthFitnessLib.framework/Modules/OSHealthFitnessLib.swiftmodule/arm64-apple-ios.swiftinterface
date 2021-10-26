@@ -1,0 +1,59 @@
+// swift-interface-format-version: 1.0
+// swift-compiler-version: Apple Swift version 5.5 (swiftlang-1300.0.31.1 clang-1300.0.29.1)
+// swift-module-flags: -target arm64-apple-ios15.0 -enable-objc-interop -enable-library-evolution -swift-version 5 -enforce-exclusivity=checked -O -module-name OSHealthFitnessLib
+import Foundation
+import HealthKit
+@_exported import OSHealthFitnessLib
+import Swift
+import UIKit
+import _Concurrency
+public enum HealthKitErrors : Swift.Int, Foundation.CustomNSError, Foundation.LocalizedError {
+  case variableNotAvailable
+  case variableNotAuthorized
+  case operationNotAllowed
+  case errorWhileReading
+  case errorWhileWriting
+  case variableHasWriteDenied
+  case badParameterType
+  case authorizationError
+  case notAvailableOnDevice
+  case unitNotAvailable
+  case featureNotAvailable
+  public var errorDescription: Swift.String? {
+    get
+  }
+  public init?(rawValue: Swift.Int)
+  public typealias RawValue = Swift.Int
+  public var rawValue: Swift.Int {
+    get
+  }
+}
+extension Swift.String {
+  public func decode<T>(string: Swift.String) -> T where T : Swift.Decodable
+}
+extension Swift.Encodable {
+  public func encode<T>(object: T) -> Swift.String where T : Swift.Encodable
+}
+open class HealthFitnessPlugin {
+  public init()
+  public func writeData(variable: Swift.String, value: Swift.Double, completion: @escaping (Swift.Bool, Foundation.NSError?) -> Swift.Void)
+  public func getLastRecord(variable: Swift.String, mostRecent: Swift.Bool, timeUnitLength: Swift.Int, completion: @escaping (Swift.Bool, Swift.String?, Foundation.NSError?) -> Swift.Void)
+  public func requestPermissions(customPermissions: Swift.String, allVariables: Swift.String, fitnessVariables: Swift.String, healthVariables: Swift.String, profileVariables: Swift.String, summaryVariables: Swift.String, completion: @escaping (Swift.Bool, Foundation.NSError?) -> Swift.Void)
+  public func advancedQuery(variable: Swift.String, startDate: Foundation.Date, endDate: Foundation.Date, timeUnit: Swift.String, operationType: Swift.String, mostRecent: Swift.Bool, timeUnitLength: Swift.Int, completion: @escaping (Swift.Bool, Swift.String?, Foundation.NSError?) -> Swift.Void)
+  @objc deinit
+}
+@_hasMissingDesignatedInitializers public class QueryParameters : Swift.Codable {
+  final public let variable: Swift.String?
+  final public let startDate: Swift.String?, endDate: Swift.String?
+  final public let timeUnit: Swift.String?, operationType: Swift.String?
+  final public let timeUnitLength: Swift.Int?
+  @objc deinit
+  public func encode(to encoder: Swift.Encoder) throws
+  required public init(from decoder: Swift.Decoder) throws
+}
+extension Foundation.Date {
+  public init(_ dateString: Swift.String)
+}
+extension OSHealthFitnessLib.HealthKitErrors : Swift.Equatable {}
+extension OSHealthFitnessLib.HealthKitErrors : Swift.Hashable {}
+extension OSHealthFitnessLib.HealthKitErrors : Swift.RawRepresentable {}
