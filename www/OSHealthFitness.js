@@ -46,7 +46,7 @@ exports.setBackgroundJob = function (success, error, params) {
         notificationBody
     } = params;
 
-    var args = [variable, value, comparison, notificationTitle, notificationBody]
+    var args = [variable, value, comparison, notificationTitle, notificationBody];
 
     exec(success, error, 'OSHealthFitness', 'setBackgroundJob', [args]);
 };
