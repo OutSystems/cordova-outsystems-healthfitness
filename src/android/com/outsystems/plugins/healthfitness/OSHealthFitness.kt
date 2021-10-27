@@ -53,6 +53,9 @@ class OSHealthFitness : CordovaImplementation() {
             "getLastRecord" -> {
                 getLastRecord(args)
             }
+            "setBackgroundJob" -> {
+                setBackgroundJob(args)
+            }
         }
         return true
     }
@@ -129,6 +132,12 @@ class OSHealthFitness : CordovaImplementation() {
         //process parameters
         val variable = args.getString(0)
         healthStore?.getLastRecord(variable)
+    }
+
+    private fun setBackgroundJob(args: JSONArray) {
+        //process parameters
+        val parameters = gson.fromJson(args.getString(0), BackgroundJobParameters::class.java)
+        healthStore?.setBackgroundJob(parameters)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, intent: Intent) {
