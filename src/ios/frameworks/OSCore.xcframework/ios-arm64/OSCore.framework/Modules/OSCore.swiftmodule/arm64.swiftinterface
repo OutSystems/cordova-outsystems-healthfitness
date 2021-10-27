@@ -1,0 +1,9 @@
+// swift-interface-format-version: 1.0
+// swift-compiler-version: Apple Swift version 5.3.1 effective-4.2 (swiftlang-1200.0.41 clang-1200.0.32.8)
+// swift-module-flags: -target arm64-apple-ios12.0 -enable-objc-interop -enable-library-evolution -swift-version 4.2 -enforce-exclusivity=checked -O -module-name OSCore
+import Foundation
+@_exported import OSCore
+import Swift
+public protocol PlatformProtocol {
+  func sendResult(result: Swift.String?, error: Foundation.NSError?, callBackID: Swift.String)
+}

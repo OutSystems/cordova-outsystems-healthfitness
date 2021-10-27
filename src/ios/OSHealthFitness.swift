@@ -1,4 +1,5 @@
 import Foundation
+import OSHealthFitnessLib
 
 @objc(OSHealthFitness)
 class OSHealthFitness: CordovaImplementation {
