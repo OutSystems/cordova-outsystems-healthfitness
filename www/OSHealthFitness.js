@@ -36,6 +36,6 @@ exports.getLastRecord = function (success, error, variable) {
     exec(success, error, 'OSHealthFitness', 'getLastRecord', [variable]);
 };
 
-exports.setBackgroundJob = function (success, error, variable, value, comparison, notificationTitle, notificationBody) {
-    exec(success, error, 'OSHealthFitness', 'setBackgroundJob', [variable, value, comparison, notificationTitle, notificationBody]);
+exports.setBackgroundJob = function (success, error, params) {
+    exec(success, error, 'OSHealthFitness', 'setBackgroundJob', [params]);
 };
