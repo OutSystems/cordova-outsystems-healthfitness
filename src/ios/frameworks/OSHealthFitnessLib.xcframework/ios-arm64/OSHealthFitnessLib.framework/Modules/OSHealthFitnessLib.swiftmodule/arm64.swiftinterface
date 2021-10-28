@@ -1,11 +1,44 @@
 // swift-interface-format-version: 1.0
-// swift-compiler-version: Apple Swift version 5.3.1 effective-4.2 (swiftlang-1200.0.41 clang-1200.0.32.8)
+// swift-compiler-version: Apple Swift version 5.5.1 effective-4.2 (swiftlang-1300.0.31.4 clang-1300.0.29.6)
 // swift-module-flags: -target arm64-apple-ios12.0 -enable-objc-interop -enable-library-evolution -swift-version 4.2 -enforce-exclusivity=checked -O -module-name OSHealthFitnessLib
+import BackgroundTasks
 import Foundation
 import HealthKit
+import NotificationCenter
 @_exported import OSHealthFitnessLib
+import Realm
+import RealmSwift
 import Swift
 import UIKit
+import UserNotifications
+import UserNotificationsUI
+import _Concurrency
+@objc @_inheritsConvenienceInitializers final public class BackgroundJob : RealmSwift.Object {
+  public enum ComparisonOperationEnum : Swift.Int {
+    case GREATER
+    case GREATER_OR_EQUALS
+    case LESSER
+    case LESSER_OR_EQUALS
+    case EQUALS
+    public init?(rawValue: Swift.Int)
+    public typealias RawValue = Swift.Int
+    public var rawValue: Swift.Int {
+      get
+    }
+  }
+  dynamic final public var id: Swift.Int
+  dynamic final public var notification: OSHealthFitnessLib.Notification?
+  dynamic final public var compoundKey: Swift.String
+  dynamic final public var variable: Swift.String
+  final public func setCompoundVariable(variable: Swift.String)
+  dynamic final public var comparison: Swift.String
+  final public func setCompoundComparison(comparison: Swift.String)
+  dynamic final public var value: Swift.Double
+  final public func setCompoundValue(value: Swift.Double)
+  @objc override final public class func primaryKey() -> Swift.String?
+  @objc override dynamic public init()
+  @objc deinit
+}
 public enum HealthKitErrors : Swift.Int, Foundation.CustomNSError, Foundation.LocalizedError {
   case variableNotAvailable
   case variableNotAuthorized
@@ -21,16 +54,16 @@ public enum HealthKitErrors : Swift.Int, Foundation.CustomNSError, Foundation.Lo
   public var errorDescription: Swift.String? {
     get
   }
-  public typealias RawValue = Swift.Int
   public init?(rawValue: Swift.Int)
+  public typealias RawValue = Swift.Int
   public var rawValue: Swift.Int {
     get
   }
 }
-extension String {
+extension Swift.String {
   public func decode<T>(string: Swift.String) -> T where T : Swift.Decodable
 }
-extension Encodable {
+extension Swift.Encodable {
   public func encode<T>(object: T) -> Swift.String where T : Swift.Encodable
 }
 open class HealthFitnessPlugin {
@@ -39,7 +72,30 @@ open class HealthFitnessPlugin {
   public func getLastRecord(variable: Swift.String, mostRecent: Swift.Bool, timeUnitLength: Swift.Int, completion: @escaping (Swift.Bool, Swift.String?, Foundation.NSError?) -> Swift.Void)
   public func requestPermissions(customPermissions: Swift.String, allVariables: Swift.String, fitnessVariables: Swift.String, healthVariables: Swift.String, profileVariables: Swift.String, summaryVariables: Swift.String, completion: @escaping (Swift.Bool, Foundation.NSError?) -> Swift.Void)
   public func advancedQuery(variable: Swift.String, startDate: Foundation.Date, endDate: Foundation.Date, timeUnit: Swift.String, operationType: Swift.String, mostRecent: Swift.Bool, timeUnitLength: Swift.Int, completion: @escaping (Swift.Bool, Swift.String?, Foundation.NSError?) -> Swift.Void)
+  public func setBackgroundJob(variable: Swift.String, timeUnit: Swift.String, timeUnitGrouping: Swift.Int, jobFrequency: Swift.Int, condition: Swift.String, value: Swift.Double, notificationHeader: Swift.String, notificationBody: Swift.String, completion: @escaping (Swift.Bool, Swift.String?, Foundation.NSError?) -> Swift.Void)
   @objc deinit
+}
+@objc @_inheritsConvenienceInitializers final public class Notification : RealmSwift.Object {
+  dynamic final public var id: Swift.Int
+  dynamic final public var title: Swift.String
+  dynamic final public var body: Swift.String
+  final public func incrementID() -> Swift.Int
+  @objc override final public class func primaryKey() -> Swift.String?
+  @objc override dynamic public init()
+  @objc deinit
+}
+@_hasMissingDesignatedInitializers public class BackgroundJobParameters : Swift.Codable {
+  final public let variable: Swift.String?
+  final public let timeUnit: Swift.String?
+  final public let timeUnitGrouping: Swift.Int?
+  final public let jobFrequency: Swift.Int?
+  final public let condition: Swift.String?
+  final public let value: Swift.Double?
+  final public let notificationHeader: Swift.String?
+  final public let notificationBody: Swift.String?
+  @objc deinit
+  public func encode(to encoder: Swift.Encoder) throws
+  required public init(from decoder: Swift.Decoder) throws
 }
 @_hasMissingDesignatedInitializers public class QueryParameters : Swift.Codable {
   final public let variable: Swift.String?
@@ -47,12 +103,15 @@ open class HealthFitnessPlugin {
   final public let timeUnit: Swift.String?, operationType: Swift.String?
   final public let timeUnitLength: Swift.Int?
   @objc deinit
-  required public init(from decoder: Swift.Decoder) throws
   public func encode(to encoder: Swift.Encoder) throws
+  required public init(from decoder: Swift.Decoder) throws
 }
-extension Date {
+extension Foundation.Date {
   public init(_ dateString: Swift.String)
 }
+extension OSHealthFitnessLib.BackgroundJob.ComparisonOperationEnum : Swift.Equatable {}
+extension OSHealthFitnessLib.BackgroundJob.ComparisonOperationEnum : Swift.Hashable {}
+extension OSHealthFitnessLib.BackgroundJob.ComparisonOperationEnum : Swift.RawRepresentable {}
 extension OSHealthFitnessLib.HealthKitErrors : Swift.Equatable {}
 extension OSHealthFitnessLib.HealthKitErrors : Swift.Hashable {}
 extension OSHealthFitnessLib.HealthKitErrors : Swift.RawRepresentable {}
