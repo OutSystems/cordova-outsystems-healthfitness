@@ -93,7 +93,7 @@ class OSHealthFitness: CordovaImplementation {
             let timeUnitGrouping = params.timeUnitGrouping ?? 0
             let condition = params.condition ?? ""
             let timeUnit = params.timeUnit ?? ""
-            let jobFrequency = params.jobFrequency ?? 0
+            let jobFrequency = params.jobFrequency ?? ""
             let value = params.value ?? 0
             let notificationHeader = params.notificationHeader ?? ""
             let notificationBody = params.notificationBody ?? ""
