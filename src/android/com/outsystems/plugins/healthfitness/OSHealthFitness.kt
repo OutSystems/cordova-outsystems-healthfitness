@@ -10,9 +10,11 @@ import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
 import com.google.gson.Gson
 import com.outsystems.plugins.healthfitnesslib.HealthFitnessError
+import com.outsystems.plugins.healthfitnesslib.background.BackgroundJobParameters
 import com.outsystems.plugins.healthfitnesslib.store.AdvancedQueryParameters
 import com.outsystems.plugins.healthfitnesslib.store.HealthFitnessManager
 import com.outsystems.plugins.healthfitnesslib.store.HealthStore
+import com.outsystems.plugins.healthfitnesslib.store.HealthStoreException
 import com.outsystems.plugins.oscordova.CordovaImplementation
 import org.apache.cordova.*
 import org.json.JSONArray
@@ -26,7 +28,7 @@ class OSHealthFitness : CordovaImplementation() {
     override fun initialize(cordova: CordovaInterface, webView: CordovaWebView) {
         super.initialize(cordova, webView)
         val manager = HealthFitnessManager(cordova.context, cordova.activity)
-        healthStore = HealthStore(this, manager)
+        healthStore = HealthStore(cordova.context, manager)
     }
 
     override fun execute(
@@ -103,7 +105,9 @@ class OSHealthFitness : CordovaImplementation() {
             if(!healthStore!!.areGoogleFitPermissionsGranted()){
                 setAsActivityResultCallback()
             }
-            healthStore?.requestGoogleFitPermissions()
+            if(healthStore?.requestGoogleFitPermissions() == true) {
+                sendPluginResult("success")
+            }
         }
         else {
             PermissionHelper.requestPermissions(
@@ -116,7 +120,16 @@ class OSHealthFitness : CordovaImplementation() {
 
     private fun advancedQuery(args : JSONArray) {
         val parameters = gson.fromJson(args.getString(0), AdvancedQueryParameters::class.java)
-        healthStore?.advancedQuery(parameters)
+        healthStore?.advancedQueryAsync(
+            parameters,
+            { response ->
+                val pluginResponseJson = gson.toJson(response)
+                sendPluginResult(pluginResponseJson)
+            },
+            { error ->
+                sendPluginResult(null, Pair(error.code, error.message))
+            }
+        )
     }
 
     private fun writeData(args: JSONArray) {
@@ -125,24 +138,57 @@ class OSHealthFitness : CordovaImplementation() {
         val variable = args.getString(0)
         val value = args.getDouble(1).toFloat()
 
-        healthStore?.updateData(variable, value)
+        healthStore?.updateDataAsync(
+            variable,
+            value,
+            { response ->
+                sendPluginResult(response)
+            },
+            { error ->
+                sendPluginResult(null, Pair(error.code, error.message))
+            }
+
+        )
     }
 
     private fun getLastRecord(args: JSONArray) {
         //process parameters
         val variable = args.getString(0)
-        healthStore?.getLastRecord(variable)
+        healthStore?.getLastRecordAsync(
+            variable,
+            { response ->
+                val pluginResponseJson = gson.toJson(response)
+                sendPluginResult(pluginResponseJson)
+            },
+            { error ->
+                sendPluginResult(null, Pair(error.code, error.message))
+            })
     }
 
     private fun setBackgroundJob(args: JSONArray) {
         //process parameters
         val parameters = gson.fromJson(args.getString(0), BackgroundJobParameters::class.java)
-        healthStore?.setBackgroundJob(parameters)
+        healthStore?.setBackgroundJob(
+            parameters,
+            { response ->
+                sendPluginResult(response)
+            },
+            { error ->
+                sendPluginResult(null, Pair(error.code, error.message))
+            }
+        )
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, intent: Intent) {
         //super.onActivityResult(requestCode, resultCode, intent)
-        healthStore?.handleActivityResult(requestCode, resultCode, intent)
+        try {
+            healthStore?.handleActivityResult(requestCode, resultCode, intent)
+        }
+        catch(hse : HealthStoreException) {
+            val error = hse.error
+            sendPluginResult(null, Pair(error.code, error.message))
+        }
+
     }
 
     override fun areGooglePlayServicesAvailable(): Boolean {
