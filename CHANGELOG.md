@@ -8,6 +8,9 @@ The changes documented here do not include those from the original repository.
 
 ## [Unreleased]
 
+## 2021-11-02
+- Feat: Added setBackgroundJob feature (https://outsystemsrd.atlassian.net/browse/RMET-1130)
+
 ## 2021-10-20
 - Fixed compatibility issue with MABS 7 (https://outsystemsrd.atlassian.net/browse/RMET-1168)
 
