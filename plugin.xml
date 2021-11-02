@@ -38,7 +38,7 @@
     <framework src="com.github.OutSystems.os-plugins-base-interface:oscore-android:core-0.0.3@aar" /> 
 
     <!-- OS Health Fitness Library -->
-    <framework src="com.github.OutSystems.os-plugins-base-interface:oshealthfitness-android:hf-0.0.5@aar" /> 
+    <framework src="com.github.OutSystems.os-plugins-base-interface:oshealthfitness-android:hf-0.0.6@aar" /> 
 
     <framework src="src/android/build.gradle" custom="true" type="gradleReference" />
     <framework src="org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.4.3" />
