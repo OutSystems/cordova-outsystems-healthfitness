@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 The changes documented here do not include those from the original repository.
 
+## [Version 1.0.1]
+
+- New plugin release to include metadata tag for MABS 7.2 and 8.0 compatibility
+
 ## [Version 1.0.0]
 
 ## 2021-10-04
