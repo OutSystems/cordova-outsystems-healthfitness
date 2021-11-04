@@ -1,6 +1,6 @@
 // swift-interface-format-version: 1.0
-// swift-compiler-version: Apple Swift version 5.3 effective-4.2 (swiftlang-1200.0.29.2 clang-1200.0.30.1)
-// swift-module-flags: -target x86_64-apple-ios12.0-simulator -enable-objc-interop -enable-library-evolution -swift-version 4.2 -enforce-exclusivity=checked -O -module-name OSHealthFitnessLib
+// swift-compiler-version: Apple Swift version 5.3 (swiftlang-1200.0.29.2 clang-1200.0.30.1)
+// swift-module-flags: -target x86_64-apple-ios12.0-simulator -enable-objc-interop -enable-library-evolution -swift-version 5 -enforce-exclusivity=checked -O -module-name OSHealthFitnessLib
 import BackgroundTasks
 import CoreData
 import Foundation
@@ -72,7 +72,7 @@ open class HealthFitnessPlugin {
 extension Date {
   public init(_ dateString: Swift.String)
 }
-@objc @_inheritsConvenienceInitializers public class BackgroundJob : CoreData.NSManagedObject {
+@_inheritsConvenienceInitializers @objc(BackgroundJob) public class BackgroundJob : CoreData.NSManagedObject {
   @objc override dynamic public init(entity: CoreData.NSEntityDescription, insertInto context: CoreData.NSManagedObjectContext?)
   @objc deinit
 }
@@ -103,7 +103,7 @@ extension BackgroundJob {
     @objc set
   }
 }
-@objc @_inheritsConvenienceInitializers public class Notification : CoreData.NSManagedObject {
+@_inheritsConvenienceInitializers @objc(Notification) public class Notification : CoreData.NSManagedObject {
   @objc override dynamic public init(entity: CoreData.NSEntityDescription, insertInto context: CoreData.NSManagedObjectContext?)
   @objc deinit
 }
