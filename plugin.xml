@@ -72,6 +72,13 @@
         <string>$HEALTH_UPDATE_DESCRIPTION</string>
     </config-file>
 
+    <config-file target="*-Info.plist" parent="UIBackgroundModes">
+      <array>
+        <string>fetch</string>
+        <string>processing</string>
+      </array>
+    </config-file>
+
     <!-- Entitlements -->
     <config-file target="*/Entitlements-Debug.plist" parent="com.apple.developer.healthkit">
       <true/>
