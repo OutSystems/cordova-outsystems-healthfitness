@@ -211,7 +211,7 @@ typedef unsigned int swift_uint4  __attribute__((__ext_vector_type__(4)));
 @class NSEntityDescription;
 @class NSManagedObjectContext;
 
-SWIFT_CLASS_NAMED("BackgroundJob")
+SWIFT_CLASS("_TtC18OSHealthFitnessLib13BackgroundJob")
 @interface BackgroundJob : NSManagedObject
 - (nonnull instancetype)initWithEntity:(NSEntityDescription * _Nonnull)entity insertIntoManagedObjectContext:(NSManagedObjectContext * _Nullable)context OBJC_DESIGNATED_INITIALIZER;
 @end
@@ -230,7 +230,7 @@ SWIFT_CLASS_NAMED("BackgroundJob")
 
 
 
-SWIFT_CLASS_NAMED("Notification")
+SWIFT_CLASS("_TtC18OSHealthFitnessLib12Notification")
 @interface Notification : NSManagedObject
 - (nonnull instancetype)initWithEntity:(NSEntityDescription * _Nonnull)entity insertIntoManagedObjectContext:(NSManagedObjectContext * _Nullable)context OBJC_DESIGNATED_INITIALIZER;
 @end
@@ -460,7 +460,7 @@ typedef unsigned int swift_uint4  __attribute__((__ext_vector_type__(4)));
 @class NSEntityDescription;
 @class NSManagedObjectContext;
 
-SWIFT_CLASS_NAMED("BackgroundJob")
+SWIFT_CLASS("_TtC18OSHealthFitnessLib13BackgroundJob")
 @interface BackgroundJob : NSManagedObject
 - (nonnull instancetype)initWithEntity:(NSEntityDescription * _Nonnull)entity insertIntoManagedObjectContext:(NSManagedObjectContext * _Nullable)context OBJC_DESIGNATED_INITIALIZER;
 @end
@@ -479,7 +479,7 @@ SWIFT_CLASS_NAMED("BackgroundJob")
 
 
 
-SWIFT_CLASS_NAMED("Notification")
+SWIFT_CLASS("_TtC18OSHealthFitnessLib12Notification")
 @interface Notification : NSManagedObject
 - (nonnull instancetype)initWithEntity:(NSEntityDescription * _Nonnull)entity insertIntoManagedObjectContext:(NSManagedObjectContext * _Nullable)context OBJC_DESIGNATED_INITIALIZER;
 @end

@@ -72,7 +72,7 @@ open class HealthFitnessPlugin {
 extension Date {
   public init(_ dateString: Swift.String)
 }
-@_inheritsConvenienceInitializers @objc(BackgroundJob) public class BackgroundJob : CoreData.NSManagedObject {
+@objc @_inheritsConvenienceInitializers public class BackgroundJob : CoreData.NSManagedObject {
   @objc override dynamic public init(entity: CoreData.NSEntityDescription, insertInto context: CoreData.NSManagedObjectContext?)
   @objc deinit
 }
@@ -107,7 +107,7 @@ extension BackgroundJob {
     @objc set
   }
 }
-@_inheritsConvenienceInitializers @objc(Notification) public class Notification : CoreData.NSManagedObject {
+@objc @_inheritsConvenienceInitializers public class Notification : CoreData.NSManagedObject {
   @objc override dynamic public init(entity: CoreData.NSEntityDescription, insertInto context: CoreData.NSManagedObjectContext?)
   @objc deinit
 }
