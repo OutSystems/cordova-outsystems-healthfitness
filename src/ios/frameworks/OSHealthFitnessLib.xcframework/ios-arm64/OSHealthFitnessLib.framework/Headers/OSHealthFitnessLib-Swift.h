@@ -189,7 +189,6 @@ typedef unsigned int swift_uint4  __attribute__((__ext_vector_type__(4)));
 #pragma clang diagnostic ignored "-Watimport-in-framework-header"
 #endif
 @import CoreData;
-@import Foundation;
 #endif
 
 #pragma clang diagnostic ignored "-Wproperty-attribute-mismatch"
@@ -219,8 +218,9 @@ SWIFT_CLASS_NAMED("BackgroundJob")
 
 @interface BackgroundJob (SWIFT_EXTENSION(OSHealthFitnessLib))
 @property (nonatomic, copy) NSString * _Nullable comparision;
-@property (nonatomic, copy) NSString * _Nullable comparisonOperation;
-@property (nonatomic, copy) NSUUID * _Nullable id;
+@property (nonatomic, copy) NSString * _Nullable frequency;
+@property (nonatomic) int64_t id;
+@property (nonatomic, copy) NSString * _Nullable timeUnit;
 @property (nonatomic) double value;
 @property (nonatomic, copy) NSString * _Nullable variable;
 @property (nonatomic, strong) Notification * _Nullable notification;
@@ -236,7 +236,7 @@ SWIFT_CLASS_NAMED("Notification")
 
 @interface Notification (SWIFT_EXTENSION(OSHealthFitnessLib))
 @property (nonatomic, copy) NSString * _Nullable body;
-@property (nonatomic, copy) NSUUID * _Nullable id;
+@property (nonatomic) int64_t id;
 @property (nonatomic, copy) NSString * _Nullable title;
 @end
 

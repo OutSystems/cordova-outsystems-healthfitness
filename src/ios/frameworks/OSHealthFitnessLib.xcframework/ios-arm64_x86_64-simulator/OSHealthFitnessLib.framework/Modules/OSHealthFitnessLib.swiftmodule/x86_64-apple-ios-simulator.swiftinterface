@@ -82,11 +82,15 @@ extension BackgroundJob {
     @objc get
     @objc set
   }
-  @objc @NSManaged dynamic public var comparisonOperation: Swift.String? {
+  @objc @NSManaged dynamic public var frequency: Swift.String? {
     @objc get
     @objc set
   }
-  @objc @NSManaged dynamic public var id: Foundation.UUID? {
+  @objc @NSManaged dynamic public var id: Swift.Int64 {
+    @objc get
+    @objc set
+  }
+  @objc @NSManaged dynamic public var timeUnit: Swift.String? {
     @objc get
     @objc set
   }
@@ -113,7 +117,7 @@ extension Notification {
     @objc get
     @objc set
   }
-  @objc @NSManaged dynamic public var id: Foundation.UUID? {
+  @objc @NSManaged dynamic public var id: Swift.Int64 {
     @objc get
     @objc set
   }
