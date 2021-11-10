@@ -1,8 +1,8 @@
 package com.outsystems.plugins.healthfitnesslib.store
 
 import com.outsystems.plugins.healthfitnesslib.HealthFitnessError
+import java.lang.Exception
 
-data class AdvancedQueryResponse(
-    val results : List<AdvancedQueryResponseBlock>,
-    var metadata : String? = ""
-)
+class HealthStoreException(val error : HealthFitnessError) : Exception() {
+
+}

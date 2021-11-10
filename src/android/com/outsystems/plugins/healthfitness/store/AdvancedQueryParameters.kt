@@ -1,4 +1,4 @@
-package com.outsystems.plugins.healthfitness.store
+package com.outsystems.plugins.healthfitnesslib.store
 
 import com.google.gson.annotations.SerializedName
 import java.util.*

@@ -1,24 +1,27 @@
-package com.outsystems.plugins.healthfitness.store
+package com.outsystems.plugins.healthfitnesslib.store
 
 import android.app.Activity
+import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.database.sqlite.SQLiteException
 import android.util.Log
 import com.google.android.gms.fitness.FitnessOptions
 import com.google.android.gms.fitness.data.*
 import com.google.android.gms.fitness.data.DataPoint
 import com.google.android.gms.fitness.data.DataSet
-import com.google.android.gms.fitness.result.DataReadResponse
-import com.google.android.gms.fitness.result.DataReadResult
 import com.google.gson.Gson
-import com.outsystems.plugins.healthfitness.AndroidPlatformInterface
-import com.outsystems.plugins.healthfitness.HealthFitnessError
-import com.outsystems.plugins.healthfitness.OSHealthFitness
+import com.outsystems.plugins.healthfitnesslib.HealthFitnessError
+import com.outsystems.plugins.healthfitnesslib.background.*
+import com.outsystems.plugins.healthfitnesslib.background.database.BackgroundJob
+import com.outsystems.plugins.healthfitnesslib.background.database.Notification
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
+import java.lang.Exception
 import java.lang.NullPointerException
-import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.TimeUnit
-
 
 enum class EnumAccessType(val value : String) {
     READ("READ"),
@@ -49,12 +52,46 @@ enum class EnumTimeUnit(val value : Pair<String, TimeUnit>) {
     YEAR(Pair("YEAR", TimeUnit.DAYS))
 }
 
+enum class EnumJobFrequency(val value : String) {
+    IMMEDIATE("IMMEDIATE"),
+    HOUR("HOUR"),
+    DAY("DAY"),
+    WEEK("WEEK")
+}
+
+private val jobFrequencies: Map<String, EnumTimeUnit> by lazy {
+    mapOf(
+        "IMMEDIATE" to EnumTimeUnit.SECOND,
+        "HOUR" to EnumTimeUnit.HOUR,
+        "DAY" to EnumTimeUnit.DAY,
+        "WEEK" to EnumTimeUnit.DAY
+    )
+}
+
 class HealthStore(
-    private val platformInterface: AndroidPlatformInterface,
+    private val context : Context,
     private val manager: HealthFitnessManagerInterface) {
 
     private var fitnessOptions: FitnessOptions? = null
     private val gson: Gson by lazy { Gson() }
+
+    private val historyVariables: Set<String> by lazy {
+        setOf(
+            "HEIGHT",
+            "WEIGHT",
+            "BODY_FAT_PERCENTAGE",
+            "BASAL_METABOLIC_RATE"
+        )
+    }
+
+    private val sensorVariables: Set<String> by lazy {
+        setOf(
+            "STEPS",
+            "HEART_RATE",
+            "BLOOD_PRESSURE",
+            "CALORIES_BURNED"
+        )
+    }
 
     private val fitnessVariablesMap: Map<String, GoogleFitVariable> by lazy {
         mapOf(
@@ -194,7 +231,7 @@ class HealthStore(
         )
     }
 
-    private fun getVariableByName(name : String) : GoogleFitVariable? {
+    fun getVariableByName(name : String) : GoogleFitVariable? {
         return if(fitnessVariablesMap.containsKey(name)){
             fitnessVariablesMap[name]
         } else if(healthVariablesMap.containsKey(name)){
@@ -208,14 +245,12 @@ class HealthStore(
         }
     }
 
-    fun initAndRequestPermissions(
-        customPermissions: String,
-        allVariables: String,
-        fitnessVariables: String,
-        healthVariables: String,
-        profileVariables: String,
-        summaryVariables: String
-    ) {
+    fun initAndRequestPermissions(customPermissions: String,
+                                  allVariables: String,
+                                  fitnessVariables: String,
+                                  healthVariables: String,
+                                  profileVariables: String,
+                                  summaryVariables: String) {
 
         var permissionList: MutableList<Pair<DataType, Int>> = mutableListOf()
         val allVariablesPermissions = gson.fromJson(allVariables, GoogleFitGroupPermission::class.java)
@@ -252,9 +287,8 @@ class HealthStore(
         manager.createAccount(fitnessOptions!!)
     }
 
-    private fun createPermissionsForVariableGroup(
-        permission: String,
-        variableGroup: EnumVariableGroup) : MutableList<Pair<DataType, Int>>  {
+    private fun createPermissionsForVariableGroup(permission: String,
+                                                  variableGroup: EnumVariableGroup) : MutableList<Pair<DataType, Int>>  {
 
         val permissionList: MutableList<Pair<DataType, Int>> = mutableListOf()
         when(variableGroup) {
@@ -282,9 +316,8 @@ class HealthStore(
         return permissionList
     }
 
-    private fun createPermissionsForVariable(
-        variable: GoogleFitVariable,
-        permission: String) : List<Pair<DataType, Int>> {
+    private fun createPermissionsForVariable(variable: GoogleFitVariable,
+                                             permission: String) : List<Pair<DataType, Int>> {
 
         val permissionList = mutableListOf<Pair<DataType, Int>>()
         when(permission) {
@@ -329,13 +362,7 @@ class HealthStore(
 
         permissions.forEach { permission ->
             val googleVariable = getVariableByName(permission.variable)
-
-            if(googleVariable == null) {
-                platformInterface.sendPluginResult(
-                    null,
-                    Pair(HealthFitnessError.VARIABLE_NOT_AVAILABLE_ERROR.code, HealthFitnessError.VARIABLE_NOT_AVAILABLE_ERROR.message))
-                return listOf()
-            }
+                ?: throw HealthStoreException(HealthFitnessError.VARIABLE_NOT_AVAILABLE_ERROR)
 
             when(permission.accessType) {
                 EnumAccessType.WRITE.value -> {
@@ -362,34 +389,33 @@ class HealthStore(
         return fitnessBuild.build()
     }
 
-    fun requestGoogleFitPermissions() {
+    fun requestGoogleFitPermissions() : Boolean {
         if(manager.areGoogleFitPermissionsGranted(fitnessOptions)){
-            platformInterface.sendPluginResult("success")
+            return true
         }
         else{
             fitnessOptions?.let {
                 manager.requestPermissions(it, GOOGLE_FIT_PERMISSIONS_REQUEST_CODE)
             }
+            return false
         }
     }
 
-    fun handleActivityResult(requestCode: Int, resultCode: Int, intent: Intent){
-        when (resultCode) {
+    fun handleActivityResult(requestCode: Int,
+                             resultCode: Int,
+                             intent: Intent) : String? {
+        return when (resultCode) {
             Activity.RESULT_OK -> {
-
                 when (requestCode) {
-                    GOOGLE_FIT_PERMISSIONS_REQUEST_CODE -> platformInterface.sendPluginResult(
-                        "success",
+                    GOOGLE_FIT_PERMISSIONS_REQUEST_CODE ->
+                        "success"
+                    else ->
                         null
-                    )
-                    else -> {
-                        // Result wasn't from Google Fit
-                    }
                 }
             }
             else -> {
                 // Permission not granted
-                platformInterface.sendPluginResult(null, Pair(HealthFitnessError.VARIABLE_NOT_AUTHORIZED_ERROR.code, HealthFitnessError.VARIABLE_NOT_AUTHORIZED_ERROR.message))
+                throw HealthStoreException(HealthFitnessError.VARIABLE_NOT_AUTHORIZED_ERROR)
             }
         }
     }
@@ -398,14 +424,15 @@ class HealthStore(
         return manager.areGoogleFitPermissionsGranted(fitnessOptions)
     }
 
-    fun updateData(variableName: String, value: Float) {
+    fun updateDataAsync(variableName: String,
+                        value: Float,
+                        onSuccess : (String) -> Unit,
+                        onError : (HealthFitnessError) -> Unit) {
 
         //right now we are only writing data which are float values
         val variable = getVariableByName(variableName)
         if(variable == null) {
-            platformInterface.sendPluginResult(
-                null,
-                Pair(HealthFitnessError.VARIABLE_NOT_AVAILABLE_ERROR.code, HealthFitnessError.VARIABLE_NOT_AVAILABLE_ERROR.message))
+            onError(HealthFitnessError.VARIABLE_NOT_AVAILABLE_ERROR)
             return
         }
 
@@ -413,9 +440,7 @@ class HealthStore(
         val permissions = createPermissionsForVariable(variable, EnumAccessType.WRITE.value)
         val options = createFitnessOptions(permissions)
         if(!manager.areGoogleFitPermissionsGranted(options)) {
-            platformInterface.sendPluginResult(
-                null,
-                Pair(HealthFitnessError.VARIABLE_NOT_AUTHORIZED_ERROR.code, HealthFitnessError.VARIABLE_NOT_AUTHORIZED_ERROR.message))
+            onError(HealthFitnessError.VARIABLE_NOT_AUTHORIZED_ERROR)
             return
         }
 
@@ -423,7 +448,7 @@ class HealthStore(
         val fieldType = profileVariablesMap[variableName]?.fields?.get(0)
 
         //insert the data
-        val packageName = platformInterface.getPackageAppName()
+        val packageName = context.applicationContext.packageName
         val dataSourceWrite = DataSource.Builder()
             .setAppPackageName(packageName)
             .setDataType(variable.dataType)
@@ -457,29 +482,25 @@ class HealthStore(
         }
         catch (e : IllegalArgumentException) {
             Log.w("Write to GoogleFit:", "Field out of range", e)
-            platformInterface.sendPluginResult(null, Pair(HealthFitnessError.WRITE_VALUE_OUT_OF_RANGE_ERROR.code, HealthFitnessError.WRITE_VALUE_OUT_OF_RANGE_ERROR.message))
+            onError(HealthFitnessError.WRITE_VALUE_OUT_OF_RANGE_ERROR)
             return
         }
 
         manager.updateDataOnStore(dataSet,
             {
                 Log.i("Access GoogleFit:", "DataSet updated successfully!")
-                platformInterface.sendPluginResult("success", null)
+                onSuccess("success")
             },
             { e ->
                 Log.w("Access GoogleFit:", "There was an error updating the DataSet", e)
-                platformInterface.sendPluginResult(
-                    null,
-                    Pair(
-                        HealthFitnessError.WRITE_DATA_ERROR.code,
-                        HealthFitnessError.WRITE_DATA_ERROR.message
-                    )
-                )
+                onError(HealthFitnessError.WRITE_DATA_ERROR)
             }
         )
     }
 
-    fun getLastRecord(variable: String) {
+    fun getLastRecordAsync(variable: String,
+                           onSuccess : (AdvancedQueryResponse) -> Unit,
+                           onError : (HealthFitnessError) -> Unit) {
 
         val endDate: Long = Date().time
         val month = 2592000000
@@ -491,35 +512,31 @@ class HealthStore(
             Date(endDate),
             limit = 1
         )
-        advancedQuery(advancedQueryParameters)
+        advancedQueryAsync(advancedQueryParameters, onSuccess, onError)
     }
 
-    fun advancedQuery(parameters : AdvancedQueryParameters) {
+    fun advancedQueryAsync(parameters : AdvancedQueryParameters,
+                           onSuccess : (AdvancedQueryResponse) -> Unit,
+                           onError : (HealthFitnessError) -> Unit) {
 
         val variable = getVariableByName(parameters.variable)
         val endDate = parameters.endDate
         val startDate = parameters.startDate
 
         if(variable == null) {
-            platformInterface.sendPluginResult(
-                null,
-                Pair(HealthFitnessError.VARIABLE_NOT_AVAILABLE_ERROR.code, HealthFitnessError.VARIABLE_NOT_AVAILABLE_ERROR.message))
+            onError(HealthFitnessError.VARIABLE_NOT_AVAILABLE_ERROR)
             return
         }
 
         if(!variable.allowedOperations.contains(parameters.operationType)) {
-            platformInterface.sendPluginResult(
-                null,
-                Pair(HealthFitnessError.OPERATION_NOT_ALLOWED.code, HealthFitnessError.OPERATION_NOT_ALLOWED.message))
+            onError(HealthFitnessError.OPERATION_NOT_ALLOWED)
             return
         }
 
         val permissions = createPermissionsForVariable(variable, EnumAccessType.READ.value)
         val options = createFitnessOptions(permissions)
         if(!manager.areGoogleFitPermissionsGranted(options)) {
-            platformInterface.sendPluginResult(
-                null,
-                Pair(HealthFitnessError.VARIABLE_NOT_AUTHORIZED_ERROR.code, HealthFitnessError.VARIABLE_NOT_AUTHORIZED_ERROR.message))
+            onError(HealthFitnessError.VARIABLE_NOT_AUTHORIZED_ERROR)
             return
         }
 
@@ -574,17 +591,10 @@ class HealthStore(
                     }
                 }
 
-                val pluginResponseJson = gson.toJson(queryResponse)
-                Log.d("STORE", "Response $pluginResponseJson")
-                platformInterface.sendPluginResult(pluginResponseJson)
-
+                onSuccess(queryResponse)
             },
             { e ->
-                platformInterface.sendPluginResult(
-                    null,
-                    Pair(HealthFitnessError.READ_DATA_ERROR.code,
-                        HealthFitnessError.READ_DATA_ERROR.message)
-                )
+                onError(HealthFitnessError.READ_DATA_ERROR)
             }
         )
     }
@@ -602,6 +612,104 @@ class HealthStore(
             )
         }
         return AdvancedQueryResponse(blockList)
+    }
+
+    fun setBackgroundJob(parameters: BackgroundJobParameters,
+                         onSuccess : (String) -> Unit,
+                         onError : (HealthFitnessError) -> Unit) {
+
+        val variable = getVariableByName(parameters.variable)
+        if(variable == null) {
+            onError(HealthFitnessError.VARIABLE_NOT_AVAILABLE_ERROR)
+            return
+        }
+
+        val permissions = createPermissionsForVariable(variable, EnumAccessType.READ.value)
+        val options = createFitnessOptions(permissions)
+        if(!manager.areGoogleFitPermissionsGranted(options)) {
+            onError(HealthFitnessError.VARIABLE_NOT_AUTHORIZED_ERROR)
+            return
+        }
+
+        //do the actual subscription to the variable updates
+        val intent = Intent(context, VariableUpdateService::class.java)
+        intent.putExtra(VariableUpdateService.VARIABLE_NAME, parameters.variable)
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+        val pendingIntent = PendingIntent.getBroadcast(context, variable.dataType.hashCode(), intent, PendingIntent.FLAG_UPDATE_CURRENT)
+
+        manager.subscribeToRecordingUpdates(variable, parameters,
+            {
+                Log.i("Access GoogleFit:", "Subscribed to Recording Updates with success.")
+
+                runBlocking {
+                    launch(Dispatchers.IO) {
+
+                        try {
+                            val db = DatabaseManager.getInstance(context)
+
+                            db.runInTransaction({
+                                val nNotification = db.fetchNotifications()
+                                val notification = Notification().apply {
+                                    this.title = parameters.notificationHeader
+                                    this.body = parameters.notificationBody
+                                }
+                                val notificationId = db.insert(notification)
+
+                                val backgroundJob = BackgroundJob().apply {
+                                    this.variable = parameters.variable
+                                    this.comparison = parameters.condition
+                                    this.value = parameters.value.toFloat()
+
+                                    this.notificationId = notificationId
+                                    this.timeUnit = parameters.timeUnit
+                                    this.timeUnitGrouping = parameters.timeUnitGrouping
+                                }
+                                db.insert(backgroundJob)
+                            })
+                            onSuccess("success")
+                        } catch(sqle : SQLiteException) {
+                            onError(HealthFitnessError.BACKGROUND_JOB_ALREADY_EXISTS_ERROR)
+                        } catch(e : Exception) {
+                            onError(HealthFitnessError.BACKGROUND_JOB_GENERIC_ERROR)
+                        }
+                    }
+                }
+            },
+            { exception ->
+                Log.w("Access GoogleFit:", "There was a problem subscribing to Recording.", exception)
+            }
+        )
+
+        if(sensorVariables.contains(parameters.variable)){
+            var grouping : Long = 1
+            if(parameters.jobFrequency?.equals(EnumJobFrequency.WEEK.value) == true){
+                grouping = 7
+            }
+            val jobFrequency = jobFrequencies[parameters.jobFrequency]?.value?.second
+            jobFrequency?.let {
+                manager.subscribeToSensorUpdates(variable, grouping, jobFrequency, parameters, pendingIntent,
+                    {
+                        Log.i("Access GoogleFit:", "Subscribed to Sensor Updates with success.")
+                    },
+                    {
+                        //register the background job in our database calling the insert method
+                        Log.w("Access GoogleFit:", "There was a problem subscribing to Sensor Updates.", it)
+                    })
+            }
+        }
+        else if(historyVariables.contains(parameters.variable)){
+            manager.subscribeToHistoryUpdates(variable, pendingIntent,
+                {
+                    Log.i("Access GoogleFit:", "Subscribed to History Updates with success.")
+                },
+                {
+                    Log.w("Access GoogleFit:", "There was a problem subscribing to History Updates.", it)
+                })
+        }
+        else {
+            //do nothing
+            //maybe throw an error because variable is not a sensorVariable nor a historyVariable??
+        }
     }
 
     companion object {
