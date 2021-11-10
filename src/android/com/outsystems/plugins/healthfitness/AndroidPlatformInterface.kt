@@ -16,6 +16,6 @@ interface AndroidPlatformInterface {
         grantResults: IntArray)
 
     fun <T> sendPluginResult(resultVariable: T, error: Pair<Int, String>? = null)
-    fun areGooglePlayServicesAvailable(callbackContext: CallbackContext): Boolean
+    fun areGooglePlayServicesAvailable(): Boolean
 
 }

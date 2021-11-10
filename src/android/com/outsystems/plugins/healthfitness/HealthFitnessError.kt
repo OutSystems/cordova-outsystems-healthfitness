@@ -1,4 +1,4 @@
-package com.outsystems.plugins.healthfitnesslib
+package com.outsystems.plugins.healthfitness
 
 enum class HealthFitnessError(val code: Int, val message: String) {
     // Plugin Shared errors

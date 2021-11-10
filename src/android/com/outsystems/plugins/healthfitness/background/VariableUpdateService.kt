@@ -10,7 +10,6 @@ import android.os.Build
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.room.Room
-import com.outsystems.plugins.healthfitnesslib.R
 import com.outsystems.plugins.healthfitnesslib.background.database.AppDatabase
 import com.outsystems.plugins.healthfitnesslib.background.database.BackgroundJob
 import com.outsystems.plugins.healthfitnesslib.store.AdvancedQueryParameters
@@ -131,16 +130,25 @@ class VariableUpdateService : BroadcastReceiver() {
         val myIntent = Intent(context, ClickActivity::class.java)
         val pendingIntent = PendingIntent.getActivity(context, 1, myIntent, PendingIntent.FLAG_UPDATE_CURRENT)
 
+        //get icon for notification
+        val icon = getResourceId(context, "mipmap/ic_launcher")
+
         //here we get the NotificationTitle and NotificationBody from the db
         val notification = NotificationCompat.Builder(context, CHANNEL_ID)
             .setContentTitle(title)
             .setContentText(body)
-            .setSmallIcon(R.mipmap.ic_launcher)
+            //.setSmallIcon(R.mipmap.ic_launcher)
+            .setSmallIcon(icon)
             .setContentIntent(pendingIntent)
             .setAutoCancel(true)
             .build()
 
         NotificationManagerCompat.from(context).notify(notificationID, notification)
+    }
+
+    private fun getResourceId(context: Context, typeAndName: String): Int {
+        return context.resources.getIdentifier(typeAndName, null, context.packageName)
+
     }
 
     companion object {

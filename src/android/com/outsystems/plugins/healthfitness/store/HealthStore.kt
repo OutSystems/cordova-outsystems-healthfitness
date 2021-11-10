@@ -11,7 +11,7 @@ import com.google.android.gms.fitness.data.*
 import com.google.android.gms.fitness.data.DataPoint
 import com.google.android.gms.fitness.data.DataSet
 import com.google.gson.Gson
-import com.outsystems.plugins.healthfitnesslib.HealthFitnessError
+import com.outsystems.plugins.healthfitness.HealthFitnessError
 import com.outsystems.plugins.healthfitnesslib.background.*
 import com.outsystems.plugins.healthfitnesslib.background.database.BackgroundJob
 import com.outsystems.plugins.healthfitnesslib.background.database.Notification

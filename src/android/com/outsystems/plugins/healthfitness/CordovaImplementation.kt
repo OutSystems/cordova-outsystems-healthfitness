@@ -3,7 +3,7 @@ package com.outsystems.plugins.oscordova
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import com.outsystems.plugins.core.AndroidPlatformInterface
+import com.outsystems.plugins.healthfitness.AndroidPlatformInterface
 import org.apache.cordova.*
 import org.json.JSONArray
 import org.json.JSONObject

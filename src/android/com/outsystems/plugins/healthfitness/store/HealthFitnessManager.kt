@@ -14,7 +14,7 @@ import com.google.android.gms.fitness.data.DataSource
 import com.google.android.gms.fitness.request.DataUpdateListenerRegistrationRequest
 import com.google.android.gms.fitness.request.SensorRequest
 import com.google.android.gms.fitness.result.DataReadResponse
-import com.outsystems.plugins.healthfitnesslib.HealthFitnessError
+import com.outsystems.plugins.healthfitness.HealthFitnessError
 import com.outsystems.plugins.healthfitnesslib.background.BackgroundJobParameters
 import com.outsystems.plugins.healthfitnesslib.background.DatabaseManager
 import com.outsystems.plugins.healthfitnesslib.background.database.AppDatabase
