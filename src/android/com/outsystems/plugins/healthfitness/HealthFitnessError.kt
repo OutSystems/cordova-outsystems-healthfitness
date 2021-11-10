@@ -1,4 +1,4 @@
-package com.outsystems.plugins.healthfitness
+package com.outsystems.plugins.healthfitnesslib
 
 enum class HealthFitnessError(val code: Int, val message: String) {
     // Plugin Shared errors
@@ -7,6 +7,8 @@ enum class HealthFitnessError(val code: Int, val message: String) {
     OPERATION_NOT_ALLOWED(102, "Operation not allowed."),
     READ_DATA_ERROR(103, "Error while reading data."),
     WRITE_DATA_ERROR(104, "Error while writing data."),
+    BACKGROUND_JOB_ALREADY_EXISTS_ERROR(105, "The background job you are trying to set already exists."),
+    BACKGROUND_JOB_GENERIC_ERROR(106, "The background job could not be created."),
 
     // Plugin Android specific errors
     WRITE_VALUE_OUT_OF_RANGE_ERROR(109, "Value provided is out of range for this variable"),
