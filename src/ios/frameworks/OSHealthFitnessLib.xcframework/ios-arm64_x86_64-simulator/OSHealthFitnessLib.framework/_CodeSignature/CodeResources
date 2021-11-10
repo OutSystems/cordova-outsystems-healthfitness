@@ -6,7 +6,7 @@
 	<dict>
 		<key>BackgroundModel.momd/BackgroundModel.mom</key>
 		<data>
-		q5t1fdpab7DCmtqN6AkMOPoTiBI=
+		GBlmFP7c//QqbUlU9mrsU16+kuo=
 		</data>
 		<key>BackgroundModel.momd/VersionInfo.plist</key>
 		<data>
@@ -34,7 +34,7 @@
 		</data>
 		<key>Modules/OSHealthFitnessLib.swiftmodule/arm64-apple-ios-simulator.swiftmodule</key>
 		<data>
-		AL5sMQ2enT7tJ+vQ60tMqMRkglg=
+		djD6DPe0viyTt+Gx75X1HebS04s=
 		</data>
 		<key>Modules/OSHealthFitnessLib.swiftmodule/arm64.swiftdoc</key>
 		<data>
@@ -46,7 +46,7 @@
 		</data>
 		<key>Modules/OSHealthFitnessLib.swiftmodule/arm64.swiftmodule</key>
 		<data>
-		AL5sMQ2enT7tJ+vQ60tMqMRkglg=
+		djD6DPe0viyTt+Gx75X1HebS04s=
 		</data>
 		<key>Modules/OSHealthFitnessLib.swiftmodule/x86_64-apple-ios-simulator.swiftdoc</key>
 		<data>
@@ -58,7 +58,7 @@
 		</data>
 		<key>Modules/OSHealthFitnessLib.swiftmodule/x86_64-apple-ios-simulator.swiftmodule</key>
 		<data>
-		uNP7wZi+GcvKFXjAJeCmCEkvyYs=
+		BxkUGLyj/F1qTjIQrGJD7XEnmIQ=
 		</data>
 		<key>Modules/OSHealthFitnessLib.swiftmodule/x86_64.swiftdoc</key>
 		<data>
@@ -70,7 +70,7 @@
 		</data>
 		<key>Modules/OSHealthFitnessLib.swiftmodule/x86_64.swiftmodule</key>
 		<data>
-		uNP7wZi+GcvKFXjAJeCmCEkvyYs=
+		BxkUGLyj/F1qTjIQrGJD7XEnmIQ=
 		</data>
 		<key>Modules/module.modulemap</key>
 		<data>
@@ -83,7 +83,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			d3qjs9A292tn6a30fZEitJ8Avj3jlwcUriJ6ohkI3sE=
+			5G7P0S5JFxQbUAlK/PnGpGH2VM5fA1KQj8ia4gst/j8=
 			</data>
 		</dict>
 		<key>BackgroundModel.momd/VersionInfo.plist</key>
@@ -125,7 +125,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			ZqHQavC0/r6LmOaBWbZ0DF+ZHfvDlUle+8fBGUYCodM=
+			z+D7e1/KhgJYGmq9DcNZmjI5PwhbZPAR5Y43g/r2lMw=
 			</data>
 		</dict>
 		<key>Modules/OSHealthFitnessLib.swiftmodule/arm64.swiftdoc</key>
@@ -146,7 +146,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			ZqHQavC0/r6LmOaBWbZ0DF+ZHfvDlUle+8fBGUYCodM=
+			z+D7e1/KhgJYGmq9DcNZmjI5PwhbZPAR5Y43g/r2lMw=
 			</data>
 		</dict>
 		<key>Modules/OSHealthFitnessLib.swiftmodule/x86_64-apple-ios-simulator.swiftdoc</key>
@@ -167,7 +167,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			eZd9UHF8qlRsAPDQ2M89Os6j3QWrXQyzwstKeImvq+4=
+			WsjcP37j+dCBYk9PeYkSwUD+tzx03JKmLgsqgdT4L8I=
 			</data>
 		</dict>
 		<key>Modules/OSHealthFitnessLib.swiftmodule/x86_64.swiftdoc</key>
@@ -188,7 +188,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			eZd9UHF8qlRsAPDQ2M89Os6j3QWrXQyzwstKeImvq+4=
+			WsjcP37j+dCBYk9PeYkSwUD+tzx03JKmLgsqgdT4L8I=
 			</data>
 		</dict>
 		<key>Modules/module.modulemap</key>
