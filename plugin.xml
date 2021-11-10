@@ -63,12 +63,12 @@
     <source-file src="src/android/com/outsystems/plugins/healthfitness/background/ClickActivity.kt" target-dir="app/src/main/kotlin/com/outsystems/plugins/healthfitness/background"/>
     <source-file src="src/android/com/outsystems/plugins/healthfitness/background/VariableUpdateService.kt" target-dir="app/src/main/kotlin/com/outsystems/plugins/healthfitness/background"/>
 
-    <source-file src="src/android/com/outsystems/plugins/healthfitness/background/AppDatabase.kt" target-dir="app/src/main/kotlin/com/outsystems/plugins/healthfitness/background/database"/>
-    <source-file src="src/android/com/outsystems/plugins/healthfitness/background/BackgroundJob.kt" target-dir="app/src/main/kotlin/com/outsystems/plugins/healthfitness/background/database"/>
-    <source-file src="src/android/com/outsystems/plugins/healthfitness/background/BackgroundJobDao.kt" target-dir="app/src/main/kotlin/com/outsystems/plugins/healthfitness/background/database"/>
-    <source-file src="src/android/com/outsystems/plugins/healthfitness/background/DatabaseManager.kt" target-dir="app/src/main/kotlin/com/outsystems/plugins/healthfitness/background/database"/>
-    <source-file src="src/android/com/outsystems/plugins/healthfitness/background/Notification.kt" target-dir="app/src/main/kotlin/com/outsystems/plugins/healthfitness/background/database"/>
-    <source-file src="src/android/com/outsystems/plugins/healthfitness/background/NotificationDao.kt" target-dir="app/src/main/kotlin/com/outsystems/plugins/healthfitness/background/database"/>
+    <source-file src="src/android/com/outsystems/plugins/healthfitness/background/database/AppDatabase.kt" target-dir="app/src/main/kotlin/com/outsystems/plugins/healthfitness/background/database"/>
+    <source-file src="src/android/com/outsystems/plugins/healthfitness/background/database/BackgroundJob.kt" target-dir="app/src/main/kotlin/com/outsystems/plugins/healthfitness/background/database"/>
+    <source-file src="src/android/com/outsystems/plugins/healthfitness/background/database/BackgroundJobDao.kt" target-dir="app/src/main/kotlin/com/outsystems/plugins/healthfitness/background/database"/>
+    <source-file src="src/android/com/outsystems/plugins/healthfitness/background/database/DatabaseManager.kt" target-dir="app/src/main/kotlin/com/outsystems/plugins/healthfitness/background/database"/>
+    <source-file src="src/android/com/outsystems/plugins/healthfitness/background/database/Notification.kt" target-dir="app/src/main/kotlin/com/outsystems/plugins/healthfitness/background/database"/>
+    <source-file src="src/android/com/outsystems/plugins/healthfitness/background/database/NotificationDao.kt" target-dir="app/src/main/kotlin/com/outsystems/plugins/healthfitness/background/database"/>
 
 
 
