@@ -648,7 +648,6 @@ class HealthStore(
                             val db = DatabaseManager.getInstance(context)
 
                             db.runInTransaction({
-                                val nNotification = db.fetchNotifications()
                                 val notification = Notification().apply {
                                     this.title = parameters.notificationHeader
                                     this.body = parameters.notificationBody
@@ -666,7 +665,9 @@ class HealthStore(
                                 }
                                 db.insert(backgroundJob)
                             })
-                            onSuccess("success")
+
+                            subscribeForUpdates(parameters, variable, pendingIntent, onSuccess, onError)
+
                         } catch(sqle : SQLiteException) {
                             onError(HealthFitnessError.BACKGROUND_JOB_ALREADY_EXISTS_ERROR)
                         } catch(e : Exception) {
@@ -674,12 +675,19 @@ class HealthStore(
                         }
                     }
                 }
+
             },
             { exception ->
                 Log.w("Access GoogleFit:", "There was a problem subscribing to Recording.", exception)
             }
         )
+    }
 
+    private fun subscribeForUpdates(parameters: BackgroundJobParameters, variable:
+                                    GoogleFitVariable,
+                                    pendingIntent: PendingIntent,
+                                    onSuccess : (String) -> Unit,
+                                    onError : (HealthFitnessError) -> Unit){
         if(sensorVariables.contains(parameters.variable)){
             var grouping : Long = 1
             if(parameters.jobFrequency?.equals(EnumJobFrequency.WEEK.value) == true){
@@ -690,10 +698,12 @@ class HealthStore(
                 manager.subscribeToSensorUpdates(variable, grouping, jobFrequency, parameters, pendingIntent,
                     {
                         Log.i("Access GoogleFit:", "Subscribed to Sensor Updates with success.")
+                        onSuccess("success")
                     },
                     {
                         //register the background job in our database calling the insert method
                         Log.w("Access GoogleFit:", "There was a problem subscribing to Sensor Updates.", it)
+                        onError(HealthFitnessError.BACKGROUND_JOB_GENERIC_ERROR)
                     })
             }
         }
@@ -701,9 +711,11 @@ class HealthStore(
             manager.subscribeToHistoryUpdates(variable, pendingIntent,
                 {
                     Log.i("Access GoogleFit:", "Subscribed to History Updates with success.")
+                    onSuccess("success")
                 },
                 {
                     Log.w("Access GoogleFit:", "There was a problem subscribing to History Updates.", it)
+                    onError(HealthFitnessError.BACKGROUND_JOB_GENERIC_ERROR)
                 })
         }
         else {

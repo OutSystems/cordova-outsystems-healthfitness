@@ -137,7 +137,6 @@ class VariableUpdateService : BroadcastReceiver() {
         val notification = NotificationCompat.Builder(context, CHANNEL_ID)
             .setContentTitle(title)
             .setContentText(body)
-            //.setSmallIcon(R.mipmap.ic_launcher)
             .setSmallIcon(icon)
             .setContentIntent(pendingIntent)
             .setAutoCancel(true)
