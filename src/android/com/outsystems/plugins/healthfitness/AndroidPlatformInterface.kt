@@ -2,7 +2,6 @@ package com.outsystems.plugins.healthfitness
 
 import android.app.Activity
 import android.content.Context
-import org.apache.cordova.CallbackContext
 
 interface AndroidPlatformInterface {
 

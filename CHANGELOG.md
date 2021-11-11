@@ -8,11 +8,17 @@ The changes documented here do not include those from the original repository.
 
 ## [Version 1.0.0]
 ## [Unreleased]
+
+## 2021-10-18
+- Refactored method to check for Google Play Services (https://outsystemsrd.atlassian.net/browse/RMET-1153)
+
 ## 2021-10-14
 - Unit Tests for iOS (https://outsystemsrd.atlassian.net/browse/RMET-1049)
 
 ## 2021-10-14
 - Unit Tests for Android (https://outsystemsrd.atlassian.net/browse/RMET-1048)
+
+## [Version 1.0.0]
 
 ## 2021-10-04<>
 - Refactorings for Android (https://outsystemsrd.atlassian.net/browse/RMET-1066)
