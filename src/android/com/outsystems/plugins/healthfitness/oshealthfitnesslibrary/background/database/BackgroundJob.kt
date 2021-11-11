@@ -5,12 +5,12 @@ import androidx.room.Entity
 import androidx.room.ForeignKey
 
 @Entity(
-    primaryKeys = ["variable", "comparison", "value"]/*,
+    primaryKeys = ["variable", "comparison", "value"],
     foreignKeys = [ForeignKey(
         entity = Notification::class,
-        parentColumns = arrayOf("notification_id"),
-        childColumns = arrayOf("id"),
-        onDelete = ForeignKey.CASCADE)]*/
+        parentColumns = arrayOf("id"),
+        childColumns = arrayOf("notification_id"),
+        onDelete = ForeignKey.CASCADE)]
 )
 open class BackgroundJob {
 
