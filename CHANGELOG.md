@@ -6,8 +6,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 The changes documented here do not include those from the original repository.
 
-## [Version 1.0.0]
 ## [Unreleased]
+
+## 2021-11-11
+- Implemented SetBackgroundJob action with notifications (https://outsystemsrd.atlassian.net/browse/RMET-1070)
+
+## 2021-11-04
+- Implemented setup phase of SetBackgroundJob action (https://outsystemsrd.atlassian.net/browse/RMET-1130)
+
+## [Version 1.0.1]
+
+## 2021-11-05
+- Created new release for updates in wrapper Extensability Configurations
 
 ## 2021-10-18
 - Refactored method to check for Google Play Services (https://outsystemsrd.atlassian.net/browse/RMET-1153)
