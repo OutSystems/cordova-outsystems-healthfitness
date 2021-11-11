@@ -52,7 +52,7 @@
     <source-file src="src/android/com/outsystems/plugins/healthfitness/oshealthfitnesslibrary/store/GoogleFitPermission.kt" target-dir="app/src/main/kotlin/com/outsystems/plugins/healthfitness/store"/>
     <source-file src="src/android/com/outsystems/plugins/healthfitness/oshealthfitnesslibrary/store/GoogleFitVariable.kt" target-dir="app/src/main/kotlin/com/outsystems/plugins/healthfitness/store"/>
     <source-file src="src/android/com/outsystems/plugins/healthfitness/oshealthfitnesslibrary/store/GoogleFitGroupPermission.kt" target-dir="app/src/main/kotlin/com/outsystems/plugins/healthfitness/store"/>
-    <source-file src="src/android/com/outsystems/plugins/healthfitness/oshealthfitnesslibrary/oshealthfitnesslibrary/store/AdvancedQueryParameters.kt" target-dir="app/src/main/kotlin/com/outsystems/plugins/healthfitness/store"/>
+    <source-file src="src/android/com/outsystems/plugins/healthfitness/oshealthfitnesslibrary/store/AdvancedQueryParameters.kt" target-dir="app/src/main/kotlin/com/outsystems/plugins/healthfitness/store"/>
     <source-file src="src/android/com/outsystems/plugins/healthfitness/oshealthfitnesslibrary/store/AdvancedQueryResponse.kt" target-dir="app/src/main/kotlin/com/outsystems/plugins/healthfitness/store"/>
     <source-file src="src/android/com/outsystems/plugins/healthfitness/oshealthfitnesslibrary/store/AdvancedQueryResponseBlock.kt" target-dir="app/src/main/kotlin/com/outsystems/plugins/healthfitness/store"/>
     <source-file src="src/android/com/outsystems/plugins/healthfitness/oshealthfitnesslibrary/store/AdvancedQuery.kt" target-dir="app/src/main/kotlin/com/outsystems/plugins/healthfitness/store"/>
