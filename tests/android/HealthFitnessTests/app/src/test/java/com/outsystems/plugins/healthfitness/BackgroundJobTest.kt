@@ -42,7 +42,32 @@ class BackgroundJobTest {
 
     @Test
     fun given_VariableWithoutPermissions_When_SettingBackgroundJob_Then_VariableNotAuthorizedError() {
-        //TODO
+        val googleFitMock = HealthFitnessManagerMock().apply {
+            permissionsGranted = false
+        }
+        val databaseMock = DatabaseManagerMock()
+        val store = HealthStore("", googleFitMock, databaseMock)
+
+        val parameters = BackgroundJobParameters(
+            "HEART_RATE",
+            "0",
+            "GREATER",
+            "TIME",
+            1,
+            "DAY",
+            "Header",
+            "Body"
+        )
+
+        store.setBackgroundJob(parameters,
+            {
+                //test fails
+                Assert.fail()
+            },
+            { error ->
+                Assert.assertEquals(error.code, HealthFitnessError.VARIABLE_NOT_AUTHORIZED_ERROR.code)
+                Assert.assertEquals(error.message, HealthFitnessError.VARIABLE_NOT_AUTHORIZED_ERROR.message)
+            })
     }
 
     @Test
