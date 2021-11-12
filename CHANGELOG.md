@@ -8,6 +8,17 @@ The changes documented here do not include those from the original repository.
 
 ## [Unreleased]
 
+## 2021-11-11
+- Implemented SetBackgroundJob action with notifications (https://outsystemsrd.atlassian.net/browse/RMET-1070)
+
+## 2021-11-04
+- Implemented setup phase of SetBackgroundJob action (https://outsystemsrd.atlassian.net/browse/RMET-1130)
+
+## [Version 1.0.1]
+
+## 2021-11-05
+- Created new release for updates in wrapper Extensability Configurations
+
 ## 2021-11-02
 - Feat: Added setBackgroundJob feature (https://outsystemsrd.atlassian.net/browse/RMET-1130)
 
