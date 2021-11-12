@@ -18,6 +18,7 @@ class HealthFitnessManagerMock: HealthFitnessManagerInterface {
 
     var permissionsGranted : Boolean = true
     var permissionsGrantedOnRequest : Boolean = true
+    var backgroundJobSuccess : Boolean = true
     var updateDataSuccess : Boolean = true
     var getDataSuccess : Boolean = true
     var store : HealthStore? = null
@@ -39,36 +40,6 @@ class HealthFitnessManagerMock: HealthFitnessManagerInterface {
         }
     }
 
-    override fun subscribeToHistoryUpdates(
-        variable: GoogleFitVariable,
-        variableName: String,
-        onSuccess: () -> Unit,
-        onFailure: (Exception) -> Unit
-    ) {
-        TODO("Not yet implemented")
-    }
-
-    override fun subscribeToRecordingUpdates(
-        variable: GoogleFitVariable,
-        parameters: BackgroundJobParameters,
-        onSuccess: () -> Unit,
-        onFailure: (Exception) -> Unit
-    ) {
-        TODO("Not yet implemented")
-    }
-
-    override fun subscribeToSensorUpdates(
-        variable: GoogleFitVariable,
-        variableName: String,
-        grouping: Long,
-        jobFrequency: TimeUnit,
-        parameters: BackgroundJobParameters,
-        onSuccess: () -> Unit,
-        onFailure: (Exception) -> Unit
-    ) {
-        TODO("Not yet implemented")
-    }
-
     override fun updateDataOnStore(dataSet: DataSet?, onSuccess: () -> Unit, onFailure: (Exception) -> Unit) {
         if(updateDataSuccess){
             onSuccess()
@@ -83,6 +54,51 @@ class HealthFitnessManagerMock: HealthFitnessManagerInterface {
             onSuccess(DataReadResponse())
         }
         else{
+            onFailure(Exception())
+        }
+    }
+
+    override fun subscribeToHistoryUpdates(
+        variable: GoogleFitVariable,
+        variableName: String,
+        onSuccess: () -> Unit,
+        onFailure: (Exception) -> Unit
+    ) {
+        if(backgroundJobSuccess){
+            onSuccess()
+        }
+        else {
+            onFailure(Exception())
+        }
+    }
+
+    override fun subscribeToRecordingUpdates(
+        variable: GoogleFitVariable,
+        parameters: BackgroundJobParameters,
+        onSuccess: () -> Unit,
+        onFailure: (Exception) -> Unit
+    ) {
+        if(backgroundJobSuccess){
+            onSuccess()
+        }
+        else {
+            onFailure(Exception())
+        }
+    }
+
+    override fun subscribeToSensorUpdates(
+        variable: GoogleFitVariable,
+        variableName: String,
+        grouping: Long,
+        jobFrequency: TimeUnit,
+        parameters: BackgroundJobParameters,
+        onSuccess: () -> Unit,
+        onFailure: (Exception) -> Unit
+    ) {
+        if(backgroundJobSuccess){
+            onSuccess()
+        }
+        else {
             onFailure(Exception())
         }
     }

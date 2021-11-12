@@ -1,36 +1,44 @@
 package com.outsystems.plugins.healthfitness.mock
 
+import android.database.sqlite.SQLiteException
 import com.outsystems.plugins.healthfitnesslib.background.database.BackgroundJob
 import com.outsystems.plugins.healthfitnesslib.background.database.DatabaseManagerInterface
 import com.outsystems.plugins.healthfitnesslib.background.database.Notification
+import java.sql.SQLException
 
 class DatabaseManagerMock: DatabaseManagerInterface {
+
+    var backgroundJobAlreadyExists : Boolean = true
+
     override fun deleteBackgroundJob(backgroundJob: BackgroundJob) {
-        TODO("Not yet implemented")
+
     }
 
     override fun fetchBackgroundJobs(variable: String): List<BackgroundJob>? {
-        TODO("Not yet implemented")
+        return arrayListOf()
     }
 
     override fun fetchNotification(id: Long): Notification? {
-        TODO("Not yet implemented")
+        return null
     }
 
     override fun fetchNotifications(): List<Notification>? {
-        TODO("Not yet implemented")
+        return arrayListOf()
     }
 
     override fun insert(backgroundJob: BackgroundJob): Long? {
-        TODO("Not yet implemented")
+        if(backgroundJobAlreadyExists) {
+            throw SQLiteException()
+        }
+        return null
     }
 
     override fun insert(notification: Notification): Long? {
-        TODO("Not yet implemented")
+        return null
     }
 
     override fun runInTransaction(closude: () -> Unit) {
-        TODO("Not yet implemented")
+
     }
 
 
