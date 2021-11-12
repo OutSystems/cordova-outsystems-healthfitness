@@ -23,6 +23,7 @@ public enum HealthKitErrors : Swift.Int, Foundation.CustomNSError, Foundation.Lo
   case notAvailableOnDevice
   case unitNotAvailable
   case featureNotAvailable
+  case backgroundJobAlreadyExists
   public var errorDescription: Swift.String? {
     get
   }
@@ -82,15 +83,15 @@ extension BackgroundJob {
     @objc get
     @objc set
   }
-  @objc @NSManaged dynamic public var frequency: Swift.String? {
-    @objc get
-    @objc set
-  }
   @objc @NSManaged dynamic public var id: Swift.Int64 {
     @objc get
     @objc set
   }
   @objc @NSManaged dynamic public var timeUnit: Swift.String? {
+    @objc get
+    @objc set
+  }
+  @objc @NSManaged dynamic public var timeUnitGrouping: Swift.Int64 {
     @objc get
     @objc set
   }
