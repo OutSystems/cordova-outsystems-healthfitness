@@ -2,6 +2,7 @@ package com.outsystems.plugins.healthfitness
 
 import com.google.gson.Gson
 import com.outsystems.plugins.healthfitness.mock.AndroidPlatformMock
+import com.outsystems.plugins.healthfitness.mock.DatabaseManagerMock
 import com.outsystems.plugins.healthfitness.mock.HealthFitnessManagerMock
 import com.outsystems.plugins.healthfitnesslib.HealthFitnessError
 import com.outsystems.plugins.healthfitnesslib.store.AdvancedQueryResponse
@@ -13,6 +14,7 @@ class SimpleQueryTest {
 
     @Test
     fun given_InvalidVariable_When_SimpleQuery_Then_VariableNotAvailableError() {
+        /*
         val platformInterfaceMock = AndroidPlatformMock().apply {
             sendPluginResultCompletion = { result, error ->
                 Assert.assertEquals(result, "null")
@@ -27,6 +29,23 @@ class SimpleQueryTest {
         val store = HealthStore(platformInterfaceMock, googleFitMock)
 
         store.getLastRecord("Test")
+         */
+
+        val googleFitMock = HealthFitnessManagerMock()
+        val databaseMock = DatabaseManagerMock()
+        val store = HealthStore("", googleFitMock, databaseMock)
+
+        store.getLastRecordAsync("Test",
+            {
+                //test fails
+                Assert.assertTrue(false)
+            },
+            { error ->
+                val code = error.code
+                val message = error.message
+                Assert.assertEquals(code, HealthFitnessError.VARIABLE_NOT_AVAILABLE_ERROR.code)
+                Assert.assertEquals(message, HealthFitnessError.VARIABLE_NOT_AVAILABLE_ERROR.message)
+            })
     }
 
     @Test

@@ -61,7 +61,8 @@ class AdvancedQueryTest {
         val parameters = AdvancedQueryParameters("HEART_RATE", Date(), Date(), null, 1, EnumOperationType.SUM.value, null)
         store.advancedQueryAsync(parameters,
             {
-
+                //test fails
+                Assert.assertTrue(false)
             },
             { error ->
                 val code = error.code

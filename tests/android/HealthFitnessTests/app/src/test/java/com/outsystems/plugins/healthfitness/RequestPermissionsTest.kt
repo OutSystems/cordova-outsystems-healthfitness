@@ -2,6 +2,7 @@ package com.outsystems.plugins.healthfitness
 
 import com.google.gson.Gson
 import com.outsystems.plugins.healthfitness.mock.AndroidPlatformMock
+import com.outsystems.plugins.healthfitness.mock.DatabaseManagerMock
 import com.outsystems.plugins.healthfitness.mock.HealthFitnessManagerMock
 import com.outsystems.plugins.healthfitnesslib.HealthFitnessError
 import com.outsystems.plugins.healthfitnesslib.store.GoogleFitGroupPermission
@@ -46,6 +47,7 @@ class RequestPermissionsTest {
         )
 
         Assert.assertTrue(wasThrownError)
+
     }
 
     @Test
