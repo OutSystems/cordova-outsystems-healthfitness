@@ -4,7 +4,6 @@ import com.outsystems.plugins.healthfitness.mock.DatabaseManagerMock
 import com.outsystems.plugins.healthfitness.mock.HealthFitnessManagerMock
 import com.outsystems.plugins.healthfitnesslib.HealthFitnessError
 import com.outsystems.plugins.healthfitnesslib.background.BackgroundJobParameters
-import com.outsystems.plugins.healthfitnesslib.HealthFitnessError
 import com.outsystems.plugins.healthfitnesslib.store.HealthStore
 import org.junit.Assert
 import org.junit.Test
@@ -73,7 +72,32 @@ class BackgroundJobTest {
 
     @Test
     fun given_ExistentBackgroundJob_When_SettingBackgroundJob_Then_BackgroundJobAlreadyExistsError() {
-        //TODO
+        val googleFitMock = HealthFitnessManagerMock()
+        val databaseMock = DatabaseManagerMock().apply {
+            backgroundJobAlreadyExists = true
+        }
+        val store = HealthStore("", googleFitMock, databaseMock)
+
+        val parameters = BackgroundJobParameters(
+            "HEART_RATE",
+            "0",
+            "GREATER",
+            "TIME",
+            1,
+            "DAY",
+            "Header",
+            "Body"
+        )
+
+        store.setBackgroundJob(parameters,
+            {
+                //test fails
+                Assert.fail()
+            },
+            { error ->
+                Assert.assertEquals(error.code, HealthFitnessError.BACKGROUND_JOB_ALREADY_EXISTS_ERROR.code)
+                Assert.assertEquals(error.message, HealthFitnessError.BACKGROUND_JOB_ALREADY_EXISTS_ERROR.message)
+            })
     }
 
     @Test
