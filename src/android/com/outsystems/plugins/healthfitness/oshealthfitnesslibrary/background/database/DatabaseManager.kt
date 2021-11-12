@@ -7,7 +7,7 @@ import androidx.room.Room
 import com.outsystems.plugins.healthfitnesslib.background.database.*
 import kotlinx.coroutines.Runnable
 
-class DatabaseManager(context : Context) {
+class DatabaseManager(context : Context) : DatabaseManagerInterface {
 
     private var database : AppDatabase? = null
     private var backgroundJobDao : BackgroundJobDao? = null
@@ -39,19 +39,19 @@ class DatabaseManager(context : Context) {
         }
     }
 
-    fun insert(backgroundJob: BackgroundJob) : Long? {
+    override fun insert(backgroundJob: BackgroundJob) : Long? {
         return backgroundJobDao?.insert(backgroundJob)
     }
 
-    fun insert(notification: Notification) : Long? {
+    override fun insert(notification: Notification) : Long? {
         return notificationDao?.insert(notification)
     }
 
-    fun fetchNotifications() : List<Notification>? {
+    override fun fetchNotifications() : List<Notification>? {
         return notificationDao?.getAll()
     }
 
-    fun fetchBackgroundJobs(variable : String) : List<BackgroundJob>? {
+    override fun fetchBackgroundJobs(variable : String) : List<BackgroundJob>? {
         return backgroundJobDao?.findByVariableName(variable)
     }
 
@@ -59,15 +59,15 @@ class DatabaseManager(context : Context) {
     //    return backgroundJobDao?.findByPrimaryKey(variable, comparison, value)
     //}
 
-    fun fetchNotification(id : Long) : Notification? {
+    override fun fetchNotification(id : Long) : Notification? {
         return notificationDao?.findById(id)?.first()
     }
 
-    fun deleteBackgroundJob(backgroundJob : BackgroundJob) {
+    override fun deleteBackgroundJob(backgroundJob : BackgroundJob) {
         backgroundJobDao?.delete(backgroundJob)
     }
 
-    fun runInTransaction(closude : () -> Unit){
+    override fun runInTransaction(closude : () -> Unit){
         database?.runInTransaction(Runnable {
             closude()
         });
