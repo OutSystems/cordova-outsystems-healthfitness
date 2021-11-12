@@ -10,6 +10,21 @@ The changes documented here do not include those from the original repository.
 
 ## 2021-11-12
 - Implementation of the background job (https://outsystemsrd.atlassian.net/browse/RMET-1133)
+
+## 2021-11-11
+- Implemented SetBackgroundJob action with notifications (https://outsystemsrd.atlassian.net/browse/RMET-1070)
+
+## 2021-11-04
+- Implemented setup phase of SetBackgroundJob action (https://outsystemsrd.atlassian.net/browse/RMET-1130)
+
+## [Version 1.0.1]
+
+## 2021-11-05
+- Created new release for updates in wrapper Extensability Configurations
+
+## 2021-11-02
+- Feat: Added setBackgroundJob feature (https://outsystemsrd.atlassian.net/browse/RMET-1130)
+
 ## 2021-10-20
 - Fixed compatibility issue with MABS 7 (https://outsystemsrd.atlassian.net/browse/RMET-1168)
 
