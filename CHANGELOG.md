@@ -8,7 +8,7 @@ The changes documented here do not include those from the original repository.
 
 ## [Unreleased]
 
-## 2021-10-20
+## 2021-11-12
 - Implementation of the background job (https://outsystemsrd.atlassian.net/browse/RMET-1133)
 ## 2021-10-20
 - Fixed compatibility issue with MABS 7 (https://outsystemsrd.atlassian.net/browse/RMET-1168)
