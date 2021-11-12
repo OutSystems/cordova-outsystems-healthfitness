@@ -38,7 +38,7 @@ class DatabaseManagerMock: DatabaseManagerInterface {
     }
 
     override fun runInTransaction(closude: () -> Unit) {
-
+        closude()
     }
 
 
