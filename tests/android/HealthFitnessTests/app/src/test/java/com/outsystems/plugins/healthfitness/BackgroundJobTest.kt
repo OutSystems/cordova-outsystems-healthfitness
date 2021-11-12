@@ -4,7 +4,6 @@ import com.outsystems.plugins.healthfitness.mock.DatabaseManagerMock
 import com.outsystems.plugins.healthfitness.mock.HealthFitnessManagerMock
 import com.outsystems.plugins.healthfitnesslib.HealthFitnessError
 import com.outsystems.plugins.healthfitnesslib.background.BackgroundJobParameters
-import com.outsystems.plugins.healthfitnesslib.HealthFitnessError
 import com.outsystems.plugins.healthfitnesslib.store.HealthStore
 import org.junit.Assert
 import org.junit.Test
@@ -72,11 +71,6 @@ class BackgroundJobTest {
     }
 
     @Test
-    fun given_ExistentBackgroundJob_When_SettingBackgroundJob_Then_BackgroundJobAlreadyExistsError() {
-        //TODO
-    }
-
-    @Test
     fun given_ValidVariableValidValue_When_SettingBackgroundJob_Then_SomeError() {
         val googleFitMock = HealthFitnessManagerMock().apply {
             backgroundJobSuccess = false
@@ -122,11 +116,9 @@ class BackgroundJobTest {
             onSuccess = { response ->
                 Assert.assertEquals(response, "success")
             },
-            onError = {
+            onError = { error ->
                 Assert.fail()
             })
     }
-
-
 
 }

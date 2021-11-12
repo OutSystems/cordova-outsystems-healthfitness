@@ -8,7 +8,7 @@ import java.sql.SQLException
 
 class DatabaseManagerMock: DatabaseManagerInterface {
 
-    var backgroundJobAlreadyExists : Boolean = true
+    var backgroundJobAlreadyExists : Boolean = false
 
     override fun deleteBackgroundJob(backgroundJob: BackgroundJob) {
 
