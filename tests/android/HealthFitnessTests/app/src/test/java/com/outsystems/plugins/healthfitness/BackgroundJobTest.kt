@@ -1,6 +1,12 @@
 package com.outsystems.plugins.healthfitness
 
+import com.outsystems.plugins.healthfitness.mock.DatabaseManagerMock
+import com.outsystems.plugins.healthfitness.mock.HealthFitnessManagerMock
+import com.outsystems.plugins.healthfitnesslib.background.BackgroundJobParameters
+import com.outsystems.plugins.healthfitnesslib.store.HealthStore
+import org.junit.Assert
 import org.junit.Test
+import java.lang.AssertionError
 
 class BackgroundJobTest {
 
@@ -26,7 +32,26 @@ class BackgroundJobTest {
 
     @Test
     fun given_ValidVariableValidValue_When_SettingBackgroundJob_Then_Success() {
-        //TODO
+        val googleFitMock = HealthFitnessManagerMock()
+        val databaseMock = DatabaseManagerMock()
+        val store = HealthStore("", googleFitMock, databaseMock)
+        val parameters =
+            BackgroundJobParameters("STEPS",
+                "0",
+                "GREATER",
+                "TIME",
+                1,
+                "DAY",
+                "Header",
+                "Body")
+
+        store.setBackgroundJob(parameters,
+            onSuccess = { response ->
+                Assert.assertEquals(response, "success")
+            },
+            onError = {
+                Assert.fail()
+            })
     }
 
 
