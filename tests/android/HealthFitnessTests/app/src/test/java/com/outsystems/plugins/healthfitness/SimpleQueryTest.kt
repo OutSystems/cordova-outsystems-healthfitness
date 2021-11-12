@@ -14,22 +14,6 @@ class SimpleQueryTest {
 
     @Test
     fun given_InvalidVariable_When_SimpleQuery_Then_VariableNotAvailableError() {
-        /*
-        val platformInterfaceMock = AndroidPlatformMock().apply {
-            sendPluginResultCompletion = { result, error ->
-                Assert.assertEquals(result, "null")
-                val code = error?.first
-                val message = error?.second
-                Assert.assertEquals(code, HealthFitnessError.VARIABLE_NOT_AVAILABLE_ERROR.code)
-                Assert.assertEquals(message, HealthFitnessError.VARIABLE_NOT_AVAILABLE_ERROR.message)
-            }
-        }
-
-        val googleFitMock = HealthFitnessManagerMock()
-        val store = HealthStore(platformInterfaceMock, googleFitMock)
-
-        store.getLastRecord("Test")
-         */
 
         val googleFitMock = HealthFitnessManagerMock()
         val databaseMock = DatabaseManagerMock()
@@ -50,68 +34,69 @@ class SimpleQueryTest {
 
     @Test
     fun given_VariableWithoutPermissions_When_SimpleQuery_Then_VariableNotAuthorizedError() {
-        val platformInterfaceMock = AndroidPlatformMock().apply {
-            sendPluginResultCompletion = { result, error ->
-                Assert.assertEquals(result, "null")
-                val code = error?.first
-                val message = error?.second
-                Assert.assertEquals(code, HealthFitnessError.VARIABLE_NOT_AUTHORIZED_ERROR.code)
-                Assert.assertEquals(
-                    message,
-                    HealthFitnessError.VARIABLE_NOT_AUTHORIZED_ERROR.message
-                )
-            }
-        }
 
         val googleFitMock = HealthFitnessManagerMock().apply {
             permissionsGranted = false
         }
-        val store = HealthStore(platformInterfaceMock, googleFitMock)
+        val databaseMock = DatabaseManagerMock()
+        val store = HealthStore("", googleFitMock, databaseMock)
 
-        store.getLastRecord("HEART_RATE")
+        store.getLastRecordAsync("HEART_RATE",
+            {
+                //test fails
+                Assert.assertTrue(false)
+            },
+            { error ->
+                val code = error.code
+                val message = error.message
+                Assert.assertEquals(code, HealthFitnessError.VARIABLE_NOT_AUTHORIZED_ERROR.code)
+                Assert.assertEquals(message, HealthFitnessError.VARIABLE_NOT_AUTHORIZED_ERROR.message)
+            })
+
     }
 
     @Test
     fun given_ValidVariable_When_SimpleQuery_Then_SomeError(){
 
-        val platformInterfaceMock = AndroidPlatformMock().apply {
-            sendPluginResultCompletion = { result, error ->
-                Assert.assertEquals(result, "null")
-                val code = error?.first
-                val message = error?.second
-                Assert.assertEquals(code, HealthFitnessError.READ_DATA_ERROR.code)
-                Assert.assertEquals(message, HealthFitnessError.READ_DATA_ERROR.message)
-            }
-        }
-
         val googleFitMock = HealthFitnessManagerMock().apply {
             getDataSuccess = false
         }
+        val databaseMock = DatabaseManagerMock()
+        val store = HealthStore("", googleFitMock, databaseMock)
 
-        val store = HealthStore(platformInterfaceMock, googleFitMock)
-
-        store.getLastRecord("HEART_RATE")
+        store.getLastRecordAsync("HEART_RATE",
+            {
+                //test fails
+                Assert.assertTrue(false)
+            },
+            { error ->
+                val code = error.code
+                val message = error.message
+                Assert.assertEquals(code, HealthFitnessError.READ_DATA_ERROR.code)
+                Assert.assertEquals(message, HealthFitnessError.READ_DATA_ERROR.message)
+            })
 
     }
 
     @Test
     fun given_ValidVariable_When_SimpleQuery_Then_Success(){
 
-        val platformInterfaceMock = AndroidPlatformMock().apply {
-            sendPluginResultCompletion = { result, _ ->
-                val response = Gson().fromJson(result, AdvancedQueryResponse::class.java)
-                Assert.assertTrue(response.results.isNotEmpty())
-                Assert.assertTrue(response.results[0].values.isEmpty())
-            }
-        }
-
         val googleFitMock = HealthFitnessManagerMock().apply {
             getDataSuccess = true
         }
+        val databaseMock = DatabaseManagerMock()
+        val store = HealthStore("", googleFitMock, databaseMock)
 
-        val store = HealthStore(platformInterfaceMock, googleFitMock)
+        store.getLastRecordAsync("HEART_RATE",
+            { result ->
+                Assert.assertTrue(result.results.isNotEmpty())
+                Assert.assertTrue(result.results[0].values.isEmpty())
+            },
+            {
+                //test fails
+                Assert.assertTrue(false)
+            })
 
-        store.getLastRecord("HEART_RATE")
 
     }
 
