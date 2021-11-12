@@ -2,18 +2,11 @@ package com.outsystems.plugins.healthfitness
 
 import com.outsystems.plugins.healthfitness.mock.DatabaseManagerMock
 import com.outsystems.plugins.healthfitness.mock.HealthFitnessManagerMock
-<<<<<<< Updated upstream
 import com.outsystems.plugins.healthfitnesslib.background.BackgroundJobParameters
-=======
 import com.outsystems.plugins.healthfitnesslib.HealthFitnessError
-import com.outsystems.plugins.healthfitnesslib.background.BackgroundJobParameters
-import com.outsystems.plugins.healthfitnesslib.store.AdvancedQueryParameters
-import com.outsystems.plugins.healthfitnesslib.store.EnumOperationType
->>>>>>> Stashed changes
 import com.outsystems.plugins.healthfitnesslib.store.HealthStore
 import org.junit.Assert
 import org.junit.Test
-import java.lang.AssertionError
 
 class BackgroundJobTest {
 
