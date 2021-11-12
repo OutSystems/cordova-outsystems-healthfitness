@@ -15,6 +15,11 @@ class BackgroundJobTest {
     }
 
     @Test
+    fun given_ExistentBackgroundJob_When_SettingBackgroundJob_Then_BackgroundJobAlreadyExistsError() {
+        //TODO
+    }
+
+    @Test
     fun given_ValidVariableValidValue_When_SettingBackgroundJob_Then_SomeError() {
         //TODO
     }

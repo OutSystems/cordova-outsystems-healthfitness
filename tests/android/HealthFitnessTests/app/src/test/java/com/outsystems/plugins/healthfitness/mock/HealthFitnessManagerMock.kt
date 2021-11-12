@@ -1,14 +1,18 @@
 package com.outsystems.plugins.healthfitness.mock
 
 import android.app.Activity
+import android.app.PendingIntent
 import android.content.Intent
 import com.google.android.gms.fitness.FitnessOptions
 import com.google.android.gms.fitness.data.DataSet
 import com.google.android.gms.fitness.result.DataReadResponse
+import com.outsystems.plugins.healthfitnesslib.background.BackgroundJobParameters
 import com.outsystems.plugins.healthfitnesslib.store.AdvancedQuery
+import com.outsystems.plugins.healthfitnesslib.store.GoogleFitVariable
 import com.outsystems.plugins.healthfitnesslib.store.HealthFitnessManagerInterface
 import com.outsystems.plugins.healthfitnesslib.store.HealthStore
 import java.lang.Exception
+import java.util.concurrent.TimeUnit
 
 class HealthFitnessManagerMock: HealthFitnessManagerInterface {
 
@@ -33,6 +37,36 @@ class HealthFitnessManagerMock: HealthFitnessManagerInterface {
         else {
             store?.handleActivityResult(requestCode, Activity.RESULT_CANCELED, Intent())
         }
+    }
+
+    override fun subscribeToHistoryUpdates(
+        variable: GoogleFitVariable,
+        variableName: String,
+        onSuccess: () -> Unit,
+        onFailure: (Exception) -> Unit
+    ) {
+        TODO("Not yet implemented")
+    }
+
+    override fun subscribeToRecordingUpdates(
+        variable: GoogleFitVariable,
+        parameters: BackgroundJobParameters,
+        onSuccess: () -> Unit,
+        onFailure: (Exception) -> Unit
+    ) {
+        TODO("Not yet implemented")
+    }
+
+    override fun subscribeToSensorUpdates(
+        variable: GoogleFitVariable,
+        variableName: String,
+        grouping: Long,
+        jobFrequency: TimeUnit,
+        parameters: BackgroundJobParameters,
+        onSuccess: () -> Unit,
+        onFailure: (Exception) -> Unit
+    ) {
+        TODO("Not yet implemented")
     }
 
     override fun updateDataOnStore(dataSet: DataSet?, onSuccess: () -> Unit, onFailure: (Exception) -> Unit) {
