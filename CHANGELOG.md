@@ -19,6 +19,12 @@ The changes documented here do not include those from the original repository.
 ## 2021-11-05
 - Created new release for updates in wrapper Extensability Configurations
 
+## 2021-11-02
+- Feat: Added setBackgroundJob feature (https://outsystemsrd.atlassian.net/browse/RMET-1130)
+
+## 2021-10-20
+- Fixed compatibility issue with MABS 7 (https://outsystemsrd.atlassian.net/browse/RMET-1168)
+
 ## 2021-10-18
 - Refactored method to check for Google Play Services (https://outsystemsrd.atlassian.net/browse/RMET-1153)
 

@@ -10,6 +10,11 @@ buildscript {
 }
 
 apply plugin: 'kotlin-kapt'
+allprojects {
+    repositories {
+        maven { url 'https://jitpack.io' }
+    }
+}
 
 dependencies{
     implementation("com.google.android.gms:play-services-fitness:20.0.0")
