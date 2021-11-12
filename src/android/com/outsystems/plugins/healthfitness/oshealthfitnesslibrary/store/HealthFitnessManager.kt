@@ -6,6 +6,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.fitness.Fitness
 import com.google.android.gms.fitness.FitnessOptions
 import android.content.Context
+import android.content.Intent
 import android.util.Log
 import androidx.room.Room
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -17,6 +18,7 @@ import com.google.android.gms.fitness.result.DataReadResponse
 import com.outsystems.plugins.healthfitness.HealthFitnessError
 import com.outsystems.plugins.healthfitnesslib.background.BackgroundJobParameters
 import com.outsystems.plugins.healthfitnesslib.background.DatabaseManager
+import com.outsystems.plugins.healthfitnesslib.background.VariableUpdateService
 import com.outsystems.plugins.healthfitnesslib.background.database.AppDatabase
 import com.outsystems.plugins.healthfitnesslib.background.database.BackgroundJob
 import com.outsystems.plugins.healthfitnesslib.background.database.Notification
@@ -91,10 +93,10 @@ class HealthFitnessManager(var context : Context, var activity : Activity? = nul
     }
 
     override fun subscribeToSensorUpdates(variable: GoogleFitVariable,
+                                          variableName : String,
                                           grouping: Long,
                                           jobFrequency: TimeUnit,
                                           parameters: BackgroundJobParameters,
-                                          pendingIntent : PendingIntent,
                                           onSuccess: () -> Unit,
                                           onFailure: (Exception) -> Unit) {
 
@@ -110,7 +112,7 @@ class HealthFitnessManager(var context : Context, var activity : Activity? = nul
                     .setDataType(variable.dataType)
                     .setSamplingRate(grouping, jobFrequency)
                     .build(),
-                pendingIntent
+                getSubscritionPendingIntent(variableName)
             )
             .addOnSuccessListener {
                 onSuccess()
@@ -121,7 +123,7 @@ class HealthFitnessManager(var context : Context, var activity : Activity? = nul
     }
 
     override fun subscribeToHistoryUpdates(variable: GoogleFitVariable,
-                                           pendingIntent : PendingIntent,
+                                           variableName : String,
                                            onSuccess: () -> Unit,
                                            onFailure: (Exception) -> Unit) {
 
@@ -133,7 +135,7 @@ class HealthFitnessManager(var context : Context, var activity : Activity? = nul
 
         val request = DataUpdateListenerRegistrationRequest.Builder()
             .setDataType(variable.dataType)
-            .setPendingIntent(pendingIntent)
+            .setPendingIntent(getSubscritionPendingIntent(variableName))
             .build()
 
         Fitness.getHistoryClient(context, account)
@@ -158,4 +160,11 @@ class HealthFitnessManager(var context : Context, var activity : Activity? = nul
         return GoogleSignIn.getLastSignedInAccount(context)
     }
 
+    private fun getSubscritionPendingIntent(variableName : String) : PendingIntent {
+        //do the actual subscription to the variable updates
+        val intent = Intent(context, VariableUpdateService::class.java)
+        intent.putExtra(VariableUpdateService.VARIABLE_NAME, variableName)
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+        return PendingIntent.getBroadcast(context, variableName.hashCode(), intent, PendingIntent.FLAG_UPDATE_CURRENT)
+    }
 }

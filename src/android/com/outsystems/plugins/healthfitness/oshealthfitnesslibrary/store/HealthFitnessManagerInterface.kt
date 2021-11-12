@@ -24,15 +24,15 @@ interface HealthFitnessManagerInterface {
                                     onFailure: (Exception) -> Unit)
 
     fun subscribeToSensorUpdates(variable: GoogleFitVariable,
+                                 variableName: String,
                                  grouping: Long,
                                  jobFrequency: TimeUnit,
                                  parameters: BackgroundJobParameters,
-                                 pendingIntent: PendingIntent,
                                  onSuccess: () -> Unit,
                                  onFailure: (Exception) -> Unit)
 
     fun subscribeToHistoryUpdates(variable: GoogleFitVariable,
-                                  pendingIntent : PendingIntent,
+                                  variableName: String,
                                   onSuccess: () -> Unit,
                                   onFailure: (Exception) -> Unit)
 }
