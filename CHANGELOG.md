@@ -8,6 +8,9 @@ The changes documented here do not include those from the original repository.
 
 ## [Unreleased]
 
+## 2021-11-12
+- Test: Added setBackgroundJob unit tests for Android (https://outsystemsrd.atlassian.net/browse/RMET-1191)
+
 ## 2021-11-02
 - Feat: Added setBackgroundJob feature (https://outsystemsrd.atlassian.net/browse/RMET-1130)
 
