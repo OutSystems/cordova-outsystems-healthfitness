@@ -132,6 +132,16 @@ class HealthStore(
                     EnumOperationType.SUM.value,
                     EnumOperationType.MAX.value,
                     EnumOperationType.MIN.value
+                )),
+            "DISTANCE" to GoogleFitVariable(DataType.TYPE_DISTANCE_DELTA, listOf(
+                Field.FIELD_DISTANCE
+            ),
+                listOf(
+                    EnumOperationType.RAW.value,
+                    EnumOperationType.AVERAGE.value,
+                    EnumOperationType.SUM.value,
+                    EnumOperationType.MAX.value,
+                    EnumOperationType.MIN.value
                 ))
         )
     }
