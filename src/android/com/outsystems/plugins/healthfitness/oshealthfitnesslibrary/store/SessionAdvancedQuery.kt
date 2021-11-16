@@ -1,55 +1,19 @@
 package com.outsystems.plugins.healthfitnesslib.store
 
-import com.google.android.gms.fitness.data.Bucket
 import com.google.android.gms.fitness.data.DataPoint
 import com.google.android.gms.fitness.data.DataSource
 import com.google.android.gms.fitness.data.DataType
-import com.google.android.gms.fitness.request.DataReadRequest
-import java.text.SimpleDateFormat
+import com.google.android.gms.fitness.request.SessionReadRequest
 import java.util.*
 import java.util.concurrent.TimeUnit
 
-val timeUnitsForMinMaxAverage: Map<String, EnumTimeUnit> by lazy {
-    mapOf(
-        "MILLISECONDS" to EnumTimeUnit.MILLISECOND,
-        "SECONDS" to EnumTimeUnit.MILLISECOND,
-        "MINUTE" to EnumTimeUnit.SECOND,
-        "HOUR" to EnumTimeUnit.MINUTE,
-        "DAY" to EnumTimeUnit.HOUR,
-        "WEEK" to EnumTimeUnit.DAY,
-        "MONTH" to EnumTimeUnit.WEEK,
-        "YEAR" to EnumTimeUnit.MONTH
-    )
-}
-val timeUnits: Map<String, EnumTimeUnit> by lazy {
-    mapOf(
-        "MILLISECONDS" to EnumTimeUnit.MILLISECOND,
-        "SECONDS" to EnumTimeUnit.SECOND,
-        "MINUTE" to EnumTimeUnit.MINUTE,
-        "HOUR" to EnumTimeUnit.HOUR,
-        "DAY" to EnumTimeUnit.DAY,
-        "WEEK" to EnumTimeUnit.WEEK,
-        "MONTH" to EnumTimeUnit.MONTH,
-        "YEAR" to EnumTimeUnit.YEAR
-    )
-}
-
-data class ProcessedBucket(
-    val startDate : Long,
-    var endDate : Long,
-    var dataPoints : MutableList<DataPoint> = mutableListOf(),
-    var processedDataPoints : MutableList<Float> = mutableListOf(),
-    var DEBUG_startDate : String = "",
-    var DEBUG_endDate : String = ""
-)
-
-class AdvancedQuery(
+class SessionAdvancedQuery(
     private val variable : GoogleFitVariable,
     private val startDate : Date,
     private val endDate : Date)
 {
     private var dataSource : DataSource? = null
-    private var dataRequestBuilder : DataReadRequest.Builder = DataReadRequest.Builder()
+    private var readRequest : SessionReadRequest.Builder = SessionReadRequest.Builder()
     private var operationType : String = EnumOperationType.RAW.value
     private var timeUnit : EnumTimeUnit? = null
     private var timeUnitLength : Int? = null
@@ -65,36 +29,22 @@ class AdvancedQuery(
                 .setStreamName("estimated_steps")
                 .build()
         }
-        dataRequestBuilder.setTimeRange(startDate.time, endDate.time, TimeUnit.MILLISECONDS)
+        readRequest.readSessionsFromAllApps()
+        readRequest.enableServerQueries()
+        readRequest.includeActivitySessions()
+        readRequest.setTimeInterval(startDate.time, endDate.time, TimeUnit.MILLISECONDS)
     }
 
     fun setOperationType(operation : String?) {
         operation?.let {
             operationType = it
 
-            if(operationType == EnumOperationType.RAW.value){
-                if(dataSource != null) {
-                    dataRequestBuilder.read(dataSource!!)
-                }
-                else {
-                    dataRequestBuilder.read(variable.dataType)
-                }
+            if(dataSource != null) {
+                readRequest.read(dataSource!!)
             }
             else {
-                if(dataSource != null) {
-                    dataRequestBuilder.aggregate(dataSource!!)
-                }
-                else {
-                    dataRequestBuilder.aggregate(variable.dataType)
-                }
+                readRequest.read(variable.dataType)
             }
-
-        }
-    }
-    fun setLimit(count : Int?) {
-        count?.let {
-            limit = it
-            dataRequestBuilder.setLimit(it)
         }
     }
     fun setTimeUnit(unit : String?) {
@@ -112,19 +62,16 @@ class AdvancedQuery(
             if(timeUnit!!.value.first == EnumTimeUnit.WEEK.value.first ||
                 timeUnit!!.value.first == EnumTimeUnit.MONTH.value.first ||
                 timeUnit!!.value.first == EnumTimeUnit.YEAR.value.first) {
-                dataRequestBuilder.bucketByTime(1, timeUnit!!.value.second)
+                //dataRequestBuilder.bucketByTime(1, timeUnit!!.value.second)
             }
             else {
-                dataRequestBuilder.bucketByTime(grouping, timeUnit!!.value.second)
+                //dataRequestBuilder.bucketByTime(grouping, timeUnit!!.value.second)
             }
         }
     }
 
-    fun getDataReadRequest() : DataReadRequest {
-        if(timeUnit != null && timeUnitLength == null) {
-            dataRequestBuilder.bucketByTime(1, timeUnit!!.value.second)
-        }
-        return dataRequestBuilder.build()
+    fun getDataReadRequest() : SessionReadRequest {
+        return readRequest.build()
     }
 
     fun isSingleResult() : Boolean {
@@ -147,4 +94,5 @@ class AdvancedQuery(
             operationType,
             buckets)
     }
+
 }

@@ -1,8 +1,6 @@
 package com.outsystems.plugins.healthfitnesslib.store
 
 import android.app.Activity
-import android.app.PendingIntent
-import android.content.Context
 import android.content.Intent
 import android.database.sqlite.SQLiteException
 import android.util.Log
@@ -130,6 +128,14 @@ class HealthStore(
                     EnumOperationType.RAW.value,
                     EnumOperationType.AVERAGE.value,
                     EnumOperationType.SUM.value,
+                    EnumOperationType.MAX.value,
+                    EnumOperationType.MIN.value
+                )),
+            "WALKING_SPEED" to GoogleFitVariable(DataType.TYPE_SPEED, listOf(
+                Field.FIELD_SPEED
+            ),
+                listOf(
+                    EnumOperationType.AVERAGE.value,
                     EnumOperationType.MAX.value,
                     EnumOperationType.MIN.value
                 ))
@@ -519,6 +525,10 @@ class HealthStore(
                            onSuccess : (AdvancedQueryResponse) -> Unit,
                            onError : (HealthFitnessError) -> Unit) {
 
+        //parameters.variable = "WALKING_SPEED"
+        //parameters.operationType = "MAX"
+        //parameters.timeUnit = "DAY"
+
         val variable = getVariableByName(parameters.variable)
         val endDate = parameters.endDate
         val startDate = parameters.startDate
@@ -528,7 +538,7 @@ class HealthStore(
             return
         }
 
-        if(!variable.allowedOperations.contains(parameters.operationType)) {
+        if(!variable.allowedOperations.contains(parameters.operationType!!)) {
             onError(HealthFitnessError.OPERATION_NOT_ALLOWED)
             return
         }
@@ -540,63 +550,100 @@ class HealthStore(
             return
         }
 
-        val queryInformation = AdvancedQuery(variable, startDate, endDate)
-        queryInformation.setOperationType(parameters.operationType)
-        queryInformation.setTimeUnit(parameters.timeUnit)
-        queryInformation.setTimeUnitGrouping(parameters.timeUnitLength)
-        queryInformation.setLimit(parameters.limit)
+        val isSessions = false
+        if(isSessions) {
+            val queryInformation = SessionAdvancedQuery(variable, startDate, endDate)
+            queryInformation.setOperationType(parameters.operationType)
+            queryInformation.setTimeUnit(parameters.timeUnit)
+            queryInformation.setTimeUnitGrouping(parameters.timeUnitLength)
 
-        manager.getDataFromStore(queryInformation,
-            { dataReadResponse ->
+            manager.getSessionDataFromStore(queryInformation,
+                { sessionReadResponse ->
 
-                val queryResponse: AdvancedQueryResponse
+                    val dataPoints = mutableListOf<DataPoint>()
+                    for (session in sessionReadResponse.sessions) {
+                        if(session.activity == "walking")
+                        sessionReadResponse.getDataSet(session)
+                            .forEach { ds ->
+                                dataPoints.addAll(ds.dataPoints)
+                            }
+                    }
 
-                if(queryInformation.isSingleResult()) {
+                    val buckets = queryInformation.processIntoBuckets(dataPoints)
 
-                    val values = mutableListOf<Float>()
+                    val queryResponse = buildAdvancedQueryResult(buckets)
+                    onSuccess(queryResponse)
+                },
+                { e ->
+                    onError(HealthFitnessError.READ_DATA_ERROR)
+                })
+        }
+        else {
+            val queryInformation = AdvancedQuery(variable, startDate, endDate)
+            queryInformation.setOperationType(parameters.operationType)
+            queryInformation.setTimeUnit(parameters.timeUnit)
+            queryInformation.setTimeUnitGrouping(parameters.timeUnitLength)
+            queryInformation.setLimit(parameters.limit)
 
-                    try {
-                        variable.fields.forEach { field ->
-                            dataReadResponse.dataSets
-                                .flatMap { it.dataPoints }
-                                .forEach { dataPoint ->
-                                    values.add(dataPoint.getValue(field).toString().toFloat())
+            manager.getDataFromStore(queryInformation,
+                { dataReadResponse ->
+
+                    val queryResponse: AdvancedQueryResponse
+
+                    if(queryInformation.isSingleResult()) {
+
+                        val values = mutableListOf<Float>()
+
+                        try {
+                            variable.fields.forEach { field ->
+                                dataReadResponse.dataSets
+                                    .flatMap { it.dataPoints }
+                                    .forEach { dataPoint ->
+                                        values.add(dataPoint.getValue(field).toString().toFloat())
+                                    }
+                            }
+                        }
+                        catch (_ : NullPointerException){
+                            // Ignores. Should only happen in UnitTesting.
+                        }
+
+                        val responseBlock =
+                            AdvancedQueryResponseBlock(0, startDate.time / 1000, endDate.time / 1000, values)
+
+                        queryResponse = AdvancedQueryResponse(listOf(responseBlock))
+                    }
+                    else {
+                        val buckets = try {
+                            val dataPoints = mutableListOf<DataPoint>()
+                            for (bucket in dataReadResponse.buckets) {
+                                bucket.dataSets.forEach { ds ->
+                                    dataPoints.addAll(ds.dataPoints)
                                 }
+                            }
+                            queryInformation.processIntoBuckets(dataPoints)
+                        } catch (_: NullPointerException) {
+                            listOf(ProcessedBucket(startDate.time, endDate.time))
+                        }
+
+                        queryResponse = buildAdvancedQueryResult(buckets)
+                    }
+
+                    if(parameters.variable == "HEIGHT"){
+                        queryResponse.results.forEach{ bucket ->
+                            for (i in bucket.values.indices){
+                                bucket.values[i] = bucket.values[i] * 100
+                            }
                         }
                     }
-                    catch (_ : NullPointerException){
-                        // Ignores. Should only happen in UnitTesting.
-                    }
 
-                    val responseBlock =
-                        AdvancedQueryResponseBlock(0, startDate.time / 1000, endDate.time / 1000, values)
-
-                    queryResponse = AdvancedQueryResponse(listOf(responseBlock))
+                    onSuccess(queryResponse)
+                },
+                { e ->
+                    onError(HealthFitnessError.READ_DATA_ERROR)
                 }
-                else {
-                    val resultBuckets = try {
-                        queryInformation.processBuckets(dataReadResponse.buckets)
-                    } catch (_: NullPointerException) {
-                        listOf(ProcessedBucket(startDate.time, endDate.time))
-                    }
+            )
+        }
 
-                    queryResponse = buildAdvancedQueryResult(resultBuckets)
-                }
-
-                if(parameters.variable == "HEIGHT"){
-                    queryResponse.results.forEach{ bucket ->
-                        for (i in bucket.values.indices){
-                            bucket.values[i] = bucket.values[i] * 100
-                        }
-                    }
-                }
-
-                onSuccess(queryResponse)
-            },
-            { e ->
-                onError(HealthFitnessError.READ_DATA_ERROR)
-            }
-        )
     }
 
     private fun buildAdvancedQueryResult(resultBuckets: List<ProcessedBucket>): AdvancedQueryResponse {
