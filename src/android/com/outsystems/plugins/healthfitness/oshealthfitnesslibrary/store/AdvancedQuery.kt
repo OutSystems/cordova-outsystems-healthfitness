@@ -1,5 +1,6 @@
 package com.outsystems.plugins.healthfitnesslib.store
 
+import android.util.Log
 import com.google.android.gms.fitness.data.Bucket
 import com.google.android.gms.fitness.data.DataPoint
 import com.google.android.gms.fitness.data.DataSource
@@ -53,6 +54,8 @@ class AdvancedQuery(
     private var timeUnit : EnumTimeUnit? = null
     private var timeUnitLength : Int? = null
     private var limit : Int? = null
+    private var bucketBySession : Boolean = false
+    private var activityToFilter : Array<String> = arrayOf("walking", "running")
 
     init {
         if(variable.dataType == DataType.TYPE_STEP_COUNT_DELTA) {
@@ -65,6 +68,7 @@ class AdvancedQuery(
                 .build()
         }
         dataRequestBuilder.setTimeRange(startDate.time, endDate.time, TimeUnit.MILLISECONDS)
+        bucketBySession = variable.dataType == DataType.TYPE_SPEED
     }
 
     fun setOperationType(operation : String?) {
@@ -96,13 +100,18 @@ class AdvancedQuery(
     fun setTimeUnitGrouping(grouping : Int?) {
         if(grouping != null && timeUnit != null) {
             timeUnitLength = grouping
-            if(timeUnit!!.value.first == EnumTimeUnit.WEEK.value.first ||
-                timeUnit!!.value.first == EnumTimeUnit.MONTH.value.first ||
-                timeUnit!!.value.first == EnumTimeUnit.YEAR.value.first) {
-                dataRequestBuilder.bucketByTime(1, timeUnit!!.value.second)
+            if(bucketBySession){
+                dataRequestBuilder.bucketBySession(1, TimeUnit.MINUTES)
             }
             else {
-                dataRequestBuilder.bucketByTime(grouping, timeUnit!!.value.second)
+                if(timeUnit!!.value.first == EnumTimeUnit.WEEK.value.first ||
+                    timeUnit!!.value.first == EnumTimeUnit.MONTH.value.first ||
+                    timeUnit!!.value.first == EnumTimeUnit.YEAR.value.first) {
+                    dataRequestBuilder.bucketByTime(1, timeUnit!!.value.second)
+                }
+                else {
+                    dataRequestBuilder.bucketByTime(grouping, timeUnit!!.value.second)
+                }
             }
         }
     }
@@ -119,12 +128,20 @@ class AdvancedQuery(
     }
 
     fun processBuckets(buckets : List<Bucket>) : List<ProcessedBucket>{
+
+        var filteredBuckets = buckets
+        if(bucketBySession){
+            filteredBuckets = buckets.filter {
+                it.session.activity in activityToFilter
+            }
+        }
+
         val buckets = AdvancedQueryBucketProcessor.processBuckets(
             startDate,
             endDate,
             timeUnit,
             timeUnitLength,
-            buckets)
+            filteredBuckets)
         return applyBucketOperation(buckets)
     }
 

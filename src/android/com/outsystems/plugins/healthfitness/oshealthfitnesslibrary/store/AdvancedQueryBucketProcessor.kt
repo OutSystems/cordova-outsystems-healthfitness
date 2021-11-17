@@ -1,5 +1,6 @@
 package com.outsystems.plugins.healthfitnesslib.store
 
+import android.util.Log
 import com.google.android.gms.fitness.data.Bucket
 import com.google.android.gms.fitness.data.DataPoint
 import java.text.SimpleDateFormat

@@ -140,6 +140,16 @@ class HealthStore(
                     EnumOperationType.MAX.value,
                     EnumOperationType.MIN.value
                 ))
+            /*,
+            "WORKOUT_DURATION" to GoogleFitVariable(DataType.TYPE_WORKOUT_EXERCISE, listOf(
+                Field.FIELD_DURATION
+            ),
+                listOf(
+                    EnumOperationType.RAW.value,
+                    EnumOperationType.AVERAGE.value,
+                    EnumOperationType.MAX.value,
+                    EnumOperationType.MIN.value
+                ))*/
         )
     }
     private val healthVariablesMap: Map<String, GoogleFitVariable> by lazy {
