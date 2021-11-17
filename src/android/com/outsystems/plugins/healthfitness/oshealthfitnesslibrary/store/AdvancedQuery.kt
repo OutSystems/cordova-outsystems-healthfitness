@@ -70,21 +70,11 @@ class AdvancedQuery(
     fun setOperationType(operation : String?) {
         operation?.let {
             operationType = it
-            if(operationType == EnumOperationType.RAW.value || operationType == EnumOperationType.AVERAGE.value){
-                if(dataSource != null) {
-                    dataRequestBuilder.read(dataSource!!)
-                }
-                else {
-                    dataRequestBuilder.read(variable.dataType)
-                }
+            if(dataSource != null) {
+                dataRequestBuilder.read(dataSource!!)
             }
             else {
-                if(dataSource != null) {
-                    dataRequestBuilder.aggregate(dataSource!!)
-                }
-                else {
-                    dataRequestBuilder.aggregate(variable.dataType)
-                }
+                dataRequestBuilder.read(variable.dataType)
             }
         }
     }

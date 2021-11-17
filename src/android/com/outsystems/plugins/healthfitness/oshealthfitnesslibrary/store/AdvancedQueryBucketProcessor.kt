@@ -100,7 +100,9 @@ class AdvancedQueryBucketProcessor {
                     c.set(Calendar.WEEK_OF_YEAR, weekNumber)
 
                     val firstDayOfWeek = c.firstDayOfWeek
-
+                    c[Calendar.HOUR_OF_DAY] = 0
+                    c[Calendar.MINUTE] = 0
+                    c[Calendar.SECOND] = 0
                     c[Calendar.DAY_OF_WEEK] = firstDayOfWeek
                     var startDate = c.timeInMillis
                     if (startDate < queryStartDate) {
@@ -152,7 +154,7 @@ class AdvancedQueryBucketProcessor {
                     c.set(Calendar.MONTH, monthNumber)
                     c.set(Calendar.YEAR, yearNumber)
                     c.set(Calendar.DAY_OF_MONTH, 1)
-                    c.set(Calendar.HOUR, 0)
+                    c.set(Calendar.HOUR_OF_DAY, 0)
                     c.set(Calendar.MINUTE, 0)
                     c.set(Calendar.SECOND, 0)
 
@@ -209,6 +211,9 @@ class AdvancedQueryBucketProcessor {
                     val c = Calendar.getInstance()
                     c.set(Calendar.YEAR, yearNumber)
                     c.set(Calendar.DAY_OF_YEAR, 1)
+                    c[Calendar.HOUR_OF_DAY] = 0
+                    c[Calendar.MINUTE] = 0
+                    c[Calendar.SECOND] = 0
 
                     var startDate = c.timeInMillis
                     if (startDate < queryStartDate) {

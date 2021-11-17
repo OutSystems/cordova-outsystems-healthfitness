@@ -526,8 +526,8 @@ class HealthStore(
                            onSuccess : (AdvancedQueryResponse) -> Unit,
                            onError : (HealthFitnessError) -> Unit) {
 
-        parameters.variable = "WALKING_SPEED"
-        parameters.operationType = "AVERAGE"
+        //parameters.variable = "WALKING_SPEED"
+        //parameters.operationType = "AVERAGE"
         //parameters.timeUnit = "DAY"
 
         val variable = getVariableByName(parameters.variable)
