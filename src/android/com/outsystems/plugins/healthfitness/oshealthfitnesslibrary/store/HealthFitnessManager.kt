@@ -49,14 +49,6 @@ class HealthFitnessManager(var context : Context, var activity : Activity? = nul
             .addOnFailureListener(onFailure)
     }
 
-    override fun getSessionDataFromStore(queryInformation: SessionAdvancedQuery, onSuccess: (SessionReadResponse) -> Unit, onFailure: (Exception) -> Unit) {
-        val fitnessRequest = queryInformation.getDataReadRequest()
-        Fitness.getSessionsClient(context, getLastAccount())
-            .readSession(fitnessRequest)
-            .addOnSuccessListener(onSuccess)
-            .addOnFailureListener(onFailure)
-    }
-
     override fun getDataFromStore(queryInformation: AdvancedQuery, onSuccess: (DataReadResponse) -> Unit, onFailure: (Exception) -> Unit){
         val fitnessRequest = queryInformation.getDataReadRequest()
         Fitness.getHistoryClient(context, getLastAccount())

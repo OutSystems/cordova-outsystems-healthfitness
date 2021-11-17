@@ -5,7 +5,6 @@ import com.google.android.gms.fitness.data.DataPoint
 import com.google.android.gms.fitness.data.DataSource
 import com.google.android.gms.fitness.data.DataType
 import com.google.android.gms.fitness.request.DataReadRequest
-import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.TimeUnit
 
@@ -71,8 +70,7 @@ class AdvancedQuery(
     fun setOperationType(operation : String?) {
         operation?.let {
             operationType = it
-
-            if(operationType == EnumOperationType.RAW.value){
+            if(operationType == EnumOperationType.RAW.value || operationType == EnumOperationType.AVERAGE.value){
                 if(dataSource != null) {
                     dataRequestBuilder.read(dataSource!!)
                 }
@@ -88,7 +86,6 @@ class AdvancedQuery(
                     dataRequestBuilder.aggregate(variable.dataType)
                 }
             }
-
         }
     }
     fun setLimit(count : Int?) {
@@ -131,13 +128,13 @@ class AdvancedQuery(
         return limit != null && limit == 1
     }
 
-    fun processIntoBuckets(dataPoints : List<DataPoint>) : List<ProcessedBucket>{
-        val buckets = AdvancedQueryBucketProcessor.processIntoBuckets(
+    fun processBuckets(buckets : List<Bucket>) : List<ProcessedBucket>{
+        val buckets = AdvancedQueryBucketProcessor.processBuckets(
             startDate,
             endDate,
             timeUnit,
             timeUnitLength,
-            dataPoints)
+            buckets)
         return applyBucketOperation(buckets)
     }
 

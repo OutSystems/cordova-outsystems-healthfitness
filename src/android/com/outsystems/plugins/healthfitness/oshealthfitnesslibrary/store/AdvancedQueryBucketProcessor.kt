@@ -11,8 +11,48 @@ class AdvancedQueryBucketProcessor {
 
     companion object {
 
-        fun processIntoBuckets(buckets : List<Bucket>): List<ProcessedBucket> {
+        fun processBuckets(
+            startDate: Date,
+            endDate: Date,
+            timeUnit: EnumTimeUnit?,
+            timeUnitLength: Int?,
+            buckets: List<Bucket>
+        ): List<ProcessedBucket> {
+            when (timeUnit) {
+                EnumTimeUnit.WEEK -> {
+                    val dataPoints = buckets.flatMap { it.dataSets }.flatMap { it.dataPoints }
+                    return processIntoWeekBuckets(
+                        startDate.time,
+                        endDate.time,
+                        timeUnitLength ?: 1,
+                        dataPoints
+                    )
+                }
+                EnumTimeUnit.MONTH -> {
+                    val dataPoints = buckets.flatMap { it.dataSets }.flatMap { it.dataPoints }
+                    return processIntoMonthBuckets(
+                        startDate.time,
+                        endDate.time,
+                        timeUnitLength ?: 1,
+                        dataPoints
+                    )
+                }
+                EnumTimeUnit.YEAR -> {
+                    val dataPoints = buckets.flatMap { it.dataSets }.flatMap { it.dataPoints }
+                    return processIntoYearBuckets(
+                        startDate.time,
+                        endDate.time,
+                        timeUnitLength ?: 1,
+                        dataPoints
+                    )
+                }
+                else -> {
+                    return processBuckets(buckets)
+                }
+            }
+        }
 
+        private fun processBuckets(buckets : List<Bucket>): List<ProcessedBucket> {
             val format = SimpleDateFormat("yyyy.MM.dd HH:mm")
             val processedBuckets: MutableList<ProcessedBucket> = mutableListOf()
             for (bucket in buckets) {
@@ -38,105 +78,6 @@ class AdvancedQueryBucketProcessor {
                 processedBuckets.add(processedBucket)
             }
             return processedBuckets
-        }
-
-        fun processIntoBuckets(
-            startDate: Date,
-            endDate: Date,
-            timeUnit: EnumTimeUnit?,
-            timeUnitLength: Int?,
-            dataPoints: List<DataPoint>
-        ): List<ProcessedBucket> {
-
-            when (timeUnit) {
-                EnumTimeUnit.WEEK -> {
-                    return processIntoWeekBuckets(
-                        startDate.time,
-                        endDate.time,
-                        timeUnitLength ?: 1,
-                        dataPoints
-                    )
-                }
-                EnumTimeUnit.MONTH -> {
-                    return processIntoMonthBuckets(
-                        startDate.time,
-                        endDate.time,
-                        timeUnitLength ?: 1,
-                        dataPoints
-                    )
-                }
-                EnumTimeUnit.YEAR -> {
-                    return processIntoYearBuckets(
-                        startDate.time,
-                        endDate.time,
-                        timeUnitLength ?: 1,
-                        dataPoints
-                    )
-                }
-                else -> {
-                    return processIntoDayBuckets(
-                        startDate.time,
-                        endDate.time,
-                        1,
-                        dataPoints
-                    )
-                }
-            }
-        }
-
-        private fun processIntoDayBuckets(
-            queryStartDate: Long,
-            queryEndDate: Long,
-            timeUnitLength: Int,
-            dataPoints: List<DataPoint>
-        ): List<ProcessedBucket> {
-
-            val format = SimpleDateFormat("yyyy.MM.dd HH:mm")
-            val processedBuckets: MutableMap<String, ProcessedBucket> = mutableMapOf()
-            val bucketKeyQueue: ArrayDeque<String> = ArrayDeque()
-
-            dataPoints.forEach { dataPoint ->
-                val dayNumber = getDayNumber(dataPoint.getStartTime(TimeUnit.MILLISECONDS))
-                val yearNumber = getYear(dataPoint.getStartTime(TimeUnit.MILLISECONDS))
-                val dataPointKey = "$dayNumber$yearNumber"
-
-                if (!processedBuckets.containsKey(dataPointKey)) {
-
-                    val c = Calendar.getInstance()
-                    c.set(Calendar.DAY_OF_YEAR, dayNumber)
-                    c.set(Calendar.YEAR, yearNumber)
-                    c.set(Calendar.DAY_OF_MONTH, 1)
-                    c.set(Calendar.HOUR, 0)
-                    c.set(Calendar.MINUTE, 0)
-                    c.set(Calendar.SECOND, 0)
-
-                    var startDate = c.timeInMillis
-                    if (startDate < queryStartDate) {
-                        startDate = queryStartDate
-                    }
-
-                    c.add(Calendar.MONTH, 1)
-                    var endDate = c.timeInMillis
-                    if (endDate > queryEndDate) {
-                        endDate = queryEndDate
-                    }
-
-                    processedBuckets[dataPointKey] = ProcessedBucket(
-                        startDate,
-                        endDate,
-                        mutableListOf(),
-                        mutableListOf(),
-                        format.format(startDate),
-                        format.format(endDate)
-                    )
-                    bucketKeyQueue.push(dataPointKey)
-                }
-
-                processedBuckets[dataPointKey]!!.dataPoints.add(dataPoint)
-            }
-            mergeBucketsIntoGroups(timeUnitLength, bucketKeyQueue, processedBuckets)
-            return processedBuckets.values.toList()
-
         }
 
         private fun processIntoWeekBuckets(
@@ -306,7 +247,10 @@ class AdvancedQueryBucketProcessor {
             for(bucket in buckets) {
                 val resultPerField : MutableMap<String, MutableList<Float>> = mutableMapOf()
                 var nResultsPerField = 0
-                for(datePoint in bucket.dataPoints) {
+                for(pointIndex in bucket.dataPoints.indices) {
+
+                    val dataPoint = bucket.dataPoints[pointIndex]
+
                     variable.fields.forEach { field ->
                         if(!resultPerField.containsKey(field.name)) {
                             val results = mutableListOf<Float>()
@@ -316,7 +260,7 @@ class AdvancedQueryBucketProcessor {
                             }
                         }
 
-                        val dataPointValue = datePoint.getValue(field).toString().toFloat()
+                        val dataPointValue = dataPoint.getValue(field).toString().toFloat()
 
                         when(operationType) {
 
@@ -327,8 +271,7 @@ class AdvancedQueryBucketProcessor {
 
                             EnumOperationType.SUM.value -> {
                                 nResultsPerField = 1
-                                resultPerField[field.name]!![0] =
-                                    resultPerField[field.name]!![0] + dataPointValue
+                                resultPerField[field.name]!![0] = resultPerField[field.name]!![0] + dataPointValue
                             }
 
                             EnumOperationType.MAX.value -> {
@@ -346,13 +289,18 @@ class AdvancedQueryBucketProcessor {
                             }
 
                             EnumOperationType.AVERAGE.value -> {
-                                //TODO: Implement this operation
+                                nResultsPerField = 1
+                                resultPerField[field.name]!![0] = resultPerField[field.name]!![0] + dataPointValue
+                                if(pointIndex == bucket.dataPoints.size - 1){
+                                    resultPerField[field.name]!![0] = resultPerField[field.name]!![0] / bucket.dataPoints.size
+                                }
                             }
 
                         }
 
                     }
                 }
+
                 nResultsPerField /= variable.fields.size
                 for(variableResultIndex in 0 until nResultsPerField) {
                     variable.fields.forEach { field ->
@@ -362,7 +310,6 @@ class AdvancedQueryBucketProcessor {
             }
             return buckets
         }
-
 
         private fun mergeBucketsIntoGroups(
             length: Int,
@@ -389,6 +336,7 @@ class AdvancedQueryBucketProcessor {
                 }
             }
         }
+
         private fun getDayNumber(milliseconds: Long): Int {
             val isoCalendar = Calendar.getInstance()
             isoCalendar.time = Date(milliseconds)
