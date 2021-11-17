@@ -91,7 +91,9 @@ class HealthStore(
             "STEPS",
             "HEART_RATE",
             "BLOOD_PRESSURE",
-            "CALORIES_BURNED"
+            "BLOOD_GLUCOSE",
+            "CALORIES_BURNED",
+            "SLEEP"
         )
     }
 
