@@ -75,14 +75,20 @@ class OSHealthFitness : CordovaImplementation() {
         val profileVariables = args.getString(4)
         val summaryVariables = args.getString(5)
 
-        healthStore?.initAndRequestPermissions(
-            customPermissions,
-            allVariables,
-            fitnessVariables,
-            healthVariables,
-            profileVariables,
-            summaryVariables)
-        checkAndGrantPermissions()
+        try {
+            healthStore?.initAndRequestPermissions(
+                customPermissions,
+                allVariables,
+                fitnessVariables,
+                healthVariables,
+                profileVariables,
+                summaryVariables)
+            checkAndGrantPermissions()
+        }
+        catch (hse : HealthStoreException) {
+            sendPluginResult(null, Pair(hse.error.code, hse.error.message))
+        }
+
     }
 
     private fun areAndroidPermissionsGranted(permissions: List<String>): Boolean {
