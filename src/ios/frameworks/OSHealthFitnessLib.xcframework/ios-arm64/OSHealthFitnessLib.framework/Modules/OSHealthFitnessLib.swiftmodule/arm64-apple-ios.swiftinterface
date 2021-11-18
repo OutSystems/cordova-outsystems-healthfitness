@@ -22,8 +22,9 @@ public enum HealthKitErrors : Swift.Int, Foundation.CustomNSError, Foundation.Lo
   case authorizationError
   case notAvailableOnDevice
   case unitNotAvailable
-  case featureNotAvailable
   case backgroundJobAlreadyExists
+  case featureNotAvailableiOS13
+  case featureNotAvailableiOS14
   public var errorDescription: Swift.String? {
     get
   }
