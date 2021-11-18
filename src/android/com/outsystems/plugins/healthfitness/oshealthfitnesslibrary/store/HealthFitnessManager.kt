@@ -2,30 +2,21 @@ package com.outsystems.plugins.healthfitnesslib.store
 
 import android.app.Activity
 import android.app.PendingIntent
+import android.content.Context
+import android.content.Intent
+import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.fitness.Fitness
 import com.google.android.gms.fitness.FitnessOptions
-import android.content.Context
-import android.content.Intent
-import android.util.Log
-import androidx.room.Room
-import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.fitness.data.DataSet
 import com.google.android.gms.fitness.data.DataSource
 import com.google.android.gms.fitness.request.DataUpdateListenerRegistrationRequest
 import com.google.android.gms.fitness.request.SensorRequest
 import com.google.android.gms.fitness.result.DataReadResponse
+import com.google.android.gms.fitness.result.SessionReadResponse
 import com.outsystems.plugins.healthfitness.HealthFitnessError
 import com.outsystems.plugins.healthfitnesslib.background.BackgroundJobParameters
-import com.outsystems.plugins.healthfitnesslib.background.DatabaseManager
 import com.outsystems.plugins.healthfitnesslib.background.VariableUpdateService
-import com.outsystems.plugins.healthfitnesslib.background.database.AppDatabase
-import com.outsystems.plugins.healthfitnesslib.background.database.BackgroundJob
-import com.outsystems.plugins.healthfitnesslib.background.database.Notification
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
-import java.lang.Exception
 import java.util.concurrent.TimeUnit
 
 class HealthFitnessManager(var context : Context, var activity : Activity? = null): HealthFitnessManagerInterface {
