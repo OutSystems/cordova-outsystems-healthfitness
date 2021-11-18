@@ -11,6 +11,7 @@ import com.google.android.gms.common.GoogleApiAvailability
 import com.google.gson.Gson
 
 import com.outsystems.plugins.healthfitnesslib.background.BackgroundJobParameters
+import com.outsystems.plugins.healthfitnesslib.background.DatabaseManager
 import com.outsystems.plugins.healthfitnesslib.store.AdvancedQueryParameters
 import com.outsystems.plugins.healthfitnesslib.store.HealthFitnessManager
 import com.outsystems.plugins.healthfitnesslib.store.HealthStore
@@ -29,7 +30,8 @@ class OSHealthFitness : CordovaImplementation() {
     override fun initialize(cordova: CordovaInterface, webView: CordovaWebView) {
         super.initialize(cordova, webView)
         val manager = HealthFitnessManager(cordova.context, cordova.activity)
-        healthStore = HealthStore(cordova.context, manager)
+        val database = DatabaseManager(cordova.context)
+        healthStore = HealthStore(cordova.context.applicationContext.packageName, manager, database)
     }
 
     override fun execute(
@@ -73,14 +75,20 @@ class OSHealthFitness : CordovaImplementation() {
         val profileVariables = args.getString(4)
         val summaryVariables = args.getString(5)
 
-        healthStore?.initAndRequestPermissions(
-            customPermissions,
-            allVariables,
-            fitnessVariables,
-            healthVariables,
-            profileVariables,
-            summaryVariables)
-        checkAndGrantPermissions()
+        try {
+            healthStore?.initAndRequestPermissions(
+                customPermissions,
+                allVariables,
+                fitnessVariables,
+                healthVariables,
+                profileVariables,
+                summaryVariables)
+            checkAndGrantPermissions()
+        }
+        catch (hse : HealthStoreException) {
+            sendPluginResult(null, Pair(hse.error.code, hse.error.message))
+        }
+
     }
 
     private fun areAndroidPermissionsGranted(permissions: List<String>): Boolean {

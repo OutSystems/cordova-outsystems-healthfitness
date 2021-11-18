@@ -1,8 +1,6 @@
 package com.outsystems.plugins.healthfitnesslib.store
 
 import android.app.Activity
-import android.app.PendingIntent
-import android.content.Context
 import android.content.Intent
 import android.database.sqlite.SQLiteException
 import android.util.Log
@@ -12,8 +10,9 @@ import com.google.android.gms.fitness.data.DataPoint
 import com.google.android.gms.fitness.data.DataSet
 import com.google.gson.Gson
 import com.outsystems.plugins.healthfitness.HealthFitnessError
-import com.outsystems.plugins.healthfitnesslib.background.*
+import com.outsystems.plugins.healthfitnesslib.background.BackgroundJobParameters
 import com.outsystems.plugins.healthfitnesslib.background.database.BackgroundJob
+import com.outsystems.plugins.healthfitnesslib.background.database.DatabaseManagerInterface
 import com.outsystems.plugins.healthfitnesslib.background.database.Notification
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -69,8 +68,9 @@ private val jobFrequencies: Map<String, EnumTimeUnit> by lazy {
 }
 
 class HealthStore(
-    private val context : Context,
-    private val manager: HealthFitnessManagerInterface) {
+    private val packageName : String,
+    private val manager: HealthFitnessManagerInterface,
+    private val database : DatabaseManagerInterface) {
 
     private var fitnessOptions: FitnessOptions? = null
     private val gson: Gson by lazy { Gson() }
@@ -89,7 +89,9 @@ class HealthStore(
             "STEPS",
             "HEART_RATE",
             "BLOOD_PRESSURE",
-            "CALORIES_BURNED"
+            "BLOOD_GLUCOSE",
+            "CALORIES_BURNED",
+            "SLEEP"
         )
     }
 
@@ -115,12 +117,6 @@ class HealthStore(
                     EnumOperationType.MAX.value,
                     EnumOperationType.MIN.value
                 )),
-            "PUSH_COUNT" to GoogleFitVariable(DataType.TYPE_ACTIVITY_SEGMENT, listOf(
-                //TODO: possible different from iOS
-            ),
-                listOf(
-
-                )),
             "MOVE_MINUTES" to GoogleFitVariable(DataType.TYPE_MOVE_MINUTES, listOf(
                 Field.FIELD_DURATION
             ),
@@ -130,7 +126,34 @@ class HealthStore(
                     EnumOperationType.SUM.value,
                     EnumOperationType.MAX.value,
                     EnumOperationType.MIN.value
-                ))
+                )),
+            "WALKING_SPEED" to GoogleFitVariable(DataType.TYPE_SPEED, listOf(
+                Field.FIELD_SPEED
+            ),
+                listOf(
+                    EnumOperationType.RAW.value,
+                    EnumOperationType.AVERAGE.value,
+                    EnumOperationType.MAX.value,
+                    EnumOperationType.MIN.value
+                ),
+                listOf(
+                    "walking"
+                )
+            ),
+            "DISTANCE" to GoogleFitVariable(DataType.TYPE_DISTANCE_DELTA, listOf(
+                Field.FIELD_DISTANCE
+            ),
+                listOf(
+                    EnumOperationType.RAW.value,
+                    EnumOperationType.AVERAGE.value,
+                    EnumOperationType.MAX.value,
+                    EnumOperationType.MIN.value
+                ),
+                listOf(
+                    "walking",
+                    "running"
+                )
+            )
         )
     }
     private val healthVariablesMap: Map<String, GoogleFitVariable> by lazy {
@@ -436,7 +459,6 @@ class HealthStore(
             return
         }
 
-        //val lastAccount = GoogleSignIn.getLastSignedInAccount(context)
         val permissions = createPermissionsForVariable(variable, EnumAccessType.WRITE.value)
         val options = createFitnessOptions(permissions)
         if(!manager.areGoogleFitPermissionsGranted(options)) {
@@ -448,7 +470,6 @@ class HealthStore(
         val fieldType = profileVariablesMap[variableName]?.fields?.get(0)
 
         //insert the data
-        val packageName = context.applicationContext.packageName
         val dataSourceWrite = DataSource.Builder()
             .setAppPackageName(packageName)
             .setDataType(variable.dataType)
@@ -528,7 +549,7 @@ class HealthStore(
             return
         }
 
-        if(!variable.allowedOperations.contains(parameters.operationType)) {
+        if(!variable.allowedOperations.contains(parameters.operationType!!)) {
             onError(HealthFitnessError.OPERATION_NOT_ALLOWED)
             return
         }
@@ -568,35 +589,34 @@ class HealthStore(
                         // Ignores. Should only happen in UnitTesting.
                     }
 
-                    val responseBlock =
-                        AdvancedQueryResponseBlock(0, startDate.time / 1000, endDate.time / 1000, values)
+                    val responseBlock = AdvancedQueryResponseBlock(
+                        0,
+                        startDate.time / 1000,
+                        endDate.time / 1000,
+                        values)
 
                     queryResponse = AdvancedQueryResponse(listOf(responseBlock))
                 }
                 else {
-                    val resultBuckets = try {
+                    val buckets = try {
                         queryInformation.processBuckets(dataReadResponse.buckets)
                     } catch (_: NullPointerException) {
                         listOf(ProcessedBucket(startDate.time, endDate.time))
                     }
 
-                    queryResponse = buildAdvancedQueryResult(resultBuckets)
+                    queryResponse = buildAdvancedQueryResult(buckets)
                 }
 
-                if(parameters.variable == "HEIGHT"){
-                    queryResponse.results.forEach{ bucket ->
-                        for (i in bucket.values.indices){
-                            bucket.values[i] = bucket.values[i] * 100
-                        }
-                    }
-                }
+                convertResultUnits(parameters.variable, queryResponse)
 
+                Log.d("RESULT", gson.toJson(queryResponse))
                 onSuccess(queryResponse)
             },
             { e ->
                 onError(HealthFitnessError.READ_DATA_ERROR)
             }
         )
+
     }
 
     private fun buildAdvancedQueryResult(resultBuckets: List<ProcessedBucket>): AdvancedQueryResponse {
@@ -612,6 +632,15 @@ class HealthStore(
             )
         }
         return AdvancedQueryResponse(blockList)
+    }
+    private fun convertResultUnits(variableName : String, response : AdvancedQueryResponse){
+        if(variableName == "HEIGHT"){
+            response.results.forEach{ bucket ->
+                for (i in bucket.values.indices){
+                    bucket.values[i] = bucket.values[i] * 100
+                }
+            }
+        }
     }
 
     fun setBackgroundJob(parameters: BackgroundJobParameters,
@@ -631,12 +660,6 @@ class HealthStore(
             return
         }
 
-        //do the actual subscription to the variable updates
-        val intent = Intent(context, VariableUpdateService::class.java)
-        intent.putExtra(VariableUpdateService.VARIABLE_NAME, parameters.variable)
-        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-        val pendingIntent = PendingIntent.getBroadcast(context, variable.dataType.hashCode(), intent, PendingIntent.FLAG_UPDATE_CURRENT)
-
         manager.subscribeToRecordingUpdates(variable, parameters,
             {
                 Log.i("Access GoogleFit:", "Subscribed to Recording Updates with success.")
@@ -645,14 +668,13 @@ class HealthStore(
                     launch(Dispatchers.IO) {
 
                         try {
-                            val db = DatabaseManager.getInstance(context)
-
-                            db.runInTransaction({
+                            database.runInTransaction({
+                                val nNotification = database.fetchNotifications()
                                 val notification = Notification().apply {
                                     this.title = parameters.notificationHeader
                                     this.body = parameters.notificationBody
                                 }
-                                val notificationId = db.insert(notification)
+                                val notificationId = database.insert(notification)
 
                                 val backgroundJob = BackgroundJob().apply {
                                     this.variable = parameters.variable
@@ -663,11 +685,9 @@ class HealthStore(
                                     this.timeUnit = parameters.timeUnit
                                     this.timeUnitGrouping = parameters.timeUnitGrouping
                                 }
-                                db.insert(backgroundJob)
+                                database.insert(backgroundJob)
                             })
-
-                            subscribeForUpdates(parameters, variable, pendingIntent, onSuccess, onError)
-
+                            onSuccess("success")
                         } catch(sqle : SQLiteException) {
                             onError(HealthFitnessError.BACKGROUND_JOB_ALREADY_EXISTS_ERROR)
                         } catch(e : Exception) {
@@ -675,19 +695,12 @@ class HealthStore(
                         }
                     }
                 }
-
             },
             { exception ->
                 Log.w("Access GoogleFit:", "There was a problem subscribing to Recording.", exception)
             }
         )
-    }
 
-    private fun subscribeForUpdates(parameters: BackgroundJobParameters, variable:
-                                    GoogleFitVariable,
-                                    pendingIntent: PendingIntent,
-                                    onSuccess : (String) -> Unit,
-                                    onError : (HealthFitnessError) -> Unit){
         if(sensorVariables.contains(parameters.variable)){
             var grouping : Long = 1
             if(parameters.jobFrequency?.equals(EnumJobFrequency.WEEK.value) == true){
@@ -695,27 +708,23 @@ class HealthStore(
             }
             val jobFrequency = jobFrequencies[parameters.jobFrequency]?.value?.second
             jobFrequency?.let {
-                manager.subscribeToSensorUpdates(variable, grouping, jobFrequency, parameters, pendingIntent,
+                manager.subscribeToSensorUpdates(variable, parameters.variable, grouping, jobFrequency, parameters,
                     {
                         Log.i("Access GoogleFit:", "Subscribed to Sensor Updates with success.")
-                        onSuccess("success")
                     },
                     {
                         //register the background job in our database calling the insert method
                         Log.w("Access GoogleFit:", "There was a problem subscribing to Sensor Updates.", it)
-                        onError(HealthFitnessError.BACKGROUND_JOB_GENERIC_ERROR)
                     })
             }
         }
         else if(historyVariables.contains(parameters.variable)){
-            manager.subscribeToHistoryUpdates(variable, pendingIntent,
+            manager.subscribeToHistoryUpdates(variable, parameters.variable,
                 {
                     Log.i("Access GoogleFit:", "Subscribed to History Updates with success.")
-                    onSuccess("success")
                 },
                 {
                     Log.w("Access GoogleFit:", "There was a problem subscribing to History Updates.", it)
-                    onError(HealthFitnessError.BACKGROUND_JOB_GENERIC_ERROR)
                 })
         }
         else {

@@ -34,12 +34,12 @@ class VariableUpdateService : BroadcastReceiver() {
         }
     }
 
-    private suspend fun processBackgroundJobs(context : Context, intent : Intent) {
+    private fun processBackgroundJobs(context : Context, intent : Intent) {
 
         val variableName = intent.getStringExtra(VARIABLE_NAME) ?: return
-
         val manager = HealthFitnessManager(context)
-        val store = HealthStore(context, manager)
+        val database = DatabaseManager(context)
+        val store = HealthStore(context.applicationContext.packageName, manager, database)
 
         val operationType : String
         val variable = store.getVariableByName(variableName)
