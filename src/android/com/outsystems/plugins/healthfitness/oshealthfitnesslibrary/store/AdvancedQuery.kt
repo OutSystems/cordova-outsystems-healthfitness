@@ -55,7 +55,6 @@ class AdvancedQuery(
     private var timeUnitLength : Int? = null
     private var limit : Int? = null
     private var bucketBySession : Boolean = false
-    private var activityToFilter : Array<String> = arrayOf("walking", "running")
 
     init {
         if(variable.dataType == DataType.TYPE_STEP_COUNT_DELTA) {
@@ -68,7 +67,7 @@ class AdvancedQuery(
                 .build()
         }
         dataRequestBuilder.setTimeRange(startDate.time, endDate.time, TimeUnit.MILLISECONDS)
-        bucketBySession = variable.dataType == DataType.TYPE_SPEED
+        bucketBySession = variable.filterBySession.isNotEmpty()
     }
 
     fun setOperationType(operation : String?) {
@@ -101,7 +100,7 @@ class AdvancedQuery(
         if(grouping != null && timeUnit != null) {
             timeUnitLength = grouping
             if(bucketBySession){
-                dataRequestBuilder.bucketBySession(1, TimeUnit.MINUTES)
+                dataRequestBuilder.bucketBySession(1, TimeUnit.SECONDS)
             }
             else {
                 if(timeUnit!!.value.first == EnumTimeUnit.WEEK.value.first ||
@@ -132,7 +131,7 @@ class AdvancedQuery(
         var filteredBuckets = buckets
         if(bucketBySession){
             filteredBuckets = buckets.filter {
-                it.session.activity in activityToFilter
+                it.session.activity in variable.filterBySession
             }
         }
 

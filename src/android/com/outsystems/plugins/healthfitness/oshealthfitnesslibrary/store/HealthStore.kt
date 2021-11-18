@@ -139,7 +139,11 @@ class HealthStore(
                     EnumOperationType.AVERAGE.value,
                     EnumOperationType.MAX.value,
                     EnumOperationType.MIN.value
-                ))
+                ),
+                listOf(
+                    "walking"
+                )
+            )
             /*,
             "WORKOUT_DURATION" to GoogleFitVariable(DataType.TYPE_WORKOUT_EXERCISE, listOf(
                 Field.FIELD_DURATION
@@ -535,10 +539,6 @@ class HealthStore(
     fun advancedQueryAsync(parameters : AdvancedQueryParameters,
                            onSuccess : (AdvancedQueryResponse) -> Unit,
                            onError : (HealthFitnessError) -> Unit) {
-
-        //parameters.variable = "WALKING_SPEED"
-        //parameters.operationType = "AVERAGE"
-        //parameters.timeUnit = "DAY"
 
         val variable = getVariableByName(parameters.variable)
         val endDate = parameters.endDate
