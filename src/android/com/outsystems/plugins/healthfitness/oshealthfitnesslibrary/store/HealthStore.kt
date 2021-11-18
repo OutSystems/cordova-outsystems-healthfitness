@@ -135,8 +135,11 @@ class HealthStore(
                     EnumOperationType.AVERAGE.value,
                     EnumOperationType.MAX.value,
                     EnumOperationType.MIN.value
-                )),
-              
+                ),
+                listOf(
+                    "walking"
+                )
+            ),
             "DISTANCE" to GoogleFitVariable(DataType.TYPE_DISTANCE_DELTA, listOf(
                 Field.FIELD_DISTANCE
             ),
@@ -147,8 +150,10 @@ class HealthStore(
                     EnumOperationType.MIN.value
                 ),
                 listOf(
-                    "walking"
-                ))
+                    "walking",
+                    "running"
+                )
+            )
         )
     }
     private val healthVariablesMap: Map<String, GoogleFitVariable> by lazy {
