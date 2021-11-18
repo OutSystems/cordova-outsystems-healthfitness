@@ -9,7 +9,10 @@ The changes documented here do not include those from the original repository.
 ## [Unreleased]
 
 ## 2021-11-12
-- Implementation of the background job (https://outsystemsrd.atlassian.net/browse/RMET-1133)
+- Implementation of new variables and new version of background job iOS (https://outsystemsrd.atlassian.net/browse/RMET-1138)
+
+## 2021-11-12
+- Implementation of the background job iOS (https://outsystemsrd.atlassian.net/browse/RMET-1133)
 
 ## 2021-11-11
 - Implemented SetBackgroundJob action with notifications (https://outsystemsrd.atlassian.net/browse/RMET-1070)
