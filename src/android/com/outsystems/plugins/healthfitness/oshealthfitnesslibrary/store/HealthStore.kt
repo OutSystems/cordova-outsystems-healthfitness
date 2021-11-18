@@ -89,7 +89,9 @@ class HealthStore(
             "STEPS",
             "HEART_RATE",
             "BLOOD_PRESSURE",
-            "CALORIES_BURNED"
+            "BLOOD_GLUCOSE",
+            "CALORIES_BURNED",
+            "SLEEP"
         )
     }
 
@@ -115,12 +117,6 @@ class HealthStore(
                     EnumOperationType.MAX.value,
                     EnumOperationType.MIN.value
                 )),
-            "PUSH_COUNT" to GoogleFitVariable(DataType.TYPE_ACTIVITY_SEGMENT, listOf(
-                //TODO: possible different from iOS
-            ),
-                listOf(
-
-                )),
             "MOVE_MINUTES" to GoogleFitVariable(DataType.TYPE_MOVE_MINUTES, listOf(
                 Field.FIELD_DURATION
             ),
@@ -139,21 +135,20 @@ class HealthStore(
                     EnumOperationType.AVERAGE.value,
                     EnumOperationType.MAX.value,
                     EnumOperationType.MIN.value
-                ),
-                listOf(
-                    "walking"
-                )
-            )
-            /*,
-            "WORKOUT_DURATION" to GoogleFitVariable(DataType.TYPE_WORKOUT_EXERCISE, listOf(
-                Field.FIELD_DURATION
+                )),
+              
+            "DISTANCE" to GoogleFitVariable(DataType.TYPE_DISTANCE_DELTA, listOf(
+                Field.FIELD_DISTANCE
             ),
                 listOf(
                     EnumOperationType.RAW.value,
                     EnumOperationType.AVERAGE.value,
                     EnumOperationType.MAX.value,
                     EnumOperationType.MIN.value
-                ))*/
+                ),
+                listOf(
+                    "walking"
+                ))
         )
     }
     private val healthVariablesMap: Map<String, GoogleFitVariable> by lazy {
