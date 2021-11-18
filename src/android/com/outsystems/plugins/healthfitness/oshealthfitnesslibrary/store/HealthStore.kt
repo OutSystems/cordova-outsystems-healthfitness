@@ -1,8 +1,6 @@
 package com.outsystems.plugins.healthfitnesslib.store
 
 import android.app.Activity
-import android.app.PendingIntent
-import android.content.Context
 import android.content.Intent
 import android.database.sqlite.SQLiteException
 import android.util.Log
@@ -91,7 +89,9 @@ class HealthStore(
             "STEPS",
             "HEART_RATE",
             "BLOOD_PRESSURE",
-            "CALORIES_BURNED"
+            "BLOOD_GLUCOSE",
+            "CALORIES_BURNED",
+            "SLEEP"
         )
     }
 
@@ -117,12 +117,6 @@ class HealthStore(
                     EnumOperationType.MAX.value,
                     EnumOperationType.MIN.value
                 )),
-            "PUSH_COUNT" to GoogleFitVariable(DataType.TYPE_ACTIVITY_SEGMENT, listOf(
-                //TODO: possible different from iOS
-            ),
-                listOf(
-
-                )),
             "MOVE_MINUTES" to GoogleFitVariable(DataType.TYPE_MOVE_MINUTES, listOf(
                 Field.FIELD_DURATION
             ),
@@ -132,7 +126,34 @@ class HealthStore(
                     EnumOperationType.SUM.value,
                     EnumOperationType.MAX.value,
                     EnumOperationType.MIN.value
-                ))
+                )),
+            "WALKING_SPEED" to GoogleFitVariable(DataType.TYPE_SPEED, listOf(
+                Field.FIELD_SPEED
+            ),
+                listOf(
+                    EnumOperationType.RAW.value,
+                    EnumOperationType.AVERAGE.value,
+                    EnumOperationType.MAX.value,
+                    EnumOperationType.MIN.value
+                ),
+                listOf(
+                    "walking"
+                )
+            ),
+            "DISTANCE" to GoogleFitVariable(DataType.TYPE_DISTANCE_DELTA, listOf(
+                Field.FIELD_DISTANCE
+            ),
+                listOf(
+                    EnumOperationType.RAW.value,
+                    EnumOperationType.AVERAGE.value,
+                    EnumOperationType.MAX.value,
+                    EnumOperationType.MIN.value
+                ),
+                listOf(
+                    "walking",
+                    "running"
+                )
+            )
         )
     }
     private val healthVariablesMap: Map<String, GoogleFitVariable> by lazy {
@@ -528,7 +549,7 @@ class HealthStore(
             return
         }
 
-        if(!variable.allowedOperations.contains(parameters.operationType)) {
+        if(!variable.allowedOperations.contains(parameters.operationType!!)) {
             onError(HealthFitnessError.OPERATION_NOT_ALLOWED)
             return
         }
@@ -568,35 +589,34 @@ class HealthStore(
                         // Ignores. Should only happen in UnitTesting.
                     }
 
-                    val responseBlock =
-                        AdvancedQueryResponseBlock(0, startDate.time / 1000, endDate.time / 1000, values)
+                    val responseBlock = AdvancedQueryResponseBlock(
+                        0,
+                        startDate.time / 1000,
+                        endDate.time / 1000,
+                        values)
 
                     queryResponse = AdvancedQueryResponse(listOf(responseBlock))
                 }
                 else {
-                    val resultBuckets = try {
+                    val buckets = try {
                         queryInformation.processBuckets(dataReadResponse.buckets)
                     } catch (_: NullPointerException) {
                         listOf(ProcessedBucket(startDate.time, endDate.time))
                     }
 
-                    queryResponse = buildAdvancedQueryResult(resultBuckets)
+                    queryResponse = buildAdvancedQueryResult(buckets)
                 }
 
-                if(parameters.variable == "HEIGHT"){
-                    queryResponse.results.forEach{ bucket ->
-                        for (i in bucket.values.indices){
-                            bucket.values[i] = bucket.values[i] * 100
-                        }
-                    }
-                }
+                convertResultUnits(parameters.variable, queryResponse)
 
+                Log.d("RESULT", gson.toJson(queryResponse))
                 onSuccess(queryResponse)
             },
             { e ->
                 onError(HealthFitnessError.READ_DATA_ERROR)
             }
         )
+
     }
 
     private fun buildAdvancedQueryResult(resultBuckets: List<ProcessedBucket>): AdvancedQueryResponse {
@@ -612,6 +632,15 @@ class HealthStore(
             )
         }
         return AdvancedQueryResponse(blockList)
+    }
+    private fun convertResultUnits(variableName : String, response : AdvancedQueryResponse){
+        if(variableName == "HEIGHT"){
+            response.results.forEach{ bucket ->
+                for (i in bucket.values.indices){
+                    bucket.values[i] = bucket.values[i] * 100
+                }
+            }
+        }
     }
 
     fun setBackgroundJob(parameters: BackgroundJobParameters,
