@@ -19,9 +19,42 @@ class AdvancedQueryBucketProcessor {
             timeUnitLength: Int?,
             buckets: List<Bucket>
         ): List<ProcessedBucket> {
+
+            val dataPoints = buckets.flatMap { it.dataSets }.flatMap { it.dataPoints }
             when (timeUnit) {
+                EnumTimeUnit.SECOND -> {
+                    return processIntoSecondBuckets(
+                        startDate.time,
+                        endDate.time,
+                        timeUnitLength ?: 1,
+                        dataPoints
+                    )
+                }
+                EnumTimeUnit.MINUTE -> {
+                    return processIntoMinuteBuckets(
+                        startDate.time,
+                        endDate.time,
+                        timeUnitLength ?: 1,
+                        dataPoints
+                    )
+                }
+                EnumTimeUnit.HOUR -> {
+                    return processIntoHourBuckets(
+                        startDate.time,
+                        endDate.time,
+                        timeUnitLength ?: 1,
+                        dataPoints
+                    )
+                }
+                EnumTimeUnit.DAY -> {
+                    return processIntoDayBuckets(
+                        startDate.time,
+                        endDate.time,
+                        timeUnitLength ?: 1,
+                        dataPoints
+                    )
+                }
                 EnumTimeUnit.WEEK -> {
-                    val dataPoints = buckets.flatMap { it.dataSets }.flatMap { it.dataPoints }
                     return processIntoWeekBuckets(
                         startDate.time,
                         endDate.time,
@@ -30,7 +63,6 @@ class AdvancedQueryBucketProcessor {
                     )
                 }
                 EnumTimeUnit.MONTH -> {
-                    val dataPoints = buckets.flatMap { it.dataSets }.flatMap { it.dataPoints }
                     return processIntoMonthBuckets(
                         startDate.time,
                         endDate.time,
@@ -39,7 +71,6 @@ class AdvancedQueryBucketProcessor {
                     )
                 }
                 EnumTimeUnit.YEAR -> {
-                    val dataPoints = buckets.flatMap { it.dataSets }.flatMap { it.dataPoints }
                     return processIntoYearBuckets(
                         startDate.time,
                         endDate.time,
@@ -81,6 +112,279 @@ class AdvancedQueryBucketProcessor {
             return processedBuckets
         }
 
+
+        private fun processIntoSecondBuckets(
+            queryStartDate: Long,
+            queryEndDate: Long,
+            timeUnitLength: Int,
+            dataPoints: List<DataPoint>
+        ): List<ProcessedBucket> {
+
+            val format = SimpleDateFormat("yyyy.MM.dd HH:mm")
+            val processedBuckets: MutableMap<String, ProcessedBucket> = mutableMapOf()
+            val bucketKeyQueue: ArrayDeque<String> = ArrayDeque()
+
+            val currentCalendar = Calendar.getInstance()
+            currentCalendar.time = Date(queryStartDate)
+            while(currentCalendar.timeInMillis <= queryEndDate) {
+                val secondNumber = getSecondNumber(currentCalendar.timeInMillis)
+                val minuteNumber = getMinuteNumber(currentCalendar.timeInMillis)
+                val hourNumber = getHourNumber(currentCalendar.timeInMillis)
+                val dayNumber = getDayNumber(currentCalendar.timeInMillis)
+                val monthNumber = getMonth(currentCalendar.timeInMillis)
+                val yearNumber = getYear(currentCalendar.timeInMillis)
+                val dataPointKey = "$secondNumber$minuteNumber$hourNumber$dayNumber$monthNumber$yearNumber"
+
+                val c = Calendar.getInstance()
+                c.set(Calendar.MONTH, monthNumber)
+                c.set(Calendar.YEAR, yearNumber)
+                c.set(Calendar.DAY_OF_MONTH, dayNumber)
+                c.set(Calendar.HOUR_OF_DAY, hourNumber)
+                c.set(Calendar.MINUTE, minuteNumber)
+                c.set(Calendar.SECOND, secondNumber)
+                c.clear(Calendar.MILLISECOND)
+
+                var startDate = c.timeInMillis
+                c.add(Calendar.SECOND, 1)
+                var endDate = c.timeInMillis
+
+                /*
+                if (startDate < queryStartDate) {
+                    startDate = queryStartDate
+                }
+                if (endDate > queryEndDate) {
+                    endDate = queryEndDate
+                }
+                */
+
+                processedBuckets[dataPointKey] = ProcessedBucket(
+                    startDate,
+                    endDate,
+                    mutableListOf(),
+                    mutableListOf(),
+                    format.format(startDate),
+                    format.format(endDate)
+                )
+                bucketKeyQueue.push(dataPointKey)
+                currentCalendar.add(Calendar.SECOND, 1)
+            }
+
+            dataPoints.forEach { dataPoint ->
+                val secondNumber = getSecondNumber(dataPoint.getStartTime(TimeUnit.MILLISECONDS))
+                val minuteNumber = getMinuteNumber(dataPoint.getStartTime(TimeUnit.MILLISECONDS))
+                val hourNumber = getHourNumber(dataPoint.getStartTime(TimeUnit.MILLISECONDS))
+                val dayNumber = getDayNumber(dataPoint.getStartTime(TimeUnit.MILLISECONDS))
+                val monthNumber = getMonth(dataPoint.getStartTime(TimeUnit.MILLISECONDS))
+                val yearNumber = getYear(dataPoint.getStartTime(TimeUnit.MILLISECONDS))
+                val dataPointKey = "$secondNumber$minuteNumber$hourNumber$dayNumber$monthNumber$yearNumber"
+                processedBuckets[dataPointKey]!!.dataPoints.add(dataPoint)
+            }
+
+            mergeBucketsIntoGroups(timeUnitLength, bucketKeyQueue, processedBuckets)
+            return processedBuckets.values.toList()
+        }
+
+        private fun processIntoMinuteBuckets(
+            queryStartDate: Long,
+            queryEndDate: Long,
+            timeUnitLength: Int,
+            dataPoints: List<DataPoint>
+        ): List<ProcessedBucket> {
+
+            val format = SimpleDateFormat("yyyy.MM.dd HH:mm")
+            val processedBuckets: MutableMap<String, ProcessedBucket> = mutableMapOf()
+            val bucketKeyQueue: ArrayDeque<String> = ArrayDeque()
+
+            val currentCalendar = Calendar.getInstance()
+            currentCalendar.time = Date(queryStartDate)
+            while(currentCalendar.timeInMillis <= queryEndDate) {
+
+                val minuteNumber = getMinuteNumber(currentCalendar.timeInMillis)
+                val hourNumber = getHourNumber(currentCalendar.timeInMillis)
+                val dayNumber = getDayNumber(currentCalendar.timeInMillis)
+                val monthNumber = getMonth(currentCalendar.timeInMillis)
+                val yearNumber = getYear(currentCalendar.timeInMillis)
+                val dataPointKey = "$minuteNumber$hourNumber$dayNumber$monthNumber$yearNumber"
+
+                val c = Calendar.getInstance()
+                c.set(Calendar.MONTH, monthNumber)
+                c.set(Calendar.YEAR, yearNumber)
+                c.set(Calendar.DAY_OF_MONTH, dayNumber)
+                c.set(Calendar.HOUR_OF_DAY, hourNumber)
+                c.set(Calendar.MINUTE, minuteNumber)
+                c.set(Calendar.SECOND, 0)
+
+                var startDate = c.timeInMillis
+                c.add(Calendar.MINUTE, 1)
+                var endDate = c.timeInMillis
+
+                /*
+                if (startDate < queryStartDate) {
+                    startDate = queryStartDate
+                }
+                if (endDate > queryEndDate) {
+                    endDate = queryEndDate
+                }
+                */
+
+                processedBuckets[dataPointKey] = ProcessedBucket(
+                    startDate,
+                    endDate,
+                    mutableListOf(),
+                    mutableListOf(),
+                    format.format(startDate),
+                    format.format(endDate)
+                )
+                bucketKeyQueue.push(dataPointKey)
+                currentCalendar.add(Calendar.MINUTE, 1)
+            }
+
+            dataPoints.forEach { dataPoint ->
+                val minuteNumber = getMinuteNumber(dataPoint.getStartTime(TimeUnit.MILLISECONDS))
+                val hourNumber = getHourNumber(dataPoint.getStartTime(TimeUnit.MILLISECONDS))
+                val dayNumber = getDayNumber(dataPoint.getStartTime(TimeUnit.MILLISECONDS))
+                val monthNumber = getMonth(dataPoint.getStartTime(TimeUnit.MILLISECONDS))
+                val yearNumber = getYear(dataPoint.getStartTime(TimeUnit.MILLISECONDS))
+                val dataPointKey = "$minuteNumber$hourNumber$dayNumber$monthNumber$yearNumber"
+                processedBuckets[dataPointKey]!!.dataPoints.add(dataPoint)
+            }
+
+            mergeBucketsIntoGroups(timeUnitLength, bucketKeyQueue, processedBuckets)
+            return processedBuckets.values.toList()
+        }
+
+        private fun processIntoHourBuckets(
+            queryStartDate: Long,
+            queryEndDate: Long,
+            timeUnitLength: Int,
+            dataPoints: List<DataPoint>
+        ): List<ProcessedBucket> {
+
+            val format = SimpleDateFormat("yyyy.MM.dd HH:mm")
+            val processedBuckets: MutableMap<String, ProcessedBucket> = mutableMapOf()
+            val bucketKeyQueue: ArrayDeque<String> = ArrayDeque()
+
+            val currentCalendar = Calendar.getInstance()
+            currentCalendar.time = Date(queryStartDate)
+            while(currentCalendar.timeInMillis <= queryEndDate) {
+
+                val hourNumber = getHourNumber(currentCalendar.timeInMillis)
+                val dayNumber = getDayNumber(currentCalendar.timeInMillis)
+                val monthNumber = getMonth(currentCalendar.timeInMillis)
+                val yearNumber = getYear(currentCalendar.timeInMillis)
+                val dataPointKey = "$hourNumber$dayNumber$monthNumber$yearNumber"
+
+                val c = Calendar.getInstance()
+                c.set(Calendar.YEAR, yearNumber)
+                c.set(Calendar.MONTH, monthNumber)
+                c.set(Calendar.DAY_OF_MONTH, dayNumber)
+                c.set(Calendar.HOUR_OF_DAY, hourNumber)
+                c.set(Calendar.MINUTE, 0)
+                c.set(Calendar.SECOND, 0)
+
+                var startDate = c.timeInMillis
+                c.add(Calendar.HOUR, 1)
+                var endDate = c.timeInMillis
+
+                /*
+                if (startDate < queryStartDate) {
+                    startDate = queryStartDate
+                }
+                if (endDate > queryEndDate) {
+                    endDate = queryEndDate
+                }
+                */
+
+                processedBuckets[dataPointKey] = ProcessedBucket(
+                    startDate,
+                    endDate,
+                    mutableListOf(),
+                    mutableListOf(),
+                    format.format(startDate),
+                    format.format(endDate)
+                )
+                bucketKeyQueue.push(dataPointKey)
+                currentCalendar.add(Calendar.HOUR, 1)
+            }
+
+            dataPoints.forEach { dataPoint ->
+                val hourNumber = getHourNumber(dataPoint.getStartTime(TimeUnit.MILLISECONDS))
+                val dayNumber = getDayNumber(dataPoint.getStartTime(TimeUnit.MILLISECONDS))
+                val monthNumber = getMonth(dataPoint.getStartTime(TimeUnit.MILLISECONDS))
+                val yearNumber = getYear(dataPoint.getStartTime(TimeUnit.MILLISECONDS))
+                val dataPointKey = "$hourNumber$dayNumber$monthNumber$yearNumber"
+                processedBuckets[dataPointKey]!!.dataPoints.add(dataPoint)
+            }
+
+            mergeBucketsIntoGroups(timeUnitLength, bucketKeyQueue, processedBuckets)
+            return processedBuckets.values.toList()
+        }
+
+        private fun processIntoDayBuckets(
+            queryStartDate: Long,
+            queryEndDate: Long,
+            timeUnitLength: Int,
+            dataPoints: List<DataPoint>
+        ): List<ProcessedBucket> {
+
+            val format = SimpleDateFormat("yyyy.MM.dd HH:mm")
+            val processedBuckets: MutableMap<String, ProcessedBucket> = mutableMapOf()
+            val bucketKeyQueue: ArrayDeque<String> = ArrayDeque()
+
+            val currentCalendar = Calendar.getInstance()
+            currentCalendar.time = Date(queryStartDate)
+            while(currentCalendar.timeInMillis <= queryEndDate) {
+
+                val dayNumber = getDayNumber(currentCalendar.timeInMillis)
+                val monthNumber = getMonth(currentCalendar.timeInMillis)
+                val yearNumber = getYear(currentCalendar.timeInMillis)
+                val dataPointKey = "$dayNumber$monthNumber$yearNumber"
+
+                val c = Calendar.getInstance()
+                c.set(Calendar.YEAR, yearNumber)
+                c.set(Calendar.MONTH, monthNumber)
+                c.set(Calendar.DAY_OF_MONTH, dayNumber)
+                c.set(Calendar.HOUR_OF_DAY, 0)
+                c.set(Calendar.MINUTE, 0)
+                c.set(Calendar.SECOND, 0)
+
+                var startDate = c.timeInMillis
+                c.add(Calendar.DATE, 1)
+                var endDate = c.timeInMillis
+
+                /*
+                if (startDate < queryStartDate) {
+                    startDate = queryStartDate
+                }
+                if (endDate > queryEndDate) {
+                    endDate = queryEndDate
+                }
+                */
+
+                processedBuckets[dataPointKey] = ProcessedBucket(
+                    startDate,
+                    endDate,
+                    mutableListOf(),
+                    mutableListOf(),
+                    format.format(startDate),
+                    format.format(endDate)
+                )
+                bucketKeyQueue.push(dataPointKey)
+                currentCalendar.add(Calendar.DATE, 1)
+            }
+
+            dataPoints.forEach { dataPoint ->
+                val dayNumber = getDayNumber(dataPoint.getStartTime(TimeUnit.MILLISECONDS))
+                val monthNumber = getMonth(dataPoint.getStartTime(TimeUnit.MILLISECONDS))
+                val yearNumber = getYear(dataPoint.getStartTime(TimeUnit.MILLISECONDS))
+                val dataPointKey = "$dayNumber$monthNumber$yearNumber"
+                processedBuckets[dataPointKey]!!.dataPoints.add(dataPoint)
+            }
+
+            mergeBucketsIntoGroups(timeUnitLength, bucketKeyQueue, processedBuckets)
+            return processedBuckets.values.toList()
+        }
+
         private fun processIntoWeekBuckets(
             queryStartDate: Long,
             queryEndDate: Long,
@@ -90,43 +394,52 @@ class AdvancedQueryBucketProcessor {
             val format = SimpleDateFormat("yyyy.MM.dd HH:mm")
             val processedBuckets: MutableMap<String, ProcessedBucket> = mutableMapOf()
             val weekKeyQueue: ArrayDeque<String> = ArrayDeque()
-            dataPoints.forEach { dataPoint ->
 
+            var currentCalendar = Calendar.getInstance()
+            currentCalendar.time = Date(queryStartDate)
+            currentCalendar.set(Calendar.HOUR_OF_DAY, 0)
+            currentCalendar.clear(Calendar.MINUTE)
+            currentCalendar.clear(Calendar.SECOND)
+            currentCalendar.clear(Calendar.MILLISECOND)
+            currentCalendar.minimalDaysInFirstWeek = 4
+            currentCalendar.firstDayOfWeek = Calendar.MONDAY
+            currentCalendar.set(Calendar.DAY_OF_WEEK, currentCalendar.firstDayOfWeek)
+
+            while(currentCalendar.timeInMillis <= queryEndDate) {
+
+                val weekNumber = getISOWeekNumber(currentCalendar.timeInMillis)
+                val yearNumber = getYear(currentCalendar.timeInMillis)
+                val dataPointKey = "$weekNumber$yearNumber"
+
+                var startDate = currentCalendar.timeInMillis
+                currentCalendar.add(Calendar.WEEK_OF_YEAR, 1)
+                var endDate = currentCalendar.timeInMillis
+
+                /*
+                if (startDate < queryStartDate) {
+                    startDate = queryStartDate
+                }
+                if (endDate > queryEndDate) {
+                    endDate = queryEndDate
+                }
+                */
+
+                processedBuckets[dataPointKey] = ProcessedBucket(
+                    startDate,
+                    endDate,
+                    mutableListOf(),
+                    mutableListOf(),
+                    format.format(startDate),
+                    format.format(endDate)
+                )
+                weekKeyQueue.add(dataPointKey)
+
+            }
+
+            dataPoints.forEach { dataPoint ->
                 val weekNumber = getISOWeekNumber(dataPoint.getStartTime(TimeUnit.MILLISECONDS))
                 val yearNumber = getYear(dataPoint.getStartTime(TimeUnit.MILLISECONDS))
                 val dataPointKey = "$weekNumber$yearNumber"
-
-                if (!processedBuckets.containsKey(dataPointKey)) {
-                    val c = Calendar.getInstance()
-                    c.set(Calendar.WEEK_OF_YEAR, weekNumber)
-
-                    val firstDayOfWeek = c.firstDayOfWeek
-                    c[Calendar.HOUR_OF_DAY] = 0
-                    c[Calendar.MINUTE] = 0
-                    c[Calendar.SECOND] = 0
-                    c[Calendar.DAY_OF_WEEK] = firstDayOfWeek
-                    var startDate = c.timeInMillis
-                    if (startDate < queryStartDate) {
-                        startDate = queryStartDate
-                    }
-
-                    c[Calendar.DAY_OF_WEEK] = firstDayOfWeek + 6
-                    var endDate = c.timeInMillis
-                    if (endDate > queryEndDate) {
-                        endDate = queryEndDate
-                    }
-
-                    processedBuckets[dataPointKey] = ProcessedBucket(
-                        startDate,
-                        endDate,
-                        mutableListOf(),
-                        mutableListOf(),
-                        format.format(startDate),
-                        format.format(endDate)
-                    )
-                    weekKeyQueue.add(dataPointKey)
-                }
-
                 processedBuckets[dataPointKey]!!.dataPoints.add(dataPoint)
             }
             mergeBucketsIntoGroups(timeUnitLength, weekKeyQueue, processedBuckets)
@@ -144,45 +457,53 @@ class AdvancedQueryBucketProcessor {
             val processedBuckets: MutableMap<String, ProcessedBucket> = mutableMapOf()
             val bucketKeyQueue: ArrayDeque<String> = ArrayDeque()
 
+            val currentCalendar = Calendar.getInstance()
+            currentCalendar.time = Date(queryStartDate)
+            while(currentCalendar.timeInMillis <= queryEndDate) {
+                val monthNumber = getMonth(currentCalendar.timeInMillis)
+                val yearNumber = getYear(currentCalendar.timeInMillis)
+                val dataPointKey = "$monthNumber$yearNumber"
+
+                val c = Calendar.getInstance()
+                c.set(Calendar.MONTH, monthNumber)
+                c.set(Calendar.YEAR, yearNumber)
+                c.set(Calendar.DAY_OF_MONTH, 1)
+                c.set(Calendar.HOUR_OF_DAY, 0)
+                c.set(Calendar.MINUTE, 0)
+                c.set(Calendar.SECOND, 0)
+
+                var startDate = c.timeInMillis
+                c.add(Calendar.MONTH, 1)
+                var endDate = c.timeInMillis
+
+                /*
+                if (startDate < queryStartDate) {
+                    startDate = queryStartDate
+                }
+                if (endDate > queryEndDate) {
+                    endDate = queryEndDate
+                }
+                */
+
+                processedBuckets[dataPointKey] = ProcessedBucket(
+                    startDate,
+                    endDate,
+                    mutableListOf(),
+                    mutableListOf(),
+                    format.format(startDate),
+                    format.format(endDate)
+                )
+                bucketKeyQueue.push(dataPointKey)
+                currentCalendar.add(Calendar.MONTH, 1)
+            }
+
             dataPoints.forEach { dataPoint ->
                 val monthNumber = getMonth(dataPoint.getStartTime(TimeUnit.MILLISECONDS))
                 val yearNumber = getYear(dataPoint.getStartTime(TimeUnit.MILLISECONDS))
                 val dataPointKey = "$monthNumber$yearNumber"
-
-                if (!processedBuckets.containsKey(dataPointKey)) {
-
-                    val c = Calendar.getInstance()
-                    c.set(Calendar.MONTH, monthNumber)
-                    c.set(Calendar.YEAR, yearNumber)
-                    c.set(Calendar.DAY_OF_MONTH, 1)
-                    c.set(Calendar.HOUR_OF_DAY, 0)
-                    c.set(Calendar.MINUTE, 0)
-                    c.set(Calendar.SECOND, 0)
-
-                    var startDate = c.timeInMillis
-                    if (startDate < queryStartDate) {
-                        startDate = queryStartDate
-                    }
-
-                    c.add(Calendar.MONTH, 1)
-                    var endDate = c.timeInMillis
-                    if (endDate > queryEndDate) {
-                        endDate = queryEndDate
-                    }
-
-                    processedBuckets[dataPointKey] = ProcessedBucket(
-                        startDate,
-                        endDate,
-                        mutableListOf(),
-                        mutableListOf(),
-                        format.format(startDate),
-                        format.format(endDate)
-                    )
-                    bucketKeyQueue.push(dataPointKey)
-                }
-
                 processedBuckets[dataPointKey]!!.dataPoints.add(dataPoint)
             }
+
             mergeBucketsIntoGroups(timeUnitLength, bucketKeyQueue, processedBuckets)
             return processedBuckets.values.toList()
         }
@@ -198,45 +519,48 @@ class AdvancedQueryBucketProcessor {
             val processedBuckets: MutableMap<String, ProcessedBucket> = mutableMapOf()
             val bucketKeyQueue: ArrayDeque<String> = ArrayDeque()
 
-            dataPoints.forEach { dataPoint ->
+            val currentCalendar = Calendar.getInstance()
+            currentCalendar.time = Date(queryStartDate)
+            while(currentCalendar.timeInMillis <= queryEndDate) {
 
-                val dataPointDate = Date(dataPoint.getStartTime(TimeUnit.MILLISECONDS))
-                val calendar = Calendar.getInstance()
-                calendar.time = dataPointDate
-
-                val yearNumber = calendar.get(Calendar.YEAR)
+                val yearNumber = getYear(currentCalendar.timeInMillis)
                 val dataPointKey = "$yearNumber"
 
-                if (!processedBuckets.containsKey(dataPointKey)) {
+                val c = Calendar.getInstance()
+                c.set(Calendar.YEAR, yearNumber)
+                c.set(Calendar.DAY_OF_YEAR, 1)
+                c[Calendar.HOUR_OF_DAY] = 0
+                c[Calendar.MINUTE] = 0
+                c[Calendar.SECOND] = 0
 
-                    val c = Calendar.getInstance()
-                    c.set(Calendar.YEAR, yearNumber)
-                    c.set(Calendar.DAY_OF_YEAR, 1)
-                    c[Calendar.HOUR_OF_DAY] = 0
-                    c[Calendar.MINUTE] = 0
-                    c[Calendar.SECOND] = 0
+                var startDate = c.timeInMillis
+                c.add(Calendar.YEAR, 1)
+                var endDate = c.timeInMillis
 
-                    var startDate = c.timeInMillis
-                    if (startDate < queryStartDate) {
-                        startDate = queryStartDate
-                    }
-
-                    c.add(Calendar.YEAR, 1)
-                    var endDate = c.timeInMillis
-                    if (endDate > queryEndDate) {
-                        endDate = queryEndDate
-                    }
-
-                    bucketKeyQueue.push(dataPointKey)
-                    processedBuckets[dataPointKey] = ProcessedBucket(
-                        startDate,
-                        endDate,
-                        mutableListOf(),
-                        mutableListOf(),
-                        format.format(startDate),
-                        format.format(endDate)
-                    )
+                /*
+                if (startDate < queryStartDate) {
+                    startDate = queryStartDate
                 }
+                if (endDate > queryEndDate) {
+                    endDate = queryEndDate
+                }
+                */
+
+                bucketKeyQueue.push(dataPointKey)
+                processedBuckets[dataPointKey] = ProcessedBucket(
+                    startDate,
+                    endDate,
+                    mutableListOf(),
+                    mutableListOf(),
+                    format.format(startDate),
+                    format.format(endDate)
+                )
+                currentCalendar.add(Calendar.YEAR, 1)
+            }
+
+            dataPoints.forEach { dataPoint ->
+                val yearNumber = getYear(dataPoint.getStartTime(TimeUnit.MILLISECONDS))
+                val dataPointKey = "$yearNumber"
                 processedBuckets[dataPointKey]!!.dataPoints.add(dataPoint)
             }
 
@@ -343,10 +667,26 @@ class AdvancedQueryBucketProcessor {
             }
         }
 
+
+        private fun getSecondNumber(milliseconds: Long): Int {
+            val isoCalendar = Calendar.getInstance()
+            isoCalendar.time = Date(milliseconds)
+            return isoCalendar.get(Calendar.SECOND)
+        }
+        private fun getMinuteNumber(milliseconds: Long): Int {
+            val isoCalendar = Calendar.getInstance()
+            isoCalendar.time = Date(milliseconds)
+            return isoCalendar.get(Calendar.MINUTE)
+        }
+        private fun getHourNumber(milliseconds: Long): Int {
+            val isoCalendar = Calendar.getInstance()
+            isoCalendar.time = Date(milliseconds)
+            return isoCalendar.get(Calendar.HOUR_OF_DAY)
+        }
         private fun getDayNumber(milliseconds: Long): Int {
             val isoCalendar = Calendar.getInstance()
             isoCalendar.time = Date(milliseconds)
-            return isoCalendar.get(Calendar.DAY_OF_YEAR)
+            return isoCalendar.get(Calendar.DAY_OF_MONTH)
         }
         private fun getISOWeekNumber(milliseconds: Long): Int {
             val isoCalendar = Calendar.getInstance()
@@ -365,7 +705,5 @@ class AdvancedQueryBucketProcessor {
             isoCalendar.time = Date(milliseconds)
             return isoCalendar.get(Calendar.YEAR)
         }
-
     }
 }
-
