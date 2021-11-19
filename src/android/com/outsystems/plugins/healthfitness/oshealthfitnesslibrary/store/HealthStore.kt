@@ -146,6 +146,7 @@ class HealthStore(
                 listOf(
                     EnumOperationType.RAW.value,
                     EnumOperationType.AVERAGE.value,
+                    EnumOperationType.SUM.value,
                     EnumOperationType.MAX.value,
                     EnumOperationType.MIN.value
                 ),
