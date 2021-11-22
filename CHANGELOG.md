@@ -24,6 +24,12 @@ The changes documented here do not include those from the original repository.
 ## 2021-11-04
 - Implemented setup phase of SetBackgroundJob action (https://outsystemsrd.atlassian.net/browse/RMET-1130)
 
+## [Version 1.0.3]
+- Introducing WALKING_SPEED and DISTANCE variables
+
+## [Version 1.0.2]
+- Updated Health and Fitness variables list and general improvements
+
 ## [Version 1.0.1]
 
 ## 2021-11-05
