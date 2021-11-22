@@ -9,4 +9,4 @@ xcuserdata
 !xcschemes
 
 **/node_modules
-
+*.jar

@@ -6,15 +6,47 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 The changes documented here do not include those from the original repository.
 
-## [Version 1.0.0]
 ## [Unreleased]
+
+## 2021-11-18
+- Implementation of new variables and new version of background job iOS (https://outsystemsrd.atlassian.net/browse/RMET-1138)
+
+## 2021-11-12
+- Implementation of the background job iOS (https://outsystemsrd.atlassian.net/browse/RMET-1133)
+
+- Test: Added setBackgroundJob unit tests for Android (https://outsystemsrd.atlassian.net/browse/RMET-1191)
+
+- Implementation of the background job (https://outsystemsrd.atlassian.net/browse/RMET-1133)
+
+## 2021-11-11
+- Implemented SetBackgroundJob action with notifications (https://outsystemsrd.atlassian.net/browse/RMET-1070)
+
+## 2021-11-04
+- Implemented setup phase of SetBackgroundJob action (https://outsystemsrd.atlassian.net/browse/RMET-1130)
+
+## [Version 1.0.1]
+
+## 2021-11-05
+- Created new release for updates in wrapper Extensability Configurations
+
+## 2021-11-02
+- Feat: Added setBackgroundJob feature (https://outsystemsrd.atlassian.net/browse/RMET-1130)
+
+## 2021-10-20
+- Fixed compatibility issue with MABS 7 (https://outsystemsrd.atlassian.net/browse/RMET-1168)
+
+## 2021-10-18
+- Refactored method to check for Google Play Services (https://outsystemsrd.atlassian.net/browse/RMET-1153)
+
 ## 2021-10-14
 - Unit Tests for iOS (https://outsystemsrd.atlassian.net/browse/RMET-1049)
 
 ## 2021-10-14
 - Unit Tests for Android (https://outsystemsrd.atlassian.net/browse/RMET-1048)
 
-## 2021-10-04<>
+## [Version 1.0.0]
+
+## 2021-10-04
 - Refactorings for Android (https://outsystemsrd.atlassian.net/browse/RMET-1066)
 
 ## 2021-09-21

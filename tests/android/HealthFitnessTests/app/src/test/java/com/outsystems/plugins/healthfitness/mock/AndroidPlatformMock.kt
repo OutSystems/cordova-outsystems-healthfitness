@@ -4,8 +4,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import android.app.Activity
 import android.content.Context
 import androidx.test.core.app.ApplicationProvider
-import com.outsystems.plugins.healthfitness.AndroidPlatformInterface
-import org.apache.cordova.CallbackContext
+import com.outsystems.plugins.core.AndroidPlatformInterface
 import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
@@ -35,7 +34,8 @@ class AndroidPlatformMock : AndroidPlatformInterface {
         sendPluginResultCompletion?.let { it(resultVariable.toString(), error) }
     }
 
-    override fun areGooglePlayServicesAvailable(callbackContext: CallbackContext): Boolean {
-        TODO("Not yet implemented")
+    override fun areGooglePlayServicesAvailable(): Boolean {
+        // Does nothing
+        return true
     }
 }

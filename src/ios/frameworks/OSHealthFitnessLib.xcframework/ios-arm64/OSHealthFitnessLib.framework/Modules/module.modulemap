@@ -1,0 +1,11 @@
+framework module OSHealthFitnessLib {
+  umbrella header "OSHealthFitnessLib.h"
+
+  export *
+  module * { export * }
+}
+
+module OSHealthFitnessLib.Swift {
+    header "OSHealthFitnessLib-Swift.h"
+    requires objc
+}

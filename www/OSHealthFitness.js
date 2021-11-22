@@ -35,3 +35,4 @@ exports.writeData = function (success, error, variable, value) {
 exports.getLastRecord = function (success, error, variable) {
     exec(success, error, 'OSHealthFitness', 'getLastRecord', [variable]);
 };
+
