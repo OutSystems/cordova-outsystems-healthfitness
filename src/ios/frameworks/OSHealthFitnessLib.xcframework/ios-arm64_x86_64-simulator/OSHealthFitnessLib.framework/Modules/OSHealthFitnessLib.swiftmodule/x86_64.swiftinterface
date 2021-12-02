@@ -22,8 +22,8 @@ public enum HealthKitErrors : Swift.Int, Foundation.CustomNSError, Foundation.Lo
   case authorizationError
   case notAvailableOnDevice
   case unitNotAvailable
-  case backgroundJobAlreadyExists
   case featureNotAvailableiOS13
+  case backgroundJobAlreadyExists
   case featureNotAvailableiOS14
   public var errorDescription: Swift.String? {
     get
@@ -85,6 +85,10 @@ extension BackgroundJob {
     @objc set
   }
   @objc @NSManaged dynamic public var id: Swift.Int64 {
+    @objc get
+    @objc set
+  }
+  @objc @NSManaged dynamic public var operation: Swift.String? {
     @objc get
     @objc set
   }

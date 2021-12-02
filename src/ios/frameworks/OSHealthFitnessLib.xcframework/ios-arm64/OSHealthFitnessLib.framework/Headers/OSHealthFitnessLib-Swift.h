@@ -219,6 +219,7 @@ SWIFT_CLASS("_TtC18OSHealthFitnessLib13BackgroundJob")
 @interface BackgroundJob (SWIFT_EXTENSION(OSHealthFitnessLib))
 @property (nonatomic, copy) NSString * _Nullable comparision;
 @property (nonatomic) int64_t id;
+@property (nonatomic, copy) NSString * _Nullable operation;
 @property (nonatomic, copy) NSString * _Nullable timeUnit;
 @property (nonatomic) int64_t timeUnitGrouping;
 @property (nonatomic) double value;
