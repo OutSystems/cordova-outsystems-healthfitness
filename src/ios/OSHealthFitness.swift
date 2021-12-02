@@ -82,6 +82,42 @@ class OSHealthFitness: CordovaImplementation {
     
     }
 
+    @objc(setBackgroundJob:)
+    func setBackgroundJob(command: CDVInvokedUrlCommand) {
+        callbackId = command.callbackId
+        
+        let queryParameters = command.arguments[0] as? String ?? ""
+        if let params = queryParameters.decode(string: queryParameters) as BackgroundJobParameters? {
+                
+            let variable = params.variable ?? ""
+            let timeUnitGrouping = params.timeUnitGrouping ?? 0
+            let condition = params.condition ?? ""
+            let timeUnit = params.timeUnit ?? ""
+            let jobFrequency = params.jobFrequency ?? ""
+            let value = params.value ?? 0
+            let notificationHeader = params.notificationHeader ?? ""
+            let notificationBody = params.notificationBody ?? ""
+                
+            plugin?.setBackgroundJob(variable: variable,
+                                     timeUnit: timeUnit,
+                                     timeUnitGrouping: timeUnitGrouping,
+                                     jobFrequency: jobFrequency,
+                                     condition: condition,
+                                     value: value,
+                                     notificationHeader: notificationHeader,
+                                     notificationBody: notificationBody)
+            { success, result, error in
+
+                if error != nil {
+                    self.sendResult(result: nil, error: error, callBackID: self.callbackId)
+                }
+                else if success {
+                    self.sendResult(result: result, error: nil, callBackID: self.callbackId)
+                }
+            }
+        }
+    }
+
     @objc(getData:)
     func getData(command: CDVInvokedUrlCommand) {
         callbackId = command.callbackId
