@@ -4,9 +4,17 @@
 <dict>
 	<key>files</key>
 	<dict>
+		<key>BackgroundModel.momd/BackgroundModel.mom</key>
+		<data>
+		FZ+Lwh7xbsFdAas/ATvF/uGqU8s=
+		</data>
+		<key>BackgroundModel.momd/VersionInfo.plist</key>
+		<data>
+		Q9+ndRsVUplxTDxRTN7SnXmhc5k=
+		</data>
 		<key>Headers/OSHealthFitnessLib-Swift.h</key>
 		<data>
-		+HSMZ3fi+wbidjufrgcch84PQzc=
+		LP4zebJ3MFTfUz9/46zym5sEpO0=
 		</data>
 		<key>Headers/OSHealthFitnessLib.h</key>
 		<data>
@@ -18,27 +26,27 @@
 		</data>
 		<key>Modules/OSHealthFitnessLib.swiftmodule/arm64-apple-ios.swiftdoc</key>
 		<data>
-		0soW3IwoYbDrsn0tcgdxN+/Z21c=
+		V52WDK2johRfd6Td4ANSsuDZLgA=
 		</data>
 		<key>Modules/OSHealthFitnessLib.swiftmodule/arm64-apple-ios.swiftinterface</key>
 		<data>
-		AQ3OtjkxuYfzskBQiW5zfr8hcrk=
+		m7HWWaW/GMSiVkuSxXsuMaO+WUc=
 		</data>
 		<key>Modules/OSHealthFitnessLib.swiftmodule/arm64-apple-ios.swiftmodule</key>
 		<data>
-		dTea0MqjhCsLwxzB+uxXMutxXbw=
+		JPMjzxcUsrNk6P+7Ckj+9fpGW5U=
 		</data>
 		<key>Modules/OSHealthFitnessLib.swiftmodule/arm64.swiftdoc</key>
 		<data>
-		0soW3IwoYbDrsn0tcgdxN+/Z21c=
+		V52WDK2johRfd6Td4ANSsuDZLgA=
 		</data>
 		<key>Modules/OSHealthFitnessLib.swiftmodule/arm64.swiftinterface</key>
 		<data>
-		AQ3OtjkxuYfzskBQiW5zfr8hcrk=
+		m7HWWaW/GMSiVkuSxXsuMaO+WUc=
 		</data>
 		<key>Modules/OSHealthFitnessLib.swiftmodule/arm64.swiftmodule</key>
 		<data>
-		dTea0MqjhCsLwxzB+uxXMutxXbw=
+		JPMjzxcUsrNk6P+7Ckj+9fpGW5U=
 		</data>
 		<key>Modules/module.modulemap</key>
 		<data>
@@ -47,11 +55,25 @@
 	</dict>
 	<key>files2</key>
 	<dict>
+		<key>BackgroundModel.momd/BackgroundModel.mom</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			i4PeZU1vtetnPAGS2liqvm1izrHiMutPgKvuRtwRzn4=
+			</data>
+		</dict>
+		<key>BackgroundModel.momd/VersionInfo.plist</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			8TV0WK1mazDDzUg2hKo1l4U4jzq9TT4GwIk3sP28fWY=
+			</data>
+		</dict>
 		<key>Headers/OSHealthFitnessLib-Swift.h</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			Btrqy2QXLqWvtFdPr0cd2lOhQVp2GIo8Vp+NlIP+vKk=
+			V2JZM/HpVSo1PLxDLQh9sbz/FDCFFWRozOVcq2MjWAE=
 			</data>
 		</dict>
 		<key>Headers/OSHealthFitnessLib.h</key>
@@ -65,42 +87,42 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			wrc+rAlWQIrt8uxmCYB3r8vvQFGdC2uKyaHCXNI18xk=
+			YN6Ber5TppwOO+qkcsk3Cd81U9IOhPuWM9jip/FB1Jw=
 			</data>
 		</dict>
 		<key>Modules/OSHealthFitnessLib.swiftmodule/arm64-apple-ios.swiftinterface</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			ffpZLjTW0ywYzSbSBQzhgPWdCrVo9xpPh0VXMa7tEfs=
+			C4TRlZsccjUcTM3AXKCLsTIA1PXTFqPEOCXTg1hR14k=
 			</data>
 		</dict>
 		<key>Modules/OSHealthFitnessLib.swiftmodule/arm64-apple-ios.swiftmodule</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			eM51gWQHM7kyfgP+L1B1AK0OoFKNhe1jhw/DRtNLYDU=
+			FNk9mtoQgCH8Zwcne5gECY/hwiFWleY/UHwaWNf05bg=
 			</data>
 		</dict>
 		<key>Modules/OSHealthFitnessLib.swiftmodule/arm64.swiftdoc</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			wrc+rAlWQIrt8uxmCYB3r8vvQFGdC2uKyaHCXNI18xk=
+			YN6Ber5TppwOO+qkcsk3Cd81U9IOhPuWM9jip/FB1Jw=
 			</data>
 		</dict>
 		<key>Modules/OSHealthFitnessLib.swiftmodule/arm64.swiftinterface</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			ffpZLjTW0ywYzSbSBQzhgPWdCrVo9xpPh0VXMa7tEfs=
+			C4TRlZsccjUcTM3AXKCLsTIA1PXTFqPEOCXTg1hR14k=
 			</data>
 		</dict>
 		<key>Modules/OSHealthFitnessLib.swiftmodule/arm64.swiftmodule</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			eM51gWQHM7kyfgP+L1B1AK0OoFKNhe1jhw/DRtNLYDU=
+			FNk9mtoQgCH8Zwcne5gECY/hwiFWleY/UHwaWNf05bg=
 			</data>
 		</dict>
 		<key>Modules/module.modulemap</key>
