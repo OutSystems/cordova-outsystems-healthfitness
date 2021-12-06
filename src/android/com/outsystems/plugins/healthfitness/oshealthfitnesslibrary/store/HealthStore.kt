@@ -685,6 +685,11 @@ class HealthStore(
                                     this.notificationId = notificationId
                                     this.timeUnit = parameters.timeUnit
                                     this.timeUnitGrouping = parameters.timeUnitGrouping
+
+                                    parameters.waitingPeriod?.let {
+                                        this.waitingPeriod = parameters.waitingPeriod
+                                        this.lastNotificationTimestamp = System.currentTimeMillis() - (parameters.waitingPeriod!!*1000)
+                                    }
                                 }
                                 database.insert(backgroundJob)
                             })

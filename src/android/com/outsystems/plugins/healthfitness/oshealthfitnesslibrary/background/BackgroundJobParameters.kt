@@ -9,6 +9,7 @@ data class BackgroundJobParameters (
     @SerializedName("TimeUnit") val timeUnit : String? = null,
     @SerializedName("TimeUnitGrouping") val timeUnitGrouping : Int? = 1,
     @SerializedName("JobFrequency") val jobFrequency : String? = null,
+    @SerializedName("WaitingPeriod") val waitingPeriod : Int? = 10,
     @SerializedName("NotificationHeader") val notificationHeader : String,
     @SerializedName("NotificationBody") val notificationBody : String
 )

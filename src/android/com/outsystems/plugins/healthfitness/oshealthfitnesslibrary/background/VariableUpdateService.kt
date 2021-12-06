@@ -55,59 +55,61 @@ class VariableUpdateService : BroadcastReceiver() {
 
         backgroundJobs?.forEach { job ->
 
-            job.notificationId?.let { notificationId ->
-                db.fetchNotification(notificationId)?.let { notification ->
+            //check waiting period, only do query after checking that
+            if(System.currentTimeMillis() - job.lastNotificationTimestamp!! >= (job.waitingPeriod!!*1000)){
 
-                    val notificationTitle = notification.title
-                    val notificationBody = notification.body
-                    val notificationID = notification.notificationID
+                job.notificationId?.let { notificationId ->
+                    db.fetchNotification(notificationId)?.let { notification ->
 
-                    val endDate: Long = Date().time
-                    val month = 2592000000
-                    val startDate: Long = endDate - month
+                        val notificationTitle = notification.title
+                        val notificationBody = notification.body
+                        val notificationID = notification.notificationID
 
-                    val queryParams =  AdvancedQueryParameters(
-                        variableName,
-                        Date(startDate),
-                        Date(endDate),
-                        job.timeUnit,
-                        job.timeUnitGrouping,
-                        operationType
-                    )
-                    store.advancedQueryAsync(
-                        queryParams,
-                        { response ->
-                            var willTriggerJob = false
+                        val endDate: Long = Date().time
+                        val month = 2592000000
+                        val startDate: Long = endDate - month
 
-                            if(response.results.isNotEmpty()) {
-                                val comparison = job.comparison
-                                val triggerValue = job.value
-                                val currentValue = response.results.last().values.last()
-                                when(comparison){
-                                    BackgroundJob.ComparisonOperationEnum.EQUALS.id ->
-                                        willTriggerJob = currentValue == triggerValue
-                                    BackgroundJob.ComparisonOperationEnum.GREATER.id ->
-                                        willTriggerJob = currentValue > triggerValue
-                                    BackgroundJob.ComparisonOperationEnum.LESSER.id ->
-                                        willTriggerJob = currentValue < triggerValue
-                                    BackgroundJob.ComparisonOperationEnum.GREATER_OR_EQUALS.id ->
-                                        willTriggerJob = currentValue >= triggerValue
-                                    BackgroundJob.ComparisonOperationEnum.LESSER_OR_EQUALS.id ->
-                                        willTriggerJob = currentValue <= triggerValue
+                        val queryParams =  AdvancedQueryParameters(
+                            variableName,
+                            Date(startDate),
+                            Date(endDate),
+                            job.timeUnit,
+                            job.timeUnitGrouping,
+                            operationType
+                        )
+                        store.advancedQueryAsync(
+                            queryParams,
+                            { response ->
+                                var willTriggerJob = false
+
+                                if(response.results.isNotEmpty()) {
+                                    val comparison = job.comparison
+                                    val triggerValue = job.value
+                                    val currentValue = response.results.last().values.last()
+                                    when(comparison){
+                                        BackgroundJob.ComparisonOperationEnum.EQUALS.id ->
+                                            willTriggerJob = currentValue == triggerValue
+                                        BackgroundJob.ComparisonOperationEnum.GREATER.id ->
+                                            willTriggerJob = currentValue > triggerValue
+                                        BackgroundJob.ComparisonOperationEnum.LESSER.id ->
+                                            willTriggerJob = currentValue < triggerValue
+                                        BackgroundJob.ComparisonOperationEnum.GREATER_OR_EQUALS.id ->
+                                            willTriggerJob = currentValue >= triggerValue
+                                        BackgroundJob.ComparisonOperationEnum.LESSER_OR_EQUALS.id ->
+                                            willTriggerJob = currentValue <= triggerValue
+                                    }
                                 }
-                            }
 
-                            if(willTriggerJob){
-                                sendNotification(context, notificationTitle, notificationBody, notificationID)
+                                if(willTriggerJob){
+                                    sendNotification(context, notificationTitle, notificationBody, notificationID)
+                                }
+                            },
+                            { error ->
+                                //TODO: What should we do with errors?
                             }
-                        },
-                        { error ->
-                            //TODO: What should we do with errors?
-                        }
-                    )
+                        )
+                    }
                 }
-
-
 
             }
         }

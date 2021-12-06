@@ -27,6 +27,9 @@ open class BackgroundJob {
     @ColumnInfo(name = "time_unit") var timeUnit: String? = null
     @ColumnInfo(name = "time_unit_grouping") var timeUnitGrouping: Int? = null
     @ColumnInfo(name = "notification_id") var notificationId: Long? = null
+    @ColumnInfo(name = "waiting_period") var waitingPeriod: Int? = 10
+    @ColumnInfo(name = "last_notification_timestamp") var lastNotificationTimestamp: Long? = 0
+
 }
 
 
