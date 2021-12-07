@@ -55,6 +55,9 @@ class VariableUpdateService : BroadcastReceiver() {
 
         backgroundJobs?.forEach { job ->
 
+            val nf = job.notificationFrequency
+            val nfg = job.notificationFrequencyGrouping
+
             //notificationFrequency = SECOND
             //notificationFrequencyGrouping = 30
             //waitingPeriod = 30 seconds = 30*1000 millis

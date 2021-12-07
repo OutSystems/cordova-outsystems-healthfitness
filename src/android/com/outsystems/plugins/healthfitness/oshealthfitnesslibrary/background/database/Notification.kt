@@ -24,4 +24,7 @@ class Notification{
         return random.nextInt()
     }
 
+    companion object {
+        const val TABLE_NAME: String= "notification"
+    }
 }

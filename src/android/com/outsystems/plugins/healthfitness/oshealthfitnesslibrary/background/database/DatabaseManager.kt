@@ -18,8 +18,9 @@ class DatabaseManager(context : Context) : DatabaseManagerInterface {
             // Should we close the database instance? If so, when.
             database = Room.databaseBuilder(
                 context.applicationContext,
-                AppDatabase::class.java, "database-name"
-            ).build()
+                AppDatabase::class.java, "database-name")
+                .addMigrations(AppDatabase.MIGRATION_1_2)
+                .build()
 
             backgroundJobDao = database!!.backgroundJobDao()
             notificationDao = database!!.notificationDao()

@@ -8,10 +8,10 @@ import androidx.room.Query
 @Dao
 interface NotificationDao {
 
-    @Query("SELECT * FROM notification")
+    @Query("SELECT * FROM ${Notification.TABLE_NAME}")
     fun getAll(): List<Notification>
 
-    @Query("SELECT * FROM notification WHERE id = :id")
+    @Query("SELECT * FROM ${Notification.TABLE_NAME} WHERE id = :id")
     fun findById(id : Long): List<Notification>
 
     @Insert

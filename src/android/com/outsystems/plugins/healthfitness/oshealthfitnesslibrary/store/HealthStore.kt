@@ -686,8 +686,8 @@ class HealthStore(
                                     this.timeUnit = parameters.timeUnit
                                     this.timeUnitGrouping = parameters.timeUnitGrouping
 
-                                    this.notificationFrequency = parameters.notificationFrequency
-                                    this.notificationFrequencyGrouping = parameters.notificationFrequencyGrouping
+                                    this.notificationFrequency = parameters.notificationFrequency.toString()
+                                    this.notificationFrequencyGrouping = parameters.notificationFrequencyGrouping!!
 
                                     when (parameters.notificationFrequency) {
                                         "SECOND" -> this.waitingPeriod = parameters.notificationFrequencyGrouping!!*1000
