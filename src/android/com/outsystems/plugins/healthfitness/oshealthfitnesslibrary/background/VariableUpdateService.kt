@@ -55,8 +55,16 @@ class VariableUpdateService : BroadcastReceiver() {
 
         backgroundJobs?.forEach { job ->
 
+            //notificationFrequency = SECOND
+            //notificationFrequencyGrouping = 30
+            //waitingPeriod = 30 seconds = 30*1000 millis
+
+            //notificationFrequency = DAY
+            //notificationFrequencyGrouping = 1
+            //waitingPeriod = 1 day = 24*60*60*1000 millis
+
             //check waiting period, only do query after checking that
-            if(System.currentTimeMillis() - job.lastNotificationTimestamp!! >= (job.waitingPeriod!!*1000)){
+            if(System.currentTimeMillis() - job.lastNotificationTimestamp!! >= (job.waitingPeriod!!)){
 
                 job.notificationId?.let { notificationId ->
                     db.fetchNotification(notificationId)?.let { notification ->
