@@ -7,5 +7,6 @@ interface DatabaseManagerInterface {
     fun fetchBackgroundJobs(variable : String) : List<BackgroundJob>?
     fun fetchNotification(id : Long) : Notification?
     fun deleteBackgroundJob(backgroundJob : BackgroundJob)
+    fun updateBackgroundJob(backgroundJob: BackgroundJob)
     fun runInTransaction(closude : () -> Unit)
 }

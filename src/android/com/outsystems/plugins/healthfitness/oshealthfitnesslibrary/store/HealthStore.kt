@@ -669,7 +669,7 @@ class HealthStore(
                     launch(Dispatchers.IO) {
 
                         try {
-                            database.runInTransaction({
+                            database.runInTransaction {
                                 val nNotification = database.fetchNotifications()
                                 val notification = Notification().apply {
                                     this.title = parameters.notificationHeader
@@ -686,25 +686,36 @@ class HealthStore(
                                     this.timeUnit = parameters.timeUnit
                                     this.timeUnitGrouping = parameters.timeUnitGrouping
 
-                                    this.notificationFrequency = parameters.notificationFrequency.toString()
-                                    this.notificationFrequencyGrouping = parameters.notificationFrequencyGrouping!!
+                                    this.notificationFrequency =
+                                        parameters.notificationFrequency.toString()
+                                    this.notificationFrequencyGrouping =
+                                        parameters.notificationFrequencyGrouping!!
 
                                     when (parameters.notificationFrequency) {
-                                        "SECOND" -> this.waitingPeriod = parameters.notificationFrequencyGrouping!!*1000
-                                        "MINUTE" -> this.waitingPeriod = parameters.notificationFrequencyGrouping!!*60*1000
-                                        "HOUR" -> this.waitingPeriod = parameters.notificationFrequencyGrouping!!*60*60*1000
-                                        "DAY" -> this.waitingPeriod = parameters.notificationFrequencyGrouping!!*24*60*60*1000
-                                        "WEEK" -> this.waitingPeriod = parameters.notificationFrequencyGrouping!!*7*24*60*60*1000
-                                        "MONTH" -> this.waitingPeriod = parameters.notificationFrequencyGrouping!!*30*24*60*60*1000
-                                        "YEAR" -> this.waitingPeriod = parameters.notificationFrequencyGrouping!!*12*30*24*60*60*1000
+                                        "SECOND" -> this.waitingPeriod =
+                                            parameters.notificationFrequencyGrouping * 1000
+                                        "MINUTE" -> this.waitingPeriod =
+                                            parameters.notificationFrequencyGrouping * 60 * 1000
+                                        "HOUR" -> this.waitingPeriod =
+                                            parameters.notificationFrequencyGrouping * 60 * 60 * 1000
+                                        "DAY" -> this.waitingPeriod =
+                                            parameters.notificationFrequencyGrouping * 24 * 60 * 60 * 1000
+                                        "WEEK" -> this.waitingPeriod =
+                                            parameters.notificationFrequencyGrouping * 7 * 24 * 60 * 60 * 1000
+                                        "MONTH" -> this.waitingPeriod =
+                                            parameters.notificationFrequencyGrouping * 30 * 24 * 60 * 60 * 1000
+                                        "YEAR" -> this.waitingPeriod =
+                                            parameters.notificationFrequencyGrouping * 12 * 30 * 24 * 60 * 60 * 1000
                                         else -> {
-                                            this.waitingPeriod = 0 //we don't want a waiting period in this case
+                                            this.waitingPeriod =
+                                                0 //we don't want a waiting period in this case
                                         }
                                     }
-                                    this.lastNotificationTimestamp = System.currentTimeMillis() - this.waitingPeriod!!
+                                    this.lastNotificationTimestamp =
+                                        System.currentTimeMillis() - this.waitingPeriod!!
                                 }
                                 database.insert(backgroundJob)
-                            })
+                            }
                             onSuccess("success")
                         } catch(sqle : SQLiteException) {
                             onError(HealthFitnessError.BACKGROUND_JOB_ALREADY_EXISTS_ERROR)
