@@ -1,9 +1,6 @@
 package com.outsystems.plugins.healthfitnesslib.background.database
 
-import androidx.room.Dao
-import androidx.room.Delete
-import androidx.room.Insert
-import androidx.room.Query
+import androidx.room.*
 
 @Dao
 interface BackgroundJobDao {
@@ -22,5 +19,8 @@ interface BackgroundJobDao {
 
     @Delete
     fun delete(backgroundJob: BackgroundJob)
+
+    @Update
+    fun update(backgroundJob: BackgroundJob)
 
 }

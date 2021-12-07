@@ -67,6 +67,10 @@ class DatabaseManager(context : Context) : DatabaseManagerInterface {
         backgroundJobDao?.delete(backgroundJob)
     }
 
+    override fun updateBackgroundJob(backgroundJob: BackgroundJob) {
+        backgroundJobDao?.update(backgroundJob)
+    }
+
     override fun runInTransaction(closude : () -> Unit){
         database?.runInTransaction(Runnable {
             closude()

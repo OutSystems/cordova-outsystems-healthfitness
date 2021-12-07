@@ -64,7 +64,11 @@ class VariableUpdateService : BroadcastReceiver() {
             //waitingPeriod = 1 day = 24*60*60*1000 millis
 
             //check waiting period, only do query after checking that
-            if(System.currentTimeMillis() - job.lastNotificationTimestamp!! >= (job.waitingPeriod!!)){
+            val currentTime = System.currentTimeMillis()
+            if(currentTime - job.lastNotificationTimestamp!! >= (job.waitingPeriod!!)){
+
+                job.lastNotificationTimestamp = currentTime
+                database.updateBackgroundJob(job)
 
                 job.notificationId?.let { notificationId ->
                     db.fetchNotification(notificationId)?.let { notification ->
