@@ -24,10 +24,7 @@ abstract class AppDatabase : RoomDatabase() {
                             "ADD COLUMN notification_frequency_grouping INTEGER NOT NULL DEFAULT 1")
                 database.execSQL(
                     "ALTER TABLE ${BackgroundJob.TABLE_NAME} " +
-                            "ADD COLUMN waiting_period INTEGER NOT NULL DEFAULT 0")
-                database.execSQL(
-                    "ALTER TABLE ${BackgroundJob.TABLE_NAME} " +
-                            "ADD COLUMN last_notification_timestamp INTEGER NOT NULL DEFAULT 0")
+                            "ADD COLUMN next_notification_timestamp INTEGER NOT NULL DEFAULT 0")
             }
         }
     }

@@ -7,10 +7,9 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.os.Build
+import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
-import androidx.room.Room
-import com.outsystems.plugins.healthfitnesslib.background.database.AppDatabase
 import com.outsystems.plugins.healthfitnesslib.background.database.BackgroundJob
 import com.outsystems.plugins.healthfitnesslib.store.AdvancedQueryParameters
 import com.outsystems.plugins.healthfitnesslib.store.HealthFitnessManager
@@ -18,6 +17,7 @@ import com.outsystems.plugins.healthfitnesslib.store.HealthStore
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import java.text.SimpleDateFormat
 import java.util.*
 
 class VariableUpdateService : BroadcastReceiver() {
@@ -55,54 +55,51 @@ class VariableUpdateService : BroadcastReceiver() {
 
         backgroundJobs?.forEach { job ->
 
-            val nf = job.notificationFrequency
-            val nfg = job.notificationFrequencyGrouping
+            val currentTimestamp = System.currentTimeMillis()
+            val nextNotificationTimestamp = job.nextNotificationTimestamp
 
-            //notificationFrequency = SECOND
-            //notificationFrequencyGrouping = 30
-            //waitingPeriod = 30 seconds = 30*1000 millis
+            if(currentTimestamp >= nextNotificationTimestamp) {
 
-            //notificationFrequency = DAY
-            //notificationFrequencyGrouping = 1
-            //waitingPeriod = 1 day = 24*60*60*1000 millis
+                val nextNotificationCalendar = Calendar.getInstance()
+                nextNotificationCalendar.timeInMillis = currentTimestamp
+                nextNotificationCalendar.minimalDaysInFirstWeek = 4
+                nextNotificationCalendar.firstDayOfWeek = Calendar.MONDAY
 
+                val format = SimpleDateFormat("yyyy.MM.dd HH:mm:ss.SSS")
+                Log.d("NEXT_NOTIF", format.format(nextNotificationCalendar.timeInMillis))
 
-            //currentTime = 9 dezembro
-            //lastNotification = 6 dezembro
-            //waitingPeriod = 3 day
-            //notificationFrequency * grouping = 1 day
-            // 9 - 6 >= 3 (1)
-
-            //check waiting period, only do query after checking that
-            val currentTime = System.currentTimeMillis()
-            if(currentTime - job.lastNotificationTimestamp!! >= (job.waitingPeriod!!)){
-
-                if(job.notificationFrequency in listOf("HOUR", "DAY", "WEEK", "MONTH", "YEAR")){
-                    val calendar = Calendar.getInstance()
-                    calendar.set(Calendar.MINUTE, 0)
-                    calendar.set(Calendar.SECOND, 0)
-                    if(job.notificationFrequency == "DAY"){
-                        calendar.set(Calendar.HOUR, 0)
-                    }
-                    else if(job.notificationFrequency == "MONTH"){
-                        calendar.set(Calendar.DAY_OF_MONTH, 1)
-                        calendar.set(Calendar.HOUR, 0)
-                    }
-                    else if (job.notificationFrequency == "YEAR"){
-                        calendar.set(Calendar.MONTH, 1)
-                        calendar.set(Calendar.DAY_OF_MONTH, 1)
-                        calendar.set(Calendar.HOUR, 0)
-                    }
-
-                    job.lastNotificationTimestamp = calendar.timeInMillis
-
+                if(job.notificationFrequency == "SECOND") {
+                    nextNotificationCalendar.add(Calendar.SECOND, 1)
                 }
-                else{
-                    job.lastNotificationTimestamp = currentTime
+                else if(job.notificationFrequency == "MINUTE") {
+                    nextNotificationCalendar.add(Calendar.MINUTE, 1)
                 }
+                else if(job.notificationFrequency == "HOUR") {
+                    nextNotificationCalendar.add(Calendar.HOUR, 1)
+                }
+                else if(job.notificationFrequency == "DAY") {
+                    nextNotificationCalendar.add(Calendar.DATE, 1)
+                    nextNotificationCalendar.startOfUnit(Calendar.DATE)
+                }
+                else if(job.notificationFrequency == "WEEK") {
+                    nextNotificationCalendar.add(Calendar.WEEK_OF_MONTH, 1)
+                    nextNotificationCalendar.startOfUnit(Calendar.WEEK_OF_MONTH)
+                }
+                else if(job.notificationFrequency == "MONTH") {
+                    nextNotificationCalendar.add(Calendar.MONTH, 1)
+                    nextNotificationCalendar.startOfUnit(Calendar.MONTH)
+                }
+                else if (job.notificationFrequency == "YEAR") {
+                    nextNotificationCalendar.add(Calendar.YEAR, 1)
+                    nextNotificationCalendar.startOfUnit(Calendar.YEAR)
+                }
+
+                val debugDate = format.format(nextNotificationCalendar.timeInMillis)
+                Log.d("NEXT_NOTIF", debugDate)
+
+                job.nextNotificationTimestamp = nextNotificationCalendar.timeInMillis
 
                 database.updateBackgroundJob(job)
-
                 job.notificationId?.let { notificationId ->
                     db.fetchNotification(notificationId)?.let { notification ->
 
@@ -155,7 +152,6 @@ class VariableUpdateService : BroadcastReceiver() {
                         )
                     }
                 }
-
             }
         }
     }
@@ -195,6 +191,34 @@ class VariableUpdateService : BroadcastReceiver() {
     private fun getResourceId(context: Context, typeAndName: String): Int {
         return context.resources.getIdentifier(typeAndName, null, context.packageName)
 
+    }
+
+    private fun Calendar.startOfUnit(unit: Int): Calendar {
+        var unitVal = 0
+        when(unit){
+            Calendar.DATE -> unitVal = 1
+            Calendar.WEEK_OF_MONTH -> unitVal = 2
+            Calendar.MONTH -> unitVal = 3
+            Calendar.YEAR -> unitVal = 4
+        }
+
+        if(unitVal >= 4){
+            this.set(Calendar.MONTH, 1)
+        }
+        if(unitVal >= 3){
+            this.set(Calendar.DAY_OF_MONTH, 1)
+        }
+        if(unitVal >= 2){
+            this.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY)
+        }
+        if(unitVal >= 1){
+            this.set(Calendar.MILLISECOND, 0)
+            this.set(Calendar.SECOND, 0)
+            this.set(Calendar.MINUTE, 0)
+            this.set(Calendar.HOUR_OF_DAY, 0)
+        }
+
+        return this
     }
 
     companion object {
