@@ -10,6 +10,8 @@ import com.google.android.gms.fitness.data.DataPoint
 import com.google.android.gms.fitness.data.DataSet
 import com.google.gson.Gson
 import com.outsystems.plugins.healthfitness.HealthFitnessError
+import com.outsystems.plugins.healthfitness.background.BackgroundJobsResponse
+import com.outsystems.plugins.healthfitness.background.BackgroundJobsResponseBlock
 import com.outsystems.plugins.healthfitnesslib.background.BackgroundJobParameters
 import com.outsystems.plugins.healthfitnesslib.background.database.BackgroundJob
 import com.outsystems.plugins.healthfitnesslib.background.database.DatabaseManagerInterface
@@ -738,6 +740,33 @@ class HealthStore(
         else {
             //do nothing
             //maybe throw an error because variable is not a sensorVariable nor a historyVariable??
+        }
+    }
+
+    fun listBackgroundJobs(onSuccess : (BackgroundJobsResponse) -> Unit,
+                           onError: (HealthFitnessError) -> Unit){
+        val jobsList = database.fetchBackgroundJobs()
+
+        if (jobsList != null) {
+            val responseJobList : Array<BackgroundJobsResponseBlock>
+            for (job in jobsList){
+                val notification = database.fetchNotification(job.notificationId!!)
+                val responseJob = BackgroundJobsResponseBlock(
+                    job.variable,
+                    job.comparison,
+                    job.value,
+                    notification?.title,
+                    notification?.body,
+                    job.notificationFrequency,
+                    job.notificationFrequencyGrouping
+                )
+                //TODO add responseJob to responseJobList and then return success with that
+                //then in OSHealthStore we pass that to Kotlin and sendPluginResult with that
+                //responseJobList[i] = responseJob
+            }
+        }
+        else{
+            //return empty list or error?
         }
     }
 

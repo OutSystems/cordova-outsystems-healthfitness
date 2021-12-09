@@ -39,3 +39,7 @@ exports.getLastRecord = function (success, error, variable) {
 exports.setBackgroundJob = function (success, error, params) {
     exec(success, error, 'OSHealthFitness', 'setBackgroundJob', [params]);
 };
+
+exports.listBackgroundJobs = function (success, error) {
+    exec(success, error, 'OSHealthFitness', 'listBackgroundJobs');
+};
