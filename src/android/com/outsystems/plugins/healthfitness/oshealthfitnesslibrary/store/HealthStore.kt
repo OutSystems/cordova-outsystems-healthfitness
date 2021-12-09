@@ -700,10 +700,7 @@ class HealthStore(
                                         calendar.get(Calendar.MINUTE),
                                         calendar.get(Calendar.SECOND)
                                     )
-
-                                    val timeNow = System.currentTimeMillis()
-                                    this.nextNotificationTimestamp = timeNow
-
+                                    this.nextNotificationTimestamp = System.currentTimeMillis()
                                 }
                                 database.insert(backgroundJob)
                             }
