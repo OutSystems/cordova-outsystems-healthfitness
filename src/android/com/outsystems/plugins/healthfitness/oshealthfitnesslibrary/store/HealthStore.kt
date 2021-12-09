@@ -692,13 +692,14 @@ class HealthStore(
                                         parameters.notificationFrequencyGrouping!!
 
                                     val calendar = Calendar.getInstance()
-                                    val year = calendar.get(Calendar.YEAR)
-                                    val month = calendar.get(Calendar.MONTH)
-                                    val day = calendar.get(Calendar.DAY_OF_MONTH)
-                                    val hour = calendar.get(Calendar.HOUR_OF_DAY)
-                                    val minute = calendar.get(Calendar.MINUTE)
-                                    val second = calendar.get(Calendar.SECOND)
-                                    calendar.set(year, month, day, hour, minute, second)
+                                    calendar.set(
+                                        calendar.get(Calendar.YEAR),
+                                        calendar.get(Calendar.MONTH),
+                                        calendar.get(Calendar.DAY_OF_MONTH),
+                                        calendar.get(Calendar.HOUR_OF_DAY),
+                                        calendar.get(Calendar.MINUTE),
+                                        calendar.get(Calendar.SECOND)
+                                    )
 
                                     val timeNow = System.currentTimeMillis()
                                     this.nextNotificationTimestamp = timeNow
