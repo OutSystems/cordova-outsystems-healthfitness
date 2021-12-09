@@ -58,44 +58,39 @@ class VariableUpdateService : BroadcastReceiver() {
             val currentTimestamp = System.currentTimeMillis()
             val nextNotificationTimestamp = job.nextNotificationTimestamp
 
-            if(currentTimestamp >= nextNotificationTimestamp) {
+            if(currentTimestamp >= nextNotificationTimestamp || job.notificationFrequency == "ALWAYS") {
 
                 val nextNotificationCalendar = Calendar.getInstance()
                 nextNotificationCalendar.timeInMillis = currentTimestamp
                 nextNotificationCalendar.minimalDaysInFirstWeek = 4
                 nextNotificationCalendar.firstDayOfWeek = Calendar.MONDAY
 
-                val format = SimpleDateFormat("yyyy.MM.dd HH:mm:ss.SSS")
-                Log.d("NEXT_NOTIF", format.format(nextNotificationCalendar.timeInMillis))
-
                 if(job.notificationFrequency == "SECOND") {
-                    nextNotificationCalendar.add(Calendar.SECOND, 1)
+                    nextNotificationCalendar.add(Calendar.SECOND, job.notificationFrequencyGrouping)
                 }
                 else if(job.notificationFrequency == "MINUTE") {
-                    nextNotificationCalendar.add(Calendar.MINUTE, 1)
+                    nextNotificationCalendar.add(Calendar.MINUTE, job.notificationFrequencyGrouping)
                 }
                 else if(job.notificationFrequency == "HOUR") {
-                    nextNotificationCalendar.add(Calendar.HOUR, 1)
+                    nextNotificationCalendar.add(Calendar.HOUR, job.notificationFrequencyGrouping)
+                    nextNotificationCalendar.startOfUnit(Calendar.HOUR)
                 }
                 else if(job.notificationFrequency == "DAY") {
-                    nextNotificationCalendar.add(Calendar.DATE, 1)
+                    nextNotificationCalendar.add(Calendar.DATE, job.notificationFrequencyGrouping)
                     nextNotificationCalendar.startOfUnit(Calendar.DATE)
                 }
                 else if(job.notificationFrequency == "WEEK") {
-                    nextNotificationCalendar.add(Calendar.WEEK_OF_MONTH, 1)
+                    nextNotificationCalendar.add(Calendar.WEEK_OF_MONTH, job.notificationFrequencyGrouping)
                     nextNotificationCalendar.startOfUnit(Calendar.WEEK_OF_MONTH)
                 }
                 else if(job.notificationFrequency == "MONTH") {
-                    nextNotificationCalendar.add(Calendar.MONTH, 1)
+                    nextNotificationCalendar.add(Calendar.MONTH, job.notificationFrequencyGrouping)
                     nextNotificationCalendar.startOfUnit(Calendar.MONTH)
                 }
                 else if (job.notificationFrequency == "YEAR") {
-                    nextNotificationCalendar.add(Calendar.YEAR, 1)
+                    nextNotificationCalendar.add(Calendar.YEAR, job.notificationFrequencyGrouping)
                     nextNotificationCalendar.startOfUnit(Calendar.YEAR)
                 }
-
-                val debugDate = format.format(nextNotificationCalendar.timeInMillis)
-                Log.d("NEXT_NOTIF", debugDate)
 
                 job.nextNotificationTimestamp = nextNotificationCalendar.timeInMillis
 
@@ -196,26 +191,29 @@ class VariableUpdateService : BroadcastReceiver() {
     private fun Calendar.startOfUnit(unit: Int): Calendar {
         var unitVal = 0
         when(unit){
-            Calendar.DATE -> unitVal = 1
-            Calendar.WEEK_OF_MONTH -> unitVal = 2
-            Calendar.MONTH -> unitVal = 3
-            Calendar.YEAR -> unitVal = 4
+            Calendar.HOUR -> unitVal = 1
+            Calendar.DATE -> unitVal = 2
+            Calendar.WEEK_OF_MONTH -> unitVal = 3
+            Calendar.MONTH -> unitVal = 4
+            Calendar.YEAR -> unitVal = 5
         }
 
-        if(unitVal >= 4){
-            this.set(Calendar.MONTH, 1)
+        if(unitVal >= 5){
+            this.set(Calendar.MONTH, 0)
         }
-        if(unitVal >= 3){
+        if(unitVal >= 4){
             this.set(Calendar.DAY_OF_MONTH, 1)
         }
-        if(unitVal >= 2){
+        if(unitVal == 3){
             this.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY)
+        }
+        if(unitVal >= 2){
+            this.set(Calendar.HOUR_OF_DAY, 0)
         }
         if(unitVal >= 1){
             this.set(Calendar.MILLISECOND, 0)
             this.set(Calendar.SECOND, 0)
             this.set(Calendar.MINUTE, 0)
-            this.set(Calendar.HOUR_OF_DAY, 0)
         }
 
         return this
