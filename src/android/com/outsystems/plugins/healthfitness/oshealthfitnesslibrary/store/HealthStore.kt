@@ -691,28 +691,69 @@ class HealthStore(
                                     this.notificationFrequencyGrouping =
                                         parameters.notificationFrequencyGrouping!!
 
+                                    val calendar = Calendar.getInstance()
+                                    val year = calendar.get(Calendar.YEAR)
+                                    val month = calendar.get(Calendar.MONTH)
+                                    val day = calendar.get(Calendar.DAY_OF_MONTH)
+                                    val hour = calendar.get(Calendar.HOUR_OF_DAY)
+                                    val minute = calendar.get(Calendar.MINUTE)
+                                    val second = calendar.get(Calendar.SECOND)
+                                    calendar.set(year, month, day, hour, minute, second)
+
                                     when (parameters.notificationFrequency) {
-                                        "SECOND" -> this.waitingPeriod =
-                                            parameters.notificationFrequencyGrouping * 1000
-                                        "MINUTE" -> this.waitingPeriod =
-                                            parameters.notificationFrequencyGrouping * 60 * 1000
-                                        "HOUR" -> this.waitingPeriod =
-                                            parameters.notificationFrequencyGrouping * 60 * 60 * 1000
-                                        "DAY" -> this.waitingPeriod =
-                                            parameters.notificationFrequencyGrouping * 24 * 60 * 60 * 1000
-                                        "WEEK" -> this.waitingPeriod =
-                                            parameters.notificationFrequencyGrouping * 7 * 24 * 60 * 60 * 1000
-                                        "MONTH" -> this.waitingPeriod =
-                                            parameters.notificationFrequencyGrouping * 30 * 24 * 60 * 60 * 1000
-                                        "YEAR" -> this.waitingPeriod =
-                                            parameters.notificationFrequencyGrouping * 12 * 30 * 24 * 60 * 60 * 1000
-                                        else -> {
+                                        "SECOND" -> {
+                                            //this.waitingPeriod =
+                                                    //parameters.notificationFrequencyGrouping * 1000
+                                            this.waitingPeriod = parameters.notificationFrequencyGrouping * 1000
+                                            this.lastNotificationTimestamp = System.currentTimeMillis() - this.waitingPeriod!!
+                                            //calendar.add(Calendar.SECOND, -(notificationFrequencyGrouping))
+                                        }
+                                        "MINUTE" -> {
+                                            //this.waitingPeriod =
+                                                //parameters.notificationFrequencyGrouping * 60 * 1000
+                                            this.waitingPeriod = parameters.notificationFrequencyGrouping * 60 * 1000
+                                            this.lastNotificationTimestamp = System.currentTimeMillis() - this.waitingPeriod!!
+                                            //calendar.add(Calendar.MINUTE, -(notificationFrequencyGrouping))
+                                        }
+                                        "HOUR" -> {
+                                            //this.waitingPeriod =
+                                                //parameters.notificationFrequencyGrouping * 60 * 60 * 1000
+                                            TimeUnit.HOURS.toMillis(parameters.notificationFrequencyGrouping as Long)
+                                            calendar.add(Calendar.HOUR, -(notificationFrequencyGrouping))
+                                            this.lastNotificationTimestamp = calendar.timeInMillis
+                                        }
+                                        "DAY" -> {
+                                            //this.waitingPeriod =
+                                                //parameters.notificationFrequencyGrouping * 24 * 60 * 60 * 1000
+                                            calendar.add(Calendar.DAY_OF_MONTH, -(notificationFrequencyGrouping))
+                                            this.lastNotificationTimestamp = calendar.timeInMillis
+                                        }
+                                        "WEEK" -> {
                                             this.waitingPeriod =
-                                                0 //we don't want a waiting period in this case
+                                                parameters.notificationFrequencyGrouping * 7 * 24 * 60 * 60 * 1000
+                                            calendar.add(Calendar.WEEK_OF_MONTH, -(notificationFrequencyGrouping))
+                                            this.lastNotificationTimestamp = calendar.timeInMillis
+                                        }
+                                        "MONTH" -> {
+                                            this.waitingPeriod =
+                                                parameters.notificationFrequencyGrouping * 30 * 24 * 60 * 60 * 1000
+                                            calendar.add(Calendar.MONTH, -(notificationFrequencyGrouping))
+                                            this.lastNotificationTimestamp = calendar.timeInMillis
+                                        }
+                                        "YEAR" -> {
+                                            this.waitingPeriod =
+                                                parameters.notificationFrequencyGrouping * 12 * 30 * 24 * 60 * 60 * 1000
+                                            calendar.add(Calendar.YEAR, -(notificationFrequencyGrouping))
+                                            this.lastNotificationTimestamp = calendar.timeInMillis
+                                        }
+                                        else -> {
+                                            //this.waitingPeriod =
+                                                //0 //we don't want a waiting period in this case
                                         }
                                     }
-                                    this.lastNotificationTimestamp =
-                                        System.currentTimeMillis() - this.waitingPeriod!!
+                                    //this.lastNotificationTimestamp = calendar.timeInMillis
+                                    //this.lastNotificationTimestamp =
+                                        //System.currentTimeMillis() - this.waitingPeriod!!
                                 }
                                 database.insert(backgroundJob)
                             }

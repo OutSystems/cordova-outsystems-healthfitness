@@ -66,11 +66,41 @@ class VariableUpdateService : BroadcastReceiver() {
             //notificationFrequencyGrouping = 1
             //waitingPeriod = 1 day = 24*60*60*1000 millis
 
+
+            //currentTime = 9 dezembro
+            //lastNotification = 6 dezembro
+            //waitingPeriod = 3 day
+            //notificationFrequency * grouping = 1 day
+            // 9 - 6 >= 3 (1)
+
             //check waiting period, only do query after checking that
             val currentTime = System.currentTimeMillis()
-            if(currentTime - job.lastNotificationTimestamp >= (job.waitingPeriod)){
+            if(currentTime - job.lastNotificationTimestamp!! >= (job.waitingPeriod!!)){
 
-                job.lastNotificationTimestamp = currentTime
+                if(job.notificationFrequency in listOf("HOUR", "DAY", "WEEK", "MONTH", "YEAR")){
+                    val calendar = Calendar.getInstance()
+                    calendar.set(Calendar.MINUTE, 0)
+                    calendar.set(Calendar.SECOND, 0)
+                    if(job.notificationFrequency == "DAY"){
+                        calendar.set(Calendar.HOUR, 0)
+                    }
+                    else if(job.notificationFrequency == "MONTH"){
+                        calendar.set(Calendar.DAY_OF_MONTH, 1)
+                        calendar.set(Calendar.HOUR, 0)
+                    }
+                    else if (job.notificationFrequency == "YEAR"){
+                        calendar.set(Calendar.MONTH, 1)
+                        calendar.set(Calendar.DAY_OF_MONTH, 1)
+                        calendar.set(Calendar.HOUR, 0)
+                    }
+
+                    job.lastNotificationTimestamp = calendar.timeInMillis
+
+                }
+                else{
+                    job.lastNotificationTimestamp = currentTime
+                }
+
                 database.updateBackgroundJob(job)
 
                 job.notificationId?.let { notificationId ->
