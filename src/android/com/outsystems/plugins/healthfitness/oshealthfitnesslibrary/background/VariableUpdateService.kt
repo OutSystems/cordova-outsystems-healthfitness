@@ -7,7 +7,6 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.os.Build
-import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.outsystems.plugins.healthfitnesslib.background.database.BackgroundJob
@@ -17,7 +16,6 @@ import com.outsystems.plugins.healthfitnesslib.store.HealthStore
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
-import java.text.SimpleDateFormat
 import java.util.*
 
 class VariableUpdateService : BroadcastReceiver() {
