@@ -37,5 +37,10 @@ interface HealthFitnessManagerInterface {
                                   variableName: String,
                                   onSuccess: () -> Unit,
                                   onFailure: (Exception) -> Unit)
+
+    fun unsubscribeFromAllUpdates(variable: GoogleFitVariable,
+                                  variableName : String,
+                                  onSuccess: () -> Unit,
+                                  onFailure: (Exception) -> Unit)
 }
 

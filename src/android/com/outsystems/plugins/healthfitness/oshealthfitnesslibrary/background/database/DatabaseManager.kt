@@ -52,19 +52,23 @@ class DatabaseManager(context : Context) : DatabaseManagerInterface {
         return notificationDao?.getAll()
     }
 
-    override fun fetchBackgroundJobs(variable : String) : List<BackgroundJob>? {
-        return backgroundJobDao?.findByVariableName(variable)
+    override fun fetchBackgroundJob(variable: String, comparison: String, value: Float) : BackgroundJob? {
+        return backgroundJobDao?.findByPrimaryKey(variable, comparison, value)
     }
 
-    //fun fetchBackgroundJob(variable: String, comparison: String, value: Float) {
-    //    return backgroundJobDao?.findByPrimaryKey(variable, comparison, value)
-    //}
+    override fun fetchBackgroundJobCountForVariable(variable: String) : Int {
+        return backgroundJobDao?.getBackgroundJobCountForVariable(variable) ?: 0
+    }
+
+    override fun fetchBackgroundJobs(variable: String) : List<BackgroundJob>? {
+        return backgroundJobDao?.findByVariableName(variable)
+    }
 
     override fun fetchNotification(id : Long) : Notification? {
         return notificationDao?.findById(id)?.first()
     }
 
-    override fun deleteBackgroundJob(backgroundJob : BackgroundJob) {
+    override fun deleteBackgroundJob(backgroundJob: BackgroundJob) {
         backgroundJobDao?.delete(backgroundJob)
     }
 

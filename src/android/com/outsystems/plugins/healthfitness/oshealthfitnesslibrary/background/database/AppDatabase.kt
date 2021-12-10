@@ -25,6 +25,9 @@ abstract class AppDatabase : RoomDatabase() {
                 database.execSQL(
                     "ALTER TABLE ${BackgroundJob.TABLE_NAME} " +
                             "ADD COLUMN next_notification_timestamp INTEGER NOT NULL DEFAULT 0")
+                database.execSQL(
+                    "ALTER TABLE ${BackgroundJob.TABLE_NAME} " +
+                            "ADD COLUMN active INTEGER NOT NULL DEFAULT 1")
             }
         }
     }

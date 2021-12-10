@@ -50,7 +50,6 @@ enum class EnumTimeUnit(val value : Pair<String, TimeUnit>) {
     MONTH(Pair("MONTH", TimeUnit.DAYS)),
     YEAR(Pair("YEAR", TimeUnit.DAYS))
 }
-
 enum class EnumJobFrequency(val value : String) {
     IMMEDIATE("IMMEDIATE"),
     HOUR("HOUR"),
@@ -687,9 +686,9 @@ class HealthStore(
                                     this.timeUnitGrouping = parameters.timeUnitGrouping
 
                                     this.notificationFrequency =
-                                        parameters.notificationFrequency.toString()
+                                        "ALWAYS" //parameters.notificationFrequency.toString()
                                     this.notificationFrequencyGrouping =
-                                        parameters.notificationFrequencyGrouping!!
+                                        0//parameters.notificationFrequencyGrouping!!
                                     
                                     this.nextNotificationTimestamp = System.currentTimeMillis()
                                 }
@@ -738,6 +737,49 @@ class HealthStore(
         else {
             //do nothing
             //maybe throw an error because variable is not a sensorVariable nor a historyVariable??
+        }
+    }
+
+    fun deleteBackgroundJob(jogId: String,
+                         onSuccess : (String) -> Unit,
+                         onError : (HealthFitnessError) -> Unit) {
+
+        val parameters = jogId.split("-")
+        val variableName: String
+        val comparison: String
+        val value: Float
+        val variable: GoogleFitVariable
+
+        try {
+            variableName = parameters[0]
+            comparison = parameters[1]
+            value = parameters[2].toFloat()
+            variable = getVariableByName(variableName)!!
+        }
+        catch(e: Exception) {
+            onError(HealthFitnessError.BACKGROUND_JOB_DOES_NOT_EXISTS_ERROR)
+            return
+        }
+
+        runBlocking {
+            launch(Dispatchers.IO) {
+
+                val job = database.fetchBackgroundJob(variableName, comparison, value)
+                if(job != null) {
+                    database.deleteBackgroundJob(job)
+                    val jobCount = database.fetchBackgroundJobCountForVariable(variableName)
+                    if(jobCount == 0) {
+                        manager.unsubscribeFromAllUpdates(
+                            variable,
+                            variableName,
+                            onSuccess = {},
+                            onFailure = {})
+                    }
+                }
+                else {
+                    //onError(HealthFitnessError.BACKGROUND_JOB_DOES_NOT_EXISTS_ERROR)
+                }
+            }
         }
     }
 
