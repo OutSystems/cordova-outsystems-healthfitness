@@ -59,8 +59,7 @@ class OSHealthFitness : CordovaImplementation() {
                 getLastRecord(args)
             }
             "setBackgroundJob" -> {
-                //setBackgroundJob(args)
-                deleteBackgroundJob(args)
+                setBackgroundJob(args)
             }
             "deleteBackgroundJob" -> {
                 deleteBackgroundJob(args)
