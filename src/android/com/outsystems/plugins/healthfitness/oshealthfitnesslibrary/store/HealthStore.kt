@@ -686,9 +686,9 @@ class HealthStore(
                                     this.timeUnitGrouping = parameters.timeUnitGrouping
 
                                     this.notificationFrequency =
-                                        "ALWAYS" //parameters.notificationFrequency.toString()
+                                        parameters.notificationFrequency.toString()
                                     this.notificationFrequencyGrouping =
-                                        0//parameters.notificationFrequencyGrouping!!
+                                        parameters.notificationFrequencyGrouping!!
                                     
                                     this.nextNotificationTimestamp = System.currentTimeMillis()
                                 }
@@ -772,12 +772,16 @@ class HealthStore(
                         manager.unsubscribeFromAllUpdates(
                             variable,
                             variableName,
-                            onSuccess = {},
-                            onFailure = {})
+                            onSuccess = {
+                                onSuccess("success")
+                            },
+                            onFailure = {
+                                onError(HealthFitnessError.UNSUBSCRIBE_ERROR)
+                            })
                     }
                 }
                 else {
-                    //onError(HealthFitnessError.BACKGROUND_JOB_DOES_NOT_EXISTS_ERROR)
+                    onError(HealthFitnessError.BACKGROUND_JOB_DOES_NOT_EXISTS_ERROR)
                 }
             }
         }

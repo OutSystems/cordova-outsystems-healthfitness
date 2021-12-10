@@ -192,7 +192,7 @@ class OSHealthFitness : CordovaImplementation() {
     private fun deleteBackgroundJob(args: JSONArray) {
         val parameters = args.getString(0)
         healthStore?.deleteBackgroundJob(
-            "WEIGHT-HIGHER-100",
+            parameters,
             { response ->
                 sendPluginResult(response)
             },

@@ -16,10 +16,10 @@ open class BackgroundJob {
 
     enum class ComparisonOperationEnum(val id : String) {
         GREATER("HIGHER"),
-        GREATER_OR_EQUALS("HIGHER_EQUALS"),
+        GREATER_OR_EQUALS("HIGHER_EQUAL"),
         LESSER("LOWER"),
-        LESSER_OR_EQUALS("LOWER_EQUALS"),
-        EQUALS("EQUALS"),
+        LESSER_OR_EQUALS("LOWER_EQUAL"),
+        EQUALS("EQUAL"),
     }
 
     @ColumnInfo(name = "variable") var variable: String = ""
@@ -44,7 +44,7 @@ open class BackgroundJob {
     @ColumnInfo(name = "notification_frequency") var notificationFrequency: String = "ALWAYS"
     @ColumnInfo(name = "notification_frequency_grouping") var notificationFrequencyGrouping: Int = 1
     @ColumnInfo(name = "next_notification_timestamp") var nextNotificationTimestamp: Long = 0
-    @ColumnInfo(name = "active") var active: Boolean = true
+    @ColumnInfo(name = "isActive") var isActive: Boolean = true
 
     @Ignore
     var id: String = ""
