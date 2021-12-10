@@ -31,6 +31,7 @@ open class BackgroundJob {
     @ColumnInfo(name = "notification_frequency") var notificationFrequency: String = "ALWAYS"
     @ColumnInfo(name = "notification_frequency_grouping") var notificationFrequencyGrouping: Int = 1
     @ColumnInfo(name = "next_notification_timestamp") var nextNotificationTimestamp: Long = 0
+    @ColumnInfo(name = "active") var active: Boolean = true
 
     companion object {
         const val TABLE_NAME: String= "backgroundJob"

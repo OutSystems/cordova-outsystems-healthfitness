@@ -747,27 +747,30 @@ class HealthStore(
                            onError: (HealthFitnessError) -> Unit){
         val jobsList = database.fetchBackgroundJobs()
 
+        onSuccess(BackgroundJobsResponse(buildListBackgroundJobsResult(jobsList!!)))
+
+    }
+
+    private fun buildListBackgroundJobsResult(jobsList: List<BackgroundJob>) : List<BackgroundJobsResponseBlock>{
+        val responseJobList : MutableList<BackgroundJobsResponseBlock> = mutableListOf()
         if (jobsList != null) {
-            val responseJobList : Array<BackgroundJobsResponseBlock>
             for (job in jobsList){
                 val notification = database.fetchNotification(job.notificationId!!)
-                val responseJob = BackgroundJobsResponseBlock(
-                    job.variable,
-                    job.comparison,
-                    job.value,
-                    notification?.title,
-                    notification?.body,
-                    job.notificationFrequency,
-                    job.notificationFrequencyGrouping
+                responseJobList.add(
+                    BackgroundJobsResponseBlock(
+                        job.variable,
+                        job.comparison,
+                        job.value,
+                        notification?.title,
+                        notification?.body,
+                        job.notificationFrequency,
+                        job.notificationFrequencyGrouping,
+                        job.active
+                    )
                 )
-                //TODO add responseJob to responseJobList and then return success with that
-                //then in OSHealthStore we pass that to Kotlin and sendPluginResult with that
-                //responseJobList[i] = responseJob
             }
         }
-        else{
-            //return empty list or error?
-        }
+        return responseJobList
     }
 
     companion object {
