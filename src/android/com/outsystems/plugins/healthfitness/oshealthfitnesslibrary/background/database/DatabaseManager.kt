@@ -56,6 +56,10 @@ class DatabaseManager(context : Context) : DatabaseManagerInterface {
         return backgroundJobDao?.findByVariableName(variable)
     }
 
+    override fun fetchBackgroundJobs() : List<BackgroundJob>? {
+        return backgroundJobDao?.getAll()
+    }
+
     //fun fetchBackgroundJob(variable: String, comparison: String, value: Float) {
     //    return backgroundJobDao?.findByPrimaryKey(variable, comparison, value)
     //}
