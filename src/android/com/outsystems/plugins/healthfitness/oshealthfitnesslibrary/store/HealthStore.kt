@@ -745,30 +745,33 @@ class HealthStore(
 
     fun listBackgroundJobs(onSuccess : (BackgroundJobsResponse) -> Unit,
                            onError: (HealthFitnessError) -> Unit){
-        val jobsList = database.fetchBackgroundJobs()
 
-        onSuccess(BackgroundJobsResponse(buildListBackgroundJobsResult(jobsList!!)))
-
+        try {
+            var jobsList = database.fetchBackgroundJobs()!!
+            onSuccess(BackgroundJobsResponse(buildListBackgroundJobsResult(jobsList)))
+        }
+        catch (e: Exception){
+            onError(HealthFitnessError.LIST_BACKGROUND_JOBS_GENERIC_ERROR)
+        }
     }
 
     private fun buildListBackgroundJobsResult(jobsList: List<BackgroundJob>) : List<BackgroundJobsResponseBlock>{
         val responseJobList : MutableList<BackgroundJobsResponseBlock> = mutableListOf()
-        if (jobsList != null) {
-            for (job in jobsList){
-                val notification = database.fetchNotification(job.notificationId!!)
-                responseJobList.add(
-                    BackgroundJobsResponseBlock(
-                        job.variable,
-                        job.comparison,
-                        job.value,
-                        notification?.title,
-                        notification?.body,
-                        job.notificationFrequency,
-                        job.notificationFrequencyGrouping,
-                        job.active
-                    )
+        for (job in jobsList){
+            val notification = database.fetchNotification(job.notificationId!!)
+            responseJobList.add(
+                BackgroundJobsResponseBlock(
+                    job.variable,
+                    job.comparison,
+                    job.value,
+                    notification?.title,
+                    notification?.body,
+                    job.notificationFrequency,
+                    job.notificationFrequencyGrouping,
+                    job.active,
+                    job.variable + "-" + job.comparison + "-" + job.value
                 )
-            }
+            )
         }
         return responseJobList
     }

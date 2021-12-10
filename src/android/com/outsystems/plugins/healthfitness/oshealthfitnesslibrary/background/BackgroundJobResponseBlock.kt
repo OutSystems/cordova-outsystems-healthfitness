@@ -8,5 +8,6 @@ data class BackgroundJobsResponseBlock (
     val notificationBody: String?,
     val notificationFrequency: String?,
     val notificationFrequencyGrouping: Int?,
-    val active: Boolean?
+    val active: Boolean?,
+    val id: String?
 )
