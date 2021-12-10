@@ -669,8 +669,8 @@ class HealthStore(
                     launch(Dispatchers.IO) {
 
                         try {
-                            database.runInTransaction({
-                                val nNotification = database.fetchNotifications()
+                            database.runInTransaction {
+
                                 val notification = Notification().apply {
                                     this.title = parameters.notificationHeader
                                     this.body = parameters.notificationBody
@@ -685,9 +685,16 @@ class HealthStore(
                                     this.notificationId = notificationId
                                     this.timeUnit = parameters.timeUnit
                                     this.timeUnitGrouping = parameters.timeUnitGrouping
+
+                                    this.notificationFrequency =
+                                        parameters.notificationFrequency.toString()
+                                    this.notificationFrequencyGrouping =
+                                        parameters.notificationFrequencyGrouping!!
+                                    
+                                    this.nextNotificationTimestamp = System.currentTimeMillis()
                                 }
                                 database.insert(backgroundJob)
-                            })
+                            }
                             onSuccess("success")
                         } catch(sqle : SQLiteException) {
                             onError(HealthFitnessError.BACKGROUND_JOB_ALREADY_EXISTS_ERROR)
