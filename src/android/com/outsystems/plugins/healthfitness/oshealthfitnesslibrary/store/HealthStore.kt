@@ -746,40 +746,26 @@ class HealthStore(
                          onSuccess : (String) -> Unit,
                          onError : (HealthFitnessError) -> Unit) {
 
-        val parameters = jogId.split("-")
-        val variableName: String
-        val comparison: String
-        val value: Float
-        val variable: GoogleFitVariable
-
-        try {
-            variableName = parameters[0]
-            comparison = parameters[1]
-            value = parameters[2].toFloat()
-            variable = getVariableByName(variableName)!!
-        }
-        catch(e: Exception) {
-            onError(HealthFitnessError.BACKGROUND_JOB_DOES_NOT_EXISTS_ERROR)
-            return
-        }
-
         runBlocking {
             launch(Dispatchers.IO) {
 
-                val job = database.fetchBackgroundJob(variableName, comparison, value)
+                val job = database.fetchBackgroundJob(jogId)
                 if(job != null) {
-                    database.deleteBackgroundJob(job)
-                    val jobCount = database.fetchBackgroundJobCountForVariable(variableName)
-                    if(jobCount == 0) {
-                        manager.unsubscribeFromAllUpdates(
-                            variable,
-                            variableName,
-                            onSuccess = {
-                                onSuccess("success")
-                            },
-                            onFailure = {
-                                onError(HealthFitnessError.UNSUBSCRIBE_ERROR)
-                            })
+                    val variableName = job.variable
+                    getVariableByName(variableName)?.let { variable ->
+                        database.deleteBackgroundJob(job)
+                        val jobCount = database.fetchBackgroundJobCountForVariable(variableName)
+                        if(jobCount == 0) {
+                            manager.unsubscribeFromAllUpdates(
+                                variable,
+                                variableName,
+                                onSuccess = {
+                                    onSuccess("success")
+                                },
+                                onFailure = {
+                                    onError(HealthFitnessError.UNSUBSCRIBE_ERROR)
+                                })
+                        }
                     }
                 }
                 else {

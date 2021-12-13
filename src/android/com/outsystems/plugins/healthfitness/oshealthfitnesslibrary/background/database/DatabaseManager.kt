@@ -52,8 +52,8 @@ class DatabaseManager(context : Context) : DatabaseManagerInterface {
         return notificationDao?.getAll()
     }
 
-    override fun fetchBackgroundJob(variable: String, comparison: String, value: Float) : BackgroundJob? {
-        return backgroundJobDao?.findByPrimaryKey(variable, comparison, value)
+    override fun fetchBackgroundJob(id: String) : BackgroundJob? {
+        return backgroundJobDao?.findById(id)
     }
 
     override fun fetchBackgroundJobCountForVariable(variable: String) : Int {
