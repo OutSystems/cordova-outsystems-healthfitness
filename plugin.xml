@@ -64,6 +64,9 @@
     <source-file src="src/android/com/outsystems/plugins/healthfitness/oshealthfitnesslibrary/background/BackgroundJobParameters.kt" target-dir="app/src/main/kotlin/com/outsystems/plugins/healthfitness/background"/>
     <source-file src="src/android/com/outsystems/plugins/healthfitness/oshealthfitnesslibrary/background/ClickActivity.kt" target-dir="app/src/main/kotlin/com/outsystems/plugins/healthfitness/background"/>
     <source-file src="src/android/com/outsystems/plugins/healthfitness/oshealthfitnesslibrary/background/VariableUpdateService.kt" target-dir="app/src/main/kotlin/com/outsystems/plugins/healthfitness/background"/>
+    <source-file src="src/android/com/outsystems/plugins/healthfitness/oshealthfitnesslibrary/background/BackgroundJobResponseBlock.kt" target-dir="app/src/main/kotlin/com/outsystems/plugins/healthfitness/background"/>
+    <source-file src="src/android/com/outsystems/plugins/healthfitness/oshealthfitnesslibrary/background/BackgroundJobsResponse.kt" target-dir="app/src/main/kotlin/com/outsystems/plugins/healthfitness/background"/>
+
 
     <source-file src="src/android/com/outsystems/plugins/healthfitness/oshealthfitnesslibrary/background/database/AppDatabase.kt" target-dir="app/src/main/kotlin/com/outsystems/plugins/healthfitness/background/database"/>
     <source-file src="src/android/com/outsystems/plugins/healthfitness/oshealthfitnesslibrary/background/database/BackgroundJob.kt" target-dir="app/src/main/kotlin/com/outsystems/plugins/healthfitness/background/database"/>

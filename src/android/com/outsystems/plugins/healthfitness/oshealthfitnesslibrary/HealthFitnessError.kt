@@ -11,6 +11,8 @@ enum class HealthFitnessError(val code: Int, val message: String) {
     BACKGROUND_JOB_GENERIC_ERROR(106, "The background job could not be created."),
     BACKGROUND_JOB_DOES_NOT_EXISTS_ERROR(107, "The background job could not be found."),
     UNSUBSCRIBE_ERROR(107, "The background job could not be deleted"),
+    LIST_BACKGROUND_JOBS_GENERIC_ERROR(107, "The list of background jobs could not be fetched."),
+
 
     // Plugin Android specific errors
     WRITE_VALUE_OUT_OF_RANGE_ERROR(109, "Value provided is out of range for this variable"),

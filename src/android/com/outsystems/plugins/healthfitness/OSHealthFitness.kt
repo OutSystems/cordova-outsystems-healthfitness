@@ -64,6 +64,9 @@ class OSHealthFitness : CordovaImplementation() {
             "deleteBackgroundJob" -> {
                 deleteBackgroundJob(args)
             }
+            "listBackgroundJobs" -> {
+                listBackgroundJobs()
+            }
         }
         return true
     }
@@ -195,6 +198,18 @@ class OSHealthFitness : CordovaImplementation() {
             parameters,
             { response ->
                 sendPluginResult(response)
+            },
+            { error ->
+                sendPluginResult(null, Pair(error.code, error.message))
+            }
+        )
+    }
+                
+    private fun listBackgroundJobs() {
+        healthStore?.listBackgroundJobs(
+            { response ->
+                val pluginResponseJson = gson.toJson(response)
+                sendPluginResult(pluginResponseJson)
             },
             { error ->
                 sendPluginResult(null, Pair(error.code, error.message))

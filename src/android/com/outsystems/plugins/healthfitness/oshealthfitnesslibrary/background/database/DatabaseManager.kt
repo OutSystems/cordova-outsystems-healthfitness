@@ -64,6 +64,10 @@ class DatabaseManager(context : Context) : DatabaseManagerInterface {
         return backgroundJobDao?.findByVariableName(variable)
     }
 
+    override fun fetchBackgroundJobs() : List<BackgroundJob>? {
+        return backgroundJobDao?.getAll()
+    }
+
     override fun fetchNotification(id : Long) : Notification? {
         return notificationDao?.findById(id)?.first()
     }

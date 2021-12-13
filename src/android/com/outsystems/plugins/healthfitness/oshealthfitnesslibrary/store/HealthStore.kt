@@ -10,6 +10,8 @@ import com.google.android.gms.fitness.data.DataPoint
 import com.google.android.gms.fitness.data.DataSet
 import com.google.gson.Gson
 import com.outsystems.plugins.healthfitness.HealthFitnessError
+import com.outsystems.plugins.healthfitness.background.BackgroundJobsResponse
+import com.outsystems.plugins.healthfitness.background.BackgroundJobsResponseBlock
 import com.outsystems.plugins.healthfitnesslib.background.BackgroundJobParameters
 import com.outsystems.plugins.healthfitnesslib.background.database.BackgroundJob
 import com.outsystems.plugins.healthfitnesslib.background.database.DatabaseManagerInterface
@@ -739,7 +741,7 @@ class HealthStore(
             //maybe throw an error because variable is not a sensorVariable nor a historyVariable??
         }
     }
-
+    
     fun deleteBackgroundJob(jogId: String,
                          onSuccess : (String) -> Unit,
                          onError : (HealthFitnessError) -> Unit) {
@@ -787,6 +789,39 @@ class HealthStore(
         }
     }
 
+        fun listBackgroundJobs(onSuccess : (BackgroundJobsResponse) -> Unit,
+                           onError: (HealthFitnessError) -> Unit){
+
+        try {
+            var jobsList = database.fetchBackgroundJobs()!!
+            onSuccess(BackgroundJobsResponse(buildListBackgroundJobsResult(jobsList)))
+        }
+        catch (e: Exception){
+            onError(HealthFitnessError.LIST_BACKGROUND_JOBS_GENERIC_ERROR)
+        }
+    }
+
+    private fun buildListBackgroundJobsResult(jobsList: List<BackgroundJob>) : List<BackgroundJobsResponseBlock>{
+        val responseJobList : MutableList<BackgroundJobsResponseBlock> = mutableListOf()
+        for (job in jobsList){
+            val notification = database.fetchNotification(job.notificationId!!)
+            responseJobList.add(
+                BackgroundJobsResponseBlock(
+                    job.variable,
+                    job.comparison,
+                    job.value,
+                    notification?.title,
+                    notification?.body,
+                    job.notificationFrequency,
+                    job.notificationFrequencyGrouping,
+                    job.active,
+                    job.variable + "-" + job.comparison + "-" + job.value
+                )
+            )
+        }
+        return responseJobList
+    }
+    
     companion object {
         const val GOOGLE_FIT_PERMISSIONS_REQUEST_CODE = 2
     }

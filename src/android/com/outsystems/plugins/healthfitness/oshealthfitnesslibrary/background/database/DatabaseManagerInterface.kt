@@ -7,6 +7,7 @@ interface DatabaseManagerInterface {
     fun fetchBackgroundJobs(variable : String) : List<BackgroundJob>?
     fun fetchBackgroundJob(variable: String, comparison: String, value: Float) : BackgroundJob?
     fun fetchBackgroundJobCountForVariable(variable: String) : Int
+    fun fetchBackgroundJobs() : List<BackgroundJob>?
     fun fetchNotification(id : Long) : Notification?
     fun deleteBackgroundJob(backgroundJob: BackgroundJob)
     fun updateBackgroundJob(backgroundJob: BackgroundJob)
