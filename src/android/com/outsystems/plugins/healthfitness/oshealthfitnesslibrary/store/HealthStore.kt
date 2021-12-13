@@ -12,6 +12,7 @@ import com.google.gson.Gson
 import com.outsystems.plugins.healthfitness.HealthFitnessError
 import com.outsystems.plugins.healthfitness.background.BackgroundJobsResponse
 import com.outsystems.plugins.healthfitness.background.BackgroundJobsResponseBlock
+import com.outsystems.plugins.healthfitness.background.UpdateBackgroundJobParameters
 import com.outsystems.plugins.healthfitnesslib.background.BackgroundJobParameters
 import com.outsystems.plugins.healthfitnesslib.background.database.BackgroundJob
 import com.outsystems.plugins.healthfitnesslib.background.database.DatabaseManagerInterface
@@ -741,10 +742,10 @@ class HealthStore(
             //maybe throw an error because variable is not a sensorVariable nor a historyVariable??
         }
     }
-    
+
     fun deleteBackgroundJob(jogId: String,
-                         onSuccess : (String) -> Unit,
-                         onError : (HealthFitnessError) -> Unit) {
+                            onSuccess : (String) -> Unit,
+                            onError : (HealthFitnessError) -> Unit) {
 
         runBlocking {
             launch(Dispatchers.IO) {
@@ -775,15 +776,19 @@ class HealthStore(
         }
     }
 
-        fun listBackgroundJobs(onSuccess : (BackgroundJobsResponse) -> Unit,
-                           onError: (HealthFitnessError) -> Unit){
+    fun listBackgroundJobs(onSuccess : (BackgroundJobsResponse) -> Unit,
+                           onError: (HealthFitnessError) -> Unit) {
 
-        try {
-            var jobsList = database.fetchBackgroundJobs()!!
-            onSuccess(BackgroundJobsResponse(buildListBackgroundJobsResult(jobsList)))
-        }
-        catch (e: Exception){
-            onError(HealthFitnessError.LIST_BACKGROUND_JOBS_GENERIC_ERROR)
+        runBlocking {
+            launch(Dispatchers.IO) {
+                try {
+                    var jobsList = database.fetchBackgroundJobs()!!
+                    onSuccess(BackgroundJobsResponse(buildListBackgroundJobsResult(jobsList)))
+                }
+                catch (e: Exception){
+                    onError(HealthFitnessError.LIST_BACKGROUND_JOBS_GENERIC_ERROR)
+                }
+            }
         }
     }
 
@@ -807,7 +812,51 @@ class HealthStore(
         }
         return responseJobList
     }
-    
+
+    fun updateBackgroundJob(parameters: UpdateBackgroundJobParameters,
+                            onSuccess: (String) -> Unit,
+                            onError: (HealthFitnessError) -> Unit) {
+
+        runBlocking {
+            launch(Dispatchers.IO) {
+                val job = database.fetchBackgroundJob(parameters.id) // then use the ID
+                if(job != null) {
+                    val notification = database.fetchNotification(job.notificationId!!)
+                    if(parameters.value != null){
+                        job.value = parameters.value
+                    }
+                    if(parameters.comparison != null){
+                        job.comparison = parameters.comparison
+                    }
+                    if(parameters.isActive != null){
+                        job.isActive = parameters.isActive
+                    }
+                    if(parameters.notificationFrequency != null){
+                        job.notificationFrequency = parameters.notificationFrequency
+                    }
+                    if(parameters.notificationFrequencyGrouping != null){
+                        job.notificationFrequencyGrouping = parameters.notificationFrequencyGrouping
+                    }
+                    if(notification != null){
+                        if(parameters.notificationHeader != null){
+                            notification.title = parameters.notificationHeader
+                        }
+                        if(parameters.notificationBody != null){
+                            notification.body = parameters.notificationBody
+                        }
+                        database.updateNotification(notification)
+                    }
+                    database.updateBackgroundJob(job)
+                    onSuccess("success")
+                }
+                else {
+                    onError(HealthFitnessError.BACKGROUND_JOB_DOES_NOT_EXISTS_ERROR)
+                }
+            }
+        }
+
+    }
+
     companion object {
         const val GOOGLE_FIT_PERMISSIONS_REQUEST_CODE = 2
     }

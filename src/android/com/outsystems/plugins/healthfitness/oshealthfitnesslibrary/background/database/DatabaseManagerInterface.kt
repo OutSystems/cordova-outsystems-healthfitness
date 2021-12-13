@@ -11,5 +11,6 @@ interface DatabaseManagerInterface {
     fun fetchNotification(id : Long) : Notification?
     fun deleteBackgroundJob(backgroundJob: BackgroundJob)
     fun updateBackgroundJob(backgroundJob: BackgroundJob)
+    fun updateNotification(notification: Notification)
     fun runInTransaction(closude : () -> Unit)
 }

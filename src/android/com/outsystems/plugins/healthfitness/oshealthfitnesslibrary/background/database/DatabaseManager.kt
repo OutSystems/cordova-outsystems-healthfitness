@@ -80,6 +80,10 @@ class DatabaseManager(context : Context) : DatabaseManagerInterface {
         backgroundJobDao?.update(backgroundJob)
     }
 
+    override fun updateNotification(notification: Notification) {
+        notificationDao?.update(notification)
+    }
+
     override fun runInTransaction(closude : () -> Unit){
         database?.runInTransaction(Runnable {
             closude()
