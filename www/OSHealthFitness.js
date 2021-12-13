@@ -47,3 +47,7 @@ exports.deleteBackgroundJob = function (success, error, params) {
 exports.listBackgroundJobs = function (success, error) {
     exec(success, error, 'OSHealthFitness', 'listBackgroundJobs');
 };
+
+exports.deleteBackgroundJob = function (success, error, params) {
+    exec(success, error, 'OSHealthFitness', 'deleteBackgroundJob', [params]);
+};
