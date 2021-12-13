@@ -814,7 +814,7 @@ class HealthStore(
                     notification?.body,
                     job.notificationFrequency,
                     job.notificationFrequencyGrouping,
-                    job.active,
+                    job.isActive,
                     job.variable + "-" + job.comparison + "-" + job.value
                 )
             )

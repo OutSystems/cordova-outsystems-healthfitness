@@ -2,6 +2,7 @@ package com.outsystems.plugins.healthfitnesslib.background.database
 
 import androidx.room.*
 import androidx.room.ColumnInfo
+import java.util.*
 
 @Entity(
     tableName = BackgroundJob.TABLE_NAME,
@@ -22,22 +23,10 @@ open class BackgroundJob {
         EQUALS("EQUAL"),
     }
 
+    @ColumnInfo(name = "id") var id: String = UUID.randomUUID().toString()
     @ColumnInfo(name = "variable") var variable: String = ""
-        set(value){
-            field = value
-            computeId()
-        }
     @ColumnInfo(name = "comparison") var comparison: String = ""
-        set(value){
-            field = value
-            computeId()
-        }
     @ColumnInfo(name = "value") var value: Float = 0.0f
-        set(value){
-            field = value
-            computeId()
-        }
-
     @ColumnInfo(name = "time_unit") var timeUnit: String? = null
     @ColumnInfo(name = "time_unit_grouping") var timeUnitGrouping: Int? = null
     @ColumnInfo(name = "notification_id") var notificationId: Long? = null
@@ -45,13 +34,6 @@ open class BackgroundJob {
     @ColumnInfo(name = "notification_frequency_grouping") var notificationFrequencyGrouping: Int = 1
     @ColumnInfo(name = "next_notification_timestamp") var nextNotificationTimestamp: Long = 0
     @ColumnInfo(name = "isActive") var isActive: Boolean = true
-
-    @Ignore
-    var id: String = ""
-
-    private fun computeId() {
-        id = "${this.variable}-${this.comparison}-${this.value}".toLowerCase()
-    }
 
     companion object {
         const val TABLE_NAME: String= "backgroundJob"

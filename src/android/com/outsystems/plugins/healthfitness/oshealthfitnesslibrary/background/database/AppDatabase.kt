@@ -4,10 +4,11 @@ import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.sqlite.db.SupportSQLiteDatabase
 import androidx.room.migration.Migration
+import java.util.*
 
 @Database(
     entities = [BackgroundJob::class, Notification::class],
-    version = 1
+    version = 2
 )
 abstract class AppDatabase : RoomDatabase() {
     abstract fun backgroundJobDao(): BackgroundJobDao
@@ -28,6 +29,20 @@ abstract class AppDatabase : RoomDatabase() {
                 database.execSQL(
                     "ALTER TABLE ${BackgroundJob.TABLE_NAME} " +
                             "ADD COLUMN isActive INTEGER NOT NULL DEFAULT 1")
+                database.execSQL(
+                    "ALTER TABLE ${BackgroundJob.TABLE_NAME} " +
+                            "ADD COLUMN id TEXT NOT NULL DEFAULT ''")
+
+                val jobIds = database.query("SELECT rowid FROM ${BackgroundJob.TABLE_NAME}")
+                for(i in 0 until jobIds.count) {
+                    jobIds.moveToPosition(i)
+                    val rid = jobIds.getInt(0)
+                    val uuid = UUID.randomUUID().toString()
+                    database.execSQL("" +
+                            "UPDATE ${BackgroundJob.TABLE_NAME} " +
+                            "SET id = '$uuid' " +
+                            "WHERE rowid == $rid")
+                }
             }
         }
     }
