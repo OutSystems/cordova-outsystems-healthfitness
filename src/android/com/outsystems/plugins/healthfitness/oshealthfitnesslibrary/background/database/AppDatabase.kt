@@ -7,7 +7,7 @@ import androidx.room.migration.Migration
 
 @Database(
     entities = [BackgroundJob::class, Notification::class],
-    version = 1
+    version = 2
 )
 abstract class AppDatabase : RoomDatabase() {
     abstract fun backgroundJobDao(): BackgroundJobDao
