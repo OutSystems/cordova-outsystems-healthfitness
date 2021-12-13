@@ -61,6 +61,9 @@ class OSHealthFitness : CordovaImplementation() {
             "setBackgroundJob" -> {
                 setBackgroundJob(args)
             }
+            "deleteBackgroundJob" -> {
+                deleteBackgroundJob(args)
+            }
             "listBackgroundJobs" -> {
                 listBackgroundJobs()
             }
@@ -70,7 +73,6 @@ class OSHealthFitness : CordovaImplementation() {
 
     //create array of permission oauth
     private fun initAndRequestPermissions(args : JSONArray) {
-
         val customPermissions = args.getString(0)
         val allVariables = args.getString(1)
         val fitnessVariables = args.getString(2)
@@ -91,7 +93,6 @@ class OSHealthFitness : CordovaImplementation() {
         catch (hse : HealthStoreException) {
             sendPluginResult(null, Pair(hse.error.code, hse.error.message))
         }
-
     }
 
     private fun areAndroidPermissionsGranted(permissions: List<String>): Boolean {
@@ -191,6 +192,19 @@ class OSHealthFitness : CordovaImplementation() {
         )
     }
 
+    private fun deleteBackgroundJob(args: JSONArray) {
+        val parameters = args.getString(0)
+        healthStore?.deleteBackgroundJob(
+            parameters,
+            { response ->
+                sendPluginResult(response)
+            },
+            { error ->
+                sendPluginResult(null, Pair(error.code, error.message))
+            }
+        )
+    }
+                
     private fun listBackgroundJobs() {
         healthStore?.listBackgroundJobs(
             { response ->
@@ -212,7 +226,6 @@ class OSHealthFitness : CordovaImplementation() {
             val error = hse.error
             sendPluginResult(null, Pair(error.code, error.message))
         }
-
     }
 
     override fun areGooglePlayServicesAvailable(): Boolean {
@@ -236,8 +249,7 @@ class OSHealthFitness : CordovaImplementation() {
     override fun onRequestPermissionResult(
         requestCode: Int,
         permissions: Array<String>,
-        grantResults: IntArray
-    ) {
+        grantResults: IntArray) {
         when (requestCode) {
             ACTIVITY_LOCATION_PERMISSIONS_REQUEST_CODE -> {
                 // If request is cancelled, the result arrays are empty.

@@ -52,7 +52,6 @@ enum class EnumTimeUnit(val value : Pair<String, TimeUnit>) {
     MONTH(Pair("MONTH", TimeUnit.DAYS)),
     YEAR(Pair("YEAR", TimeUnit.DAYS))
 }
-
 enum class EnumJobFrequency(val value : String) {
     IMMEDIATE("IMMEDIATE"),
     HOUR("HOUR"),
@@ -742,8 +741,55 @@ class HealthStore(
             //maybe throw an error because variable is not a sensorVariable nor a historyVariable??
         }
     }
+    
+    fun deleteBackgroundJob(jogId: String,
+                         onSuccess : (String) -> Unit,
+                         onError : (HealthFitnessError) -> Unit) {
 
-    fun listBackgroundJobs(onSuccess : (BackgroundJobsResponse) -> Unit,
+        val parameters = jogId.split("-")
+        val variableName: String
+        val comparison: String
+        val value: Float
+        val variable: GoogleFitVariable
+
+        try {
+            variableName = parameters[0]
+            comparison = parameters[1]
+            value = parameters[2].toFloat()
+            variable = getVariableByName(variableName)!!
+        }
+        catch(e: Exception) {
+            onError(HealthFitnessError.BACKGROUND_JOB_DOES_NOT_EXISTS_ERROR)
+            return
+        }
+
+        runBlocking {
+            launch(Dispatchers.IO) {
+
+                val job = database.fetchBackgroundJob(variableName, comparison, value)
+                if(job != null) {
+                    database.deleteBackgroundJob(job)
+                    val jobCount = database.fetchBackgroundJobCountForVariable(variableName)
+                    if(jobCount == 0) {
+                        manager.unsubscribeFromAllUpdates(
+                            variable,
+                            variableName,
+                            onSuccess = {
+                                onSuccess("success")
+                            },
+                            onFailure = {
+                                onError(HealthFitnessError.UNSUBSCRIBE_ERROR)
+                            })
+                    }
+                }
+                else {
+                    onError(HealthFitnessError.BACKGROUND_JOB_DOES_NOT_EXISTS_ERROR)
+                }
+            }
+        }
+    }
+
+        fun listBackgroundJobs(onSuccess : (BackgroundJobsResponse) -> Unit,
                            onError: (HealthFitnessError) -> Unit){
 
         try {
@@ -775,7 +821,7 @@ class HealthStore(
         }
         return responseJobList
     }
-
+    
     companion object {
         const val GOOGLE_FIT_PERMISSIONS_REQUEST_CODE = 2
     }

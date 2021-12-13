@@ -7,6 +7,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.os.Build
+import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.outsystems.plugins.healthfitnesslib.background.database.BackgroundJob
@@ -56,7 +57,7 @@ class VariableUpdateService : BroadcastReceiver() {
             val currentTimestamp = System.currentTimeMillis()
             val nextNotificationTimestamp = job.nextNotificationTimestamp
 
-            if(currentTimestamp >= nextNotificationTimestamp || job.notificationFrequency == "ALWAYS") {
+            if(job.isActive && (currentTimestamp >= nextNotificationTimestamp || job.notificationFrequency == "ALWAYS")) {
 
                 val nextNotificationCalendar = Calendar.getInstance()
                 nextNotificationCalendar.timeInMillis = currentTimestamp
@@ -140,6 +141,7 @@ class VariableUpdateService : BroadcastReceiver() {
                                 }
                             },
                             { error ->
+                                Log.e("Err", error.message)
                                 //TODO: What should we do with errors?
                             }
                         )
