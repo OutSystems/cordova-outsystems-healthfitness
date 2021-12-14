@@ -40,6 +40,10 @@ abstract class AppDatabase : RoomDatabase() {
                             "FOREIGN KEY(notification_id) REFERENCES Notification(id) ON DELETE CASCADE" +
                             ");")
 
+                database.execSQL(
+                    "CREATE UNIQUE INDEX unique_bg_job " +
+                            "ON ${BackgroundJob.TABLE_NAME}(variable, comparison, value);")
+
                 val jobs = database.query(
                     "SELECT variable,comparison,value,time_unit,time_unit_grouping,notification_id " +
                             "FROM $oldTable;")

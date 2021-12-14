@@ -10,7 +10,11 @@ import java.util.*
         entity = Notification::class,
         parentColumns = arrayOf("id"),
         childColumns = arrayOf("notification_id"),
-        onDelete = ForeignKey.CASCADE)]
+        onDelete = ForeignKey.CASCADE)],
+    indices = [Index(
+        "variable", "comparison", "value",
+        name="unique_bg_job",
+        unique=true)]
 )
 open class BackgroundJob {
 
