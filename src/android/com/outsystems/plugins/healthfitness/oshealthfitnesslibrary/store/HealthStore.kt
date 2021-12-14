@@ -833,9 +833,11 @@ class HealthStore(
                     }
                     if(parameters.notificationFrequency != null){
                         job.notificationFrequency = parameters.notificationFrequency
+                        job.nextNotificationTimestamp = 0
                     }
                     if(parameters.notificationFrequencyGrouping != null){
                         job.notificationFrequencyGrouping = parameters.notificationFrequencyGrouping
+                        job.nextNotificationTimestamp = 0
                     }
                     if(notification != null){
                         if(parameters.notificationHeader != null){
