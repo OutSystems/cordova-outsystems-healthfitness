@@ -11,8 +11,8 @@ interface BackgroundJobDao {
     @Query("SELECT COUNT(*) FROM ${BackgroundJob.TABLE_NAME} WHERE variable = :name")
     fun getBackgroundJobCountForVariable(name : String): Int
 
-    @Query("SELECT * FROM ${BackgroundJob.TABLE_NAME} WHERE variable = :variable AND comparison = :comparison AND value = :value")
-    fun findByPrimaryKey(variable: String, comparison: String, value: Float): BackgroundJob?
+    @Query("SELECT * FROM ${BackgroundJob.TABLE_NAME} WHERE id = :id")
+    fun findById(id: String): BackgroundJob?
 
     @Query("SELECT * FROM ${BackgroundJob.TABLE_NAME} WHERE variable = :name")
     fun findByVariableName(name : String): List<BackgroundJob>

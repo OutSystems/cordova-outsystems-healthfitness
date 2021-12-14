@@ -1,9 +1,6 @@
 package com.outsystems.plugins.healthfitnesslib.background.database
 
-import androidx.room.Dao
-import androidx.room.Delete
-import androidx.room.Insert
-import androidx.room.Query
+import androidx.room.*
 
 @Dao
 interface NotificationDao {
@@ -19,5 +16,8 @@ interface NotificationDao {
 
     @Delete
     fun delete(notification: Notification)
+
+    @Update
+    fun update(notification: Notification)
 
 }

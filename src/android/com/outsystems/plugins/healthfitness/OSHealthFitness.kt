@@ -9,6 +9,7 @@ import androidx.core.content.ContextCompat
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
 import com.google.gson.Gson
+import com.outsystems.plugins.healthfitness.background.UpdateBackgroundJobParameters
 
 import com.outsystems.plugins.healthfitnesslib.background.BackgroundJobParameters
 import com.outsystems.plugins.healthfitnesslib.background.DatabaseManager
@@ -66,6 +67,9 @@ class OSHealthFitness : CordovaImplementation() {
             }
             "listBackgroundJobs" -> {
                 listBackgroundJobs()
+            }
+            "updateBackgroundJob" -> {
+                updateBackgroundJob(args)
             }
         }
         return true
@@ -210,6 +214,19 @@ class OSHealthFitness : CordovaImplementation() {
             { response ->
                 val pluginResponseJson = gson.toJson(response)
                 sendPluginResult(pluginResponseJson)
+            },
+            { error ->
+                sendPluginResult(null, Pair(error.code, error.message))
+            }
+        )
+    }
+
+    private fun updateBackgroundJob(args: JSONArray) {
+        val parameters = gson.fromJson(args.getString(0), UpdateBackgroundJobParameters::class.java)
+        healthStore?.updateBackgroundJob(
+            parameters,
+            { response ->
+                sendPluginResult(response)
             },
             { error ->
                 sendPluginResult(null, Pair(error.code, error.message))

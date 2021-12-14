@@ -8,6 +8,10 @@ The changes documented here do not include those from the original repository.
 
 ## [Unreleased]
 
+- Implementation of UpdateBackgroundJob for Android (https://outsystemsrd.atlassian.net/browse/RMET-1235)
+
+- Implementation of DeleteBackgroundJob for Android (https://outsystemsrd.atlassian.net/browse/RMET-1232)
+
 - Implementation of ListBackgroundJobs for Android (https://outsystemsrd.atlassian.net/browse/RMET-1239)
 
 - Implementation of notificaiton frequency (waiting period) for Android (https://outsystemsrd.atlassian.net/browse/RMET-1240)
