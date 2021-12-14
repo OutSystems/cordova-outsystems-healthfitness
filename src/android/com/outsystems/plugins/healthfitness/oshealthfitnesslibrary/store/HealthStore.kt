@@ -825,8 +825,8 @@ class HealthStore(
                     if(parameters.value != null){
                         job.value = parameters.value
                     }
-                    if(parameters.comparison != null){
-                        job.comparison = parameters.comparison
+                    if(parameters.condition != null){
+                        job.comparison = parameters.condition
                     }
                     if(parameters.isActive != null){
                         job.isActive = parameters.isActive
