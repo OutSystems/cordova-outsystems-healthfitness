@@ -17,31 +17,71 @@ abstract class AppDatabase : RoomDatabase() {
     companion object {
         val MIGRATION_1_2: Migration = object : Migration(1, 2) {
             override fun migrate(database: SupportSQLiteDatabase) {
-                database.execSQL(
-                    "ALTER TABLE ${BackgroundJob.TABLE_NAME} " +
-                            "ADD COLUMN notification_frequency TEXT NOT NULL DEFAULT 'ALWAYS'")
-                database.execSQL(
-                    "ALTER TABLE ${BackgroundJob.TABLE_NAME} " +
-                            "ADD COLUMN notification_frequency_grouping INTEGER NOT NULL DEFAULT 1")
-                database.execSQL(
-                    "ALTER TABLE ${BackgroundJob.TABLE_NAME} " +
-                            "ADD COLUMN next_notification_timestamp INTEGER NOT NULL DEFAULT 0")
-                database.execSQL(
-                    "ALTER TABLE ${BackgroundJob.TABLE_NAME} " +
-                            "ADD COLUMN isActive INTEGER NOT NULL DEFAULT 1")
-                database.execSQL(
-                    "ALTER TABLE ${BackgroundJob.TABLE_NAME} " +
-                            "ADD COLUMN id TEXT NOT NULL DEFAULT ''")
+                val oldTable = "backgroundJob"
+                val notificationFrequency = "ALWAYS"
+                val notificationFrequencyGrouping = 1
+                val nextNotificationAt = 0
+                val isActive = 1
 
-                val jobIds = database.query("SELECT rowid FROM ${BackgroundJob.TABLE_NAME}")
-                for(i in 0 until jobIds.count) {
-                    jobIds.moveToPosition(i)
-                    val rid = jobIds.getInt(0)
+                database.execSQL(
+                    "CREATE TABLE ${BackgroundJob.TABLE_NAME}( " +
+                            "id TEXT NOT NULL PRIMARY KEY, " +
+                            "variable TEXT NOT NULL, " +
+                            "comparison TEXT NOT NULL, " +
+                            "value REAL NOT NULL, " +
+                            "time_unit TEXT, " +
+                            "time_unit_grouping INTEGER, " +
+                            "notification_id INTEGER, " +
+                            "notification_frequency TEXT NOT NULL DEFAULT '$notificationFrequency', " +
+                            "notification_frequency_grouping INTEGER NOT NULL DEFAULT $notificationFrequencyGrouping, " +
+                            "next_notification_timestamp INTEGER NOT NULL DEFAULT $nextNotificationAt, " +
+                            "isActive INTEGER NOT NULL DEFAULT $isActive, " +
+                            "UNIQUE(variable, comparison, value), " +
+                            "FOREIGN KEY(notification_id) REFERENCES Notification(id) ON DELETE CASCADE" +
+                            ");")
+
+                val jobs = database.query(
+                    "SELECT variable,comparison,value,time_unit,time_unit_grouping,notification_id " +
+                            "FROM $oldTable;")
+
+                for(i in 0 until jobs.count){
+                    jobs.moveToPosition(i)
                     val uuid = UUID.randomUUID().toString()
-                    database.execSQL("" +
-                            "UPDATE ${BackgroundJob.TABLE_NAME} " +
-                            "SET id = '$uuid' " +
-                            "WHERE rowid == $rid")
+                    val variable = jobs.getString(0)
+                    val comparison = jobs.getString(1)
+                    val value = jobs.getFloat(2)
+                    val timeUnit = jobs.getString(3)
+                    val timeUnitGrouping = jobs.getInt(4)
+                    val notificationId = jobs.getInt(5)
+
+                    database.execSQL(
+                        "INSERT INTO ${BackgroundJob.TABLE_NAME} " +
+                                "(id," +
+                                "variable," +
+                                "comparison," +
+                                "value," +
+                                "time_unit," +
+                                "time_unit_grouping," +
+                                "notification_id," +
+                                "notification_frequency," +
+                                "notification_frequency_grouping," +
+                                "next_notification_timestamp," +
+                                "isActive) " +
+                                "VALUES (" +
+                                "'$uuid'," +
+                                "'$variable'," +
+                                "'$comparison'," +
+                                "$value," +
+                                "'$timeUnit'," +
+                                "$timeUnitGrouping," +
+                                "$notificationId," +
+                                "'$notificationFrequency'," +
+                                "$notificationFrequencyGrouping," +
+                                "$nextNotificationAt," +
+                                "$isActive" +
+                                ");"
+                    )
+                    database.execSQL("DROP TABLE IF EXISTS $oldTable;")
                 }
             }
         }

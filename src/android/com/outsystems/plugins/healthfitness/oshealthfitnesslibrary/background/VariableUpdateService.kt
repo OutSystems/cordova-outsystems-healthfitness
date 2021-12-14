@@ -51,6 +51,7 @@ class VariableUpdateService : BroadcastReceiver() {
 
         val db = DatabaseManager.getInstance(context)
         val backgroundJobs = db.fetchBackgroundJobs(variableName)
+        val jobs = db.fetchBackgroundJobs()
 
         backgroundJobs?.forEach { job ->
 

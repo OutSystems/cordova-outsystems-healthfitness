@@ -6,7 +6,6 @@ import java.util.*
 
 @Entity(
     tableName = BackgroundJob.TABLE_NAME,
-    primaryKeys = ["variable", "comparison", "value"],
     foreignKeys = [ForeignKey(
         entity = Notification::class,
         parentColumns = arrayOf("id"),
@@ -23,6 +22,7 @@ open class BackgroundJob {
         EQUALS("EQUAL"),
     }
 
+    @PrimaryKey
     @ColumnInfo(name = "id") var id: String = UUID.randomUUID().toString()
     @ColumnInfo(name = "variable") var variable: String = ""
     @ColumnInfo(name = "comparison") var comparison: String = ""
@@ -36,6 +36,6 @@ open class BackgroundJob {
     @ColumnInfo(name = "isActive") var isActive: Boolean = true
 
     companion object {
-        const val TABLE_NAME: String= "backgroundJob"
+        const val TABLE_NAME: String= "backgroundJob_2"
     }
 }
