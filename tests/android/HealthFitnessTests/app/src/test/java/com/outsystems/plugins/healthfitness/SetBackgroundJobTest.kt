@@ -8,7 +8,7 @@ import com.outsystems.plugins.healthfitnesslib.store.HealthStore
 import org.junit.Assert
 import org.junit.Test
 
-class BackgroundJobTest {
+class SetBackgroundJobTest {
 
     @Test
     fun given_InvalidVariable_When_SettingBackgroundJob_Then_VariableNotAvailableError() {
@@ -24,6 +24,8 @@ class BackgroundJobTest {
             "TIME",
             1,
             "DAY",
+            "DAY",
+            1,
             "Header",
             "Body"
         )
@@ -55,6 +57,8 @@ class BackgroundJobTest {
             "TIME",
             1,
             "DAY",
+            "DAY",
+            1,
             "Header",
             "Body"
         )
@@ -85,6 +89,8 @@ class BackgroundJobTest {
             "TIME",
             1,
             "DAY",
+            "DAY",
+            1,
             "Header",
             "Body"
         )
@@ -114,8 +120,11 @@ class BackgroundJobTest {
                 "TIME",
                 1,
                 "DAY",
+                "DAY",
+                1,
                 "Header",
-                "Body")
+                "Body"
+            )
 
         store.setBackgroundJob(parameters,
             onSuccess = {
@@ -139,8 +148,11 @@ class BackgroundJobTest {
                 "TIME",
                 1,
                 "DAY",
+                "DAY",
+                1,
                 "Header",
-                "Body")
+                "Body"
+            )
 
         store.setBackgroundJob(parameters,
             onSuccess = { response ->
