@@ -8,6 +8,8 @@ The changes documented here do not include those from the original repository.
 
 ## [Unreleased]
 
+- Implemented Unit Tests for ListBackgroundJob feature on Android (https://outsystemsrd.atlassian.net/browse/RMET-1239)
+
 - Implementation of UpdateBackgroundJob for Android (https://outsystemsrd.atlassian.net/browse/RMET-1235)
 
 - Implementation of DeleteBackgroundJob for Android (https://outsystemsrd.atlassian.net/browse/RMET-1232)

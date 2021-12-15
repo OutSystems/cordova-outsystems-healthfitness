@@ -103,4 +103,13 @@ class HealthFitnessManagerMock: HealthFitnessManagerInterface {
         }
     }
 
+    override fun unsubscribeFromAllUpdates(
+        variable: GoogleFitVariable,
+        variableName: String,
+        onSuccess: () -> Unit,
+        onFailure: (Exception) -> Unit
+    ) {
+        TODO("Not yet implemented")
+    }
+
 }
