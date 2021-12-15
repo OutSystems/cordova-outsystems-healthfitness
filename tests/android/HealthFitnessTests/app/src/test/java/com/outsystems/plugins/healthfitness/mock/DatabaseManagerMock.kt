@@ -17,7 +17,9 @@ class DatabaseManagerMock: DatabaseManagerInterface {
 
     override fun fetchBackgroundJob(id: String): BackgroundJob? {
         if(backgroundJobExists){
-            return BackgroundJob()
+            val job = BackgroundJob()
+            job.notificationId = 1234
+            return job
         }
         else{
             return null
@@ -58,7 +60,12 @@ class DatabaseManagerMock: DatabaseManagerInterface {
     }
 
     override fun fetchNotification(id: Long): Notification? {
-        return null
+        if(backgroundJobExists){
+            return Notification()
+        }
+        else{
+            return null
+        }
     }
 
     override fun fetchNotifications(): List<Notification>? {
@@ -81,11 +88,15 @@ class DatabaseManagerMock: DatabaseManagerInterface {
     }
 
     override fun updateBackgroundJob(backgroundJob: BackgroundJob) {
-        TODO("Not yet implemented")
+        if(backgroundJobExists){
+            // do nothing
+        }
     }
 
     override fun updateNotification(notification: Notification) {
-        TODO("Not yet implemented")
+        if(backgroundJobExists){
+            // do nothing
+        }
     }
 
 
