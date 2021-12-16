@@ -42,6 +42,37 @@ class UpdateBackgroundJobsTest {
     }
 
     @Test
+    fun given_ExistentBackgroundJob_When_UpdatingBackgroundJob_Then_SomeError() {
+        val googleFitMock = HealthFitnessManagerMock()
+        val databaseMock = DatabaseManagerMock().apply {
+            backgroundJobExists = true
+            databaseHasError = true
+        }
+        val store = HealthStore("", googleFitMock, databaseMock)
+
+        val parameters = UpdateBackgroundJobParameters(
+            "25aea7f8-9c73-4ca8-97d4-ad63d7e1b854",
+            100F,
+            "HIGHER",
+            "DAY",
+            1,
+            true,
+            "Header",
+            "Body"
+        )
+
+        store.updateBackgroundJob(parameters,
+            onSuccess = {
+                Assert.fail()
+            },
+            onError = {error ->
+                Assert.assertEquals(error.code, HealthFitnessError.UPDATE_BACKGROUND_JOB_GENERIC_ERROR.code)
+                Assert.assertEquals(error.message, HealthFitnessError.UPDATE_BACKGROUND_JOB_GENERIC_ERROR.message)
+            }
+        )
+    }
+
+    @Test
     fun given_ExistentBackgroundJob_When_UpdatingBackgroundJob_Then_Success() {
         val googleFitMock = HealthFitnessManagerMock()
         val databaseMock = DatabaseManagerMock().apply {

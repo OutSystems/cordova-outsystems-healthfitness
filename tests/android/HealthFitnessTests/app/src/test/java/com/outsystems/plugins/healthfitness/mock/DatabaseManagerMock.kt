@@ -13,7 +13,9 @@ class DatabaseManagerMock: DatabaseManagerInterface {
     var backgroundJobs: MutableList<BackgroundJob> = mutableListOf()
 
     override fun deleteBackgroundJob(backgroundJob: BackgroundJob) {
-        TODO("Not yet implemented")
+        if(databaseHasError){
+            throw SQLiteException()
+        }
     }
 
     override fun fetchBackgroundJob(id: String): BackgroundJob? {
@@ -94,6 +96,9 @@ class DatabaseManagerMock: DatabaseManagerInterface {
                 dbJob.nextNotificationTimestamp = backgroundJob.nextNotificationTimestamp
                 return
             }
+        }
+        if(databaseHasError){
+            throw SQLiteException()
         }
     }
 
