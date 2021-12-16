@@ -30,7 +30,7 @@
 
     <config-file target="AndroidManifest.xml" parent="/manifest/application">
         
-      <receiver android:name="com.outsystems.plugins.healthfitnesslib.background.VariableUpdateService"
+      <receiver android:name="com.outsystems.plugins.healthfitness.background.VariableUpdateService"
             android:exported="false">
       </receiver>
 
