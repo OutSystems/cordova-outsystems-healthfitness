@@ -11,7 +11,7 @@ import org.junit.Test
 class DeleteBackgroundJobsTest {
 
     @Test
-    fun given_NonExistentBackgroundJob_When_ListingBackgroundJob_Then_BackgroundJobDoesNotExistError() {
+    fun given_NonExistentBackgroundJob_When_DeletingBackgroundJob_Then_BackgroundJobDoesNotExistError() {
         val googleFitMock = HealthFitnessManagerMock()
         val databaseMock = DatabaseManagerMock().apply {
             backgroundJobExists = false
