@@ -20,7 +20,7 @@ class SetBackgroundJobTest {
         val parameters = BackgroundJobParameters(
             "Test",
             "0",
-            "GREATER",
+            "HIGHER",
             "TIME",
             1,
             "DAY",
@@ -53,7 +53,7 @@ class SetBackgroundJobTest {
         val parameters = BackgroundJobParameters(
             "HEART_RATE",
             "0",
-            "GREATER",
+            "HIGHER",
             "TIME",
             1,
             "DAY",
@@ -85,7 +85,7 @@ class SetBackgroundJobTest {
         val parameters = BackgroundJobParameters(
             "HEART_RATE",
             "0",
-            "GREATER",
+            "HIGHER",
             "TIME",
             1,
             "DAY",
@@ -116,7 +116,7 @@ class SetBackgroundJobTest {
         val parameters =
             BackgroundJobParameters("STEPS",
                 "0",
-                "GREATER",
+                "HIGHER",
                 "TIME",
                 1,
                 "DAY",
@@ -144,7 +144,7 @@ class SetBackgroundJobTest {
         val parameters =
             BackgroundJobParameters("STEPS",
                 "0",
-                "GREATER",
+                "HIGHER",
                 "TIME",
                 1,
                 "DAY",

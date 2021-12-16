@@ -750,27 +750,32 @@ class HealthStore(
         runBlocking {
             launch(Dispatchers.IO) {
 
-                val job = database.fetchBackgroundJob(jogId)
-                if(job != null) {
-                    val variableName = job.variable
-                    getVariableByName(variableName)?.let { variable ->
-                        database.deleteBackgroundJob(job)
-                        val jobCount = database.fetchBackgroundJobCountForVariable(variableName)
-                        if(jobCount == 0) {
-                            manager.unsubscribeFromAllUpdates(
-                                variable,
-                                variableName,
-                                onSuccess = {
-                                    onSuccess("success")
-                                },
-                                onFailure = {
-                                    onError(HealthFitnessError.UNSUBSCRIBE_ERROR)
-                                })
+                try{
+                    val job = database.fetchBackgroundJob(jogId)
+                    if(job != null) {
+                        val variableName = job.variable
+                        getVariableByName(variableName)?.let { variable ->
+                            database.deleteBackgroundJob(job)
+                            val jobCount = database.fetchBackgroundJobCountForVariable(variableName)
+                            if(jobCount == 0) {
+                                manager.unsubscribeFromAllUpdates(
+                                    variable,
+                                    variableName,
+                                    onSuccess = {
+                                        onSuccess("success")
+                                    },
+                                    onFailure = {
+                                        onError(HealthFitnessError.UNSUBSCRIBE_ERROR)
+                                    })
+                            }
                         }
                     }
+                    else {
+                        onError(HealthFitnessError.BACKGROUND_JOB_DOES_NOT_EXISTS_ERROR)
+                    }
                 }
-                else {
-                    onError(HealthFitnessError.BACKGROUND_JOB_DOES_NOT_EXISTS_ERROR)
+                catch (e: Exception){
+                    onError(HealthFitnessError.DELETE_BACKGROUND_JOB_GENERIC_ERROR)
                 }
             }
         }
@@ -819,41 +824,48 @@ class HealthStore(
 
         runBlocking {
             launch(Dispatchers.IO) {
-                val job = database.fetchBackgroundJob(parameters.id) // then use the ID
-                if(job != null) {
-                    val notification = database.fetchNotification(job.notificationId!!)
-                    if(parameters.value != null){
-                        job.value = parameters.value
-                    }
-                    if(parameters.condition != null){
-                        job.comparison = parameters.condition
-                    }
-                    if(parameters.isActive != null){
-                        job.isActive = parameters.isActive
-                    }
-                    if(parameters.notificationFrequency != null){
-                        job.notificationFrequency = parameters.notificationFrequency
-                        job.nextNotificationTimestamp = 0
-                    }
-                    if(parameters.notificationFrequencyGrouping != null){
-                        job.notificationFrequencyGrouping = parameters.notificationFrequencyGrouping
-                        job.nextNotificationTimestamp = 0
-                    }
-                    if(notification != null){
-                        if(parameters.notificationHeader != null){
-                            notification.title = parameters.notificationHeader
+
+                try {
+                    val job = database.fetchBackgroundJob(parameters.id)
+                    if(job != null) {
+                        val notification = database.fetchNotification(job.notificationId!!)
+                        if(parameters.value != null){
+                            job.value = parameters.value
                         }
-                        if(parameters.notificationBody != null){
-                            notification.body = parameters.notificationBody
+                        if(parameters.condition != null){
+                            job.comparison = parameters.condition
                         }
-                        database.updateNotification(notification)
+                        if(parameters.isActive != null){
+                            job.isActive = parameters.isActive
+                        }
+                        if(parameters.notificationFrequency != null){
+                            job.notificationFrequency = parameters.notificationFrequency
+                            job.nextNotificationTimestamp = 0
+                        }
+                        if(parameters.notificationFrequencyGrouping != null){
+                            job.notificationFrequencyGrouping = parameters.notificationFrequencyGrouping
+                            job.nextNotificationTimestamp = 0
+                        }
+                        if(notification != null){
+                            if(parameters.notificationHeader != null){
+                                notification.title = parameters.notificationHeader
+                            }
+                            if(parameters.notificationBody != null){
+                                notification.body = parameters.notificationBody
+                            }
+                            database.updateNotification(notification)
+                        }
+                        database.updateBackgroundJob(job)
+                        onSuccess("success")
                     }
-                    database.updateBackgroundJob(job)
-                    onSuccess("success")
+                    else {
+                        onError(HealthFitnessError.BACKGROUND_JOB_DOES_NOT_EXISTS_ERROR)
+                    }
                 }
-                else {
-                    onError(HealthFitnessError.BACKGROUND_JOB_DOES_NOT_EXISTS_ERROR)
+                catch (e: Exception){
+                    onError(HealthFitnessError.UPDATE_BACKGROUND_JOB_GENERIC_ERROR)
                 }
+
             }
         }
 
