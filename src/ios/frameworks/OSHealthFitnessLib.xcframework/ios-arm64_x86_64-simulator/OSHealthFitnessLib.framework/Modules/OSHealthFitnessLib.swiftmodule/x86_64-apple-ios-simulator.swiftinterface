@@ -60,7 +60,7 @@ open class HealthFitnessPlugin {
 extension Date {
   public init(_ dateString: Swift.String)
 }
-@_hasMissingDesignatedInitializers public class BackgroundJobParameters : Swift.Codable {
+public class BackgroundJobParameters : Swift.Codable {
   final public let id: Swift.Int64?
   final public let variable: Swift.String?
   final public let timeUnit: Swift.String?
@@ -73,6 +73,7 @@ extension Date {
   final public let notificationHeader: Swift.String?
   final public let notificationBody: Swift.String?
   final public let isActive: Swift.Bool?
+  public init(id: Swift.Int64?, variable: Swift.String?, timeUnit: Swift.String?, timeUnitGrouping: Swift.Int?, notificationFrequency: Swift.String?, notificationFrequencyGrouping: Swift.Int?, jobFrequency: Swift.String?, condition: Swift.String?, value: Swift.Double?, notificationHeader: Swift.String?, notificationBody: Swift.String?, isActive: Swift.Bool?)
   @objc deinit
   required public init(from decoder: Swift.Decoder) throws
   public func encode(to encoder: Swift.Encoder) throws
