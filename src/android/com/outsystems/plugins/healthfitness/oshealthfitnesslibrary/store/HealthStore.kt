@@ -9,10 +9,10 @@ import com.google.android.gms.fitness.data.*
 import com.google.android.gms.fitness.data.DataPoint
 import com.google.android.gms.fitness.data.DataSet
 import com.google.gson.Gson
-import com.outsystems.plugins.healthfitness.HealthFitnessError
-import com.outsystems.plugins.healthfitness.background.BackgroundJobsResponse
-import com.outsystems.plugins.healthfitness.background.BackgroundJobsResponseBlock
-import com.outsystems.plugins.healthfitness.background.UpdateBackgroundJobParameters
+import com.outsystems.plugins.healthfitnesslib.HealthFitnessError
+import com.outsystems.plugins.healthfitnesslib.background.BackgroundJobsResponse
+import com.outsystems.plugins.healthfitnesslib.background.BackgroundJobsResponseBlock
+import com.outsystems.plugins.healthfitnesslib.background.UpdateBackgroundJobParameters
 import com.outsystems.plugins.healthfitnesslib.background.BackgroundJobParameters
 import com.outsystems.plugins.healthfitnesslib.background.database.BackgroundJob
 import com.outsystems.plugins.healthfitnesslib.background.database.DatabaseManagerInterface
@@ -72,7 +72,7 @@ private val jobFrequencies: Map<String, EnumTimeUnit> by lazy {
 class HealthStore(
     private val packageName : String,
     private val manager: HealthFitnessManagerInterface,
-    private val database : DatabaseManagerInterface) {
+    private val database : DatabaseManagerInterface): HealthStoreInterface {
 
     private var fitnessOptions: FitnessOptions? = null
     private val gson: Gson by lazy { Gson() }
@@ -257,7 +257,7 @@ class HealthStore(
         )
     }
 
-    fun getVariableByName(name : String) : GoogleFitVariable? {
+    override fun getVariableByName(name : String) : GoogleFitVariable? {
         return if(fitnessVariablesMap.containsKey(name)){
             fitnessVariablesMap[name]
         } else if(healthVariablesMap.containsKey(name)){
@@ -539,7 +539,7 @@ class HealthStore(
         advancedQueryAsync(advancedQueryParameters, onSuccess, onError)
     }
 
-    fun advancedQueryAsync(parameters : AdvancedQueryParameters,
+    override fun advancedQueryAsync(parameters : AdvancedQueryParameters,
                            onSuccess : (AdvancedQueryResponse) -> Unit,
                            onError : (HealthFitnessError) -> Unit) {
 
@@ -692,7 +692,7 @@ class HealthStore(
                                         parameters.notificationFrequency.toString()
                                     this.notificationFrequencyGrouping =
                                         parameters.notificationFrequencyGrouping!!
-                                    
+
                                     this.nextNotificationTimestamp = System.currentTimeMillis()
                                 }
                                 database.insert(backgroundJob)

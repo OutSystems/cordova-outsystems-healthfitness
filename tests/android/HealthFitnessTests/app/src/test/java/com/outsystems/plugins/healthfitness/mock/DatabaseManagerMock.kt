@@ -10,6 +10,7 @@ class DatabaseManagerMock: DatabaseManagerInterface {
     var backgroundJobExists : Boolean = false
     var databaseHasError : Boolean = false
     var hasBackgroundJobs : Boolean = false
+    var backgroundJobs: MutableList<BackgroundJob> = mutableListOf()
 
     override fun deleteBackgroundJob(backgroundJob: BackgroundJob) {
         TODO("Not yet implemented")
@@ -56,7 +57,7 @@ class DatabaseManagerMock: DatabaseManagerInterface {
     }
 
     override fun fetchBackgroundJobs(variable: String): List<BackgroundJob>? {
-        return arrayListOf()
+        return backgroundJobs
     }
 
     override fun fetchNotification(id: Long): Notification? {
@@ -88,8 +89,11 @@ class DatabaseManagerMock: DatabaseManagerInterface {
     }
 
     override fun updateBackgroundJob(backgroundJob: BackgroundJob) {
-        if(backgroundJobExists){
-            // do nothing
+        backgroundJobs.forEach { dbJob ->
+            if(dbJob.equals(backgroundJob)){
+                dbJob.nextNotificationTimestamp = backgroundJob.nextNotificationTimestamp
+                return
+            }
         }
     }
 
@@ -98,6 +102,5 @@ class DatabaseManagerMock: DatabaseManagerInterface {
             // do nothing
         }
     }
-
 
 }
