@@ -1,11 +1,11 @@
-package com.outsystems.plugins.healthfitnesslib.background
+package com.outsystems.plugins.healthfitness.background
 
 import android.util.Log
-import com.outsystems.plugins.healthfitnesslib.background.database.DatabaseManagerInterface
-import com.outsystems.plugins.healthfitnesslib.background.database.BackgroundJob
-import com.outsystems.plugins.healthfitnesslib.background.database.Notification
-import com.outsystems.plugins.healthfitnesslib.store.AdvancedQueryParameters
-import com.outsystems.plugins.healthfitnesslib.store.HealthStoreInterface
+import com.outsystems.plugins.healthfitness.background.database.DatabaseManagerInterface
+import com.outsystems.plugins.healthfitness.background.database.BackgroundJob
+import com.outsystems.plugins.healthfitness.background.database.Notification
+import com.outsystems.plugins.healthfitness.store.AdvancedQueryParameters
+import com.outsystems.plugins.healthfitness.store.HealthStoreInterface
 import java.util.*
 
 class VariableUpdateManager(

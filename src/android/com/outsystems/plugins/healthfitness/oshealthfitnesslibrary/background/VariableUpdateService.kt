@@ -1,4 +1,4 @@
-package com.outsystems.plugins.healthfitnesslib.background
+package com.outsystems.plugins.healthfitness.background
 
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -9,9 +9,9 @@ import android.content.Intent
 import android.os.Build
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
-import com.outsystems.plugins.healthfitnesslib.background.VariableUpdateManager
-import com.outsystems.plugins.healthfitnesslib.store.HealthFitnessManager
-import com.outsystems.plugins.healthfitnesslib.store.HealthStore
+import com.outsystems.plugins.healthfitness.background.VariableUpdateManager
+import com.outsystems.plugins.healthfitness.store.HealthFitnessManager
+import com.outsystems.plugins.healthfitness.store.HealthStore
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
