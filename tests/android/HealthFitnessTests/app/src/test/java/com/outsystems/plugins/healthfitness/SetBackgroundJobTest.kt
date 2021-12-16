@@ -78,7 +78,7 @@ class SetBackgroundJobTest {
     fun given_ExistentBackgroundJob_When_SettingBackgroundJob_Then_BackgroundJobAlreadyExistsError() {
         val googleFitMock = HealthFitnessManagerMock()
         val databaseMock = DatabaseManagerMock().apply {
-            backgroundJobAlreadyExists = true
+            backgroundJobExists = true
         }
         val store = HealthStore("", googleFitMock, databaseMock)
 

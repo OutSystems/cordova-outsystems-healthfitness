@@ -12,9 +12,7 @@ class ListBackgroundJobsTest {
 
     @Test
     fun given_ExistentBackgroundJobs_When_ListingBackgroundJob_Then_SomeError() {
-        val googleFitMock = HealthFitnessManagerMock().apply {
-            backgroundJobSuccess = false
-        }
+        val googleFitMock = HealthFitnessManagerMock()
         val databaseMock = DatabaseManagerMock().apply {
             databaseHasError = true
         }
@@ -32,9 +30,7 @@ class ListBackgroundJobsTest {
 
     @Test
     fun given_NoBackgroundJobs_When_ListingBackgroundJob_Then_Success() {
-        val googleFitMock = HealthFitnessManagerMock().apply {
-            backgroundJobSuccess = false
-        }
+        val googleFitMock = HealthFitnessManagerMock()
         val databaseMock = DatabaseManagerMock()
         val store = HealthStore("", googleFitMock, databaseMock)
 
@@ -51,9 +47,7 @@ class ListBackgroundJobsTest {
 
     @Test
     fun given_ExistentBackgroundJobs_When_ListingBackgroundJob_Then_Success() {
-        val googleFitMock = HealthFitnessManagerMock().apply {
-            backgroundJobSuccess = false
-        }
+        val googleFitMock = HealthFitnessManagerMock()
         val databaseMock = DatabaseManagerMock().apply {
             hasBackgroundJobs = true
         }
