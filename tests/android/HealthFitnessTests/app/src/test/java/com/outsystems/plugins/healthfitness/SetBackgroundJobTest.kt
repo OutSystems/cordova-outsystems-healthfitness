@@ -2,9 +2,9 @@ package com.outsystems.plugins.healthfitness
 
 import com.outsystems.plugins.healthfitness.mock.DatabaseManagerMock
 import com.outsystems.plugins.healthfitness.mock.HealthFitnessManagerMock
-import com.outsystems.plugins.healthfitnesslib.HealthFitnessError
-import com.outsystems.plugins.healthfitnesslib.background.BackgroundJobParameters
-import com.outsystems.plugins.healthfitnesslib.store.HealthStore
+import com.outsystems.plugins.healthfitness.HealthFitnessError
+import com.outsystems.plugins.healthfitness.background.BackgroundJobParameters
+import com.outsystems.plugins.healthfitness.store.HealthStore
 import org.junit.Assert
 import org.junit.Test
 

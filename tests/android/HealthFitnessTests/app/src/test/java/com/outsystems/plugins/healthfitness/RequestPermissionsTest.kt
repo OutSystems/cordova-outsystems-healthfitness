@@ -4,11 +4,11 @@ import com.google.gson.Gson
 import com.outsystems.plugins.healthfitness.mock.AndroidPlatformMock
 import com.outsystems.plugins.healthfitness.mock.DatabaseManagerMock
 import com.outsystems.plugins.healthfitness.mock.HealthFitnessManagerMock
-import com.outsystems.plugins.healthfitnesslib.HealthFitnessError
-import com.outsystems.plugins.healthfitnesslib.store.GoogleFitGroupPermission
-import com.outsystems.plugins.healthfitnesslib.store.GoogleFitPermission
-import com.outsystems.plugins.healthfitnesslib.store.HealthStore
-import com.outsystems.plugins.healthfitnesslib.store.HealthStoreException
+import com.outsystems.plugins.healthfitness.HealthFitnessError
+import com.outsystems.plugins.healthfitness.store.GoogleFitGroupPermission
+import com.outsystems.plugins.healthfitness.store.GoogleFitPermission
+import com.outsystems.plugins.healthfitness.store.HealthStore
+import com.outsystems.plugins.healthfitness.store.HealthStoreException
 import org.junit.Assert
 import org.junit.Test
 

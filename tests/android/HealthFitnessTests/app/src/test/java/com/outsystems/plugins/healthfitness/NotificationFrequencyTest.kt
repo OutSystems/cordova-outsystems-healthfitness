@@ -2,10 +2,10 @@ package com.outsystems.plugins.healthfitness
 
 import com.outsystems.plugins.healthfitness.mock.DatabaseManagerMock
 import com.outsystems.plugins.healthfitness.mock.HealthStoreMock
-import com.outsystems.plugins.healthfitnesslib.background.VariableUpdateManager
-import com.outsystems.plugins.healthfitnesslib.background.database.BackgroundJob
-import com.outsystems.plugins.healthfitnesslib.store.AdvancedQueryResponse
-import com.outsystems.plugins.healthfitnesslib.store.AdvancedQueryResponseBlock
+import com.outsystems.plugins.healthfitness.background.VariableUpdateManager
+import com.outsystems.plugins.healthfitness.background.database.BackgroundJob
+import com.outsystems.plugins.healthfitness.store.AdvancedQueryResponse
+import com.outsystems.plugins.healthfitness.store.AdvancedQueryResponseBlock
 import org.junit.Assert
 import org.junit.Test
 

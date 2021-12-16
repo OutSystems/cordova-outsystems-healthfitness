@@ -1,9 +1,9 @@
 package com.outsystems.plugins.healthfitness.mock
 
 import android.database.sqlite.SQLiteException
-import com.outsystems.plugins.healthfitnesslib.background.database.BackgroundJob
-import com.outsystems.plugins.healthfitnesslib.background.database.DatabaseManagerInterface
-import com.outsystems.plugins.healthfitnesslib.background.database.Notification
+import com.outsystems.plugins.healthfitness.background.database.BackgroundJob
+import com.outsystems.plugins.healthfitness.background.database.DatabaseManagerInterface
+import com.outsystems.plugins.healthfitness.background.database.Notification
 
 class DatabaseManagerMock: DatabaseManagerInterface {
 
