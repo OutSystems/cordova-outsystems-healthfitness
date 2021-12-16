@@ -1,6 +1,6 @@
 // swift-interface-format-version: 1.0
 // swift-compiler-version: Apple Swift version 5.3.1 (swiftlang-1200.0.41 clang-1200.0.32.8)
-// swift-module-flags: -target x86_64-apple-ios12.0-simulator -enable-objc-interop -enable-library-evolution -swift-version 5 -enforce-exclusivity=checked -Onone -module-name OSHealthFitnessLib
+// swift-module-flags: -target arm64-apple-ios12.0 -enable-objc-interop -enable-library-evolution -swift-version 5 -enforce-exclusivity=checked -O -module-name OSHealthFitnessLib
 import BackgroundTasks
 import CloudKit
 import CoreData
@@ -84,80 +84,83 @@ extension Date {
   public func encode(to encoder: Swift.Encoder) throws
 }
 @objc @_inheritsConvenienceInitializers public class BackgroundJob : CoreData.NSManagedObject {
-  @objc deinit
   @objc override dynamic public init(entity: CoreData.NSEntityDescription, insertInto context: CoreData.NSManagedObjectContext?)
+  @objc deinit
 }
 extension BackgroundJob {
   @nonobjc public class func fetchRequest() -> CoreData.NSFetchRequest<OSHealthFitnessLib.BackgroundJob>
   @objc @NSManaged dynamic public var comparision: Swift.String? {
     @objc get
-    @objc set(value)
+    @objc set
   }
   @objc @NSManaged dynamic public var id: Swift.Int64 {
     @objc get
-    @objc set(value)
+    @objc set
   }
   @objc @NSManaged dynamic public var isActive: Swift.Bool {
     @objc get
-    @objc set(value)
+    @objc set
   }
   @objc @NSManaged dynamic public var lastNotificationTimestamp: Foundation.Date? {
     @objc get
-    @objc set(value)
+    @objc set
   }
   @objc @NSManaged dynamic public var notificationFrequency: Swift.String? {
     @objc get
-    @objc set(value)
+    @objc set
   }
   @objc @NSManaged dynamic public var notificationFrequencyGrouping: Swift.Int64 {
     @objc get
-    @objc set(value)
+    @objc set
   }
   @objc @NSManaged dynamic public var operation: Swift.String? {
     @objc get
-    @objc set(value)
+    @objc set
   }
   @objc @NSManaged dynamic public var timeUnit: Swift.String? {
     @objc get
-    @objc set(value)
+    @objc set
   }
   @objc @NSManaged dynamic public var timeUnitGrouping: Swift.Int64 {
     @objc get
-    @objc set(value)
+    @objc set
   }
   @objc @NSManaged dynamic public var value: Swift.Double {
     @objc get
-    @objc set(value)
+    @objc set
   }
   @objc @NSManaged dynamic public var variable: Swift.String? {
     @objc get
-    @objc set(value)
+    @objc set
   }
   @objc @NSManaged dynamic public var notification: OSHealthFitnessLib.Notification? {
     @objc get
-    @objc set(value)
+    @objc set
   }
 }
 @objc @_inheritsConvenienceInitializers public class Notification : CoreData.NSManagedObject {
-  @objc deinit
   @objc override dynamic public init(entity: CoreData.NSEntityDescription, insertInto context: CoreData.NSManagedObjectContext?)
+  @objc deinit
 }
 extension Notification {
   @nonobjc public class func fetchRequest() -> CoreData.NSFetchRequest<OSHealthFitnessLib.Notification>
   @objc @NSManaged dynamic public var body: Swift.String? {
     @objc get
-    @objc set(value)
+    @objc set
   }
   @objc @NSManaged dynamic public var id: Swift.Int64 {
     @objc get
-    @objc set(value)
+    @objc set
   }
   @objc @NSManaged dynamic public var title: Swift.String? {
     @objc get
-    @objc set(value)
+    @objc set
   }
   @objc @NSManaged dynamic public var relationship: OSHealthFitnessLib.BackgroundJob? {
     @objc get
-    @objc set(value)
+    @objc set
   }
 }
+extension OSHealthFitnessLib.HealthKitErrors : Swift.Equatable {}
+extension OSHealthFitnessLib.HealthKitErrors : Swift.Hashable {}
+extension OSHealthFitnessLib.HealthKitErrors : Swift.RawRepresentable {}
