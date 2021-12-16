@@ -46,6 +46,9 @@ extension Encodable {
 }
 open class HealthFitnessPlugin {
   public init()
+  public func deleteBackgroundJobs(id: Swift.String?, completion: @escaping (Swift.Bool, Foundation.NSError?) -> Swift.Void)
+  public func countBackgroundJobsFor(variable: Swift.String) -> Swift.Int
+  public func listBackgroundJobs(completion: @escaping (Swift.Bool, Swift.String?, Foundation.NSError?) -> Swift.Void)
   public func writeData(variable: Swift.String, value: Swift.Double, completion: @escaping (Swift.Bool, Foundation.NSError?) -> Swift.Void)
   public func getLastRecord(variable: Swift.String, mostRecent: Swift.Bool, timeUnitLength: Swift.Int, completion: @escaping (Swift.Bool, Swift.String?, Foundation.NSError?) -> Swift.Void)
   public func requestPermissions(customPermissions: Swift.String, allVariables: Swift.String, fitnessVariables: Swift.String, healthVariables: Swift.String, profileVariables: Swift.String, summaryVariables: Swift.String, completion: @escaping (Swift.Bool, Foundation.NSError?) -> Swift.Void)
