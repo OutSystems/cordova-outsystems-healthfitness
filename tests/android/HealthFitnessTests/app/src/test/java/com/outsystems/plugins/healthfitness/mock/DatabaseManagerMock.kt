@@ -12,7 +12,9 @@ class DatabaseManagerMock: DatabaseManagerInterface {
     var hasBackgroundJobs : Boolean = false
 
     override fun deleteBackgroundJob(backgroundJob: BackgroundJob) {
-        TODO("Not yet implemented")
+        if(databaseHasError){
+            throw SQLiteException()
+        }
     }
 
     override fun fetchBackgroundJob(id: String): BackgroundJob? {
@@ -90,6 +92,9 @@ class DatabaseManagerMock: DatabaseManagerInterface {
     override fun updateBackgroundJob(backgroundJob: BackgroundJob) {
         if(backgroundJobExists){
             // do nothing
+        }
+        if(databaseHasError){
+            throw SQLiteException()
         }
     }
 

@@ -50,6 +50,26 @@ class DeleteBackgroundJobsTest {
     }
 
     @Test
+    fun given_ExistentBackgroundJob_When_DeletingBackgroundJob_Then_SomeError() {
+        val googleFitMock = HealthFitnessManagerMock()
+        val databaseMock = DatabaseManagerMock().apply {
+            backgroundJobExists = true
+            databaseHasError = true
+        }
+        val store = HealthStore("", googleFitMock, databaseMock)
+
+        store.deleteBackgroundJob("35fae7f8-9c73-4ca8-97d4-ad63d7e1b635",
+            onSuccess = {
+                Assert.fail()
+            },
+            onError = {error ->
+                Assert.assertEquals(error.code, HealthFitnessError.DELETE_BACKGROUND_JOB_GENERIC_ERROR.code)
+                Assert.assertEquals(error.message, HealthFitnessError.DELETE_BACKGROUND_JOB_GENERIC_ERROR.message)
+            }
+        )
+    }
+
+    @Test
     fun given_ExistentBackgroundJob_When_DeletingBackgroundJob_Then_Success() {
         val googleFitMock = HealthFitnessManagerMock()
         val databaseMock = DatabaseManagerMock().apply {
