@@ -1,4 +1,4 @@
-package com.outsystems.plugins.healthfitnesslib.store
+package com.outsystems.plugins.healthfitness.store
 
 import android.app.Activity
 import android.content.Intent
@@ -13,10 +13,10 @@ import com.outsystems.plugins.healthfitness.HealthFitnessError
 import com.outsystems.plugins.healthfitness.background.BackgroundJobsResponse
 import com.outsystems.plugins.healthfitness.background.BackgroundJobsResponseBlock
 import com.outsystems.plugins.healthfitness.background.UpdateBackgroundJobParameters
-import com.outsystems.plugins.healthfitnesslib.background.BackgroundJobParameters
-import com.outsystems.plugins.healthfitnesslib.background.database.BackgroundJob
-import com.outsystems.plugins.healthfitnesslib.background.database.DatabaseManagerInterface
-import com.outsystems.plugins.healthfitnesslib.background.database.Notification
+import com.outsystems.plugins.healthfitness.background.BackgroundJobParameters
+import com.outsystems.plugins.healthfitness.background.database.BackgroundJob
+import com.outsystems.plugins.healthfitness.background.database.DatabaseManagerInterface
+import com.outsystems.plugins.healthfitness.background.database.Notification
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
@@ -72,7 +72,7 @@ private val jobFrequencies: Map<String, EnumTimeUnit> by lazy {
 class HealthStore(
     private val packageName : String,
     private val manager: HealthFitnessManagerInterface,
-    private val database : DatabaseManagerInterface) {
+    private val database : DatabaseManagerInterface): HealthStoreInterface {
 
     private var fitnessOptions: FitnessOptions? = null
     private val gson: Gson by lazy { Gson() }
@@ -85,7 +85,6 @@ class HealthStore(
             "BASAL_METABOLIC_RATE"
         )
     }
-
     private val sensorVariables: Set<String> by lazy {
         setOf(
             "STEPS",
@@ -96,7 +95,6 @@ class HealthStore(
             "SLEEP"
         )
     }
-
     private val fitnessVariablesMap: Map<String, GoogleFitVariable> by lazy {
         mapOf(
             "STEPS" to GoogleFitVariable(DataType.TYPE_STEP_COUNT_DELTA, listOf(
@@ -257,7 +255,7 @@ class HealthStore(
         )
     }
 
-    fun getVariableByName(name : String) : GoogleFitVariable? {
+    override fun getVariableByName(name : String) : GoogleFitVariable? {
         return if(fitnessVariablesMap.containsKey(name)){
             fitnessVariablesMap[name]
         } else if(healthVariablesMap.containsKey(name)){
@@ -271,7 +269,7 @@ class HealthStore(
         }
     }
 
-    fun initAndRequestPermissions(customPermissions: String,
+    override fun initAndRequestPermissions(customPermissions: String,
                                   allVariables: String,
                                   fitnessVariables: String,
                                   healthVariables: String,
@@ -415,7 +413,7 @@ class HealthStore(
         return fitnessBuild.build()
     }
 
-    fun requestGoogleFitPermissions() : Boolean {
+    override fun requestGoogleFitPermissions() : Boolean {
         if(manager.areGoogleFitPermissionsGranted(fitnessOptions)){
             return true
         }
@@ -427,7 +425,7 @@ class HealthStore(
         }
     }
 
-    fun handleActivityResult(requestCode: Int,
+    override fun handleActivityResult(requestCode: Int,
                              resultCode: Int,
                              intent: Intent) : String? {
         return when (resultCode) {
@@ -446,11 +444,11 @@ class HealthStore(
         }
     }
 
-    fun areGoogleFitPermissionsGranted(): Boolean{
+    override fun areGoogleFitPermissionsGranted(): Boolean{
         return manager.areGoogleFitPermissionsGranted(fitnessOptions)
     }
 
-    fun updateDataAsync(variableName: String,
+    override fun updateDataAsync(variableName: String,
                         value: Float,
                         onSuccess : (String) -> Unit,
                         onError : (HealthFitnessError) -> Unit) {
@@ -522,7 +520,7 @@ class HealthStore(
         )
     }
 
-    fun getLastRecordAsync(variable: String,
+    override fun getLastRecordAsync(variable: String,
                            onSuccess : (AdvancedQueryResponse) -> Unit,
                            onError : (HealthFitnessError) -> Unit) {
 
@@ -539,7 +537,7 @@ class HealthStore(
         advancedQueryAsync(advancedQueryParameters, onSuccess, onError)
     }
 
-    fun advancedQueryAsync(parameters : AdvancedQueryParameters,
+    override fun advancedQueryAsync(parameters : AdvancedQueryParameters,
                            onSuccess : (AdvancedQueryResponse) -> Unit,
                            onError : (HealthFitnessError) -> Unit) {
 
@@ -646,7 +644,7 @@ class HealthStore(
         }
     }
 
-    fun setBackgroundJob(parameters: BackgroundJobParameters,
+    override fun setBackgroundJob(parameters: BackgroundJobParameters,
                          onSuccess : (String) -> Unit,
                          onError : (HealthFitnessError) -> Unit) {
 
@@ -692,7 +690,7 @@ class HealthStore(
                                         parameters.notificationFrequency.toString()
                                     this.notificationFrequencyGrouping =
                                         parameters.notificationFrequencyGrouping!!
-                                    
+
                                     this.nextNotificationTimestamp = System.currentTimeMillis()
                                 }
                                 database.insert(backgroundJob)
@@ -743,7 +741,7 @@ class HealthStore(
         }
     }
 
-    fun deleteBackgroundJob(jogId: String,
+    override fun deleteBackgroundJob(jogId: String,
                             onSuccess : (String) -> Unit,
                             onError : (HealthFitnessError) -> Unit) {
 
@@ -781,7 +779,7 @@ class HealthStore(
         }
     }
 
-    fun listBackgroundJobs(onSuccess : (BackgroundJobsResponse) -> Unit,
+    override fun listBackgroundJobs(onSuccess : (BackgroundJobsResponse) -> Unit,
                            onError: (HealthFitnessError) -> Unit) {
 
         runBlocking {
@@ -818,7 +816,7 @@ class HealthStore(
         return responseJobList
     }
 
-    fun updateBackgroundJob(parameters: UpdateBackgroundJobParameters,
+    override fun updateBackgroundJob(parameters: UpdateBackgroundJobParameters,
                             onSuccess: (String) -> Unit,
                             onError: (HealthFitnessError) -> Unit) {
 

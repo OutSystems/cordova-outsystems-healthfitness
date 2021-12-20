@@ -1,18 +1,21 @@
 package com.outsystems.plugins.healthfitness.mock
 
 import android.database.sqlite.SQLiteException
-import com.outsystems.plugins.healthfitnesslib.background.database.BackgroundJob
-import com.outsystems.plugins.healthfitnesslib.background.database.DatabaseManagerInterface
-import com.outsystems.plugins.healthfitnesslib.background.database.Notification
+import com.outsystems.plugins.healthfitness.background.database.BackgroundJob
+import com.outsystems.plugins.healthfitness.background.database.DatabaseManagerInterface
+import com.outsystems.plugins.healthfitness.background.database.Notification
 
 class DatabaseManagerMock: DatabaseManagerInterface {
 
     var backgroundJobExists : Boolean = false
     var databaseHasError : Boolean = false
     var hasBackgroundJobs : Boolean = false
+    var backgroundJobs: MutableList<BackgroundJob> = mutableListOf()
 
     override fun deleteBackgroundJob(backgroundJob: BackgroundJob) {
-        TODO("Not yet implemented")
+        if(databaseHasError){
+            throw SQLiteException()
+        }
     }
 
     override fun fetchBackgroundJob(id: String): BackgroundJob? {
@@ -56,7 +59,7 @@ class DatabaseManagerMock: DatabaseManagerInterface {
     }
 
     override fun fetchBackgroundJobs(variable: String): List<BackgroundJob>? {
-        return arrayListOf()
+        return backgroundJobs
     }
 
     override fun fetchNotification(id: Long): Notification? {
@@ -88,8 +91,14 @@ class DatabaseManagerMock: DatabaseManagerInterface {
     }
 
     override fun updateBackgroundJob(backgroundJob: BackgroundJob) {
-        if(backgroundJobExists){
-            // do nothing
+        backgroundJobs.forEach { dbJob ->
+            if(dbJob.equals(backgroundJob)){
+                dbJob.nextNotificationTimestamp = backgroundJob.nextNotificationTimestamp
+                return
+            }
+        }
+        if(databaseHasError){
+            throw SQLiteException()
         }
     }
 
@@ -98,6 +107,5 @@ class DatabaseManagerMock: DatabaseManagerInterface {
             // do nothing
         }
     }
-
 
 }

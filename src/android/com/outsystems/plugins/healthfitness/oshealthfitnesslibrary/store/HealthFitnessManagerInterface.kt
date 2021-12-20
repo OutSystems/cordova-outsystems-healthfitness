@@ -1,11 +1,11 @@
-package com.outsystems.plugins.healthfitnesslib.store
+package com.outsystems.plugins.healthfitness.store
 
 import android.app.PendingIntent
 import com.google.android.gms.fitness.FitnessOptions
 import com.google.android.gms.fitness.data.DataSet
 import com.google.android.gms.fitness.result.DataReadResponse
 import com.google.android.gms.fitness.result.SessionReadResponse
-import com.outsystems.plugins.healthfitnesslib.background.BackgroundJobParameters
+import com.outsystems.plugins.healthfitness.background.BackgroundJobParameters
 import java.lang.Exception
 import java.util.concurrent.TimeUnit
 

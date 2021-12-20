@@ -1,4 +1,4 @@
-package com.outsystems.plugins.healthfitnesslib.store
+package com.outsystems.plugins.healthfitness.store
 
 data class AdvancedQueryResponseBlock (
     val block : Int,

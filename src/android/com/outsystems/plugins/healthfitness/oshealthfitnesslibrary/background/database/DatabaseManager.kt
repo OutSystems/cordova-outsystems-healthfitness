@@ -1,10 +1,10 @@
-package com.outsystems.plugins.healthfitnesslib.background
+package com.outsystems.plugins.healthfitness.background
 
 import android.content.Context
 import android.util.Log
 import androidx.room.ColumnInfo
 import androidx.room.Room
-import com.outsystems.plugins.healthfitnesslib.background.database.*
+import com.outsystems.plugins.healthfitness.background.database.*
 import kotlinx.coroutines.Runnable
 
 class DatabaseManager(context : Context) : DatabaseManagerInterface {
