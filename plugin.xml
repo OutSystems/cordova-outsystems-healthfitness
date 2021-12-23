@@ -37,7 +37,7 @@
       <activity
             android:exported="false"
             android:launchMode="singleTask"
-            android:name="com.outsystems.plugins.healthfitnesslib.background.ClickActivity"
+            android:name="com.outsystems.plugins.healthfitness.background.ClickActivity"
             android:theme="@android:style/Theme.NoDisplay" />
         
     </config-file>
