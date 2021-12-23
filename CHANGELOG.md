@@ -8,6 +8,8 @@ The changes documented here do not include those from the original repository.
 
 ## [Unreleased]
 
+- Fixed ClickActivity package name on plugin.xml (https://outsystemsrd.atlassian.net/browse/RMET-1268)
+
 - Implemented Unit Tests for UpdateBackgroundJob feature on Android (https://outsystemsrd.atlassian.net/browse/RMET-1235)
 
 - Implemented Unit Tests for DeleteBackgroundJob feature on Android (https://outsystemsrd.atlassian.net/browse/RMET-1232)
