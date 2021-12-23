@@ -96,7 +96,7 @@ class OSHealthFitness: CordovaImplementation {
             // seams to be sending the parameters as strings.
             let id = Int64(jsonData["Id"] as? String ?? "")
             let notificationFrequency = jsonData["NotificationFrequency"] as? String
-            let notificationFrequencyGrouping = Int(jsonData["NotificationFrequencyGrouping"] as? String ?? "")
+            let notificationFrequencyGrouping = jsonData["NotificationFrequencyGrouping"] as? Int
             let condition = jsonData["Condition"] as? String
             let value = jsonData["Value"] as? Double
             let notificationHeader = jsonData["NotificationHeader"] as? String
