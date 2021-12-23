@@ -1,24 +1,32 @@
 package com.outsystems.plugins.healthfitness.mock
 
 import android.database.sqlite.SQLiteException
-import com.outsystems.plugins.healthfitnesslib.background.database.BackgroundJob
-import com.outsystems.plugins.healthfitnesslib.background.database.DatabaseManagerInterface
-import com.outsystems.plugins.healthfitnesslib.background.database.Notification
-import java.lang.Exception
-import java.sql.SQLException
+import com.outsystems.plugins.healthfitness.background.database.BackgroundJob
+import com.outsystems.plugins.healthfitness.background.database.DatabaseManagerInterface
+import com.outsystems.plugins.healthfitness.background.database.Notification
 
 class DatabaseManagerMock: DatabaseManagerInterface {
 
-    var backgroundJobAlreadyExists : Boolean = false
+    var backgroundJobExists : Boolean = false
     var databaseHasError : Boolean = false
     var hasBackgroundJobs : Boolean = false
+    var backgroundJobs: MutableList<BackgroundJob> = mutableListOf()
 
     override fun deleteBackgroundJob(backgroundJob: BackgroundJob) {
-
+        if(databaseHasError){
+            throw SQLiteException()
+        }
     }
 
     override fun fetchBackgroundJob(id: String): BackgroundJob? {
-        TODO("Not yet implemented")
+        if(backgroundJobExists){
+            val job = BackgroundJob()
+            job.notificationId = 1234
+            return job
+        }
+        else{
+            return null
+        }
     }
 
     override fun fetchBackgroundJobCountForVariable(variable: String): Int {
@@ -27,8 +35,7 @@ class DatabaseManagerMock: DatabaseManagerInterface {
 
     override fun fetchBackgroundJobs(): List<BackgroundJob>? {
         if(databaseHasError){
-            val e = Exception()
-            throw e
+            throw SQLiteException()
         }
         else{
             if(hasBackgroundJobs){
@@ -52,11 +59,16 @@ class DatabaseManagerMock: DatabaseManagerInterface {
     }
 
     override fun fetchBackgroundJobs(variable: String): List<BackgroundJob>? {
-        return arrayListOf()
+        return backgroundJobs
     }
 
     override fun fetchNotification(id: Long): Notification? {
-        return null
+        if(backgroundJobExists){
+            return Notification()
+        }
+        else{
+            return null
+        }
     }
 
     override fun fetchNotifications(): List<Notification>? {
@@ -64,7 +76,7 @@ class DatabaseManagerMock: DatabaseManagerInterface {
     }
 
     override fun insert(backgroundJob: BackgroundJob): Long? {
-        if(backgroundJobAlreadyExists) {
+        if(backgroundJobExists) {
             throw SQLiteException()
         }
         return null
@@ -79,12 +91,21 @@ class DatabaseManagerMock: DatabaseManagerInterface {
     }
 
     override fun updateBackgroundJob(backgroundJob: BackgroundJob) {
-        TODO("Not yet implemented")
+        backgroundJobs.forEach { dbJob ->
+            if(dbJob.equals(backgroundJob)){
+                dbJob.nextNotificationTimestamp = backgroundJob.nextNotificationTimestamp
+                return
+            }
+        }
+        if(databaseHasError){
+            throw SQLiteException()
+        }
     }
 
     override fun updateNotification(notification: Notification) {
-        TODO("Not yet implemented")
+        if(backgroundJobExists){
+            // do nothing
+        }
     }
-
 
 }

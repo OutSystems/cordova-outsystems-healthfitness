@@ -6,11 +6,9 @@ import android.content.Intent
 import com.google.android.gms.fitness.FitnessOptions
 import com.google.android.gms.fitness.data.DataSet
 import com.google.android.gms.fitness.result.DataReadResponse
-import com.outsystems.plugins.healthfitnesslib.background.BackgroundJobParameters
-import com.outsystems.plugins.healthfitnesslib.store.AdvancedQuery
-import com.outsystems.plugins.healthfitnesslib.store.GoogleFitVariable
-import com.outsystems.plugins.healthfitnesslib.store.HealthFitnessManagerInterface
-import com.outsystems.plugins.healthfitnesslib.store.HealthStore
+import com.outsystems.plugins.healthfitness.HealthFitnessError
+import com.outsystems.plugins.healthfitness.background.BackgroundJobParameters
+import com.outsystems.plugins.healthfitness.store.*
 import java.lang.Exception
 import java.util.concurrent.TimeUnit
 
@@ -22,6 +20,7 @@ class HealthFitnessManagerMock: HealthFitnessManagerInterface {
     var updateDataSuccess : Boolean = true
     var getDataSuccess : Boolean = true
     var store : HealthStore? = null
+    var unsubscribeError : Boolean = false
 
     override fun createAccount(options: FitnessOptions) {
         //Does nothing
@@ -109,7 +108,12 @@ class HealthFitnessManagerMock: HealthFitnessManagerInterface {
         onSuccess: () -> Unit,
         onFailure: (Exception) -> Unit
     ) {
-        TODO("Not yet implemented")
+        if(unsubscribeError){
+            onFailure(HealthStoreException(HealthFitnessError.BACKGROUND_JOB_GENERIC_ERROR))
+        }
+        else{
+            onSuccess()
+        }
     }
 
 }

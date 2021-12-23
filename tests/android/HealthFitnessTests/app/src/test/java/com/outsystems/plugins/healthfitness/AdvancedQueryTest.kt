@@ -2,10 +2,10 @@ package com.outsystems.plugins.healthfitness
 
 import com.outsystems.plugins.healthfitness.mock.DatabaseManagerMock
 import com.outsystems.plugins.healthfitness.mock.HealthFitnessManagerMock
-import com.outsystems.plugins.healthfitnesslib.store.AdvancedQueryParameters
-import com.outsystems.plugins.healthfitnesslib.store.EnumOperationType
-import com.outsystems.plugins.healthfitnesslib.store.HealthStore
-import com.outsystems.plugins.healthfitnesslib.HealthFitnessError
+import com.outsystems.plugins.healthfitness.store.AdvancedQueryParameters
+import com.outsystems.plugins.healthfitness.store.EnumOperationType
+import com.outsystems.plugins.healthfitness.store.HealthStore
+import com.outsystems.plugins.healthfitness.HealthFitnessError
 import org.junit.Assert
 import org.junit.Test
 import java.util.*

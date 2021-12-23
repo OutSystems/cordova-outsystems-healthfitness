@@ -2,9 +2,9 @@ package com.outsystems.plugins.healthfitness
 
 import com.outsystems.plugins.healthfitness.mock.DatabaseManagerMock
 import com.outsystems.plugins.healthfitness.mock.HealthFitnessManagerMock
-import com.outsystems.plugins.healthfitnesslib.HealthFitnessError
-import com.outsystems.plugins.healthfitnesslib.background.BackgroundJobParameters
-import com.outsystems.plugins.healthfitnesslib.store.HealthStore
+import com.outsystems.plugins.healthfitness.HealthFitnessError
+import com.outsystems.plugins.healthfitness.background.BackgroundJobParameters
+import com.outsystems.plugins.healthfitness.store.HealthStore
 import org.junit.Assert
 import org.junit.Test
 
@@ -20,7 +20,7 @@ class SetBackgroundJobTest {
         val parameters = BackgroundJobParameters(
             "Test",
             "0",
-            "GREATER",
+            "HIGHER",
             "TIME",
             1,
             "DAY",
@@ -53,7 +53,7 @@ class SetBackgroundJobTest {
         val parameters = BackgroundJobParameters(
             "HEART_RATE",
             "0",
-            "GREATER",
+            "HIGHER",
             "TIME",
             1,
             "DAY",
@@ -78,14 +78,14 @@ class SetBackgroundJobTest {
     fun given_ExistentBackgroundJob_When_SettingBackgroundJob_Then_BackgroundJobAlreadyExistsError() {
         val googleFitMock = HealthFitnessManagerMock()
         val databaseMock = DatabaseManagerMock().apply {
-            backgroundJobAlreadyExists = true
+            backgroundJobExists = true
         }
         val store = HealthStore("", googleFitMock, databaseMock)
 
         val parameters = BackgroundJobParameters(
             "HEART_RATE",
             "0",
-            "GREATER",
+            "HIGHER",
             "TIME",
             1,
             "DAY",
@@ -116,7 +116,7 @@ class SetBackgroundJobTest {
         val parameters =
             BackgroundJobParameters("STEPS",
                 "0",
-                "GREATER",
+                "HIGHER",
                 "TIME",
                 1,
                 "DAY",
@@ -144,7 +144,7 @@ class SetBackgroundJobTest {
         val parameters =
             BackgroundJobParameters("STEPS",
                 "0",
-                "GREATER",
+                "HIGHER",
                 "TIME",
                 1,
                 "DAY",

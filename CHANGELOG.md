@@ -10,6 +10,10 @@ The changes documented here do not include those from the original repository.
 
 - Implemented Unit Tests for BackgroundJob operations on iOS (https://outsystemsrd.atlassian.net/browse/RMET-1210)
 
+- Implemented Unit Tests for UpdateBackgroundJob feature on Android (https://outsystemsrd.atlassian.net/browse/RMET-1235)
+
+- Implemented Unit Tests for DeleteBackgroundJob feature on Android (https://outsystemsrd.atlassian.net/browse/RMET-1232)
+
 - Implemented Unit Tests for ListBackgroundJob feature on Android (https://outsystemsrd.atlassian.net/browse/RMET-1239)
 
 - Implementation of UpdateBackgroundJob for Android (https://outsystemsrd.atlassian.net/browse/RMET-1235)

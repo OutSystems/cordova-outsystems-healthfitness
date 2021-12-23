@@ -10,8 +10,10 @@ enum class HealthFitnessError(val code: Int, val message: String) {
     BACKGROUND_JOB_ALREADY_EXISTS_ERROR(105, "The background job you are trying to set already exists."),
     BACKGROUND_JOB_GENERIC_ERROR(106, "The background job could not be created."),
     BACKGROUND_JOB_DOES_NOT_EXISTS_ERROR(107, "The background job could not be found."),
-    UNSUBSCRIBE_ERROR(107, "The background job could not be deleted"),
-    LIST_BACKGROUND_JOBS_GENERIC_ERROR(107, "The list of background jobs could not be fetched."),
+    UNSUBSCRIBE_ERROR(108, "The background job could not be deleted"),
+    LIST_BACKGROUND_JOBS_GENERIC_ERROR(110, "The list of background jobs could not be fetched."),
+    DELETE_BACKGROUND_JOB_GENERIC_ERROR(111, "The background job could not be deleted."),
+    UPDATE_BACKGROUND_JOB_GENERIC_ERROR(112, "The background job could not be updated."),
 
 
     // Plugin Android specific errors

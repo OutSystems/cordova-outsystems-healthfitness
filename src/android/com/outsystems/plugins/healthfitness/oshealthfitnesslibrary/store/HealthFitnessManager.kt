@@ -1,4 +1,4 @@
-package com.outsystems.plugins.healthfitnesslib.store
+package com.outsystems.plugins.healthfitness.store
 
 import android.app.Activity
 import android.app.PendingIntent
@@ -17,8 +17,8 @@ import com.google.android.gms.fitness.result.DataReadResponse
 import com.google.android.gms.fitness.result.SessionReadResponse
 import com.google.android.gms.tasks.Tasks.await
 import com.outsystems.plugins.healthfitness.HealthFitnessError
-import com.outsystems.plugins.healthfitnesslib.background.BackgroundJobParameters
-import com.outsystems.plugins.healthfitnesslib.background.VariableUpdateService
+import com.outsystems.plugins.healthfitness.background.BackgroundJobParameters
+import com.outsystems.plugins.healthfitness.background.VariableUpdateService
 import kotlinx.coroutines.awaitAll
 import java.util.concurrent.TimeUnit
 

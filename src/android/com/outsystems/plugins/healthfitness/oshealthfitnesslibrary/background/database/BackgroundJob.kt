@@ -1,4 +1,4 @@
-package com.outsystems.plugins.healthfitnesslib.background.database
+package com.outsystems.plugins.healthfitness.background.database
 
 import androidx.room.*
 import androidx.room.ColumnInfo

@@ -1,4 +1,4 @@
-package com.outsystems.plugins.healthfitnesslib.background.database
+package com.outsystems.plugins.healthfitness.background.database
 
 interface DatabaseManagerInterface {
     fun insert(backgroundJob: BackgroundJob) : Long?

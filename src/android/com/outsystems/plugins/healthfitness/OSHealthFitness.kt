@@ -10,13 +10,10 @@ import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
 import com.google.gson.Gson
 import com.outsystems.plugins.healthfitness.background.UpdateBackgroundJobParameters
-
-import com.outsystems.plugins.healthfitnesslib.background.BackgroundJobParameters
-import com.outsystems.plugins.healthfitnesslib.background.DatabaseManager
-import com.outsystems.plugins.healthfitnesslib.store.AdvancedQueryParameters
-import com.outsystems.plugins.healthfitnesslib.store.HealthFitnessManager
-import com.outsystems.plugins.healthfitnesslib.store.HealthStore
-import com.outsystems.plugins.healthfitnesslib.store.HealthStoreException
+import com.outsystems.plugins.healthfitness.background.BackgroundJobParameters
+import com.outsystems.plugins.healthfitness.background.DatabaseManager
+import com.outsystems.plugins.healthfitness.HealthFitnessError
+import com.outsystems.plugins.healthfitness.store.*
 import com.outsystems.plugins.oscordova.CordovaImplementation
 
 import org.apache.cordova.*
@@ -25,7 +22,7 @@ import org.json.JSONArray
 class OSHealthFitness : CordovaImplementation() {
     override var callbackContext: CallbackContext? = null
 
-    var healthStore: HealthStore? = null
+    var healthStore: HealthStoreInterface? = null
     val gson by lazy { Gson() }
 
     override fun initialize(cordova: CordovaInterface, webView: CordovaWebView) {

@@ -2,9 +2,9 @@ package com.outsystems.plugins.healthfitness
 
 import com.outsystems.plugins.healthfitness.mock.DatabaseManagerMock
 import com.outsystems.plugins.healthfitness.mock.HealthFitnessManagerMock
-import com.outsystems.plugins.healthfitnesslib.HealthFitnessError
-import com.outsystems.plugins.healthfitnesslib.background.BackgroundJobParameters
-import com.outsystems.plugins.healthfitnesslib.store.HealthStore
+import com.outsystems.plugins.healthfitness.HealthFitnessError
+import com.outsystems.plugins.healthfitness.background.BackgroundJobParameters
+import com.outsystems.plugins.healthfitness.store.HealthStore
 import org.junit.Assert
 import org.junit.Test
 
@@ -12,9 +12,7 @@ class ListBackgroundJobsTest {
 
     @Test
     fun given_ExistentBackgroundJobs_When_ListingBackgroundJob_Then_SomeError() {
-        val googleFitMock = HealthFitnessManagerMock().apply {
-            backgroundJobSuccess = false
-        }
+        val googleFitMock = HealthFitnessManagerMock()
         val databaseMock = DatabaseManagerMock().apply {
             databaseHasError = true
         }
@@ -32,9 +30,7 @@ class ListBackgroundJobsTest {
 
     @Test
     fun given_NoBackgroundJobs_When_ListingBackgroundJob_Then_Success() {
-        val googleFitMock = HealthFitnessManagerMock().apply {
-            backgroundJobSuccess = false
-        }
+        val googleFitMock = HealthFitnessManagerMock()
         val databaseMock = DatabaseManagerMock()
         val store = HealthStore("", googleFitMock, databaseMock)
 
@@ -51,9 +47,7 @@ class ListBackgroundJobsTest {
 
     @Test
     fun given_ExistentBackgroundJobs_When_ListingBackgroundJob_Then_Success() {
-        val googleFitMock = HealthFitnessManagerMock().apply {
-            backgroundJobSuccess = false
-        }
+        val googleFitMock = HealthFitnessManagerMock()
         val databaseMock = DatabaseManagerMock().apply {
             hasBackgroundJobs = true
         }
