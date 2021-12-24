@@ -26,6 +26,10 @@ The changes documented here do not include those from the original repository.
 
 - Implementation of notificaiton frequency (waiting period) for Android (https://outsystemsrd.atlassian.net/browse/RMET-1240)
 
+## [Version 1.1.0]
+
+- Implementation of SetBackgroundJob for Android and iOS
+
 ## [Version 1.0.2]
 
 ## 2021-11-18
