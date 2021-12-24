@@ -60,6 +60,69 @@ class OSHealthFitness: CordovaImplementation {
         }
     }
     
+    @objc(updateBackgroundJob:)
+    func updateBackgroundJob(command: CDVInvokedUrlCommand) {
+        callbackId = command.callbackId
+
+        let queryParameters = command.arguments[0] as? String ?? ""
+        if let parameters = parseUpdateParameters(parameters: queryParameters) {
+            
+            plugin?.updateBackgroundJob(id: parameters.id,
+                                        notificationFrequency: parameters.notificationFrequency,
+                                        notificationFrequencyGrouping: parameters.notificationFrequencyGrouping,
+                                        condition: parameters.condition,
+                                        value: parameters.value,
+                                        notificationHeader: parameters.notificationHeader,
+                                        notificationBody: parameters.notificationBody,
+                                        isActive: parameters.isActive)
+            { success, error in
+                
+                if error != nil {
+                    self.sendResult(result: "", error: error, callBackID: self.callbackId)
+                }
+                else if success {
+                    self.sendResult(result: "", error: nil, callBackID: self.callbackId)
+                }
+            }
+            
+        }
+    }
+    
+    private func parseUpdateParameters(parameters: String) -> BackgroundJobParameters? {
+        let data = parameters.data(using: .utf8)!
+        if let jsonData = try? JSONSerialization.jsonObject(with: data, options : .allowFragments) as? Dictionary<String,Any> {
+            
+            // I'm doing this mess because Outsystems
+            // seams to be sending the parameters as strings.
+            let id = Int64(jsonData["Id"] as? String ?? "")
+            let notificationFrequency = jsonData["NotificationFrequency"] as? String
+            let notificationFrequencyGrouping = jsonData["NotificationFrequencyGrouping"] as? Int
+            let condition = jsonData["Condition"] as? String
+            let value = jsonData["Value"] as? Double
+            let notificationHeader = jsonData["NotificationHeader"] as? String
+            let notificationBody = jsonData["NotificationBody"] as? String
+            var isActive: Bool? = nil
+            let activeString = jsonData["IsActive"] as? String ?? ""
+            if activeString != "" {
+                isActive = activeString.lowercased() == "true"
+            }
+            
+            return BackgroundJobParameters(id: id,
+                                           variable: nil,
+                                           timeUnit: nil,
+                                           timeUnitGrouping: nil,
+                                           notificationFrequency: notificationFrequency,
+                                           notificationFrequencyGrouping: notificationFrequencyGrouping,
+                                           jobFrequency: nil,
+                                           condition: condition,
+                                           value: value,
+                                           notificationHeader: notificationHeader,
+                                           notificationBody: notificationBody,
+                                           isActive: isActive)
+        }
+        return nil
+    }
+    
     @objc(getLastRecord:)
     func getLastRecord(command: CDVInvokedUrlCommand) {
         callbackId = command.callbackId
@@ -81,7 +144,32 @@ class OSHealthFitness: CordovaImplementation {
         }
     
     }
+    
+    @objc(deleteBackgroundJob:)
+    func deleteBackgroundJob(command: CDVInvokedUrlCommand) {
+        callbackId = command.callbackId
+        let id = command.arguments[0] as? String ?? ""
+        plugin?.deleteBackgroundJobs(id: id) { success, error in
+            if error != nil {
+                self.sendResult(result: nil, error: error, callBackID: self.callbackId)
+            } else if success {
+                self.sendResult(result: "", error: nil, callBackID: self.callbackId)
+            }
+        }
+    }
 
+    @objc(listBackgroundJobs:)
+    func listBackgroundJobs(command: CDVInvokedUrlCommand) {
+        callbackId = command.callbackId
+        plugin?.listBackgroundJobs() { success, result, error in
+            if error != nil {
+                self.sendResult(result: nil, error: error, callBackID: self.callbackId)
+            } else if success {
+                self.sendResult(result: result, error: nil, callBackID: self.callbackId)
+            }
+        }
+    }
+    
     @objc(setBackgroundJob:)
     func setBackgroundJob(command: CDVInvokedUrlCommand) {
         callbackId = command.callbackId
@@ -94,6 +182,8 @@ class OSHealthFitness: CordovaImplementation {
             let condition = params.condition ?? ""
             let timeUnit = params.timeUnit ?? ""
             let jobFrequency = params.jobFrequency ?? ""
+            let notificationFrequency = params.notificationFrequency ?? ""
+            let notificationFrequencyGrouping = params.notificationFrequencyGrouping ?? 0
             let value = params.value ?? 0
             let notificationHeader = params.notificationHeader ?? ""
             let notificationBody = params.notificationBody ?? ""
@@ -101,6 +191,8 @@ class OSHealthFitness: CordovaImplementation {
             plugin?.setBackgroundJob(variable: variable,
                                      timeUnit: timeUnit,
                                      timeUnitGrouping: timeUnitGrouping,
+                                     notificationFrequency: notificationFrequency,
+                                     notificationFrequencyGrouping: notificationFrequencyGrouping,
                                      jobFrequency: jobFrequency,
                                      condition: condition,
                                      value: value,
