@@ -2,13 +2,13 @@ package com.outsystems.plugins.healthfitness
 
 import com.outsystems.plugins.healthfitness.mock.DatabaseManagerMock
 import com.outsystems.plugins.healthfitness.mock.HealthFitnessManagerMock
-import com.outsystems.plugins.healthfitnesslib.HealthFitnessError
-import com.outsystems.plugins.healthfitnesslib.background.BackgroundJobParameters
-import com.outsystems.plugins.healthfitnesslib.store.HealthStore
+import com.outsystems.plugins.healthfitness.HealthFitnessError
+import com.outsystems.plugins.healthfitness.background.BackgroundJobParameters
+import com.outsystems.plugins.healthfitness.store.HealthStore
 import org.junit.Assert
 import org.junit.Test
 
-class BackgroundJobTest {
+class SetBackgroundJobTest {
 
     @Test
     fun given_InvalidVariable_When_SettingBackgroundJob_Then_VariableNotAvailableError() {
@@ -20,10 +20,12 @@ class BackgroundJobTest {
         val parameters = BackgroundJobParameters(
             "Test",
             "0",
-            "GREATER",
+            "HIGHER",
             "TIME",
             1,
             "DAY",
+            "DAY",
+            1,
             "Header",
             "Body"
         )
@@ -51,10 +53,12 @@ class BackgroundJobTest {
         val parameters = BackgroundJobParameters(
             "HEART_RATE",
             "0",
-            "GREATER",
+            "HIGHER",
             "TIME",
             1,
             "DAY",
+            "DAY",
+            1,
             "Header",
             "Body"
         )
@@ -74,17 +78,19 @@ class BackgroundJobTest {
     fun given_ExistentBackgroundJob_When_SettingBackgroundJob_Then_BackgroundJobAlreadyExistsError() {
         val googleFitMock = HealthFitnessManagerMock()
         val databaseMock = DatabaseManagerMock().apply {
-            backgroundJobAlreadyExists = true
+            backgroundJobExists = true
         }
         val store = HealthStore("", googleFitMock, databaseMock)
 
         val parameters = BackgroundJobParameters(
             "HEART_RATE",
             "0",
-            "GREATER",
+            "HIGHER",
             "TIME",
             1,
             "DAY",
+            "DAY",
+            1,
             "Header",
             "Body"
         )
@@ -110,12 +116,15 @@ class BackgroundJobTest {
         val parameters =
             BackgroundJobParameters("STEPS",
                 "0",
-                "GREATER",
+                "HIGHER",
                 "TIME",
                 1,
                 "DAY",
+                "DAY",
+                1,
                 "Header",
-                "Body")
+                "Body"
+            )
 
         store.setBackgroundJob(parameters,
             onSuccess = {
@@ -135,12 +144,15 @@ class BackgroundJobTest {
         val parameters =
             BackgroundJobParameters("STEPS",
                 "0",
-                "GREATER",
+                "HIGHER",
                 "TIME",
                 1,
                 "DAY",
+                "DAY",
+                1,
                 "Header",
-                "Body")
+                "Body"
+            )
 
         store.setBackgroundJob(parameters,
             onSuccess = { response ->

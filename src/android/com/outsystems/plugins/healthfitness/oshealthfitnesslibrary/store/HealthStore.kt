@@ -1,4 +1,4 @@
-package com.outsystems.plugins.healthfitnesslib.store
+package com.outsystems.plugins.healthfitness.store
 
 import android.app.Activity
 import android.content.Intent
@@ -10,10 +10,13 @@ import com.google.android.gms.fitness.data.DataPoint
 import com.google.android.gms.fitness.data.DataSet
 import com.google.gson.Gson
 import com.outsystems.plugins.healthfitness.HealthFitnessError
-import com.outsystems.plugins.healthfitnesslib.background.BackgroundJobParameters
-import com.outsystems.plugins.healthfitnesslib.background.database.BackgroundJob
-import com.outsystems.plugins.healthfitnesslib.background.database.DatabaseManagerInterface
-import com.outsystems.plugins.healthfitnesslib.background.database.Notification
+import com.outsystems.plugins.healthfitness.background.BackgroundJobsResponse
+import com.outsystems.plugins.healthfitness.background.BackgroundJobsResponseBlock
+import com.outsystems.plugins.healthfitness.background.UpdateBackgroundJobParameters
+import com.outsystems.plugins.healthfitness.background.BackgroundJobParameters
+import com.outsystems.plugins.healthfitness.background.database.BackgroundJob
+import com.outsystems.plugins.healthfitness.background.database.DatabaseManagerInterface
+import com.outsystems.plugins.healthfitness.background.database.Notification
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
@@ -50,7 +53,6 @@ enum class EnumTimeUnit(val value : Pair<String, TimeUnit>) {
     MONTH(Pair("MONTH", TimeUnit.DAYS)),
     YEAR(Pair("YEAR", TimeUnit.DAYS))
 }
-
 enum class EnumJobFrequency(val value : String) {
     IMMEDIATE("IMMEDIATE"),
     HOUR("HOUR"),
@@ -70,7 +72,7 @@ private val jobFrequencies: Map<String, EnumTimeUnit> by lazy {
 class HealthStore(
     private val packageName : String,
     private val manager: HealthFitnessManagerInterface,
-    private val database : DatabaseManagerInterface) {
+    private val database : DatabaseManagerInterface): HealthStoreInterface {
 
     private var fitnessOptions: FitnessOptions? = null
     private val gson: Gson by lazy { Gson() }
@@ -83,7 +85,6 @@ class HealthStore(
             "BASAL_METABOLIC_RATE"
         )
     }
-
     private val sensorVariables: Set<String> by lazy {
         setOf(
             "STEPS",
@@ -94,7 +95,6 @@ class HealthStore(
             "SLEEP"
         )
     }
-
     private val fitnessVariablesMap: Map<String, GoogleFitVariable> by lazy {
         mapOf(
             "STEPS" to GoogleFitVariable(DataType.TYPE_STEP_COUNT_DELTA, listOf(
@@ -255,7 +255,7 @@ class HealthStore(
         )
     }
 
-    fun getVariableByName(name : String) : GoogleFitVariable? {
+    override fun getVariableByName(name : String) : GoogleFitVariable? {
         return if(fitnessVariablesMap.containsKey(name)){
             fitnessVariablesMap[name]
         } else if(healthVariablesMap.containsKey(name)){
@@ -269,7 +269,7 @@ class HealthStore(
         }
     }
 
-    fun initAndRequestPermissions(customPermissions: String,
+    override fun initAndRequestPermissions(customPermissions: String,
                                   allVariables: String,
                                   fitnessVariables: String,
                                   healthVariables: String,
@@ -413,7 +413,7 @@ class HealthStore(
         return fitnessBuild.build()
     }
 
-    fun requestGoogleFitPermissions() : Boolean {
+    override fun requestGoogleFitPermissions() : Boolean {
         if(manager.areGoogleFitPermissionsGranted(fitnessOptions)){
             return true
         }
@@ -425,7 +425,7 @@ class HealthStore(
         }
     }
 
-    fun handleActivityResult(requestCode: Int,
+    override fun handleActivityResult(requestCode: Int,
                              resultCode: Int,
                              intent: Intent) : String? {
         return when (resultCode) {
@@ -444,11 +444,11 @@ class HealthStore(
         }
     }
 
-    fun areGoogleFitPermissionsGranted(): Boolean{
+    override fun areGoogleFitPermissionsGranted(): Boolean{
         return manager.areGoogleFitPermissionsGranted(fitnessOptions)
     }
 
-    fun updateDataAsync(variableName: String,
+    override fun updateDataAsync(variableName: String,
                         value: Float,
                         onSuccess : (String) -> Unit,
                         onError : (HealthFitnessError) -> Unit) {
@@ -520,7 +520,7 @@ class HealthStore(
         )
     }
 
-    fun getLastRecordAsync(variable: String,
+    override fun getLastRecordAsync(variable: String,
                            onSuccess : (AdvancedQueryResponse) -> Unit,
                            onError : (HealthFitnessError) -> Unit) {
 
@@ -537,7 +537,7 @@ class HealthStore(
         advancedQueryAsync(advancedQueryParameters, onSuccess, onError)
     }
 
-    fun advancedQueryAsync(parameters : AdvancedQueryParameters,
+    override fun advancedQueryAsync(parameters : AdvancedQueryParameters,
                            onSuccess : (AdvancedQueryResponse) -> Unit,
                            onError : (HealthFitnessError) -> Unit) {
 
@@ -644,7 +644,7 @@ class HealthStore(
         }
     }
 
-    fun setBackgroundJob(parameters: BackgroundJobParameters,
+    override fun setBackgroundJob(parameters: BackgroundJobParameters,
                          onSuccess : (String) -> Unit,
                          onError : (HealthFitnessError) -> Unit) {
 
@@ -669,8 +669,8 @@ class HealthStore(
                     launch(Dispatchers.IO) {
 
                         try {
-                            database.runInTransaction({
-                                val nNotification = database.fetchNotifications()
+                            database.runInTransaction {
+
                                 val notification = Notification().apply {
                                     this.title = parameters.notificationHeader
                                     this.body = parameters.notificationBody
@@ -685,9 +685,16 @@ class HealthStore(
                                     this.notificationId = notificationId
                                     this.timeUnit = parameters.timeUnit
                                     this.timeUnitGrouping = parameters.timeUnitGrouping
+
+                                    this.notificationFrequency =
+                                        parameters.notificationFrequency.toString()
+                                    this.notificationFrequencyGrouping =
+                                        parameters.notificationFrequencyGrouping!!
+
+                                    this.nextNotificationTimestamp = System.currentTimeMillis()
                                 }
                                 database.insert(backgroundJob)
-                            })
+                            }
                             onSuccess("success")
                         } catch(sqle : SQLiteException) {
                             onError(HealthFitnessError.BACKGROUND_JOB_ALREADY_EXISTS_ERROR)
@@ -732,6 +739,134 @@ class HealthStore(
             //do nothing
             //maybe throw an error because variable is not a sensorVariable nor a historyVariable??
         }
+    }
+
+    override fun deleteBackgroundJob(jogId: String,
+                            onSuccess : (String) -> Unit,
+                            onError : (HealthFitnessError) -> Unit) {
+
+        runBlocking {
+            launch(Dispatchers.IO) {
+
+                try{
+                    val job = database.fetchBackgroundJob(jogId)
+                    if(job != null) {
+                        val variableName = job.variable
+                        getVariableByName(variableName)?.let { variable ->
+                            database.deleteBackgroundJob(job)
+                            val jobCount = database.fetchBackgroundJobCountForVariable(variableName)
+                            if(jobCount == 0) {
+                                manager.unsubscribeFromAllUpdates(
+                                    variable,
+                                    variableName,
+                                    onSuccess = {
+                                        onSuccess("success")
+                                    },
+                                    onFailure = {
+                                        onError(HealthFitnessError.UNSUBSCRIBE_ERROR)
+                                    })
+                            }
+                        }
+                    }
+                    else {
+                        onError(HealthFitnessError.BACKGROUND_JOB_DOES_NOT_EXISTS_ERROR)
+                    }
+                }
+                catch (e: Exception){
+                    onError(HealthFitnessError.DELETE_BACKGROUND_JOB_GENERIC_ERROR)
+                }
+            }
+        }
+    }
+
+    override fun listBackgroundJobs(onSuccess : (BackgroundJobsResponse) -> Unit,
+                           onError: (HealthFitnessError) -> Unit) {
+
+        runBlocking {
+            launch(Dispatchers.IO) {
+                try {
+                    var jobsList = database.fetchBackgroundJobs()!!
+                    onSuccess(BackgroundJobsResponse(buildListBackgroundJobsResult(jobsList)))
+                }
+                catch (e: Exception){
+                    onError(HealthFitnessError.LIST_BACKGROUND_JOBS_GENERIC_ERROR)
+                }
+            }
+        }
+    }
+
+    private fun buildListBackgroundJobsResult(jobsList: List<BackgroundJob>) : List<BackgroundJobsResponseBlock>{
+        val responseJobList : MutableList<BackgroundJobsResponseBlock> = mutableListOf()
+        for (job in jobsList){
+            val notification = database.fetchNotification(job.notificationId!!)
+            responseJobList.add(
+                BackgroundJobsResponseBlock(
+                    job.variable,
+                    job.comparison,
+                    job.value,
+                    notification?.title,
+                    notification?.body,
+                    job.notificationFrequency,
+                    job.notificationFrequencyGrouping,
+                    job.isActive,
+                    job.id
+                )
+            )
+        }
+        return responseJobList
+    }
+
+    override fun updateBackgroundJob(parameters: UpdateBackgroundJobParameters,
+                            onSuccess: (String) -> Unit,
+                            onError: (HealthFitnessError) -> Unit) {
+
+        runBlocking {
+            launch(Dispatchers.IO) {
+
+                try {
+                    val job = database.fetchBackgroundJob(parameters.id)
+                    if(job != null) {
+                        val notification = database.fetchNotification(job.notificationId!!)
+                        if(parameters.value != null){
+                            job.value = parameters.value
+                        }
+                        if(parameters.condition != null){
+                            job.comparison = parameters.condition
+                        }
+                        if(parameters.isActive != null){
+                            job.isActive = parameters.isActive
+                        }
+                        if(parameters.notificationFrequency != null){
+                            job.notificationFrequency = parameters.notificationFrequency
+                            job.nextNotificationTimestamp = 0
+                        }
+                        if(parameters.notificationFrequencyGrouping != null){
+                            job.notificationFrequencyGrouping = parameters.notificationFrequencyGrouping
+                            job.nextNotificationTimestamp = 0
+                        }
+                        if(notification != null){
+                            if(parameters.notificationHeader != null){
+                                notification.title = parameters.notificationHeader
+                            }
+                            if(parameters.notificationBody != null){
+                                notification.body = parameters.notificationBody
+                            }
+                            database.updateNotification(notification)
+                        }
+                        database.updateBackgroundJob(job)
+                        onSuccess("success")
+                    }
+                    else {
+                        onError(HealthFitnessError.BACKGROUND_JOB_DOES_NOT_EXISTS_ERROR)
+                    }
+                }
+                catch (e: Exception){
+                    onError(HealthFitnessError.UPDATE_BACKGROUND_JOB_GENERIC_ERROR)
+                }
+
+            }
+        }
+
     }
 
     companion object {

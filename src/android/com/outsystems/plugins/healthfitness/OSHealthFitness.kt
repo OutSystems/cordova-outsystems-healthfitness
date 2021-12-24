@@ -9,13 +9,11 @@ import androidx.core.content.ContextCompat
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
 import com.google.gson.Gson
-
-import com.outsystems.plugins.healthfitnesslib.background.BackgroundJobParameters
-import com.outsystems.plugins.healthfitnesslib.background.DatabaseManager
-import com.outsystems.plugins.healthfitnesslib.store.AdvancedQueryParameters
-import com.outsystems.plugins.healthfitnesslib.store.HealthFitnessManager
-import com.outsystems.plugins.healthfitnesslib.store.HealthStore
-import com.outsystems.plugins.healthfitnesslib.store.HealthStoreException
+import com.outsystems.plugins.healthfitness.background.UpdateBackgroundJobParameters
+import com.outsystems.plugins.healthfitness.background.BackgroundJobParameters
+import com.outsystems.plugins.healthfitness.background.DatabaseManager
+import com.outsystems.plugins.healthfitness.HealthFitnessError
+import com.outsystems.plugins.healthfitness.store.*
 import com.outsystems.plugins.oscordova.CordovaImplementation
 
 import org.apache.cordova.*
@@ -24,7 +22,7 @@ import org.json.JSONArray
 class OSHealthFitness : CordovaImplementation() {
     override var callbackContext: CallbackContext? = null
 
-    var healthStore: HealthStore? = null
+    var healthStore: HealthStoreInterface? = null
     val gson by lazy { Gson() }
 
     override fun initialize(cordova: CordovaInterface, webView: CordovaWebView) {
@@ -61,13 +59,21 @@ class OSHealthFitness : CordovaImplementation() {
             "setBackgroundJob" -> {
                 setBackgroundJob(args)
             }
+            "deleteBackgroundJob" -> {
+                deleteBackgroundJob(args)
+            }
+            "listBackgroundJobs" -> {
+                listBackgroundJobs()
+            }
+            "updateBackgroundJob" -> {
+                updateBackgroundJob(args)
+            }
         }
         return true
     }
 
     //create array of permission oauth
     private fun initAndRequestPermissions(args : JSONArray) {
-
         val customPermissions = args.getString(0)
         val allVariables = args.getString(1)
         val fitnessVariables = args.getString(2)
@@ -88,7 +94,6 @@ class OSHealthFitness : CordovaImplementation() {
         catch (hse : HealthStoreException) {
             sendPluginResult(null, Pair(hse.error.code, hse.error.message))
         }
-
     }
 
     private fun areAndroidPermissionsGranted(permissions: List<String>): Boolean {
@@ -188,6 +193,44 @@ class OSHealthFitness : CordovaImplementation() {
         )
     }
 
+    private fun deleteBackgroundJob(args: JSONArray) {
+        val parameters = args.getString(0)
+        healthStore?.deleteBackgroundJob(
+            parameters,
+            { response ->
+                sendPluginResult(response)
+            },
+            { error ->
+                sendPluginResult(null, Pair(error.code, error.message))
+            }
+        )
+    }
+                
+    private fun listBackgroundJobs() {
+        healthStore?.listBackgroundJobs(
+            { response ->
+                val pluginResponseJson = gson.toJson(response)
+                sendPluginResult(pluginResponseJson)
+            },
+            { error ->
+                sendPluginResult(null, Pair(error.code, error.message))
+            }
+        )
+    }
+
+    private fun updateBackgroundJob(args: JSONArray) {
+        val parameters = gson.fromJson(args.getString(0), UpdateBackgroundJobParameters::class.java)
+        healthStore?.updateBackgroundJob(
+            parameters,
+            { response ->
+                sendPluginResult(response)
+            },
+            { error ->
+                sendPluginResult(null, Pair(error.code, error.message))
+            }
+        )
+    }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, intent: Intent) {
         //super.onActivityResult(requestCode, resultCode, intent)
         try {
@@ -197,7 +240,6 @@ class OSHealthFitness : CordovaImplementation() {
             val error = hse.error
             sendPluginResult(null, Pair(error.code, error.message))
         }
-
     }
 
     override fun areGooglePlayServicesAvailable(): Boolean {
@@ -221,8 +263,7 @@ class OSHealthFitness : CordovaImplementation() {
     override fun onRequestPermissionResult(
         requestCode: Int,
         permissions: Array<String>,
-        grantResults: IntArray
-    ) {
+        grantResults: IntArray) {
         when (requestCode) {
             ACTIVITY_LOCATION_PERMISSIONS_REQUEST_CODE -> {
                 // If request is cancelled, the result arrays are empty.

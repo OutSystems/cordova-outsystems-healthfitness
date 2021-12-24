@@ -1,17 +1,14 @@
-package com.outsystems.plugins.healthfitnesslib.background.database
+package com.outsystems.plugins.healthfitness.background.database
 
-import androidx.room.Dao
-import androidx.room.Delete
-import androidx.room.Insert
-import androidx.room.Query
+import androidx.room.*
 
 @Dao
 interface NotificationDao {
 
-    @Query("SELECT * FROM notification")
+    @Query("SELECT * FROM ${Notification.TABLE_NAME}")
     fun getAll(): List<Notification>
 
-    @Query("SELECT * FROM notification WHERE id = :id")
+    @Query("SELECT * FROM ${Notification.TABLE_NAME} WHERE id = :id")
     fun findById(id : Long): List<Notification>
 
     @Insert
@@ -19,5 +16,8 @@ interface NotificationDao {
 
     @Delete
     fun delete(notification: Notification)
+
+    @Update
+    fun update(notification: Notification)
 
 }

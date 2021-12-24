@@ -3,26 +3,15 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
+		63BC8B7127709E8200E5A8FB /* OSHealthFitnessLib.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 63BC8B7027709E8200E5A8FB /* OSHealthFitnessLib.xcframework */; };
 		D45865B7270F3D9800E166A6 /* OSHealthKitTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D45865AD270F3D9800E166A6 /* OSHealthKitTests.framework */; };
 		D45865BC270F3D9800E166A6 /* OSHealthKitTestsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D45865BB270F3D9800E166A6 /* OSHealthKitTestsTests.swift */; };
 		D45865BE270F3D9800E166A6 /* OSHealthKitTests.h in Headers */ = {isa = PBXBuildFile; fileRef = D45865B0270F3D9800E166A6 /* OSHealthKitTests.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D45865F62710693F00E166A6 /* StubHealthKitStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = D45865F52710693F00E166A6 /* StubHealthKitStore.swift */; };
-		D46FCA3E2717762B003D9850 /* AuthorizationErrors.swift in Sources */ = {isa = PBXBuildFile; fileRef = D46FCA382717762B003D9850 /* AuthorizationErrors.swift */; };
-		D46FCA3F2717762B003D9850 /* Date+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = D46FCA392717762B003D9850 /* Date+Extension.swift */; };
-		D46FCA402717762B003D9850 /* HealthKitManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D46FCA3A2717762B003D9850 /* HealthKitManager.swift */; };
-		D46FCA412717762B003D9850 /* HealthKitTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = D46FCA3B2717762B003D9850 /* HealthKitTypes.swift */; };
-		D46FCA422717762B003D9850 /* HealthFitnessPlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = D46FCA3C2717762B003D9850 /* HealthFitnessPlugin.swift */; };
-		D46FCA432717762B003D9850 /* String+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = D46FCA3D2717762B003D9850 /* String+Extension.swift */; };
-		D46FCA4427177664003D9850 /* HealthKitManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D46FCA3A2717762B003D9850 /* HealthKitManager.swift */; };
-		D46FCA4527177675003D9850 /* AuthorizationErrors.swift in Sources */ = {isa = PBXBuildFile; fileRef = D46FCA382717762B003D9850 /* AuthorizationErrors.swift */; };
-		D46FCA4627177686003D9850 /* String+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = D46FCA3D2717762B003D9850 /* String+Extension.swift */; };
-		D46FCA472717768A003D9850 /* HealthFitnessPlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = D46FCA3C2717762B003D9850 /* HealthFitnessPlugin.swift */; };
-		D46FCA482717768F003D9850 /* Date+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = D46FCA392717762B003D9850 /* Date+Extension.swift */; };
-		D46FCA4927177694003D9850 /* HealthKitTypes.swift in Sources */ = {isa = PBXBuildFile; fileRef = D46FCA3B2717762B003D9850 /* HealthKitTypes.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -36,6 +25,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		63BC8B7027709E8200E5A8FB /* OSHealthFitnessLib.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = OSHealthFitnessLib.xcframework; path = ../../../src/ios/frameworks/OSHealthFitnessLib.xcframework; sourceTree = "<group>"; };
 		D45865AD270F3D9800E166A6 /* OSHealthKitTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = OSHealthKitTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D45865B0270F3D9800E166A6 /* OSHealthKitTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OSHealthKitTests.h; sourceTree = "<group>"; };
 		D45865B1270F3D9800E166A6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -43,12 +33,6 @@
 		D45865BB270F3D9800E166A6 /* OSHealthKitTestsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OSHealthKitTestsTests.swift; sourceTree = "<group>"; };
 		D45865BD270F3D9800E166A6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D45865F52710693F00E166A6 /* StubHealthKitStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StubHealthKitStore.swift; sourceTree = "<group>"; };
-		D46FCA382717762B003D9850 /* AuthorizationErrors.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AuthorizationErrors.swift; path = ../../../../src/ios/AuthorizationErrors.swift; sourceTree = "<group>"; };
-		D46FCA392717762B003D9850 /* Date+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Date+Extension.swift"; path = "../../../../src/ios/Date+Extension.swift"; sourceTree = "<group>"; };
-		D46FCA3A2717762B003D9850 /* HealthKitManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HealthKitManager.swift; path = ../../../../src/ios/HealthKitManager.swift; sourceTree = "<group>"; };
-		D46FCA3B2717762B003D9850 /* HealthKitTypes.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HealthKitTypes.swift; path = ../../../../src/ios/HealthKitTypes.swift; sourceTree = "<group>"; };
-		D46FCA3C2717762B003D9850 /* HealthFitnessPlugin.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HealthFitnessPlugin.swift; path = ../../../../src/ios/HealthFitnessPlugin.swift; sourceTree = "<group>"; };
-		D46FCA3D2717762B003D9850 /* String+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "String+Extension.swift"; path = "../../../../src/ios/String+Extension.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -56,6 +40,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				63BC8B7127709E8200E5A8FB /* OSHealthFitnessLib.xcframework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -70,12 +55,21 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		63BC8B6F27709E8200E5A8FB /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				63BC8B7027709E8200E5A8FB /* OSHealthFitnessLib.xcframework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		D45865A3270F3D9800E166A6 = {
 			isa = PBXGroup;
 			children = (
 				D45865AF270F3D9800E166A6 /* OSHealthKitTests */,
 				D45865BA270F3D9800E166A6 /* OSHealthKitTestsTests */,
 				D45865AE270F3D9800E166A6 /* Products */,
+				63BC8B6F27709E8200E5A8FB /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -91,12 +85,6 @@
 		D45865AF270F3D9800E166A6 /* OSHealthKitTests */ = {
 			isa = PBXGroup;
 			children = (
-				D46FCA3C2717762B003D9850 /* HealthFitnessPlugin.swift */,
-				D46FCA382717762B003D9850 /* AuthorizationErrors.swift */,
-				D46FCA392717762B003D9850 /* Date+Extension.swift */,
-				D46FCA3A2717762B003D9850 /* HealthKitManager.swift */,
-				D46FCA3B2717762B003D9850 /* HealthKitTypes.swift */,
-				D46FCA3D2717762B003D9850 /* String+Extension.swift */,
 				D45865B0270F3D9800E166A6 /* OSHealthKitTests.h */,
 				D45865B1270F3D9800E166A6 /* Info.plist */,
 			);
@@ -222,12 +210,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D46FCA422717762B003D9850 /* HealthFitnessPlugin.swift in Sources */,
-				D46FCA432717762B003D9850 /* String+Extension.swift in Sources */,
-				D46FCA3F2717762B003D9850 /* Date+Extension.swift in Sources */,
-				D46FCA412717762B003D9850 /* HealthKitTypes.swift in Sources */,
-				D46FCA3E2717762B003D9850 /* AuthorizationErrors.swift in Sources */,
-				D46FCA402717762B003D9850 /* HealthKitManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -237,12 +219,6 @@
 			files = (
 				D45865BC270F3D9800E166A6 /* OSHealthKitTestsTests.swift in Sources */,
 				D45865F62710693F00E166A6 /* StubHealthKitStore.swift in Sources */,
-				D46FCA4927177694003D9850 /* HealthKitTypes.swift in Sources */,
-				D46FCA4527177675003D9850 /* AuthorizationErrors.swift in Sources */,
-				D46FCA472717768A003D9850 /* HealthFitnessPlugin.swift in Sources */,
-				D46FCA482717768F003D9850 /* Date+Extension.swift in Sources */,
-				D46FCA4627177686003D9850 /* String+Extension.swift in Sources */,
-				D46FCA4427177664003D9850 /* HealthKitManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -433,7 +409,6 @@
 		D45865C5270F3D9800E166A6 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = EVSWK8BA55;
 				INFOPLIST_FILE = OSHealthKitTestsTests/Info.plist;
@@ -452,7 +427,6 @@
 		D45865C6270F3D9800E166A6 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = EVSWK8BA55;
 				INFOPLIST_FILE = OSHealthKitTestsTests/Info.plist;

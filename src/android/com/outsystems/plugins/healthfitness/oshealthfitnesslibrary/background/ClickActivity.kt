@@ -1,4 +1,4 @@
-package com.outsystems.plugins.healthfitnesslib.background
+package com.outsystems.plugins.healthfitness.background
 
 import android.app.Activity
 import android.content.Intent

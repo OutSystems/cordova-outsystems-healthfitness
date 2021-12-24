@@ -1,10 +1,10 @@
-package com.outsystems.plugins.healthfitnesslib.background
+package com.outsystems.plugins.healthfitness.background
 
 import android.content.Context
 import android.util.Log
 import androidx.room.ColumnInfo
 import androidx.room.Room
-import com.outsystems.plugins.healthfitnesslib.background.database.*
+import com.outsystems.plugins.healthfitness.background.database.*
 import kotlinx.coroutines.Runnable
 
 class DatabaseManager(context : Context) : DatabaseManagerInterface {
@@ -18,8 +18,9 @@ class DatabaseManager(context : Context) : DatabaseManagerInterface {
             // Should we close the database instance? If so, when.
             database = Room.databaseBuilder(
                 context.applicationContext,
-                AppDatabase::class.java, "database-name"
-            ).build()
+                AppDatabase::class.java, "database-name")
+                .addMigrations(AppDatabase.MIGRATION_1_2)
+                .build()
 
             backgroundJobDao = database!!.backgroundJobDao()
             notificationDao = database!!.notificationDao()
@@ -51,20 +52,36 @@ class DatabaseManager(context : Context) : DatabaseManagerInterface {
         return notificationDao?.getAll()
     }
 
-    override fun fetchBackgroundJobs(variable : String) : List<BackgroundJob>? {
+    override fun fetchBackgroundJob(id: String) : BackgroundJob? {
+        return backgroundJobDao?.findById(id)
+    }
+
+    override fun fetchBackgroundJobCountForVariable(variable: String) : Int {
+        return backgroundJobDao?.getBackgroundJobCountForVariable(variable) ?: 0
+    }
+
+    override fun fetchBackgroundJobs(variable: String) : List<BackgroundJob>? {
         return backgroundJobDao?.findByVariableName(variable)
     }
 
-    //fun fetchBackgroundJob(variable: String, comparison: String, value: Float) {
-    //    return backgroundJobDao?.findByPrimaryKey(variable, comparison, value)
-    //}
+    override fun fetchBackgroundJobs() : List<BackgroundJob>? {
+        return backgroundJobDao?.getAll()
+    }
 
     override fun fetchNotification(id : Long) : Notification? {
         return notificationDao?.findById(id)?.first()
     }
 
-    override fun deleteBackgroundJob(backgroundJob : BackgroundJob) {
+    override fun deleteBackgroundJob(backgroundJob: BackgroundJob) {
         backgroundJobDao?.delete(backgroundJob)
+    }
+
+    override fun updateBackgroundJob(backgroundJob: BackgroundJob) {
+        backgroundJobDao?.update(backgroundJob)
+    }
+
+    override fun updateNotification(notification: Notification) {
+        notificationDao?.update(notification)
     }
 
     override fun runInTransaction(closude : () -> Unit){

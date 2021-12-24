@@ -8,6 +8,26 @@ The changes documented here do not include those from the original repository.
 
 ## [Version 1.1.0]
 
+- Implemented Unit Tests for BackgroundJob operations on iOS (https://outsystemsrd.atlassian.net/browse/RMET-1210)
+
+- Fixed ClickActivity package name on plugin.xml (https://outsystemsrd.atlassian.net/browse/RMET-1268)
+
+- Implemented Unit Tests for UpdateBackgroundJob feature on Android (https://outsystemsrd.atlassian.net/browse/RMET-1235)
+
+- Implemented Unit Tests for DeleteBackgroundJob feature on Android (https://outsystemsrd.atlassian.net/browse/RMET-1232)
+
+- Implemented Unit Tests for ListBackgroundJob feature on Android (https://outsystemsrd.atlassian.net/browse/RMET-1239)
+
+- Implementation of UpdateBackgroundJob for Android (https://outsystemsrd.atlassian.net/browse/RMET-1235)
+
+- Implementation of DeleteBackgroundJob for Android (https://outsystemsrd.atlassian.net/browse/RMET-1232)
+
+- Implementation of ListBackgroundJobs for Android (https://outsystemsrd.atlassian.net/browse/RMET-1239)
+
+- Implementation of notificaiton frequency (waiting period) for Android (https://outsystemsrd.atlassian.net/browse/RMET-1240)
+
+## [Version 1.0.2]
+
 ## 2021-11-18
 - Implementation of new variables and new version of background job iOS (https://outsystemsrd.atlassian.net/browse/RMET-1138)
 

@@ -1,4 +1,4 @@
-package com.outsystems.plugins.healthfitnesslib.background.database
+package com.outsystems.plugins.healthfitness.background.database
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
@@ -24,4 +24,7 @@ class Notification{
         return random.nextInt()
     }
 
+    companion object {
+        const val TABLE_NAME: String= "notification"
+    }
 }

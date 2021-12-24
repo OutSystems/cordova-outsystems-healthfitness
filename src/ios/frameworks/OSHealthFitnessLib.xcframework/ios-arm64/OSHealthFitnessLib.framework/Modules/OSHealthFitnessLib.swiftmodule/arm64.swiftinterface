@@ -1,7 +1,8 @@
 // swift-interface-format-version: 1.0
-// swift-compiler-version: Apple Swift version 5.3 (swiftlang-1200.0.29.2 clang-1200.0.30.1)
+// swift-compiler-version: Apple Swift version 5.3.1 (swiftlang-1200.0.41 clang-1200.0.32.8)
 // swift-module-flags: -target arm64-apple-ios12.0 -enable-objc-interop -enable-library-evolution -swift-version 5 -enforce-exclusivity=checked -O -module-name OSHealthFitnessLib
 import BackgroundTasks
+import CloudKit
 import CoreData
 import Foundation
 import HealthKit
@@ -25,6 +26,9 @@ public enum HealthKitErrors : Swift.Int, Foundation.CustomNSError, Foundation.Lo
   case featureNotAvailableiOS13
   case backgroundJobAlreadyExists
   case featureNotAvailableiOS14
+  case invalidBackgroundJobID
+  case backgroundJobNotFound
+  case unsubscribeError
   public var errorDescription: Swift.String? {
     get
   }
@@ -42,22 +46,34 @@ extension Encodable {
 }
 open class HealthFitnessPlugin {
   public init()
+  public func deleteBackgroundJobs(id: Swift.String?, completion: @escaping (Swift.Bool, Foundation.NSError?) -> Swift.Void)
+  public func countBackgroundJobsFor(variable: Swift.String) -> Swift.Int
+  public func listBackgroundJobs(completion: @escaping (Swift.Bool, Swift.String?, Foundation.NSError?) -> Swift.Void)
   public func writeData(variable: Swift.String, value: Swift.Double, completion: @escaping (Swift.Bool, Foundation.NSError?) -> Swift.Void)
   public func getLastRecord(variable: Swift.String, mostRecent: Swift.Bool, timeUnitLength: Swift.Int, completion: @escaping (Swift.Bool, Swift.String?, Foundation.NSError?) -> Swift.Void)
   public func requestPermissions(customPermissions: Swift.String, allVariables: Swift.String, fitnessVariables: Swift.String, healthVariables: Swift.String, profileVariables: Swift.String, summaryVariables: Swift.String, completion: @escaping (Swift.Bool, Foundation.NSError?) -> Swift.Void)
-  public func setBackgroundJob(variable: Swift.String, timeUnit: Swift.String, timeUnitGrouping: Swift.Int, jobFrequency: Swift.String, condition: Swift.String, value: Swift.Double, notificationHeader: Swift.String, notificationBody: Swift.String, completion: @escaping (Swift.Bool, Swift.String?, Foundation.NSError?) -> Swift.Void)
+  public func setBackgroundJob(variable: Swift.String, timeUnit: Swift.String, timeUnitGrouping: Swift.Int, notificationFrequency: Swift.String, notificationFrequencyGrouping: Swift.Int, jobFrequency: Swift.String, condition: Swift.String, value: Swift.Double, notificationHeader: Swift.String, notificationBody: Swift.String, completion: @escaping (Swift.Bool, Swift.String?, Foundation.NSError?) -> Swift.Void)
+  public func updateBackgroundJob(id: Swift.Int64?, notificationFrequency: Swift.String?, notificationFrequencyGrouping: Swift.Int?, condition: Swift.String?, value: Swift.Double?, notificationHeader: Swift.String?, notificationBody: Swift.String?, isActive: Swift.Bool?, completion: @escaping (Swift.Bool, Foundation.NSError?) -> Swift.Void)
   public func advancedQuery(variable: Swift.String, startDate: Foundation.Date, endDate: Foundation.Date, timeUnit: Swift.String, operationType: Swift.String, mostRecent: Swift.Bool, timeUnitLength: Swift.Int, completion: @escaping (Swift.Bool, Swift.String?, Foundation.NSError?) -> Swift.Void)
   @objc deinit
 }
-@_hasMissingDesignatedInitializers public class BackgroundJobParameters : Swift.Codable {
+extension Date {
+  public init(_ dateString: Swift.String)
+}
+public class BackgroundJobParameters : Swift.Codable {
+  final public let id: Swift.Int64?
   final public let variable: Swift.String?
   final public let timeUnit: Swift.String?
   final public let timeUnitGrouping: Swift.Int?
+  final public let notificationFrequency: Swift.String?
+  final public let notificationFrequencyGrouping: Swift.Int?
   final public let jobFrequency: Swift.String?
   final public let condition: Swift.String?
   final public let value: Swift.Double?
   final public let notificationHeader: Swift.String?
   final public let notificationBody: Swift.String?
+  final public let isActive: Swift.Bool?
+  public init(id: Swift.Int64?, variable: Swift.String?, timeUnit: Swift.String?, timeUnitGrouping: Swift.Int?, notificationFrequency: Swift.String?, notificationFrequencyGrouping: Swift.Int?, jobFrequency: Swift.String?, condition: Swift.String?, value: Swift.Double?, notificationHeader: Swift.String?, notificationBody: Swift.String?, isActive: Swift.Bool?)
   @objc deinit
   required public init(from decoder: Swift.Decoder) throws
   public func encode(to encoder: Swift.Encoder) throws
@@ -71,9 +87,6 @@ open class HealthFitnessPlugin {
   required public init(from decoder: Swift.Decoder) throws
   public func encode(to encoder: Swift.Encoder) throws
 }
-extension Date {
-  public init(_ dateString: Swift.String)
-}
 @objc @_inheritsConvenienceInitializers public class BackgroundJob : CoreData.NSManagedObject {
   @objc override dynamic public init(entity: CoreData.NSEntityDescription, insertInto context: CoreData.NSManagedObjectContext?)
   @objc deinit
@@ -85,6 +98,22 @@ extension BackgroundJob {
     @objc set
   }
   @objc @NSManaged dynamic public var id: Swift.Int64 {
+    @objc get
+    @objc set
+  }
+  @objc @NSManaged dynamic public var isActive: Swift.Bool {
+    @objc get
+    @objc set
+  }
+  @objc @NSManaged dynamic public var lastNotificationTimestamp: Foundation.Date? {
+    @objc get
+    @objc set
+  }
+  @objc @NSManaged dynamic public var notificationFrequency: Swift.String? {
+    @objc get
+    @objc set
+  }
+  @objc @NSManaged dynamic public var notificationFrequencyGrouping: Swift.Int64 {
     @objc get
     @objc set
   }
@@ -128,6 +157,10 @@ extension Notification {
     @objc set
   }
   @objc @NSManaged dynamic public var title: Swift.String? {
+    @objc get
+    @objc set
+  }
+  @objc @NSManaged dynamic public var relationship: OSHealthFitnessLib.BackgroundJob? {
     @objc get
     @objc set
   }

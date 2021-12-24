@@ -1,4 +1,4 @@
-package com.outsystems.plugins.healthfitnesslib.background
+package com.outsystems.plugins.healthfitness.background
 
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -9,16 +9,12 @@ import android.content.Intent
 import android.os.Build
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
-import androidx.room.Room
-import com.outsystems.plugins.healthfitnesslib.background.database.AppDatabase
-import com.outsystems.plugins.healthfitnesslib.background.database.BackgroundJob
-import com.outsystems.plugins.healthfitnesslib.store.AdvancedQueryParameters
-import com.outsystems.plugins.healthfitnesslib.store.HealthFitnessManager
-import com.outsystems.plugins.healthfitnesslib.store.HealthStore
+import com.outsystems.plugins.healthfitness.background.VariableUpdateManager
+import com.outsystems.plugins.healthfitness.store.HealthFitnessManager
+import com.outsystems.plugins.healthfitness.store.HealthStore
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
-import java.util.*
 
 class VariableUpdateService : BroadcastReceiver() {
 
@@ -37,80 +33,17 @@ class VariableUpdateService : BroadcastReceiver() {
     private fun processBackgroundJobs(context : Context, intent : Intent) {
 
         val variableName = intent.getStringExtra(VARIABLE_NAME) ?: return
-        val manager = HealthFitnessManager(context)
-        val database = DatabaseManager(context)
-        val store = HealthStore(context.applicationContext.packageName, manager, database)
+        val healthManager = HealthFitnessManager(context)
+        val database = DatabaseManager.getInstance(context)
+        val heathStore = HealthStore(context.applicationContext.packageName, healthManager, database)
 
-        val operationType : String
-        val variable = store.getVariableByName(variableName)
-
-        operationType = if(variable?.allowedOperations?.contains("SUM") == true){
-            "SUM"
-        } else{
-            "RAW"
-        }
-
-        val db = DatabaseManager.getInstance(context)
-        val backgroundJobs = db.fetchBackgroundJobs(variableName)
-
-        backgroundJobs?.forEach { job ->
-
-            job.notificationId?.let { notificationId ->
-                db.fetchNotification(notificationId)?.let { notification ->
-
-                    val notificationTitle = notification.title
-                    val notificationBody = notification.body
-                    val notificationID = notification.notificationID
-
-                    val endDate: Long = Date().time
-                    val month = 2592000000
-                    val startDate: Long = endDate - month
-
-                    val queryParams =  AdvancedQueryParameters(
-                        variableName,
-                        Date(startDate),
-                        Date(endDate),
-                        job.timeUnit,
-                        job.timeUnitGrouping,
-                        operationType
-                    )
-                    store.advancedQueryAsync(
-                        queryParams,
-                        { response ->
-                            var willTriggerJob = false
-
-                            if(response.results.isNotEmpty()) {
-                                val comparison = job.comparison
-                                val triggerValue = job.value
-                                val currentValue = response.results.last().values.last()
-                                when(comparison){
-                                    BackgroundJob.ComparisonOperationEnum.EQUALS.id ->
-                                        willTriggerJob = currentValue == triggerValue
-                                    BackgroundJob.ComparisonOperationEnum.GREATER.id ->
-                                        willTriggerJob = currentValue > triggerValue
-                                    BackgroundJob.ComparisonOperationEnum.LESSER.id ->
-                                        willTriggerJob = currentValue < triggerValue
-                                    BackgroundJob.ComparisonOperationEnum.GREATER_OR_EQUALS.id ->
-                                        willTriggerJob = currentValue >= triggerValue
-                                    BackgroundJob.ComparisonOperationEnum.LESSER_OR_EQUALS.id ->
-                                        willTriggerJob = currentValue <= triggerValue
-                                }
-                            }
-
-                            if(willTriggerJob){
-                                sendNotification(context, notificationTitle, notificationBody, notificationID)
-                            }
-                        },
-                        { error ->
-                            //TODO: What should we do with errors?
-                        }
-                    )
-                }
-
-
-
-            }
-        }
+        val vum = VariableUpdateManager(variableName, database, heathStore)
+        vum.processBackgroundJobs(onSendNotification = { notification ->
+            val title = notification.title
+            val body = notification.body
+            val id = notification.notificationID
+            sendNotification(context, title, body, id)
+        })
     }
 
     private fun sendNotification(context : Context, title : String, body : String, notificationID : Int) {
@@ -147,7 +80,6 @@ class VariableUpdateService : BroadcastReceiver() {
 
     private fun getResourceId(context: Context, typeAndName: String): Int {
         return context.resources.getIdentifier(typeAndName, null, context.packageName)
-
     }
 
     companion object {

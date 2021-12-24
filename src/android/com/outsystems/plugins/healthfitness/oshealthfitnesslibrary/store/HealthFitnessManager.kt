@@ -1,4 +1,4 @@
-package com.outsystems.plugins.healthfitnesslib.store
+package com.outsystems.plugins.healthfitness.store
 
 import android.app.Activity
 import android.app.PendingIntent
@@ -8,15 +8,18 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.fitness.Fitness
 import com.google.android.gms.fitness.FitnessOptions
+import com.google.android.gms.fitness.HistoryClient
 import com.google.android.gms.fitness.data.DataSet
 import com.google.android.gms.fitness.data.DataSource
 import com.google.android.gms.fitness.request.DataUpdateListenerRegistrationRequest
 import com.google.android.gms.fitness.request.SensorRequest
 import com.google.android.gms.fitness.result.DataReadResponse
 import com.google.android.gms.fitness.result.SessionReadResponse
+import com.google.android.gms.tasks.Tasks.await
 import com.outsystems.plugins.healthfitness.HealthFitnessError
-import com.outsystems.plugins.healthfitnesslib.background.BackgroundJobParameters
-import com.outsystems.plugins.healthfitnesslib.background.VariableUpdateService
+import com.outsystems.plugins.healthfitness.background.BackgroundJobParameters
+import com.outsystems.plugins.healthfitness.background.VariableUpdateService
+import kotlinx.coroutines.awaitAll
 import java.util.concurrent.TimeUnit
 
 class HealthFitnessManager(var context : Context, var activity : Activity? = null): HealthFitnessManagerInterface {
@@ -137,6 +140,45 @@ class HealthFitnessManager(var context : Context, var activity : Activity? = nul
             .addOnFailureListener {
                 onFailure(it)
             }
+    }
+
+    override fun unsubscribeFromAllUpdates(variable: GoogleFitVariable,
+                                           variableName : String,
+                                           onSuccess: () -> Unit,
+                                           onFailure: (Exception) -> Unit) {
+
+        val account = getLastAccount()
+        if(account == null){
+            onFailure(HealthStoreException(HealthFitnessError.VARIABLE_NOT_AUTHORIZED_ERROR))
+            return
+        }
+
+        val request = getSubscritionPendingIntent(variableName)
+        val dataSource = DataSource.Builder()
+            .setDataType(variable.dataType)
+            .setType(DataSource.TYPE_RAW)
+            .build()
+
+        var success = true
+        await(Fitness.getRecordingClient(context, account)
+            .unsubscribe(dataSource)
+            .addOnFailureListener { success = false })
+
+        await(Fitness.getSensorsClient(context, account)
+            .remove(request)
+            .addOnFailureListener { success = false })
+
+        await(Fitness.getHistoryClient(context, account)
+            .unregisterDataUpdateListener(request)
+            .addOnFailureListener { success = false })
+
+        if(success){
+            onSuccess()
+        }
+        else {
+            onFailure(HealthStoreException(HealthFitnessError.BACKGROUND_JOB_GENERIC_ERROR))
+        }
+
     }
 
     private fun areGoogleFitPermissionsGranted(account : GoogleSignInAccount?, options: FitnessOptions?): Boolean {
