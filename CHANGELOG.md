@@ -6,7 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 The changes documented here do not include those from the original repository.
 
-## [Unreleased]
+## [Version 1.2.0]
 
 - Implemented Unit Tests for BackgroundJob operations on iOS (https://outsystemsrd.atlassian.net/browse/RMET-1210)
 
@@ -25,6 +25,10 @@ The changes documented here do not include those from the original repository.
 - Implementation of ListBackgroundJobs for Android (https://outsystemsrd.atlassian.net/browse/RMET-1239)
 
 - Implementation of notificaiton frequency (waiting period) for Android (https://outsystemsrd.atlassian.net/browse/RMET-1240)
+
+## [Version 1.1.0]
+
+- Implementation of SetBackgroundJob for Android and iOS
 
 ## [Version 1.0.2]
 
