@@ -44,7 +44,6 @@
 
     <!-- HealthFitness Plugin -->
     <source-file src="src/android/com/outsystems/plugins/healthfitness/OSHealthFitness.kt" target-dir="app/src/main/kotlin/com/outsystems/plugins/healthfitness"/>
-    <source-file src="src/android/com/outsystems/plugins/healthfitness/AndroidPlatformInterface.kt" target-dir="app/src/main/kotlin/com/outsystems/plugins/healthfitness"/>
     
     <source-file src="src/android/com/outsystems/plugins/healthfitness/oshealthfitnesslibrary/HealthFitnessError.kt" target-dir="app/src/main/kotlin/com/outsystems/plugins/healthfitness"/>
 
@@ -80,6 +79,9 @@
 
     <!-- OS Cordova Library -->
     <source-file src="src/android/OSCordova/src/main/java/com/outsystems/plugins/oscordova/CordovaImplementation.kt" target-dir="app/src/main/kotlin/com/outsystems/plugins/healthfitness"/>
+
+    <!-- OS Core Library -->
+    <framework src="com.github.OutSystems.os-plugins-base-interface:oscore-android:core-0.0.3@aar" /> 
 
     <framework src="src/android/build.gradle" custom="true" type="gradleReference" />
     <framework src="org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.4.3" />
