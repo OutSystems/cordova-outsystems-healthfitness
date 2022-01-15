@@ -83,12 +83,12 @@ class OSHealthFitness : CordovaImplementation() {
 
         try {
             healthStore?.initAndRequestPermissions(
-                customPermissions,
-                allVariables,
-                fitnessVariables,
-                healthVariables,
-                profileVariables,
-                summaryVariables)
+                customVariablesPermissions,
+                allVariablesPermissions,
+                fitnessVariablesPermissions,
+                healthVariablesPermissions,
+                profileVariablesPermissions,
+                summaryVariablesPermissions)
             checkAndGrantPermissions()
         }
         catch (hse : HealthStoreException) {
