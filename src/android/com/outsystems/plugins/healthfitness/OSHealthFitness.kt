@@ -81,14 +81,21 @@ class OSHealthFitness : CordovaImplementation() {
         val profileVariables = args.getString(4)
         val summaryVariables = args.getString(5)
 
+        val customVariablesPermissions = gson.fromJson(customPermissions, Array<GoogleFitPermission>::class.java)
+        val allVariablesPermissions = gson.fromJson(allVariables, GoogleFitGroupPermission::class.java)
+        val fitnessVariablesPermissions = gson.fromJson(fitnessVariables, GoogleFitGroupPermission::class.java)
+        val healthVariablesPermissions = gson.fromJson(healthVariables, GoogleFitGroupPermission::class.java)
+        val profileVariablesPermissions = gson.fromJson(profileVariables, GoogleFitGroupPermission::class.java)
+        val summaryVariablesPermissions = gson.fromJson(summaryVariables, GoogleFitGroupPermission::class.java)
+
         try {
             healthStore?.initAndRequestPermissions(
-                customPermissions,
-                allVariables,
-                fitnessVariables,
-                healthVariables,
-                profileVariables,
-                summaryVariables)
+                customVariablesPermissions,
+                allVariablesPermissions,
+                fitnessVariablesPermissions,
+                healthVariablesPermissions,
+                profileVariablesPermissions,
+                summaryVariablesPermissions)
             checkAndGrantPermissions()
         }
         catch (hse : HealthStoreException) {
