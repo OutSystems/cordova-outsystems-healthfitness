@@ -9,11 +9,11 @@ import androidx.core.content.ContextCompat
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
 import com.google.gson.Gson
-import com.outsystems.plugins.healthfitness.background.UpdateBackgroundJobParameters
-import com.outsystems.plugins.healthfitness.background.BackgroundJobParameters
-import com.outsystems.plugins.healthfitness.background.DatabaseManager
-import com.outsystems.plugins.healthfitness.HealthFitnessError
-import com.outsystems.plugins.healthfitness.store.*
+import com.outsystems.plugins.libs.healthandfitness.HealthFitnessError
+import com.outsystems.plugins.libs.healthandfitness.background.BackgroundJobParameters
+import com.outsystems.plugins.libs.healthandfitness.background.UpdateBackgroundJobParameters
+import com.outsystems.plugins.libs.healthandfitness.background.database.DatabaseManager
+import com.outsystems.plugins.libs.healthandfitness.store.*
 import com.outsystems.plugins.oscordova.CordovaImplementation
 
 import org.apache.cordova.*
