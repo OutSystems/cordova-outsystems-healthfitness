@@ -1,5 +1,11 @@
 apply plugin: "com.android.application"
 apply plugin: "kotlin-android"
+apply plugin: 'jacoco'
+apply plugin: "org.sonarqube"
+
+jacoco {
+    toolVersion = "0.8.7"
+}
 
 android {
     compileSdkVersion 30
@@ -16,11 +22,20 @@ android {
 
         testOptions {
             unitTests.returnDefaultValues = true
+                android.testOptions.unitTests.all {
+                    jacoco {
+                        includeNoLocationClasses = true
+                        excludes = ['jdk.internal.*']
+                    }
+            }
         }
 
     }
 
     buildTypes {
+        debug {
+            testCoverageEnabled true
+        }
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
@@ -30,6 +45,53 @@ android {
     testOptions {
         unitTests.includeAndroidResources = true
     }
+
+    task createTestReport(type: JacocoReport) {
+    	group = "Reporting"
+
+   	reports {
+       		 xml.enabled = true
+       		 html.enabled = true
+    	}
+
+   	    def fileFilter = ['**/R.class',
+      	                  '**/R$*.class',
+                          '**/BuildConfig.*',
+                          '**/*$ViewInjector*.*',
+                          '**/*$ViewBinder*.*',
+                          '**/*$MembersInjector*.*',
+                          '**/Manifest*.*',
+                          '**/*Test*.*',
+                          'android/**/*.*']
+	    def debugTree = fileTree(dir: "${buildDir}/tmp/kotlin-classes/debugUnitTest", excludes: fileFilter)
+    	def mainSrc = "${project.projectDir}/../../../../src/android"
+
+    	sourceDirectories.from = files([mainSrc])
+        additionalSourceDirs.from = files([mainSrc])
+    	classDirectories.from = files([debugTree])
+    	executionData.from = files("${project.buildDir}/jacoco/testDebugUnitTest.exec")
+	}
+
+    sonarqube {
+        properties {
+            property "sonar.host.url", "https://sonarcloud.io"
+            property "sonar.organization", "outsystemsrd"
+            property "sonar.projectKey", "OutSystems_cordova-outsystems-healthfitness"
+            property "sonar.projectName", "OutSystems_cordova-outsystems-healthfitness"
+            property "sonar.projectBaseDir", "$project.rootDir/../../../"
+            property "sonar.tests", "$project.rootDir/app/src"
+            property "sonar.sourceEncoding", "UTF-8"
+            property "sonar.sources", "$project.rootDir/../../../src/android"
+            property "sonar.exclusions", 
+                    'build/**' +
+                    '*.json,' +
+                    '**/.gradle/**,' +
+                    '**/R.class'
+            property "sonar.java.coveragePlugin", "jacoco"
+            property "sonar.coverage.jacoco.xmlReportPaths", "$project.rootDir/app/build/reports/jacoco/createTestReport/createTestReport.xml"
+        }
+    }
+
 }
 dependencies {
 
