@@ -198,6 +198,6 @@ class HealthFitnessManager(var context : Context, var activity : Activity? = nul
         val intent = Intent(context, VariableUpdateService::class.java)
         intent.putExtra(VariableUpdateService.VARIABLE_NAME, variableName)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-        return PendingIntent.getBroadcast(context, variableName.hashCode(), intent, PendingIntent.FLAG_UPDATE_CURRENT)
+        return PendingIntent.getBroadcast(context, variableName.hashCode(), intent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE)
     }
 }
