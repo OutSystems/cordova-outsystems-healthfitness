@@ -61,7 +61,7 @@ class VariableUpdateService : BroadcastReceiver() {
 
         //build intent to call the ClickActivity
         val myIntent = Intent(context, ClickActivity::class.java)
-        val pendingIntent = PendingIntent.getActivity(context, 1, myIntent, PendingIntent.FLAG_UPDATE_CURRENT)
+        val pendingIntent = PendingIntent.getActivity(context, 1, myIntent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE)
 
         //get icon for notification
         val icon = getResourceId(context, "mipmap/ic_launcher")
