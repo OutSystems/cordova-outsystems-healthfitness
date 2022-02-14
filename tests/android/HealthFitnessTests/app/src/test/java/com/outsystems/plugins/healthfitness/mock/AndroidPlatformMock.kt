@@ -7,7 +7,6 @@ import androidx.test.core.app.ApplicationProvider
 import com.outsystems.plugins.core.AndroidPlatformInterface
 import org.junit.runner.RunWith
 
-@RunWith(AndroidJUnit4::class)
 class AndroidPlatformMock : AndroidPlatformInterface {
 
     var sendPluginResultCompletion: ((resultVariable: String, error: Pair<Int, String>?) -> Unit)? = null

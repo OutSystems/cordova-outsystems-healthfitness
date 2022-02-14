@@ -6,7 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 The changes documented here do not include those from the original repository.
 
-## [Unreleased]
+## [Version 1.2.0]
 
 - Implemented Unit Tests for BackgroundJob operations on iOS (https://outsystemsrd.atlassian.net/browse/RMET-1210)
 
@@ -26,7 +26,7 @@ The changes documented here do not include those from the original repository.
 
 - Implementation of notificaiton frequency (waiting period) for Android (https://outsystemsrd.atlassian.net/browse/RMET-1240)
 
-## [Version 1.0.2]
+## [Version 1.1.0]
 
 ## 2021-11-18
 - Implementation of new variables and new version of background job iOS (https://outsystemsrd.atlassian.net/browse/RMET-1138)
@@ -43,6 +43,12 @@ The changes documented here do not include those from the original repository.
 
 ## 2021-11-04
 - Implemented setup phase of SetBackgroundJob action (https://outsystemsrd.atlassian.net/browse/RMET-1130)
+
+## [Version 1.0.3]
+- Introducing WALKING_SPEED and DISTANCE variables
+
+## [Version 1.0.2]
+- Updated Health and Fitness variables list and general improvements
 
 ## [Version 1.0.1]
 
