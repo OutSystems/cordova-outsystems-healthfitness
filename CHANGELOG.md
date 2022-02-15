@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 The changes documented here do not include those from the original repository.
 
+## [Version 1.2.1]
+
+- Fixes Background Jobs bugs on Android 12 due to missing PendingIntent flag
+
 ## [Version 1.2.0]
 
 - Implemented Unit Tests for BackgroundJob operations on iOS (https://outsystemsrd.atlassian.net/browse/RMET-1210)
