@@ -9,7 +9,7 @@ import java.util.*
 class Notification{
 
     // Should we use UUID for this?
-    @PrimaryKey(name = "id", autoGenerate = true) var id: Long
+    @PrimaryKey(autoGenerate = true) var id: Long
     @ColumnInfo(name = "notification_id") var notificationID: Int
     @ColumnInfo(name = "title") var title: String = ""
     @ColumnInfo(name = "body") var body: String = ""
