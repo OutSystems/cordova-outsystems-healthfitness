@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 The changes documented here do not include those from the original repository.
 
+## [Unreleased]
+
+- Fixed issue with MABS 7 Android build because of PendingIntent.FLAG_MUTABLE (https://outsystemsrd.atlassian.net/browse/RMET-1460)
+
 ## [Version 1.2.0]
 
 - Implemented Unit Tests for BackgroundJob operations on iOS (https://outsystemsrd.atlassian.net/browse/RMET-1210)
