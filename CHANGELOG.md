@@ -10,9 +10,12 @@ The changes documented here do not include those from the original repository.
 
 - Fixes problem with Kotlin versions (https://outsystemsrd.atlassian.net/browse/RMET-1438)
 
+- Fixed issue with MABS 7 Android build because of PendingIntent.FLAG_MUTABLE (https://outsystemsrd.atlassian.net/browse/RMET-1460)
+
 ## [Version 1.2.1]
 
 - Fixes Background Jobs bugs on Android 12 due to missing PendingIntent flag
+
 
 ## [Version 1.2.0]
 
