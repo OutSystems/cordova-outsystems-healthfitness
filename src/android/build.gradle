@@ -25,8 +25,8 @@ dependencies{
 
     def roomVersion = "2.3.0"
     implementation("androidx.room:room-runtime:$roomVersion")
-    annotationProcessor("android.arch.persistence.room:compiler:1.1.1")
-    kapt("android.arch.persistence.room:compiler:1.1.1")
+    annotationProcessor("androidx.room:room-compiler:2.2.3")
+    kapt("androidx.room:room-compiler:2.2.3")
 }
 
 android {

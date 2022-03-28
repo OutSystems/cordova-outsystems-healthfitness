@@ -195,9 +195,10 @@ class HealthFitnessManager(var context : Context, var activity : Activity? = nul
 
     private fun getSubscritionPendingIntent(variableName : String) : PendingIntent {
         //do the actual subscription to the variable updates
+        //when MABS 7 stops being supported, we can use PendingIntent.FLAG_MUTABLE instead of 33554432
         val intent = Intent(context, VariableUpdateService::class.java)
         intent.putExtra(VariableUpdateService.VARIABLE_NAME, variableName)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-        return PendingIntent.getBroadcast(context, variableName.hashCode(), intent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE)
+        return PendingIntent.getBroadcast(context, variableName.hashCode(), intent, PendingIntent.FLAG_UPDATE_CURRENT or 33554432)
     }
 }
