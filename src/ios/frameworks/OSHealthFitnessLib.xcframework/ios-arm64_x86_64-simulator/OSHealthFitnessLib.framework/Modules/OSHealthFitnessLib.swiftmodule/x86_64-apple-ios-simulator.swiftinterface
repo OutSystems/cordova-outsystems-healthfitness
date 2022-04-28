@@ -43,7 +43,7 @@ extension Swift.String {
   public func decode<T>(string: Swift.String) -> T where T : Swift.Decodable
 }
 extension Swift.Encodable {
-  public func encode<T>(object: T) -> Swift.String where T : Swift.Encodable
+  public func encode() -> Swift.String
 }
 open class HealthFitnessPlugin {
   public init()
@@ -60,6 +60,12 @@ open class HealthFitnessPlugin {
 }
 extension Foundation.Date {
   public init(_ dateString: Swift.String)
+  public static func - (recent: Foundation.Date, previous: Foundation.Date) -> (year: Swift.Int?, month: Swift.Int?, week: Swift.Int?, day: Swift.Int?, hour: Swift.Int?, minute: Swift.Int?, second: Swift.Int?)
+  public func startOfHour() -> Foundation.Date
+  public func startOfDay() -> Foundation.Date
+  public func startOfWeek() -> Foundation.Date
+  public func startOfMonth() -> Foundation.Date
+  public func startOfYear() -> Foundation.Date
 }
 public class BackgroundJobParameters : Swift.Codable {
   final public let id: Swift.Int64?
