@@ -8,6 +8,8 @@ The changes documented here do not include those from the original repository.
 
 ## [Version 1.2.2]
 
+- Implemented query for category types (https://outsystemsrd.atlassian.net/browse/RMET-1507)
+
 - Fixes problem with Kotlin versions (https://outsystemsrd.atlassian.net/browse/RMET-1438)
 
 - Fixed issue with MABS 7 Android build because of PendingIntent.FLAG_MUTABLE (https://outsystemsrd.atlassian.net/browse/RMET-1460)
