@@ -1,5 +1,5 @@
 // swift-interface-format-version: 1.0
-// swift-compiler-version: Apple Swift version 5.3.1 (swiftlang-1200.0.41 clang-1200.0.32.8)
+// swift-compiler-version: Apple Swift version 5.6 (swiftlang-5.6.0.323.62 clang-1316.0.20.8)
 // swift-module-flags: -target arm64-apple-ios12.0-simulator -enable-objc-interop -enable-library-evolution -swift-version 5 -enforce-exclusivity=checked -O -module-name OSHealthFitnessLib
 import BackgroundTasks
 import CloudKit
@@ -12,6 +12,7 @@ import Swift
 import UIKit
 import UserNotifications
 import UserNotificationsUI
+import _Concurrency
 public enum HealthKitErrors : Swift.Int, Foundation.CustomNSError, Foundation.LocalizedError {
   case variableNotAvailable
   case variableNotAuthorized
@@ -32,17 +33,17 @@ public enum HealthKitErrors : Swift.Int, Foundation.CustomNSError, Foundation.Lo
   public var errorDescription: Swift.String? {
     get
   }
-  public typealias RawValue = Swift.Int
   public init?(rawValue: Swift.Int)
+  public typealias RawValue = Swift.Int
   public var rawValue: Swift.Int {
     get
   }
 }
-extension String {
+extension Swift.String {
   public func decode<T>(string: Swift.String) -> T where T : Swift.Decodable
 }
-extension Encodable {
-  public func encode<T>(object: T) -> Swift.String where T : Swift.Encodable
+extension Swift.Encodable {
+  public func encode() -> Swift.String
 }
 open class HealthFitnessPlugin {
   public init()
@@ -57,8 +58,14 @@ open class HealthFitnessPlugin {
   public func advancedQuery(variable: Swift.String, startDate: Foundation.Date, endDate: Foundation.Date, timeUnit: Swift.String, operationType: Swift.String, mostRecent: Swift.Bool, timeUnitLength: Swift.Int, completion: @escaping (Swift.Bool, Swift.String?, Foundation.NSError?) -> Swift.Void)
   @objc deinit
 }
-extension Date {
+extension Foundation.Date {
   public init(_ dateString: Swift.String)
+  public static func - (recent: Foundation.Date, previous: Foundation.Date) -> (year: Swift.Int?, month: Swift.Int?, week: Swift.Int?, day: Swift.Int?, hour: Swift.Int?, minute: Swift.Int?, second: Swift.Int?)
+  public func startOfHour() -> Foundation.Date
+  public func startOfDay() -> Foundation.Date
+  public func startOfWeek() -> Foundation.Date
+  public func startOfMonth() -> Foundation.Date
+  public func startOfYear() -> Foundation.Date
 }
 public class BackgroundJobParameters : Swift.Codable {
   final public let id: Swift.Int64?
@@ -75,8 +82,8 @@ public class BackgroundJobParameters : Swift.Codable {
   final public let isActive: Swift.Bool?
   public init(id: Swift.Int64?, variable: Swift.String?, timeUnit: Swift.String?, timeUnitGrouping: Swift.Int?, notificationFrequency: Swift.String?, notificationFrequencyGrouping: Swift.Int?, jobFrequency: Swift.String?, condition: Swift.String?, value: Swift.Double?, notificationHeader: Swift.String?, notificationBody: Swift.String?, isActive: Swift.Bool?)
   @objc deinit
-  required public init(from decoder: Swift.Decoder) throws
   public func encode(to encoder: Swift.Encoder) throws
+  required public init(from decoder: Swift.Decoder) throws
 }
 @_hasMissingDesignatedInitializers public class QueryParameters : Swift.Codable {
   final public let variable: Swift.String?
@@ -84,14 +91,14 @@ public class BackgroundJobParameters : Swift.Codable {
   final public let timeUnit: Swift.String?, operationType: Swift.String?
   final public let timeUnitLength: Swift.Int?
   @objc deinit
-  required public init(from decoder: Swift.Decoder) throws
   public func encode(to encoder: Swift.Encoder) throws
+  required public init(from decoder: Swift.Decoder) throws
 }
 @objc @_inheritsConvenienceInitializers public class BackgroundJob : CoreData.NSManagedObject {
   @objc override dynamic public init(entity: CoreData.NSEntityDescription, insertInto context: CoreData.NSManagedObjectContext?)
   @objc deinit
 }
-extension BackgroundJob {
+extension OSHealthFitnessLib.BackgroundJob {
   @nonobjc public class func fetchRequest() -> CoreData.NSFetchRequest<OSHealthFitnessLib.BackgroundJob>
   @objc @NSManaged dynamic public var comparision: Swift.String? {
     @objc get
@@ -146,7 +153,7 @@ extension BackgroundJob {
   @objc override dynamic public init(entity: CoreData.NSEntityDescription, insertInto context: CoreData.NSManagedObjectContext?)
   @objc deinit
 }
-extension Notification {
+extension OSHealthFitnessLib.Notification {
   @nonobjc public class func fetchRequest() -> CoreData.NSFetchRequest<OSHealthFitnessLib.Notification>
   @objc @NSManaged dynamic public var body: Swift.String? {
     @objc get
