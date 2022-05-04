@@ -10,3 +10,4 @@ xcuserdata
 
 **/node_modules
 *.jar
+gradle/wrapper/gradle-wrapper.properties

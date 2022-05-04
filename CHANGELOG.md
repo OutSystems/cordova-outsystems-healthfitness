@@ -6,9 +6,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 The changes documented here do not include those from the original repository.
 
-## [Version 1.2.2]
+## [Version 1.2.3]
 
 - Implemented query for category types (https://outsystemsrd.atlassian.net/browse/RMET-1507)
+
+## [Version 1.2.2]
 
 - Fixes problem with Kotlin versions (https://outsystemsrd.atlassian.net/browse/RMET-1438)
 
