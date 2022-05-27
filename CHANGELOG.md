@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 The changes documented here do not include those from the original repository.
 
+## [Version 1.2.4]
+
+- Assign the "averageOperations" value for Blood Glucose's optionsAllowed property (https://outsystemsrd.atlassian.net/browse/RPM-2623)
+
 ## [Version 1.2.3]
 
 - Implemented query for category types (https://outsystemsrd.atlassian.net/browse/RMET-1507)
