@@ -115,15 +115,9 @@
     <config-file target="*-Info.plist" parent="UIBackgroundModes">
       <array>
         <string>fetch</string>
-        <string>processing</string>
       </array>
     </config-file>
-
-    <key>BGTaskSchedulerPermittedIdentifiers</key>
-    <array>
-        <string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
-    </array>
-
+    
     <!-- Entitlements -->
     <config-file target="*/Entitlements-Debug.plist" parent="com.apple.developer.healthkit">
       <true/>
