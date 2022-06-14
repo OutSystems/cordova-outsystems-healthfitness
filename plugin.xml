@@ -115,9 +115,16 @@
     <config-file target="*-Info.plist" parent="UIBackgroundModes">
       <array>
         <string>fetch</string>
+        <string>processing</string>
       </array>
     </config-file>
-    
+
+    <config-file target="*-Info.plist" parent="BGTaskSchedulerPermittedIdentifiers">
+      <array>
+        <string>com.outsystems.health.default</string>
+      </array>
+    </config-file>
+
     <!-- Entitlements -->
     <config-file target="*/Entitlements-Debug.plist" parent="com.apple.developer.healthkit">
       <true/>
