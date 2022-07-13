@@ -6,7 +6,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 The changes documented here do not include those from the original repository.
 
+## [Version 1.2.6]
+
+- Feat: Implemented option to return only filled blocks in the advanced query. (https://outsystemsrd.atlassian.net/browse/RMET-1714)
+
 ## [Version 1.2.5]
+
 - Removed hook that adds swift support and added the plugin as dependecy. (https://outsystemsrd.atlassian.net/browse/RMET-1680)
 - Added to the info.plist file a property to identify the background tasks used in the plugin.(https://outsystemsrd.atlassian.net/browse/RMET-1689) 
 

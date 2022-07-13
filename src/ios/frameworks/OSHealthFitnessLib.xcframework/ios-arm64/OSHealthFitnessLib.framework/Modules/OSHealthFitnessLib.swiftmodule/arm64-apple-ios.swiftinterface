@@ -1,5 +1,5 @@
 // swift-interface-format-version: 1.0
-// swift-compiler-version: Apple Swift version 5.4.2 (swiftlang-1205.0.28.2 clang-1205.0.19.57)
+// swift-compiler-version: Apple Swift version 5.6.1 (swiftlang-5.6.0.323.66 clang-1316.0.20.12)
 // swift-module-flags: -target arm64-apple-ios12.0 -enable-objc-interop -enable-library-evolution -swift-version 5 -enforce-exclusivity=checked -O -module-name OSHealthFitnessLib
 import BackgroundTasks
 import CloudKit
@@ -12,6 +12,7 @@ import Swift
 import UIKit
 import UserNotifications
 import UserNotificationsUI
+import _Concurrency
 public enum HealthKitErrors : Swift.Int, Foundation.CustomNSError, Foundation.LocalizedError {
   case variableNotAvailable
   case variableNotAuthorized
@@ -38,10 +39,10 @@ public enum HealthKitErrors : Swift.Int, Foundation.CustomNSError, Foundation.Lo
     get
   }
 }
-extension String {
+extension Swift.String {
   public func decode<T>(string: Swift.String) -> T where T : Swift.Decodable
 }
-extension Encodable {
+extension Swift.Encodable {
   public func encode() -> Swift.String
 }
 open class HealthFitnessPlugin {
@@ -54,10 +55,10 @@ open class HealthFitnessPlugin {
   public func requestPermissions(customPermissions: Swift.String, allVariables: Swift.String, fitnessVariables: Swift.String, healthVariables: Swift.String, profileVariables: Swift.String, summaryVariables: Swift.String, completion: @escaping (Swift.Bool, Foundation.NSError?) -> Swift.Void)
   public func setBackgroundJob(variable: Swift.String, timeUnit: Swift.String, timeUnitGrouping: Swift.Int, notificationFrequency: Swift.String, notificationFrequencyGrouping: Swift.Int, jobFrequency: Swift.String, condition: Swift.String, value: Swift.Double, notificationHeader: Swift.String, notificationBody: Swift.String, completion: @escaping (Swift.Bool, Swift.String?, Foundation.NSError?) -> Swift.Void)
   public func updateBackgroundJob(id: Swift.Int64?, notificationFrequency: Swift.String?, notificationFrequencyGrouping: Swift.Int?, condition: Swift.String?, value: Swift.Double?, notificationHeader: Swift.String?, notificationBody: Swift.String?, isActive: Swift.Bool?, completion: @escaping (Swift.Bool, Foundation.NSError?) -> Swift.Void)
-  public func advancedQuery(variable: Swift.String, startDate: Foundation.Date, endDate: Foundation.Date, timeUnit: Swift.String, operationType: Swift.String, mostRecent: Swift.Bool, timeUnitLength: Swift.Int, completion: @escaping (Swift.Bool, Swift.String?, Foundation.NSError?) -> Swift.Void)
+  public func advancedQuery(variable: Swift.String, startDate: Foundation.Date, endDate: Foundation.Date, timeUnit: Swift.String, operationType: Swift.String, mostRecent: Swift.Bool, onlyFilledBlocks: Swift.Bool, timeUnitLength: Swift.Int, completion: @escaping (Swift.Bool, Swift.String?, Foundation.NSError?) -> Swift.Void)
   @objc deinit
 }
-extension Date {
+extension Foundation.Date {
   public init(_ dateString: Swift.String)
   public static func - (recent: Foundation.Date, previous: Foundation.Date) -> (year: Swift.Int?, month: Swift.Int?, week: Swift.Int?, day: Swift.Int?, hour: Swift.Int?, minute: Swift.Int?, second: Swift.Int?)
   public func startOfHour() -> Foundation.Date
@@ -84,11 +85,20 @@ public class BackgroundJobParameters : Swift.Codable {
   public func encode(to encoder: Swift.Encoder) throws
   required public init(from decoder: Swift.Decoder) throws
 }
+public enum AdvancedQueryReturnTypeEnum : Swift.String {
+  case allData, removeEmptyDataBlocks
+  public init?(rawValue: Swift.String)
+  public typealias RawValue = Swift.String
+  public var rawValue: Swift.String {
+    get
+  }
+}
 @_hasMissingDesignatedInitializers public class QueryParameters : Swift.Codable {
   final public let variable: Swift.String?
   final public let startDate: Swift.String?, endDate: Swift.String?
   final public let timeUnit: Swift.String?, operationType: Swift.String?
   final public let timeUnitLength: Swift.Int?
+  final public let advancedQueryReturnType: Swift.String?
   @objc deinit
   public func encode(to encoder: Swift.Encoder) throws
   required public init(from decoder: Swift.Decoder) throws
@@ -97,7 +107,7 @@ public class BackgroundJobParameters : Swift.Codable {
   @objc override dynamic public init(entity: CoreData.NSEntityDescription, insertInto context: CoreData.NSManagedObjectContext?)
   @objc deinit
 }
-extension BackgroundJob {
+extension OSHealthFitnessLib.BackgroundJob {
   @nonobjc public class func fetchRequest() -> CoreData.NSFetchRequest<OSHealthFitnessLib.BackgroundJob>
   @objc @NSManaged dynamic public var comparision: Swift.String? {
     @objc get
@@ -152,7 +162,7 @@ extension BackgroundJob {
   @objc override dynamic public init(entity: CoreData.NSEntityDescription, insertInto context: CoreData.NSManagedObjectContext?)
   @objc deinit
 }
-extension Notification {
+extension OSHealthFitnessLib.Notification {
   @nonobjc public class func fetchRequest() -> CoreData.NSFetchRequest<OSHealthFitnessLib.Notification>
   @objc @NSManaged dynamic public var body: Swift.String? {
     @objc get
@@ -174,3 +184,6 @@ extension Notification {
 extension OSHealthFitnessLib.HealthKitErrors : Swift.Equatable {}
 extension OSHealthFitnessLib.HealthKitErrors : Swift.Hashable {}
 extension OSHealthFitnessLib.HealthKitErrors : Swift.RawRepresentable {}
+extension OSHealthFitnessLib.AdvancedQueryReturnTypeEnum : Swift.Equatable {}
+extension OSHealthFitnessLib.AdvancedQueryReturnTypeEnum : Swift.Hashable {}
+extension OSHealthFitnessLib.AdvancedQueryReturnTypeEnum : Swift.RawRepresentable {}

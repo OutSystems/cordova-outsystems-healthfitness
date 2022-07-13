@@ -63,7 +63,7 @@ class OSHealthFitness: CordovaImplementation {
     @objc(updateBackgroundJob:)
     func updateBackgroundJob(command: CDVInvokedUrlCommand) {
         callbackId = command.callbackId
-
+        
         let queryParameters = command.arguments[0] as? String ?? ""
         if let parameters = parseUpdateParameters(parameters: queryParameters) {
             
@@ -134,15 +134,16 @@ class OSHealthFitness: CordovaImplementation {
                               timeUnit: "",
                               operationType: "MOST_RECENT",
                               mostRecent:true,
+                              onlyFilledBlocks: false,
                               timeUnitLength: 1) { success, result, error in
-
+            
             if error != nil {
                 self.sendResult(result: nil, error: error, callBackID: self.callbackId)
             } else if success {
                 self.sendResult(result: result, error: nil, callBackID: self.callbackId)
             }
         }
-    
+        
     }
     
     @objc(deleteBackgroundJob:)
@@ -157,7 +158,7 @@ class OSHealthFitness: CordovaImplementation {
             }
         }
     }
-
+    
     @objc(listBackgroundJobs:)
     func listBackgroundJobs(command: CDVInvokedUrlCommand) {
         callbackId = command.callbackId
@@ -176,7 +177,7 @@ class OSHealthFitness: CordovaImplementation {
         
         let queryParameters = command.arguments[0] as? String ?? ""
         if let params = queryParameters.decode(string: queryParameters) as BackgroundJobParameters? {
-                
+            
             let variable = params.variable ?? ""
             let timeUnitGrouping = params.timeUnitGrouping ?? 0
             let condition = params.condition ?? ""
@@ -187,7 +188,7 @@ class OSHealthFitness: CordovaImplementation {
             let value = params.value ?? 0
             let notificationHeader = params.notificationHeader ?? ""
             let notificationBody = params.notificationBody ?? ""
-                
+            
             plugin?.setBackgroundJob(variable: variable,
                                      timeUnit: timeUnit,
                                      timeUnitGrouping: timeUnitGrouping,
@@ -199,7 +200,7 @@ class OSHealthFitness: CordovaImplementation {
                                      notificationHeader: notificationHeader,
                                      notificationBody: notificationBody)
             { success, result, error in
-
+                
                 if error != nil {
                     self.sendResult(result: nil, error: error, callBackID: self.callbackId)
                 }
@@ -209,29 +210,31 @@ class OSHealthFitness: CordovaImplementation {
             }
         }
     }
-
+    
     @objc(getData:)
     func getData(command: CDVInvokedUrlCommand) {
         callbackId = command.callbackId
         
         let queryParameters = command.arguments[0] as? String ?? ""
         if let params = queryParameters.decode(string: queryParameters) as QueryParameters? {
-                
+            
             let variable = params.variable ?? ""
             let startDate = params.startDate ?? ""
             let endDate = params.endDate ?? ""
             let timeUnit = params.timeUnit ?? ""
             let operationType = params.operationType ?? ""
             let timeUnitLength = params.timeUnitLength ?? 1
-                
+            let onlyFilledBlocks = params.advancedQueryReturnType == AdvancedQueryReturnTypeEnum.removeEmptyDataBlocks.rawValue
+            
             plugin?.advancedQuery(variable: variable,
-                            startDate: Date(startDate),
-                            endDate: Date(endDate),
-                            timeUnit: timeUnit,
-                            operationType: operationType,
-                            mostRecent:false,
-                            timeUnitLength:timeUnitLength) { success, result, error in
-
+                                  startDate: Date(startDate),
+                                  endDate: Date(endDate),
+                                  timeUnit: timeUnit,
+                                  operationType: operationType,
+                                  mostRecent: false,
+                                  onlyFilledBlocks: onlyFilledBlocks,
+                                  timeUnitLength: timeUnitLength) { success, result, error in
+                
                 if error != nil {
                     self.sendResult(result: nil, error: error, callBackID: self.callbackId)
                 }
@@ -239,9 +242,9 @@ class OSHealthFitness: CordovaImplementation {
                     self.sendResult(result: result, error: nil, callBackID: self.callbackId)
                 }
             }
-     
-        }
             
+        }
+        
     }
     
 }
