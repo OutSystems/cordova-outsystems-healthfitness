@@ -1,7 +1,6 @@
 // swift-interface-format-version: 1.0
 // swift-compiler-version: Apple Swift version 5.6.1 (swiftlang-5.6.0.323.66 clang-1316.0.20.12)
 // swift-module-flags: -target x86_64-apple-ios12.0-simulator -enable-objc-interop -enable-library-evolution -swift-version 5 -enforce-exclusivity=checked -O -module-name OSHealthFitnessLib
-import BackgroundTasks
 import CloudKit
 import CoreData
 import Foundation
@@ -9,9 +8,7 @@ import HealthKit
 import NotificationCenter
 @_exported import OSHealthFitnessLib
 import Swift
-import UIKit
 import UserNotifications
-import UserNotificationsUI
 import _Concurrency
 public enum HealthKitErrors : Swift.Int, Foundation.CustomNSError, Foundation.LocalizedError {
   case variableNotAvailable
@@ -40,27 +37,32 @@ public enum HealthKitErrors : Swift.Int, Foundation.CustomNSError, Foundation.Lo
   }
 }
 extension Swift.String {
-  public func decode<T>(string: Swift.String) -> T where T : Swift.Decodable
+  public func decode<T>() -> T? where T : Swift.Decodable
 }
 extension Swift.Encodable {
   public func encode() -> Swift.String
 }
+public struct VariableStruct {
+  public init(allVariables: Swift.String, fitnessVariables: Swift.String, healthVariables: Swift.String, profileVariables: Swift.String, summaryVariables: Swift.String)
+}
 open class HealthFitnessPlugin {
   public init()
-  public func deleteBackgroundJobs(id: Swift.String?, completion: @escaping (Swift.Bool, Foundation.NSError?) -> Swift.Void)
+  public func deleteBackgroundJobs(id: Swift.String?, completion: @escaping (Foundation.NSError?) -> Swift.Void)
   public func countBackgroundJobsFor(variable: Swift.String) -> Swift.Int
-  public func listBackgroundJobs(completion: @escaping (Swift.Bool, Swift.String?, Foundation.NSError?) -> Swift.Void)
+  public func listBackgroundJobs() -> Swift.String
   public func writeData(variable: Swift.String, value: Swift.Double, completion: @escaping (Swift.Bool, Foundation.NSError?) -> Swift.Void)
   public func getLastRecord(variable: Swift.String, mostRecent: Swift.Bool, timeUnitLength: Swift.Int, completion: @escaping (Swift.Bool, Swift.String?, Foundation.NSError?) -> Swift.Void)
-  public func requestPermissions(customPermissions: Swift.String, allVariables: Swift.String, fitnessVariables: Swift.String, healthVariables: Swift.String, profileVariables: Swift.String, summaryVariables: Swift.String, completion: @escaping (Swift.Bool, Foundation.NSError?) -> Swift.Void)
-  public func setBackgroundJob(variable: Swift.String, timeUnit: Swift.String, timeUnitGrouping: Swift.Int, notificationFrequency: Swift.String, notificationFrequencyGrouping: Swift.Int, jobFrequency: Swift.String, condition: Swift.String, value: Swift.Double, notificationHeader: Swift.String, notificationBody: Swift.String, completion: @escaping (Swift.Bool, Swift.String?, Foundation.NSError?) -> Swift.Void)
-  public func updateBackgroundJob(id: Swift.Int64?, notificationFrequency: Swift.String?, notificationFrequencyGrouping: Swift.Int?, condition: Swift.String?, value: Swift.Double?, notificationHeader: Swift.String?, notificationBody: Swift.String?, isActive: Swift.Bool?, completion: @escaping (Swift.Bool, Foundation.NSError?) -> Swift.Void)
-  public func advancedQuery(variable: Swift.String, startDate: Foundation.Date, endDate: Foundation.Date, timeUnit: Swift.String, operationType: Swift.String, mostRecent: Swift.Bool, onlyFilledBlocks: Swift.Bool, timeUnitLength: Swift.Int, completion: @escaping (Swift.Bool, Swift.String?, Foundation.NSError?) -> Swift.Void)
+  public func requestPermissions(customPermissions: Swift.String, variable: OSHealthFitnessLib.VariableStruct, completion: @escaping (Swift.Bool, Foundation.NSError?) -> Swift.Void)
+  public func setBackgroundJob(variable: Swift.String, timeUnit: (name: Swift.String, grouping: Swift.Int), notificationFrequency: (name: Swift.String, grouping: Swift.Int), jobFrequency: Swift.String, condition: Swift.String, value: Swift.Double, notificationText: (header: Swift.String, body: Swift.String), completion: @escaping (Swift.Bool, Swift.String?, Foundation.NSError?) -> Swift.Void)
+  public func updateBackgroundJob(id: Swift.Int64?, notificationFrequency: (name: Swift.String?, grouping: Swift.Int?), condition: Swift.String?, value: Swift.Double?, notificationText: (header: Swift.String?, body: Swift.String?), isActive: Swift.Bool?, completion: @escaping (Swift.Bool, Foundation.NSError?) -> Swift.Void)
+  public func advancedQuery(variable: Swift.String, date: (start: Foundation.Date, end: Foundation.Date), timeUnit: Swift.String, operationType: Swift.String, mostRecent: Swift.Bool, onlyFilledBlocks: Swift.Bool, timeUnitLength: Swift.Int, completion: @escaping (Swift.Bool, Swift.String?, Foundation.NSError?) -> Swift.Void)
   @objc deinit
 }
 extension Foundation.Date {
+  public struct ResultStruct {
+  }
   public init(_ dateString: Swift.String)
-  public static func - (recent: Foundation.Date, previous: Foundation.Date) -> (year: Swift.Int?, month: Swift.Int?, week: Swift.Int?, day: Swift.Int?, hour: Swift.Int?, minute: Swift.Int?, second: Swift.Int?)
+  public static func - (recent: Foundation.Date, previous: Foundation.Date) -> Foundation.Date.ResultStruct
   public func startOfHour() -> Foundation.Date
   public func startOfDay() -> Foundation.Date
   public func startOfWeek() -> Foundation.Date
