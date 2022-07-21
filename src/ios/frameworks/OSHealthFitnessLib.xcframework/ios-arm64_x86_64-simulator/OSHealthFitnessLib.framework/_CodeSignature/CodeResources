@@ -30,7 +30,7 @@
 		</data>
 		<key>Info.plist</key>
 		<data>
-		k0tV5K9VEYAVQrh1W22y0a7uOu0=
+		gCmiG8I919wBlKNgSVDnimCrJ5A=
 		</data>
 		<key>Modules/OSHealthFitnessLib.swiftmodule/arm64-apple-ios-simulator.swiftdoc</key>
 		<data>
@@ -38,11 +38,11 @@
 		</data>
 		<key>Modules/OSHealthFitnessLib.swiftmodule/arm64-apple-ios-simulator.swiftinterface</key>
 		<data>
-		ER0X1b176in+9vch5az0C4hQ0Ts=
+		DPIupSggVhuq1mADRi+etWEvXXk=
 		</data>
 		<key>Modules/OSHealthFitnessLib.swiftmodule/arm64-apple-ios-simulator.swiftmodule</key>
 		<data>
-		miqQOKnfT3qPUg7Na3aZZUs0W5U=
+		B0G2M7GLq0th9Z4B2twliPux2zQ=
 		</data>
 		<key>Modules/OSHealthFitnessLib.swiftmodule/x86_64-apple-ios-simulator.swiftdoc</key>
 		<data>
@@ -50,11 +50,11 @@
 		</data>
 		<key>Modules/OSHealthFitnessLib.swiftmodule/x86_64-apple-ios-simulator.swiftinterface</key>
 		<data>
-		MBj6CkbN2OGIGTwmNlKA+784VL0=
+		wMTWNRmZvQUHwbxID6wOJTgR0RA=
 		</data>
 		<key>Modules/OSHealthFitnessLib.swiftmodule/x86_64-apple-ios-simulator.swiftmodule</key>
 		<data>
-		GNFU1a/+SyoAXWEO0uS/FYD8KIc=
+		SjSFQ37owe0LVwqQXBmcffdZVuM=
 		</data>
 		<key>Modules/module.modulemap</key>
 		<data>
@@ -116,14 +116,14 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			9Faierh/20tE1HKhWBnadIrfz53vxwOnggytDAWyRoc=
+			CW2BmxGS0n1KbhEphR50Lp9t8zsiQDzdw24iFfJr1xU=
 			</data>
 		</dict>
 		<key>Modules/OSHealthFitnessLib.swiftmodule/arm64-apple-ios-simulator.swiftmodule</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			YlA7Qf43MU9Wmm6MkAUtUF4Nx1x6S/DOMKeV9nUAFPY=
+			uHCJ+LjPRpOA2Sl1DECF2FBrmk+uxDivwYSKp4xoxNo=
 			</data>
 		</dict>
 		<key>Modules/OSHealthFitnessLib.swiftmodule/x86_64-apple-ios-simulator.swiftdoc</key>
@@ -137,14 +137,14 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			yR4KCB6sOz0qfcoEM5PHGo2XqRIO3loigAagnqunxfE=
+			FeJnsK5v43iqE8dq6fsbVGVvJRc97P9zFZx0Mac8wZ4=
 			</data>
 		</dict>
 		<key>Modules/OSHealthFitnessLib.swiftmodule/x86_64-apple-ios-simulator.swiftmodule</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			aroVxrhpSVk+wNIgwb0oMW2kPNycSnj4zdPp1YgJW2s=
+			GuiRDREBkdYlAsBi8xjjfxftMUvmitr4+Q8dVkapimk=
 			</data>
 		</dict>
 		<key>Modules/module.modulemap</key>

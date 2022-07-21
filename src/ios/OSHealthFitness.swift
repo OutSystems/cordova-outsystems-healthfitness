@@ -1,4 +1,3 @@
-import Foundation
 import OSHealthFitnessLib
 
 @objc(OSHealthFitness)
@@ -12,7 +11,7 @@ class OSHealthFitness: CordovaImplementation {
     
     @objc(requestPermissions:)
     func requestPermissions(command: CDVInvokedUrlCommand) {
-        callbackId = command.callbackId
+        self.callbackId = command.callbackId
         
         let customPermissions = command.arguments[0] as? String ?? ""
         let allVariables = command.arguments[1] as? String ?? ""
@@ -20,21 +19,12 @@ class OSHealthFitness: CordovaImplementation {
         let healthVariables = command.arguments[3] as? String ?? ""
         let profileVariables = command.arguments[4] as? String ?? ""
         let summaryVariables = command.arguments[5] as? String ?? ""
+        let variable = VariableStruct(allVariables: allVariables, fitnessVariables: fitnessVariables, healthVariables: healthVariables, profileVariables: profileVariables, summaryVariables: summaryVariables)
         
-        plugin?.requestPermissions(customPermissions:customPermissions,
-                                   allVariables:allVariables,
-                                   fitnessVariables:fitnessVariables,
-                                   healthVariables:healthVariables,
-                                   profileVariables:profileVariables,
-                                   summaryVariables:summaryVariables) { [self] (authorized, error) in
+        self.plugin?.requestPermissions(customPermissions:customPermissions, variable: variable) { [weak self] authorized, error in
+            guard let self = self else { return }
             
-            if let err = error {
-                self.sendResult(result: "", error:err , callBackID: self.callbackId)
-            }
-            
-            if authorized {
-                self.sendResult(result: "", error: nil, callBackID: self.callbackId)
-            }
+            self.sendResult(result: "", error: !authorized ? error : nil, callBackID: self.callbackId)
         }
     }
     
@@ -62,29 +52,22 @@ class OSHealthFitness: CordovaImplementation {
     
     @objc(updateBackgroundJob:)
     func updateBackgroundJob(command: CDVInvokedUrlCommand) {
-        callbackId = command.callbackId
+        self.callbackId = command.callbackId
         
         let queryParameters = command.arguments[0] as? String ?? ""
-        if let parameters = parseUpdateParameters(parameters: queryParameters) {
-            
-            plugin?.updateBackgroundJob(id: parameters.id,
-                                        notificationFrequency: parameters.notificationFrequency,
-                                        notificationFrequencyGrouping: parameters.notificationFrequencyGrouping,
-                                        condition: parameters.condition,
-                                        value: parameters.value,
-                                        notificationHeader: parameters.notificationHeader,
-                                        notificationBody: parameters.notificationBody,
-                                        isActive: parameters.isActive)
-            { success, error in
+        if let parameters = self.parseUpdateParameters(parameters: queryParameters) {
+            self.plugin?.updateBackgroundJob(
+                id: parameters.id,
+                notificationFrequency: (parameters.notificationFrequency, parameters.notificationFrequencyGrouping),
+                condition: parameters.condition,
+                value: parameters.value,
+                notificationText: (parameters.notificationHeader, parameters.notificationBody),
+                isActive: parameters.isActive
+            ) { [weak self] success, error in
+                guard let self = self else { return }
                 
-                if error != nil {
-                    self.sendResult(result: "", error: error, callBackID: self.callbackId)
-                }
-                else if success {
-                    self.sendResult(result: "", error: nil, callBackID: self.callbackId)
-                }
+                self.sendResult(result: "", error: !success ? error : nil, callBackID: self.callbackId)
             }
-            
         }
     }
     
@@ -125,58 +108,54 @@ class OSHealthFitness: CordovaImplementation {
     
     @objc(getLastRecord:)
     func getLastRecord(command: CDVInvokedUrlCommand) {
-        callbackId = command.callbackId
+        self.callbackId = command.callbackId
         let variable = command.arguments[0] as? String ?? ""
         
-        plugin?.advancedQuery(variable: variable,
-                              startDate: Date.distantPast,
-                              endDate: Date(),
-                              timeUnit: "",
-                              operationType: "MOST_RECENT",
-                              mostRecent:true,
-                              onlyFilledBlocks: false,
-                              timeUnitLength: 1) { success, result, error in
+        self.plugin?.advancedQuery(
+            variable: variable,
+            date: (Date.distantPast, Date()),
+            timeUnit: "",
+            operationType: "MOST_RECENT",
+            mostRecent: true,
+            onlyFilledBlocks: false,
+            timeUnitLength: 1
+        ) { [weak self] success, result, error in
+            guard let self = self else { return }
             
-            if error != nil {
-                self.sendResult(result: nil, error: error, callBackID: self.callbackId)
-            } else if success {
+            if success {
                 self.sendResult(result: result, error: nil, callBackID: self.callbackId)
+            } else {
+                self.sendResult(result: nil, error: error, callBackID: self.callbackId)
             }
         }
-        
     }
     
     @objc(deleteBackgroundJob:)
     func deleteBackgroundJob(command: CDVInvokedUrlCommand) {
-        callbackId = command.callbackId
+        self.callbackId = command.callbackId
         let id = command.arguments[0] as? String ?? ""
-        plugin?.deleteBackgroundJobs(id: id) { success, error in
-            if error != nil {
-                self.sendResult(result: nil, error: error, callBackID: self.callbackId)
-            } else if success {
-                self.sendResult(result: "", error: nil, callBackID: self.callbackId)
-            }
+        
+        self.plugin?.deleteBackgroundJobs(id: id) { [weak self] error in
+            guard let self = self else { return }
+            
+            self.sendResult(result: error == nil ? "" : nil, error: error, callBackID: self.callbackId)
         }
     }
     
     @objc(listBackgroundJobs:)
     func listBackgroundJobs(command: CDVInvokedUrlCommand) {
-        callbackId = command.callbackId
-        plugin?.listBackgroundJobs() { success, result, error in
-            if error != nil {
-                self.sendResult(result: nil, error: error, callBackID: self.callbackId)
-            } else if success {
-                self.sendResult(result: result, error: nil, callBackID: self.callbackId)
-            }
-        }
+        self.callbackId = command.callbackId
+        
+        let result = self.plugin?.listBackgroundJobs()
+        self.sendResult(result: result, error: nil, callBackID: self.callbackId)
     }
     
     @objc(setBackgroundJob:)
     func setBackgroundJob(command: CDVInvokedUrlCommand) {
-        callbackId = command.callbackId
+        self.callbackId = command.callbackId
         
         let queryParameters = command.arguments[0] as? String ?? ""
-        if let params = queryParameters.decode(string: queryParameters) as BackgroundJobParameters? {
+        if let params = queryParameters.decode() as BackgroundJobParameters? {
             
             let variable = params.variable ?? ""
             let timeUnitGrouping = params.timeUnitGrouping ?? 0
@@ -189,23 +168,21 @@ class OSHealthFitness: CordovaImplementation {
             let notificationHeader = params.notificationHeader ?? ""
             let notificationBody = params.notificationBody ?? ""
             
-            plugin?.setBackgroundJob(variable: variable,
-                                     timeUnit: timeUnit,
-                                     timeUnitGrouping: timeUnitGrouping,
-                                     notificationFrequency: notificationFrequency,
-                                     notificationFrequencyGrouping: notificationFrequencyGrouping,
-                                     jobFrequency: jobFrequency,
-                                     condition: condition,
-                                     value: value,
-                                     notificationHeader: notificationHeader,
-                                     notificationBody: notificationBody)
-            { success, result, error in
+            self.plugin?.setBackgroundJob(
+                variable: variable,
+                timeUnit: (timeUnit,  timeUnitGrouping),
+                notificationFrequency: (notificationFrequency, notificationFrequencyGrouping),
+                jobFrequency: jobFrequency,
+                condition: condition,
+                value: value,
+                notificationText: (notificationHeader, notificationBody)
+            ) { [weak self] success, result, error in
+                guard let self = self else { return }
                 
-                if error != nil {
-                    self.sendResult(result: nil, error: error, callBackID: self.callbackId)
-                }
-                else if success {
+                if success {
                     self.sendResult(result: result, error: nil, callBackID: self.callbackId)
+                } else {
+                    self.sendResult(result: nil, error: error, callBackID: self.callbackId)
                 }
             }
         }
@@ -213,10 +190,10 @@ class OSHealthFitness: CordovaImplementation {
     
     @objc(getData:)
     func getData(command: CDVInvokedUrlCommand) {
-        callbackId = command.callbackId
+        self.callbackId = command.callbackId
         
         let queryParameters = command.arguments[0] as? String ?? ""
-        if let params = queryParameters.decode(string: queryParameters) as QueryParameters? {
+        if let params = queryParameters.decode() as QueryParameters? {
             
             let variable = params.variable ?? ""
             let startDate = params.startDate ?? ""
@@ -226,25 +203,23 @@ class OSHealthFitness: CordovaImplementation {
             let timeUnitLength = params.timeUnitLength ?? 1
             let onlyFilledBlocks = params.advancedQueryReturnType == AdvancedQueryReturnTypeEnum.removeEmptyDataBlocks.rawValue
             
-            plugin?.advancedQuery(variable: variable,
-                                  startDate: Date(startDate),
-                                  endDate: Date(endDate),
-                                  timeUnit: timeUnit,
-                                  operationType: operationType,
-                                  mostRecent: false,
-                                  onlyFilledBlocks: onlyFilledBlocks,
-                                  timeUnitLength: timeUnitLength) { success, result, error in
+            self.plugin?.advancedQuery(
+                variable: variable,
+                date: (Date(startDate), Date(endDate)),
+                timeUnit: timeUnit,
+                operationType: operationType,
+                mostRecent: false,
+                onlyFilledBlocks: onlyFilledBlocks,
+                timeUnitLength: timeUnitLength
+            ) { [weak self] success, result, error in
+                guard let self = self else { return }
                 
-                if error != nil {
+                if success {
+                    self.sendResult(result: result, error: nil, callBackID: self.callbackId)
+                } else {
                     self.sendResult(result: nil, error: error, callBackID: self.callbackId)
                 }
-                else if success {
-                    self.sendResult(result: result, error: nil, callBackID: self.callbackId)
-                }
             }
-            
         }
-        
     }
-    
 }
