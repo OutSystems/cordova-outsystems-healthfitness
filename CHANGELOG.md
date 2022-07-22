@@ -9,6 +9,7 @@ The changes documented here do not include those from the original repository.
 ## [Version 1.2.7]
 
 - Fix: Apply Date Range filter while processing Advanced Query Results, so that data blocks that don't belong to the requested dates can be omitted (https://outsystemsrd.atlassian.net/browse/RMET-1718).
+- Fix: Create AdvancedQueryDataPoint structure and AdvancedQueryResultType parameter so that we can control what to output on the native side (https://outsystemsrd.atlassian.net/browse/RMET-1724).
 
 ## [Version 1.2.6]
 
