@@ -16,69 +16,16 @@
       <preference name="GradlePluginKotlinEnabled" value="true" />
       <preference name="GradlePluginKotlinCodeStyle" value="official" />
       <preference name="AndroidXEnabled" value="true"/>
-
-      <service android:name="com.outsystems.plugins.healthfitness.MyDataUpdateService"
-               android:exported="true"/>
-
     </config-file>
+
     <config-file parent="/*" target="AndroidManifest.xml">
       <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
       <uses-permission android:name="android.permission.ACTIVITY_RECOGNITION" />
       <uses-permission android:name="android.permission.BODY_SENSORS" />
     </config-file>
 
-    <config-file target="AndroidManifest.xml" parent="/manifest/application">
-        
-      <receiver android:name="com.outsystems.plugins.healthfitness.background.VariableUpdateService"
-            android:exported="false">
-      </receiver>
-
-      <activity
-            android:exported="false"
-            android:launchMode="singleTask"
-            android:name="com.outsystems.plugins.healthfitness.background.ClickActivity"
-            android:theme="@android:style/Theme.NoDisplay" />
-        
-    </config-file>
-
     <!-- HealthFitness Plugin -->
     <source-file src="src/android/com/outsystems/plugins/healthfitness/OSHealthFitness.kt" target-dir="app/src/main/kotlin/com/outsystems/plugins/healthfitness"/>
-    <source-file src="src/android/com/outsystems/plugins/healthfitness/AndroidPlatformInterface.kt" target-dir="app/src/main/kotlin/com/outsystems/plugins/healthfitness"/>
-    
-    <source-file src="src/android/com/outsystems/plugins/healthfitness/oshealthfitnesslibrary/HealthFitnessError.kt" target-dir="app/src/main/kotlin/com/outsystems/plugins/healthfitness"/>
-
-    <source-file src="src/android/com/outsystems/plugins/healthfitness/oshealthfitnesslibrary/store/HealthStore.kt" target-dir="app/src/main/kotlin/com/outsystems/plugins/healthfitness/store"/>
-    <source-file src="src/android/com/outsystems/plugins/healthfitness/oshealthfitnesslibrary/store/HealthStoreInterface.kt" target-dir="app/src/main/kotlin/com/outsystems/plugins/healthfitness/store"/>
-    <source-file src="src/android/com/outsystems/plugins/healthfitness/oshealthfitnesslibrary/store/GoogleFitPermission.kt" target-dir="app/src/main/kotlin/com/outsystems/plugins/healthfitness/store"/>
-    <source-file src="src/android/com/outsystems/plugins/healthfitness/oshealthfitnesslibrary/store/GoogleFitVariable.kt" target-dir="app/src/main/kotlin/com/outsystems/plugins/healthfitness/store"/>
-    <source-file src="src/android/com/outsystems/plugins/healthfitness/oshealthfitnesslibrary/store/GoogleFitGroupPermission.kt" target-dir="app/src/main/kotlin/com/outsystems/plugins/healthfitness/store"/>
-    <source-file src="src/android/com/outsystems/plugins/healthfitness/oshealthfitnesslibrary/store/AdvancedQueryParameters.kt" target-dir="app/src/main/kotlin/com/outsystems/plugins/healthfitness/store"/>
-    <source-file src="src/android/com/outsystems/plugins/healthfitness/oshealthfitnesslibrary/store/AdvancedQueryResponse.kt" target-dir="app/src/main/kotlin/com/outsystems/plugins/healthfitness/store"/>
-    <source-file src="src/android/com/outsystems/plugins/healthfitness/oshealthfitnesslibrary/store/AdvancedQueryResponseBlock.kt" target-dir="app/src/main/kotlin/com/outsystems/plugins/healthfitness/store"/>
-    <source-file src="src/android/com/outsystems/plugins/healthfitness/oshealthfitnesslibrary/store/AdvancedQuery.kt" target-dir="app/src/main/kotlin/com/outsystems/plugins/healthfitness/store"/>
-    <source-file src="src/android/com/outsystems/plugins/healthfitness/oshealthfitnesslibrary/store/AdvancedQueryBucketProcessor.kt" target-dir="app/src/main/kotlin/com/outsystems/plugins/healthfitness/store"/>
-    <source-file src="src/android/com/outsystems/plugins/healthfitness/oshealthfitnesslibrary/store/HealthFitnessManager.kt" target-dir="app/src/main/kotlin/com/outsystems/plugins/healthfitness/store"/>
-    <source-file src="src/android/com/outsystems/plugins/healthfitness/oshealthfitnesslibrary/store/HealthFitnessManagerInterface.kt" target-dir="app/src/main/kotlin/com/outsystems/plugins/healthfitness/store"/>
-    <source-file src="src/android/com/outsystems/plugins/healthfitness/oshealthfitnesslibrary/store/HealthStoreException.kt" target-dir="app/src/main/kotlin/com/outsystems/plugins/healthfitness/store"/>
-
-    <source-file src="src/android/com/outsystems/plugins/healthfitness/oshealthfitnesslibrary/background/BackgroundJobParameters.kt" target-dir="app/src/main/kotlin/com/outsystems/plugins/healthfitness/background"/>
-    <source-file src="src/android/com/outsystems/plugins/healthfitness/oshealthfitnesslibrary/background/UpdateBackgroundJobParameters.kt" target-dir="app/src/main/kotlin/com/outsystems/plugins/healthfitness/background"/>
-    <source-file src="src/android/com/outsystems/plugins/healthfitness/oshealthfitnesslibrary/background/ClickActivity.kt" target-dir="app/src/main/kotlin/com/outsystems/plugins/healthfitness/background"/>
-    <source-file src="src/android/com/outsystems/plugins/healthfitness/oshealthfitnesslibrary/background/VariableUpdateService.kt" target-dir="app/src/main/kotlin/com/outsystems/plugins/healthfitness/background"/>
-    <source-file src="src/android/com/outsystems/plugins/healthfitness/oshealthfitnesslibrary/background/VariableUpdateManager.kt" target-dir="app/src/main/kotlin/com/outsystems/plugins/healthfitness/background"/>
-    <source-file src="src/android/com/outsystems/plugins/healthfitness/oshealthfitnesslibrary/background/BackgroundJobResponseBlock.kt" target-dir="app/src/main/kotlin/com/outsystems/plugins/healthfitness/background"/>
-    <source-file src="src/android/com/outsystems/plugins/healthfitness/oshealthfitnesslibrary/background/BackgroundJobsResponse.kt" target-dir="app/src/main/kotlin/com/outsystems/plugins/healthfitness/background"/>
-
-    <source-file src="src/android/com/outsystems/plugins/healthfitness/oshealthfitnesslibrary/background/database/AppDatabase.kt" target-dir="app/src/main/kotlin/com/outsystems/plugins/healthfitness/background/database"/>
-    <source-file src="src/android/com/outsystems/plugins/healthfitness/oshealthfitnesslibrary/background/database/BackgroundJob.kt" target-dir="app/src/main/kotlin/com/outsystems/plugins/healthfitness/background/database"/>
-    <source-file src="src/android/com/outsystems/plugins/healthfitness/oshealthfitnesslibrary/background/database/BackgroundJobDao.kt" target-dir="app/src/main/kotlin/com/outsystems/plugins/healthfitness/background/database"/>
-    <source-file src="src/android/com/outsystems/plugins/healthfitness/oshealthfitnesslibrary/background/database/DatabaseManager.kt" target-dir="app/src/main/kotlin/com/outsystems/plugins/healthfitness/background/database"/>
-    <source-file src="src/android/com/outsystems/plugins/healthfitness/oshealthfitnesslibrary/background/database/DatabaseManagerInterface.kt" target-dir="app/src/main/kotlin/com/outsystems/plugins/healthfitness/background/database"/>
-    <source-file src="src/android/com/outsystems/plugins/healthfitness/oshealthfitnesslibrary/background/database/Notification.kt" target-dir="app/src/main/kotlin/com/outsystems/plugins/healthfitness/background/database"/>
-    <source-file src="src/android/com/outsystems/plugins/healthfitness/oshealthfitnesslibrary/background/database/NotificationDao.kt" target-dir="app/src/main/kotlin/com/outsystems/plugins/healthfitness/background/database"/>
-
-    <!-- OS Cordova Library -->
-    <source-file src="src/android/OSCordova/src/main/java/com/outsystems/plugins/oscordova/CordovaImplementation.kt" target-dir="app/src/main/kotlin/com/outsystems/plugins/healthfitness"/>
 
     <framework src="src/android/build.gradle" custom="true" type="gradleReference" />
     <framework src="org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.4.3" />

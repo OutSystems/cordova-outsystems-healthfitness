@@ -9,13 +9,11 @@ import androidx.core.content.ContextCompat
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
 import com.google.gson.Gson
-import com.outsystems.plugins.healthfitness.background.UpdateBackgroundJobParameters
 import com.outsystems.plugins.healthfitness.background.BackgroundJobParameters
 import com.outsystems.plugins.healthfitness.background.DatabaseManager
-import com.outsystems.plugins.healthfitness.HealthFitnessError
+import com.outsystems.plugins.healthfitness.background.UpdateBackgroundJobParameters
 import com.outsystems.plugins.healthfitness.store.*
 import com.outsystems.plugins.oscordova.CordovaImplementation
-
 import org.apache.cordova.*
 import org.json.JSONArray
 
@@ -92,7 +90,7 @@ class OSHealthFitness : CordovaImplementation() {
             checkAndGrantPermissions()
         }
         catch (hse : HealthStoreException) {
-            sendPluginResult(null, Pair(hse.error.code, hse.error.message))
+            sendPluginResult(null, Pair(hse.error.code.toString(), hse.error.message))
         }
     }
 
@@ -141,7 +139,7 @@ class OSHealthFitness : CordovaImplementation() {
                 sendPluginResult(pluginResponseJson)
             },
             { error ->
-                sendPluginResult(null, Pair(error.code, error.message))
+                sendPluginResult(null, Pair(error.code.toString(), error.message))
             }
         )
     }
@@ -159,7 +157,7 @@ class OSHealthFitness : CordovaImplementation() {
                 sendPluginResult(response)
             },
             { error ->
-                sendPluginResult(null, Pair(error.code, error.message))
+                sendPluginResult(null, Pair(error.code.toString(), error.message))
             }
 
         )
@@ -175,7 +173,7 @@ class OSHealthFitness : CordovaImplementation() {
                 sendPluginResult(pluginResponseJson)
             },
             { error ->
-                sendPluginResult(null, Pair(error.code, error.message))
+                sendPluginResult(null, Pair(error.code.toString(), error.message))
             })
     }
 
@@ -188,7 +186,7 @@ class OSHealthFitness : CordovaImplementation() {
                 sendPluginResult(response)
             },
             { error ->
-                sendPluginResult(null, Pair(error.code, error.message))
+                sendPluginResult(null, Pair(error.code.toString(), error.message))
             }
         )
     }
@@ -201,7 +199,7 @@ class OSHealthFitness : CordovaImplementation() {
                 sendPluginResult(response)
             },
             { error ->
-                sendPluginResult(null, Pair(error.code, error.message))
+                sendPluginResult(null, Pair(error.code.toString(), error.message))
             }
         )
     }
@@ -213,7 +211,7 @@ class OSHealthFitness : CordovaImplementation() {
                 sendPluginResult(pluginResponseJson)
             },
             { error ->
-                sendPluginResult(null, Pair(error.code, error.message))
+                sendPluginResult(null, Pair(error.code.toString(), error.message))
             }
         )
     }
@@ -226,7 +224,7 @@ class OSHealthFitness : CordovaImplementation() {
                 sendPluginResult(response)
             },
             { error ->
-                sendPluginResult(null, Pair(error.code, error.message))
+                sendPluginResult(null, Pair(error.code.toString(), error.message))
             }
         )
     }
@@ -238,7 +236,7 @@ class OSHealthFitness : CordovaImplementation() {
         }
         catch(hse : HealthStoreException) {
             val error = hse.error
-            sendPluginResult(null, Pair(error.code, error.message))
+            sendPluginResult(null, Pair(error.code.toString(), error.message))
         }
     }
 
@@ -247,12 +245,12 @@ class OSHealthFitness : CordovaImplementation() {
         val status = googleApiAvailability.isGooglePlayServicesAvailable(cordova.activity)
 
         if (status != ConnectionResult.SUCCESS) {
-            var result: Pair<Int, String>? = null
+            var result: Pair<String, String>? = null
             result = if (googleApiAvailability.isUserResolvableError(status)) {
                 googleApiAvailability.getErrorDialog(cordova.activity, status, 1).show()
-                Pair(HealthFitnessError.GOOGLE_SERVICES_RESOLVABLE_ERROR.code, HealthFitnessError.GOOGLE_SERVICES_RESOLVABLE_ERROR.message)
+                Pair(HealthFitnessError.GOOGLE_SERVICES_RESOLVABLE_ERROR.code.toString(), HealthFitnessError.GOOGLE_SERVICES_RESOLVABLE_ERROR.message)
             } else {
-                Pair(HealthFitnessError.GOOGLE_SERVICES_ERROR.code, HealthFitnessError.GOOGLE_SERVICES_ERROR.message)
+                Pair(HealthFitnessError.GOOGLE_SERVICES_ERROR.code.toString(), HealthFitnessError.GOOGLE_SERVICES_ERROR.message)
             }
             sendPluginResult(null, result)
             return false
