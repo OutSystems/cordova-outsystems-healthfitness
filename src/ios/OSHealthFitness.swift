@@ -202,6 +202,7 @@ class OSHealthFitness: CordovaImplementation {
             let operationType = params.operationType ?? ""
             let timeUnitLength = params.timeUnitLength ?? 1
             let onlyFilledBlocks = params.advancedQueryReturnType == AdvancedQueryReturnTypeEnum.removeEmptyDataBlocks.rawValue
+            let resultType = AdvancedQueryResultType.get(with: params.advancedQueryResultType ?? "")
             
             self.plugin?.advancedQuery(
                 variable: variable,
@@ -210,6 +211,7 @@ class OSHealthFitness: CordovaImplementation {
                 operationType: operationType,
                 mostRecent: false,
                 onlyFilledBlocks: onlyFilledBlocks,
+                resultType: resultType,
                 timeUnitLength: timeUnitLength
             ) { [weak self] success, result, error in
                 guard let self = self else { return }
