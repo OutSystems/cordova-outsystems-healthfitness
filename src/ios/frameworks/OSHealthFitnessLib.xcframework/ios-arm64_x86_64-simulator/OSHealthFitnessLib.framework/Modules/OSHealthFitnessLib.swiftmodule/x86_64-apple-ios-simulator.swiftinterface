@@ -55,7 +55,7 @@ open class HealthFitnessPlugin {
   public func requestPermissions(customPermissions: Swift.String, variable: OSHealthFitnessLib.VariableStruct, completion: @escaping (Swift.Bool, Foundation.NSError?) -> Swift.Void)
   public func setBackgroundJob(variable: Swift.String, timeUnit: (name: Swift.String, grouping: Swift.Int), notificationFrequency: (name: Swift.String, grouping: Swift.Int), jobFrequency: Swift.String, condition: Swift.String, value: Swift.Double, notificationText: (header: Swift.String, body: Swift.String), completion: @escaping (Swift.Bool, Swift.String?, Foundation.NSError?) -> Swift.Void)
   public func updateBackgroundJob(id: Swift.Int64?, notificationFrequency: (name: Swift.String?, grouping: Swift.Int?), condition: Swift.String?, value: Swift.Double?, notificationText: (header: Swift.String?, body: Swift.String?), isActive: Swift.Bool?, completion: @escaping (Swift.Bool, Foundation.NSError?) -> Swift.Void)
-  public func advancedQuery(variable: Swift.String, date: (start: Foundation.Date, end: Foundation.Date), timeUnit: Swift.String, operationType: Swift.String, mostRecent: Swift.Bool, onlyFilledBlocks: Swift.Bool, timeUnitLength: Swift.Int, completion: @escaping (Swift.Bool, Swift.String?, Foundation.NSError?) -> Swift.Void)
+  public func advancedQuery(variable: Swift.String, date: (start: Foundation.Date, end: Foundation.Date), timeUnit: Swift.String, operationType: Swift.String, mostRecent: Swift.Bool, onlyFilledBlocks: Swift.Bool, resultType: OSHealthFitnessLib.AdvancedQueryResultType = .allType, timeUnitLength: Swift.Int, completion: @escaping (Swift.Bool, Swift.String?, Foundation.NSError?) -> Swift.Void)
   @objc deinit
 }
 extension Foundation.Date {
@@ -88,12 +88,26 @@ public class BackgroundJobParameters : Swift.Codable {
   required public init(from decoder: Swift.Decoder) throws
 }
 public enum AdvancedQueryReturnTypeEnum : Swift.String {
-  case allData, removeEmptyDataBlocks
+  case allData
+  case removeEmptyDataBlocks
   public init?(rawValue: Swift.String)
   public typealias RawValue = Swift.String
   public var rawValue: Swift.String {
     get
   }
+}
+public struct AdvancedQueryResultType : Swift.OptionSet {
+  public typealias RawValue = Swift.Int
+  public var rawValue: OSHealthFitnessLib.AdvancedQueryResultType.RawValue
+  public init(rawValue: OSHealthFitnessLib.AdvancedQueryResultType.RawValue)
+  public static let rawDataType: OSHealthFitnessLib.AdvancedQueryResultType
+  public static let dataPointType: OSHealthFitnessLib.AdvancedQueryResultType
+  public static let allType: OSHealthFitnessLib.AdvancedQueryResultType
+  public typealias ArrayLiteralElement = OSHealthFitnessLib.AdvancedQueryResultType
+  public typealias Element = OSHealthFitnessLib.AdvancedQueryResultType
+}
+extension OSHealthFitnessLib.AdvancedQueryResultType {
+  public static func get(with description: Swift.String) -> OSHealthFitnessLib.AdvancedQueryResultType
 }
 @_hasMissingDesignatedInitializers public class QueryParameters : Swift.Codable {
   final public let variable: Swift.String?
@@ -101,6 +115,7 @@ public enum AdvancedQueryReturnTypeEnum : Swift.String {
   final public let timeUnit: Swift.String?, operationType: Swift.String?
   final public let timeUnitLength: Swift.Int?
   final public let advancedQueryReturnType: Swift.String?
+  final public let advancedQueryResultType: Swift.String?
   @objc deinit
   public func encode(to encoder: Swift.Encoder) throws
   required public init(from decoder: Swift.Decoder) throws
