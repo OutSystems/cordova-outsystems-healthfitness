@@ -117,7 +117,8 @@ class OSHealthFitness: CordovaImplementation {
             timeUnit: "",
             operationType: "MOST_RECENT",
             mostRecent: true,
-            onlyFilledBlocks: false,
+            onlyFilledBlocks: true,
+            resultType: .rawDataType,
             timeUnitLength: 1
         ) { [weak self] success, result, error in
             guard let self = self else { return }
