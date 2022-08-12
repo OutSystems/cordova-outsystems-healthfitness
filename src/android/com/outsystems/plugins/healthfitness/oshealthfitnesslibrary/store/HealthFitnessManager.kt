@@ -68,71 +68,8 @@ class HealthFitnessManager(var context : Context, var activity : Activity? = nul
                            onSuccess: (SessionReadResponse) -> Unit,
                            onFailure: (Exception) -> Unit) {
 
-        //create sleep entries
-        val dataSource = DataSource.Builder()
-            .setType(DataSource.TYPE_RAW)
-            .setDataType(DataType.TYPE_SLEEP_SEGMENT)
-            .setAppPackageName(context)
-            // Optional but recommended for identifying the stream if you have multiple streams with the same dataType.
-            .setStreamName("streamName")
-            .build()
-
-        val oneDay = (24 * 60 * 60 * 1000)
-        val halfAnHour = (30 * 60 * 1000)
-        val fiveHours = (5 * 60 * 60 * 1000)
-
-        val dataPoints = listOf(
-            DataPoint.builder(dataSource)
-                .setTimeInterval(queryInformation.startDate.time, (queryInformation.startDate.time) + halfAnHour , TimeUnit.MILLISECONDS)
-                .setField(Field.FIELD_SLEEP_SEGMENT_TYPE, SleepStages.SLEEP_LIGHT)
-                .build(),
-            DataPoint.builder(dataSource)
-                .setTimeInterval(queryInformation.startDate.time + oneDay, (queryInformation.startDate.time) + oneDay + fiveHours, TimeUnit.MILLISECONDS)
-                .setField(Field.FIELD_SLEEP_SEGMENT_TYPE, SleepStages.SLEEP_DEEP)
-                .build(),
-            DataPoint.builder(dataSource)
-                .setTimeInterval(queryInformation.startDate.time + oneDay + oneDay , queryInformation.startDate.time + oneDay + oneDay + halfAnHour + fiveHours, TimeUnit.MILLISECONDS)
-                .setField(Field.FIELD_SLEEP_SEGMENT_TYPE, SleepStages.SLEEP_REM)
-                .build(),
-            DataPoint.builder(dataSource)
-                .setTimeInterval(queryInformation.startDate.time + oneDay + oneDay, queryInformation.startDate.time + oneDay + oneDay + halfAnHour + fiveHours, TimeUnit.MILLISECONDS)
-                .setField(Field.FIELD_SLEEP_SEGMENT_TYPE, SleepStages.AWAKE)
-                .build()
-        )
-        val dataSet = DataSet.builder(dataSource)
-            .addAll(dataPoints)
-            .build()
-        // Create the sleep session
-        val session= Session.Builder()
-            .setName("wadwd")
-            .setIdentifier("dawdawd")
-            .setDescription("awdawd")
-            .setStartTime(queryInformation.startDate.getTime(), TimeUnit.MILLISECONDS)
-            .setEndTime(queryInformation.endDate.getTime(), TimeUnit.MILLISECONDS)
-            .setActivity(FitnessActivities.SLEEP)
-            .build()
-        // Build the request to insert the session.
-        val request = SessionInsertRequest.Builder()
-            .setSession(session)
-            .addDataSet(dataSet)
-            .build()
-        // Insert the session into Fit platform
-        Log.i("INSERT", "Inserting the session with the SessionsClient")
-        Fitness.getSessionsClient(context, getLastAccount())
-            .insertSession(request)
-            .addOnSuccessListener {
-                Log.i("INSERT","Session insert was successful!")
-            }
-            .addOnFailureListener { e ->
-                Log.w("INSERT", "There was a problem inserting the session", e)
-            }
-
-
         try {
             val session: Session = Session.Builder()
-                //.setName(SESSION_NAME)
-                //.setIdentifier(SESSION_ID)
-                //.setDescription(SESSION_DESCRIPTION)
                 .setStartTime(queryInformation.startDate.time, TimeUnit.MILLISECONDS)
                 .build()
             val sessionClient = Fitness.getSessionsClient(context, getLastAccount())
