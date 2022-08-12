@@ -671,22 +671,6 @@ class HealthStore(
 
     }
 
-    private fun buildAdvancedQueryResultFromSession(resultBuckets: List<ProcessedBucket>): AdvancedQueryResponse {
-        val blockList: MutableList<AdvancedQueryResponseBlock> = mutableListOf()
-        for ((block, bucket) in resultBuckets.withIndex()) {
-            blockList.add(
-                AdvancedQueryResponseBlock(
-                    block,
-                    bucket.startDate / 1000,
-                    bucket.endDate / 1000,
-                    bucket.processedDataPoints,
-                    ""
-                )
-            )
-        }
-        return AdvancedQueryResponse(blockList)
-    }
-
     private fun buildAdvancedQueryResult(resultBuckets: List<ProcessedBucket>): AdvancedQueryResponse {
         val blockList: MutableList<AdvancedQueryResponseBlock> = mutableListOf()
         for ((block, bucket) in resultBuckets.withIndex()) {
