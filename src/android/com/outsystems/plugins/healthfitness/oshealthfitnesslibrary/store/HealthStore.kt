@@ -255,6 +255,16 @@ class HealthStore(
         )
     }
 
+    private val sleepStageNames = arrayOf(
+        "Unused",
+        "Awake",
+        "Sleep",
+        "OutOfBed",
+        "LightSleep",
+        "DeepSleep",
+        "REMSleep"
+    )
+
     override fun getVariableByName(name : String) : GoogleFitVariable? {
         return if(fitnessVariablesMap.containsKey(name)){
             fitnessVariablesMap[name]
@@ -568,56 +578,113 @@ class HealthStore(
         queryInformation.setTimeUnitGrouping(parameters.timeUnitLength)
         queryInformation.setLimit(parameters.limit)
 
-        manager.getDataFromStore(queryInformation,
-            { dataReadResponse ->
+        if (parameters.variable == "SLEEP") {
 
-                val queryResponse: AdvancedQueryResponse
+            manager.getDataFromSession(queryInformation,
+                { dataReadResponse ->
+                    val queryResponse: AdvancedQueryResponse
+                    val results: MutableList<AdvancedQueryResponseBlock> = mutableListOf()
 
-                if(queryInformation.isSingleResult()) {
+                    for (session in dataReadResponse.sessions) {
+                        // If the sleep session has finer granularity sub-components, extract them:
+                        val dataSets = dataReadResponse.getDataSet(session)
+                        for (dataSet in dataSets) {
+                            for (point in dataSet.dataPoints) {
+                                val sleepStageVal = point.getValue(Field.FIELD_SLEEP_SEGMENT_TYPE).asInt()
+                                val sleepStage = sleepStageNames[sleepStageVal]
+                                val segmentStart = point.getStartTime(TimeUnit.MILLISECONDS)
+                                val segmentEnd = point.getEndTime(TimeUnit.MILLISECONDS)
 
-                    val values = mutableListOf<Float>()
+                                val values = mutableListOf(timestampToMinute(segmentEnd - segmentStart).toFloat())
+                                val additionalData = AdditionalData(sleepStage, sleepStageVal.toString())
 
-                    try {
-                        variable.fields.forEach { field ->
-                            dataReadResponse.dataSets
-                                .flatMap { it.dataPoints }
-                                .forEach { dataPoint ->
-                                    values.add(dataPoint.getValue(field).toString().toFloat())
-                                }
+                                results.add(AdvancedQueryResponseBlock(0,
+                                                                        segmentStart,
+                                                                        segmentEnd,
+                                                                        values,
+                                                                        gson.toJson(additionalData))
+                                )
+                            }
                         }
                     }
-                    catch (_ : NullPointerException){
-                        // Ignores. Should only happen in UnitTesting.
+                    queryResponse =  AdvancedQueryResponse(results)
+                    Log.d("RESULT", gson.toJson(results))
+                    onSuccess(queryResponse)
+                },
+                {
+                    onError(HealthFitnessError.READ_DATA_ERROR)
+                }
+            )
+
+        } else {
+            manager.getDataFromStore(queryInformation,
+                { dataReadResponse ->
+
+                    val queryResponse: AdvancedQueryResponse
+
+                    if(queryInformation.isSingleResult()) {
+
+                        val values = mutableListOf<Float>()
+
+                        try {
+                            variable.fields.forEach { field ->
+                                dataReadResponse.dataSets
+                                    .flatMap { it.dataPoints }
+                                    .forEach { dataPoint ->
+                                        values.add(dataPoint.getValue(field).toString().toFloat())
+                                    }
+                            }
+                        }
+                        catch (_ : NullPointerException){
+                            // Ignores. Should only happen in UnitTesting.
+                        }
+
+                        val responseBlock = AdvancedQueryResponseBlock(
+                            0,
+                            startDate.time / 1000,
+                            endDate.time / 1000,
+                            values,
+                            "")
+
+                        queryResponse = AdvancedQueryResponse(listOf(responseBlock))
+                    }
+                    else {
+                        val buckets = try {
+                            queryInformation.processBuckets(dataReadResponse.buckets)
+                        } catch (_: NullPointerException) {
+                            listOf(ProcessedBucket(startDate.time, endDate.time))
+                        }
+
+                        queryResponse = buildAdvancedQueryResult(buckets)
                     }
 
-                    val responseBlock = AdvancedQueryResponseBlock(
-                        0,
-                        startDate.time / 1000,
-                        endDate.time / 1000,
-                        values)
+                    convertResultUnits(parameters.variable, queryResponse)
 
-                    queryResponse = AdvancedQueryResponse(listOf(responseBlock))
+                    Log.d("RESULT", gson.toJson(queryResponse))
+                    onSuccess(queryResponse)
+                },
+                {
+                    onError(HealthFitnessError.READ_DATA_ERROR)
                 }
-                else {
-                    val buckets = try {
-                        queryInformation.processBuckets(dataReadResponse.buckets)
-                    } catch (_: NullPointerException) {
-                        listOf(ProcessedBucket(startDate.time, endDate.time))
-                    }
+            )
+        }
 
-                    queryResponse = buildAdvancedQueryResult(buckets)
-                }
+    }
 
-                convertResultUnits(parameters.variable, queryResponse)
-
-                Log.d("RESULT", gson.toJson(queryResponse))
-                onSuccess(queryResponse)
-            },
-            { e ->
-                onError(HealthFitnessError.READ_DATA_ERROR)
-            }
-        )
-
+    private fun buildAdvancedQueryResultFromSession(resultBuckets: List<ProcessedBucket>): AdvancedQueryResponse {
+        val blockList: MutableList<AdvancedQueryResponseBlock> = mutableListOf()
+        for ((block, bucket) in resultBuckets.withIndex()) {
+            blockList.add(
+                AdvancedQueryResponseBlock(
+                    block,
+                    bucket.startDate / 1000,
+                    bucket.endDate / 1000,
+                    bucket.processedDataPoints,
+                    ""
+                )
+            )
+        }
+        return AdvancedQueryResponse(blockList)
     }
 
     private fun buildAdvancedQueryResult(resultBuckets: List<ProcessedBucket>): AdvancedQueryResponse {
@@ -628,7 +695,8 @@ class HealthStore(
                     block,
                     bucket.startDate / 1000,
                     bucket.endDate / 1000,
-                    bucket.processedDataPoints
+                    bucket.processedDataPoints,
+                    ""
                 )
             )
         }
@@ -814,6 +882,10 @@ class HealthStore(
             )
         }
         return responseJobList
+    }
+
+    private fun timestampToMinute(timestamp: Long): Long{
+        return (timestamp / 1000) / 60
     }
 
     override fun updateBackgroundJob(parameters: UpdateBackgroundJobParameters,
