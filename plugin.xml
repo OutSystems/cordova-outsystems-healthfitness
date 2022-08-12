@@ -60,6 +60,8 @@
     <source-file src="src/android/com/outsystems/plugins/healthfitness/oshealthfitnesslibrary/store/HealthFitnessManager.kt" target-dir="app/src/main/kotlin/com/outsystems/plugins/healthfitness/store"/>
     <source-file src="src/android/com/outsystems/plugins/healthfitness/oshealthfitnesslibrary/store/HealthFitnessManagerInterface.kt" target-dir="app/src/main/kotlin/com/outsystems/plugins/healthfitness/store"/>
     <source-file src="src/android/com/outsystems/plugins/healthfitness/oshealthfitnesslibrary/store/HealthStoreException.kt" target-dir="app/src/main/kotlin/com/outsystems/plugins/healthfitness/store"/>
+        <source-file src="src/android/com/outsystems/plugins/healthfitness/oshealthfitnesslibrary/store/AdditionalData.kt" target-dir="app/src/main/kotlin/com/outsystems/plugins/healthfitness/store"/>
+
 
     <source-file src="src/android/com/outsystems/plugins/healthfitness/oshealthfitnesslibrary/background/BackgroundJobParameters.kt" target-dir="app/src/main/kotlin/com/outsystems/plugins/healthfitness/background"/>
     <source-file src="src/android/com/outsystems/plugins/healthfitness/oshealthfitnesslibrary/background/UpdateBackgroundJobParameters.kt" target-dir="app/src/main/kotlin/com/outsystems/plugins/healthfitness/background"/>
