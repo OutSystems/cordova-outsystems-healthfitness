@@ -45,8 +45,8 @@ data class ProcessedBucket(
 
 class AdvancedQuery(
     private val variable : GoogleFitVariable,
-    private val startDate : Date,
-    private val endDate : Date)
+    val startDate : Date,
+    val endDate : Date)
 {
     private var dataSource : DataSource? = null
     private var dataRequestBuilder : DataReadRequest.Builder = DataReadRequest.Builder()
@@ -131,7 +131,7 @@ class AdvancedQuery(
         var filteredBuckets = buckets
         if(bucketBySession){
             filteredBuckets = buckets.filter {
-                it.session.activity in variable.filterBySession
+                it.session?.activity in variable.filterBySession
             }
         }
 

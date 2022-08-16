@@ -16,6 +16,10 @@ interface HealthFitnessManagerInterface {
     fun requestPermissions(fitnessOptions: FitnessOptions, resultCode: Int)
     fun updateDataOnStore(dataSet: DataSet?, onSuccess: () -> Unit, onFailure: (Exception) -> Unit)
 
+    fun getDataFromSession(queryInformation: AdvancedQuery,
+                           onSuccess: (SessionReadResponse) -> Unit,
+                           onFailure: (Exception) -> Unit)
+
     fun getDataFromStore(queryInformation: AdvancedQuery,
                          onSuccess: (DataReadResponse) -> Unit,
                          onFailure: (Exception) -> Unit)

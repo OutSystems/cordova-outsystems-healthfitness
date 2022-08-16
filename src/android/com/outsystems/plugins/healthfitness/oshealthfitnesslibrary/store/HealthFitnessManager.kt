@@ -4,23 +4,23 @@ import android.app.Activity
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.util.Log
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.fitness.Fitness
 import com.google.android.gms.fitness.FitnessOptions
-import com.google.android.gms.fitness.HistoryClient
-import com.google.android.gms.fitness.data.DataSet
-import com.google.android.gms.fitness.data.DataSource
+import com.google.android.gms.fitness.data.*
 import com.google.android.gms.fitness.request.DataUpdateListenerRegistrationRequest
 import com.google.android.gms.fitness.request.SensorRequest
+import com.google.android.gms.fitness.request.SessionReadRequest
 import com.google.android.gms.fitness.result.DataReadResponse
 import com.google.android.gms.fitness.result.SessionReadResponse
 import com.google.android.gms.tasks.Tasks.await
 import com.outsystems.plugins.healthfitness.HealthFitnessError
 import com.outsystems.plugins.healthfitness.background.BackgroundJobParameters
 import com.outsystems.plugins.healthfitness.background.VariableUpdateService
-import kotlinx.coroutines.awaitAll
 import java.util.concurrent.TimeUnit
+
 
 class HealthFitnessManager(var context : Context, var activity : Activity? = null): HealthFitnessManagerInterface {
 
@@ -50,6 +50,42 @@ class HealthFitnessManager(var context : Context, var activity : Activity? = nul
             .insertData(dataSet)
             .addOnSuccessListener { onSuccess() }
             .addOnFailureListener(onFailure)
+    }
+
+    override fun getDataFromSession(queryInformation: AdvancedQuery,
+                           onSuccess: (SessionReadResponse) -> Unit,
+                           onFailure: (Exception) -> Unit) {
+
+        try {
+            val session: Session = Session.Builder()
+                .setStartTime(queryInformation.startDate.time, TimeUnit.MILLISECONDS)
+                .build()
+            val sessionClient = Fitness.getSessionsClient(context, getLastAccount())
+            sessionClient.startSession(session)
+
+            val request = SessionReadRequest.Builder()
+                .readSessionsFromAllApps()
+                // By default, only activity sessions are included, so it is necessary to explicitly
+                // request sleep sessions. This will cause activity sessions to be *excluded*.
+                .includeSleepSessions()
+                // Sleep segment data is required for details of the fine-granularity sleep, if it is present.
+                .read(DataType.TYPE_SLEEP_SEGMENT)
+                .setTimeInterval(queryInformation.startDate.time, queryInformation.endDate.time, TimeUnit.MILLISECONDS)
+                .build()
+
+            sessionClient.readSession(request)
+                .addOnSuccessListener{ response ->
+                    onSuccess(response)
+                }
+                .addOnFailureListener{ error ->
+                    onFailure(error)
+                }
+
+        } catch (e: Exception) {
+            Log.i("error", "Sleep error ${e.message}")
+            onFailure(e)
+        }
+
     }
 
     override fun getDataFromStore(queryInformation: AdvancedQuery, onSuccess: (DataReadResponse) -> Unit, onFailure: (Exception) -> Unit){

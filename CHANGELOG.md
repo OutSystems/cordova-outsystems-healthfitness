@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 The changes documented here do not include those from the original repository.
 
+
+## [Unreleased]
+
+## 12-08-2022
+Android - Fix on retrieving sleep data (https://outsystemsrd.atlassian.net/browse/RMET-1734)
+
 ## [Version 1.2.7]
 
 - Fix: Apply Date Range filter while processing Advanced Query Results, so that data blocks that don't belong to the requested dates can be omitted (https://outsystemsrd.atlassian.net/browse/RMET-1718).
