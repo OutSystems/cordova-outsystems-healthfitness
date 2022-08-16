@@ -599,8 +599,8 @@ class HealthStore(
                                 val additionalData = AdditionalData(sleepStage, sleepStageVal.toString())
 
                                 results.add(AdvancedQueryResponseBlock(0,
-                                                                        segmentStart,
-                                                                        segmentEnd,
+                                                                        segmentStart / 1000,
+                                                                        segmentEnd / 1000,
                                                                         values,
                                                                         gson.toJson(additionalData))
                                 )
