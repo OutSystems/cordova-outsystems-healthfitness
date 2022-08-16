@@ -24,12 +24,6 @@ import java.util.concurrent.TimeUnit
 
 class HealthFitnessManager(var context : Context, var activity : Activity? = null): HealthFitnessManagerInterface {
 
-    companion object {
-        private const val SESSION_NAME = "HFSession"
-        private const val SESSION_ID = "HFSessionIdentifier"
-        private const val SESSION_DESCRIPTION = "HFSessionDescription"
-    }
-
     override fun createAccount(options: FitnessOptions){
         GoogleSignIn.getAccountForExtension(context, options)
     }
