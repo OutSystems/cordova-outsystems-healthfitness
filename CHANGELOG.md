@@ -9,6 +9,8 @@ The changes documented here do not include those from the original repository.
 
 ## [Unreleased]
 
+## [Version 1.2.8]
+
 ## 12-08-2022
 Android - Fix on retrieving sleep data (https://outsystemsrd.atlassian.net/browse/RMET-1734)
 
