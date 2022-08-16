@@ -89,6 +89,7 @@ class HealthFitnessManager(var context : Context, var activity : Activity? = nul
 
         } catch (e: Exception) {
             Log.i("error", "Sleep error ${e.message}")
+            onFailure(e)
         }
 
     }
