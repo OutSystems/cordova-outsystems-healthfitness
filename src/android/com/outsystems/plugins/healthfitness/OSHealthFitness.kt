@@ -9,6 +9,7 @@ import androidx.core.content.ContextCompat
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
 import com.google.gson.Gson
+import com.outsystems.osnotificationpermissions.*
 import com.outsystems.plugins.healthfitness.background.BackgroundJobParameters
 import com.outsystems.plugins.healthfitness.background.DatabaseManager
 import com.outsystems.plugins.healthfitness.background.UpdateBackgroundJobParameters
@@ -22,6 +23,7 @@ class OSHealthFitness : CordovaImplementation() {
 
     var healthStore: HealthStoreInterface? = null
     val gson by lazy { Gson() }
+    var notificationPermissions = OSNotificationPermissions()
 
     override fun initialize(cordova: CordovaInterface, webView: CordovaWebView) {
         super.initialize(cordova, webView)
@@ -178,6 +180,8 @@ class OSHealthFitness : CordovaImplementation() {
     }
 
     private fun setBackgroundJob(args: JSONArray) {
+        notificationPermissions.requestNotificationPermission(this, ACTIVITY_NOTIFICATION_PERMISSIONS_REQUEST_CODE)
+        
         //process parameters
         val parameters = gson.fromJson(args.getString(0), BackgroundJobParameters::class.java)
         healthStore?.setBackgroundJob(
@@ -278,5 +282,6 @@ class OSHealthFitness : CordovaImplementation() {
 
     companion object {
         const val ACTIVITY_LOCATION_PERMISSIONS_REQUEST_CODE = 1
+        const val ACTIVITY_NOTIFICATION_PERMISSIONS_REQUEST_CODE = 2
     }
 }

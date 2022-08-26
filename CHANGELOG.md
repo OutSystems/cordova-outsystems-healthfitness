@@ -6,14 +6,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 The changes documented here do not include those from the original repository.
 
+## [Version 1.2.9]
+- Feat: [Android] Implement request permissions, feature needed to android 13 compliance.
+
+## [Version 1.2.8]
+
+- Fix: [iOS] Apply the AdvancedQueryDataPoint structure and AdvancedQueryResultType parameter to Category and Correlation variables as well.
+- Fix: [iOS] Fix getLastRecord's result by fetching only the latest filled value.
+
 ## [Version 1.2.7]
 
-- Fix: Apply Date Range filter while processing Advanced Query Results, so that data blocks that don't belong to the requested dates can be omitted (https://outsystemsrd.atlassian.net/browse/RMET-1718).
-- Fix: Create AdvancedQueryDataPoint structure and AdvancedQueryResultType parameter so that we can control what to output on the native side (https://outsystemsrd.atlassian.net/browse/RMET-1724).
+- Fix: [iOS] Apply Date Range filter while processing Advanced Query Results, so that data blocks that don't belong to the requested dates can be omitted (https://outsystemsrd.atlassian.net/browse/RMET-1718).
+- Fix: [iOS] Create AdvancedQueryDataPoint structure and AdvancedQueryResultType parameter so that we can control what to output on the native side (https://outsystemsrd.atlassian.net/browse/RMET-1724).
 
 ## [Version 1.2.6]
 
-- Feat: Implemented option to return only filled blocks in the advanced query. (https://outsystemsrd.atlassian.net/browse/RMET-1714)
+- Feat: [iOS] Implemented option to return only filled blocks in the advanced query. (https://outsystemsrd.atlassian.net/browse/RMET-1714)
 
 ## [Version 1.2.5]
 
