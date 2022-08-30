@@ -25,10 +25,9 @@ dependencies{
 
     implementation("com.github.outsystems:oscore-android:1.2.0@aar")
     implementation("com.github.outsystems:oscordova-android:1.2.0@aar")
-    implementation("com.github.outsystems:oshealthfitness-android:1.0.0@aar")
+    implementation("com.github.outsystems:oshealthfitness-android:1.1.1@aar")
     implementation("com.github.outsystems:osnotificationpermissions-android:0.0.4@aar")
     
-
     def roomVersion = "2.4.2"
     implementation("androidx.room:room-runtime:$roomVersion")
     annotationProcessor("androidx.room:room-compiler:$roomVersion")
