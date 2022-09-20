@@ -6,13 +6,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 The changes documented here do not include those from the original repository.
 
+
 ## [Version 1.2.9]
 - Feat: [Android] Implement request permissions, feature needed to android 13 compliance.
-
-## [Version 1.2.8]
-
 - Fix: [iOS] Apply the AdvancedQueryDataPoint structure and AdvancedQueryResultType parameter to Category and Correlation variables as well.
 - Fix: [iOS] Fix getLastRecord's result by fetching only the latest filled value.
+
+## [Version 1.2.8]
+- Fix: [Android] Fix on retrieving sleep data (https://outsystemsrd.atlassian.net/browse/RMET-1734)
 
 ## [Version 1.2.7]
 
