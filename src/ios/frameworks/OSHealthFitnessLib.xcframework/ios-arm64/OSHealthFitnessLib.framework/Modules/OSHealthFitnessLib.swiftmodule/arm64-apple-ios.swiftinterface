@@ -63,6 +63,7 @@ extension Foundation.Date {
   }
   public init(_ dateString: Swift.String)
   public static func - (recent: Foundation.Date, previous: Foundation.Date) -> Foundation.Date.ResultStruct
+  public func startOfSecond() -> Foundation.Date
   public func startOfHour() -> Foundation.Date
   public func startOfDay() -> Foundation.Date
   public func startOfWeek() -> Foundation.Date
