@@ -30,7 +30,7 @@
 		</data>
 		<key>Info.plist</key>
 		<data>
-		gCmiG8I919wBlKNgSVDnimCrJ5A=
+		Z9JK4saDQmfCFOiyj/kffFoSiiY=
 		</data>
 		<key>Modules/OSHealthFitnessLib.swiftmodule/arm64-apple-ios-simulator.swiftdoc</key>
 		<data>
@@ -38,11 +38,11 @@
 		</data>
 		<key>Modules/OSHealthFitnessLib.swiftmodule/arm64-apple-ios-simulator.swiftinterface</key>
 		<data>
-		Qz4ITJTltXNcCjy4BAcyRblLDrg=
+		ycrYpkJIYsQCdizsaWZ84ga6gPQ=
 		</data>
 		<key>Modules/OSHealthFitnessLib.swiftmodule/arm64-apple-ios-simulator.swiftmodule</key>
 		<data>
-		zQ7vaJdjZcGg08fQeyPlCtnW8AE=
+		/P698f9CK/8xZOyoDEXHKTfo4Ak=
 		</data>
 		<key>Modules/OSHealthFitnessLib.swiftmodule/x86_64-apple-ios-simulator.swiftdoc</key>
 		<data>
@@ -50,11 +50,11 @@
 		</data>
 		<key>Modules/OSHealthFitnessLib.swiftmodule/x86_64-apple-ios-simulator.swiftinterface</key>
 		<data>
-		Y/C8GSUtA+L97U4TDbrYZiLwL/M=
+		bIyZVXI3FoM8V/dfoD6uoVJvlt4=
 		</data>
 		<key>Modules/OSHealthFitnessLib.swiftmodule/x86_64-apple-ios-simulator.swiftmodule</key>
 		<data>
-		VAhKicv/5BioQMjC6LyNXr20kC0=
+		KbrrnlV3LAQhTjvL3l79lfrC4JM=
 		</data>
 		<key>Modules/module.modulemap</key>
 		<data>
@@ -116,14 +116,14 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			waYSq1M8WkIiC2uH1GRAYfA/RkIqCb3CEgmLP0dOfcc=
+			OJ5VK9Hcg9noYlKMnevtfLTs0aRV+jr4zIvhf11O9UQ=
 			</data>
 		</dict>
 		<key>Modules/OSHealthFitnessLib.swiftmodule/arm64-apple-ios-simulator.swiftmodule</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			KsLuEYBZGT3QgT5HH/R9KLgkfppaoBTPOrZpVuFs0tw=
+			hFLQjT9oNMwoWQhYuxZ8+3WfZBh8Q9/FXZDy+izcRcM=
 			</data>
 		</dict>
 		<key>Modules/OSHealthFitnessLib.swiftmodule/x86_64-apple-ios-simulator.swiftdoc</key>
@@ -137,14 +137,14 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			uQRQYt3R/IN9Yxo6AGGxJRtdhuLk9FKsmxV6qchEIts=
+			1cVMBJuH77U/DCgN3bpUUQxuLS9NGAxe6TnlDsRFfmg=
 			</data>
 		</dict>
 		<key>Modules/OSHealthFitnessLib.swiftmodule/x86_64-apple-ios-simulator.swiftmodule</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			ljUR46bjUKPniUv7hihNoBSMU/IO0MI49xlFmEHSWnE=
+			mLyMux+jarFHPI6gJ8BpTk8PqKsQ2etLheqQT1XYrKc=
 			</data>
 		</dict>
 		<key>Modules/module.modulemap</key>
