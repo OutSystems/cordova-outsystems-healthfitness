@@ -1,7 +1,11 @@
 import OSHealthFitnessLib
 
+private protocol PlatformProtocol {
+    func sendResult(result: String?, error: NSError?, callBackID:String)
+}
+
 @objc(OSHealthFitness)
-class OSHealthFitness: CordovaImplementation {
+class OSHealthFitness: CDVPlugin {
     var plugin: HealthFitnessPlugin?
     var callbackId:String=""
     
@@ -225,4 +229,23 @@ class OSHealthFitness: CordovaImplementation {
             }
         }
     }
+}
+
+extension OSHealthFitness: PlatformProtocol {
+
+    func sendResult(result: String?, error: NSError?, callBackID: String) {
+        var pluginResult = CDVPluginResult(status: CDVCommandStatus_ERROR)
+
+        if let error = error, !error.localizedDescription.isEmpty {
+            let errorCode = error.code
+            let errorMessage = error.localizedDescription
+            let errorDict = ["code": errorCode, "message": errorMessage] as [String : Any]
+            pluginResult = CDVPluginResult(status: CDVCommandStatus_ERROR, messageAs: errorDict);
+        } else if let result = result {
+            pluginResult = result.isEmpty ? CDVPluginResult(status: CDVCommandStatus_OK) : CDVPluginResult(status: CDVCommandStatus_OK, messageAs: result)
+        }
+
+        self.commandDelegate.send(pluginResult, callbackId: callBackID);
+    }
+
 }

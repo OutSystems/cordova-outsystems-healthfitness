@@ -45,7 +45,6 @@
 		</config-file>
 
 		<!-- Hooks -->
-    <hook type="before_plugin_install" src="hooks/add_cordova_implementation_ios.js"/>
 
     <!-- iOS Permissions -->
     <preference name="HEALTH_SHARE_DESCRIPTION" default="App needs to shared health data" />
@@ -108,9 +107,7 @@
 
 		<!-- iOS Source Files -->
 		<source-file src="src/ios/OSHealthFitness.swift" />
-    <source-file src="src/ios/CordovaImplementation.swift" />
     <framework src="src/ios/frameworks/OSHealthFitnessLib.xcframework" embed="true" custom="true" />
-    <framework src="src/ios/frameworks/OSCore.xcframework" embed="true" custom="true" />
     
     <dependency id="cordova-plugin-add-swift-support" url="https://github.com/OutSystems/cordova-plugin-add-swift-support.git#2.0.3-OS1"/>
 
