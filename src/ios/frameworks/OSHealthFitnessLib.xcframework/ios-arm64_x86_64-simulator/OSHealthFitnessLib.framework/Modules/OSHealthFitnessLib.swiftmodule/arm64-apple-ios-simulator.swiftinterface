@@ -21,9 +21,7 @@ public enum HealthKitErrors : Swift.Int, Foundation.CustomNSError, Foundation.Lo
   case authorizationError
   case notAvailableOnDevice
   case unitNotAvailable
-  case featureNotAvailableiOS13
   case backgroundJobAlreadyExists
-  case featureNotAvailableiOS14
   case invalidBackgroundJobID
   case backgroundJobNotFound
   case unsubscribeError
