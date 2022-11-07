@@ -251,7 +251,7 @@ class OSHealthFitness : CordovaImplementation() {
         if (status != ConnectionResult.SUCCESS) {
             var result: Pair<String, String>? = null
             result = if (googleApiAvailability.isUserResolvableError(status)) {
-                googleApiAvailability.getErrorDialog(cordova.activity, status, 1).show()
+                googleApiAvailability.getErrorDialog(cordova.activity, status, 1)?.show()
                 Pair(HealthFitnessError.GOOGLE_SERVICES_RESOLVABLE_ERROR.code.toString(), HealthFitnessError.GOOGLE_SERVICES_RESOLVABLE_ERROR.message)
             } else {
                 Pair(HealthFitnessError.GOOGLE_SERVICES_ERROR.code.toString(), HealthFitnessError.GOOGLE_SERVICES_ERROR.message)
