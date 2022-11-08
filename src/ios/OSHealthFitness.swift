@@ -1,5 +1,5 @@
 import OSCommonPluginLib
-import OSHealthFitnessLib
+import OSHealthFitnessPluginLib
 
 @objc(OSHealthFitness)
 class OSHealthFitness: CDVPlugin {
