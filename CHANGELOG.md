@@ -7,7 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 The changes documented here do not include those from the original repository.
 
 ## Unreleased
+
+## [Version 1.2.10]
 - Fix: [Android] Add safe call to avoid build error. (https://outsystemsrd.atlassian.net/browse/RMET-2041)
+- Fix: [iOS] iOS 13 "Variable not Available" Issue. (https://outsystemsrd.atlassian.net/browse/RMET-1958)
 
 ## [Version 1.2.9]
 - Fix: [iOS] Clear milliseconds from background job's date range lower bound, as `HKStatistics` uses for its start date. This way, the data block is not discarded from the final results (https://outsystemsrd.atlassian.net/browse/RMET-1836).
