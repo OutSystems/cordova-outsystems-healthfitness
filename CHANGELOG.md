@@ -8,6 +8,8 @@ The changes documented here do not include those from the original repository.
 
 ## [Unreleased]
 
+## [Version 1.2.12]
+
 ### 16-12-2022
 - Replaced jcenter with more up to date mavenCentral [RMET-2036](https://outsystemsrd.atlassian.net/browse/RMET-2036)
 
