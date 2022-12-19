@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 The changes documented here do not include those from the original repository.
 
+## [Unreleased]
+
+### 16-12-2022
+- Replaced jcenter with more up to date mavenCentral [RMET-2036](https://outsystemsrd.atlassian.net/browse/RMET-2036)
 ## [Version 1.3.0]
 - Feat: [iOS] Add a method to retrieve workouts raw data from HealthKit (https://outsystemsrd.atlassian.net/browse/RMET-2128).
 
