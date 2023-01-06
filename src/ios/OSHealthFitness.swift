@@ -19,8 +19,8 @@ class OSHealthFitness: CDVPlugin {
         let fitnessVariables = command.arguments[2] as? String ?? ""
         let healthVariables = command.arguments[3] as? String ?? ""
         let profileVariables = command.arguments[4] as? String ?? ""
-        let summaryVariables = command.arguments[5] as? String ?? ""
-        let variable = VariableStruct(allVariables: allVariables, fitnessVariables: fitnessVariables, healthVariables: healthVariables, profileVariables: profileVariables, summaryVariables: summaryVariables)
+        let workoutVariables = command.argument(at: 6) as? String ?? ""
+        let variable = VariableStruct(allVariables: allVariables, fitnessVariables: fitnessVariables, healthVariables: healthVariables, profileVariables: profileVariables, workoutVariables: workoutVariables)
         
         self.plugin?.requestPermissions(customPermissions:customPermissions, variable: variable) { [weak self] authorized, error in
             guard let self = self else { return }
@@ -195,7 +195,7 @@ class OSHealthFitness: CDVPlugin {
         self.callbackId = command.callbackId
         
         let queryParameters = command.arguments[0] as? String ?? ""
-        if let params = queryParameters.decode() as QueryParameters? {
+        if let params = queryParameters.decode() as AdvancedQueryParameters? {
             
             let variable = params.variable ?? ""
             let startDate = params.startDate ?? ""
@@ -225,6 +225,27 @@ class OSHealthFitness: CDVPlugin {
                 }
             }
         }
+    }
+    
+    @objc(getWorkoutData:)
+    func getWorkoutData(command: CDVInvokedUrlCommand) {
+        self.callbackId = command.callbackId
+        
+        guard let arg = command.argument(at: 0) as? String, let queryParameters = arg.decode() as WorkoutAdvancedQueryParameters? else { return }
+        let workoutTypeVariableDictionary = queryParameters.workoutTypeVariableDictionary
+        let startDate = Date(queryParameters.startDate ?? "")
+        let endDate = Date(queryParameters.endDate ?? "")
+        
+        self.plugin?.workoutAdvancedQuery(workoutTypeVariableDictionary: workoutTypeVariableDictionary, date: (startDate, endDate), completion: { [weak self] success, result, error in
+            guard let self = self else { return }
+            
+            if success {
+                self.sendResult(result: result, error: nil, callBackID: self.callbackId)
+            } else {
+                self.sendResult(result: nil, error: error, callBackID: self.callbackId)
+            }
+        })
+        
     }
 }
 

@@ -223,6 +223,7 @@ SWIFT_CLASS("_TtC18OSHealthFitnessLib13BackgroundJob")
 - (nonnull instancetype)initWithEntity:(NSEntityDescription * _Nonnull)entity insertIntoManagedObjectContext:(NSManagedObjectContext * _Nullable)context OBJC_DESIGNATED_INITIALIZER;
 @end
 
+
 @class NSString;
 @class NSDate;
 @class Notification;
@@ -249,6 +250,7 @@ SWIFT_CLASS("_TtC18OSHealthFitnessLib12Notification")
 @interface Notification : NSManagedObject
 - (nonnull instancetype)initWithEntity:(NSEntityDescription * _Nonnull)entity insertIntoManagedObjectContext:(NSManagedObjectContext * _Nullable)context OBJC_DESIGNATED_INITIALIZER;
 @end
+
 
 
 @interface Notification (SWIFT_EXTENSION(OSHealthFitnessLib))
@@ -488,6 +490,7 @@ SWIFT_CLASS("_TtC18OSHealthFitnessLib13BackgroundJob")
 - (nonnull instancetype)initWithEntity:(NSEntityDescription * _Nonnull)entity insertIntoManagedObjectContext:(NSManagedObjectContext * _Nullable)context OBJC_DESIGNATED_INITIALIZER;
 @end
 
+
 @class NSString;
 @class NSDate;
 @class Notification;
@@ -514,6 +517,7 @@ SWIFT_CLASS("_TtC18OSHealthFitnessLib12Notification")
 @interface Notification : NSManagedObject
 - (nonnull instancetype)initWithEntity:(NSEntityDescription * _Nonnull)entity insertIntoManagedObjectContext:(NSManagedObjectContext * _Nullable)context OBJC_DESIGNATED_INITIALIZER;
 @end
+
 
 
 @interface Notification (SWIFT_EXTENSION(OSHealthFitnessLib))
