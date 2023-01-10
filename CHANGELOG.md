@@ -9,6 +9,11 @@ The changes documented here do not include those from the original repository.
 ## [Version 1.3.0]
 - Feat: [iOS] Add a method to retrieve workouts raw data from HealthKit (https://outsystemsrd.atlassian.net/browse/RMET-2128).
 
+## [Version 1.2.12]
+
+### 16-12-2022
+- Replaced jcenter with more up to date mavenCentral [RMET-2036](https://outsystemsrd.atlassian.net/browse/RMET-2036)
+
 ## [Version 1.2.11]
 - Fix: [iOS] Replace the old `OSCore` framework for the new `OSCommonPluginLib` pod.
 
