@@ -8,16 +8,21 @@ exports.requestPermissions = function (success, error, params) {
         fitnessVariables, 
         healthVariables, 
         profileVariables, 
-        summaryVariables 
+        summaryVariables,
+        workoutVariables 
     } = params;
 
-    var args = [customPermissions, allVariables, fitnessVariables, healthVariables, profileVariables, summaryVariables];
+    var args = [customPermissions, allVariables, fitnessVariables, healthVariables, profileVariables, summaryVariables, workoutVariables];
 
     exec(success, error, 'OSHealthFitness', 'requestPermissions', args);
 };
 
 exports.getData = function (success, error, params) {
     exec(success, error, 'OSHealthFitness', 'getData', [params]);
+};
+
+exports.getWorkoutData = function (success, error, params) {
+    exec(success, error, 'OSHealthFitness', 'getWorkoutData', [params]);
 };
 
 exports.updateData = function (success, error) {
