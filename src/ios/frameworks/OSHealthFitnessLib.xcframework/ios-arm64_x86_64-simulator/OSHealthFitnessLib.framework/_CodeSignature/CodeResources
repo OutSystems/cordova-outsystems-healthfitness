@@ -30,7 +30,7 @@
 		</data>
 		<key>Modules/OSHealthFitnessLib.swiftmodule/arm64-apple-ios-simulator.abi.json</key>
 		<data>
-		kT/KAOBH+QI1WqECFkIQk0qRlL8=
+		vhy6jg03VOYB5O2yjEoA5QhssDY=
 		</data>
 		<key>Modules/OSHealthFitnessLib.swiftmodule/arm64-apple-ios-simulator.private.swiftinterface</key>
 		<data>
@@ -50,7 +50,7 @@
 		</data>
 		<key>Modules/OSHealthFitnessLib.swiftmodule/x86_64-apple-ios-simulator.abi.json</key>
 		<data>
-		kT/KAOBH+QI1WqECFkIQk0qRlL8=
+		vhy6jg03VOYB5O2yjEoA5QhssDY=
 		</data>
 		<key>Modules/OSHealthFitnessLib.swiftmodule/x86_64-apple-ios-simulator.private.swiftinterface</key>
 		<data>
@@ -114,7 +114,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			/fu1wpF1BB1NBKCnFuGHhay/v77RpIvQLkeHgAqjN2c=
+			xUYeELV1++5cy/tsWv++R6V7LZ1FgDg+N4864w3qyPs=
 			</data>
 		</dict>
 		<key>Modules/OSHealthFitnessLib.swiftmodule/arm64-apple-ios-simulator.private.swiftinterface</key>
@@ -149,7 +149,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			/fu1wpF1BB1NBKCnFuGHhay/v77RpIvQLkeHgAqjN2c=
+			xUYeELV1++5cy/tsWv++R6V7LZ1FgDg+N4864w3qyPs=
 			</data>
 		</dict>
 		<key>Modules/OSHealthFitnessLib.swiftmodule/x86_64-apple-ios-simulator.private.swiftinterface</key>
