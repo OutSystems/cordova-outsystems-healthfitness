@@ -68,6 +68,9 @@ class OSHealthFitness : CordovaImplementation() {
             "updateBackgroundJob" -> {
                 updateBackgroundJob(args)
             }
+            "disconnectFromGoogleFit" -> {
+                disconnectFromGoogleFit()
+            }
         }
         return true
     }
@@ -229,6 +232,17 @@ class OSHealthFitness : CordovaImplementation() {
             },
             { error ->
                 sendPluginResult(null, Pair(error.code.toString(), error.message))
+            }
+        )
+    }
+    
+    private fun disconnectFromGoogleFit() {
+        healthStore?.disconnectFromGoogleFit(
+            {
+                sendPluginResult("success", null)
+            },
+            {
+                sendPluginResult(null, Pair(it.code.toString(), it.message))
             }
         )
     }

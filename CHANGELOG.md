@@ -8,6 +8,12 @@ The changes documented here do not include those from the original repository.
 
 ## [Unreleased]
 
+## 2023-08-25
+- Implemented feature to disable Google Fit (https://outsystemsrd.atlassian.net/browse/RMET-2723).
+
+## [Version 1.3.0]
+- Feat: [iOS] Add a method to retrieve workouts raw data from HealthKit (https://outsystemsrd.atlassian.net/browse/RMET-2128).
+
 ## [Version 1.2.12]
 
 ### 16-12-2022
