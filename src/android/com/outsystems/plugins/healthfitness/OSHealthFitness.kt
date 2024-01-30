@@ -86,6 +86,7 @@ class OSHealthFitness : CordovaImplementation() {
 
     //create array of permission oauth
     private fun initAndRequestPermissions(args: JSONArray) {
+        setAsActivityResultCallback()
         try {
             val customPermissions = args.getString(0)
             val allVariables = args.getString(1)
@@ -107,7 +108,7 @@ class OSHealthFitness : CordovaImplementation() {
                 healthVariablesPermissions,
                 profileVariablesPermissions
             )
-            setAsActivityResultCallback()
+
         } catch (hse: HealthStoreException) {
             sendPluginResult(null, Pair(hse.error.code.toString(), hse.error.message))
         }
