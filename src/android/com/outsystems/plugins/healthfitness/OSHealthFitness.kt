@@ -25,15 +25,19 @@ class OSHealthFitness : CordovaImplementation() {
     val gson by lazy { Gson() }
     var notificationPermissions = OSNotificationPermissions()
     lateinit var healthConnectViewModel: HealthConnectViewModel
+    lateinit var healthConnectRepository: HealthConnectRepository
+    lateinit var healthConnectDataManager: HealthConnectDataManager
 
     override fun initialize(cordova: CordovaInterface, webView: CordovaWebView) {
         super.initialize(cordova, webView)
         val manager = HealthFitnessManager(cordova.context, cordova.activity)
         val database = DatabaseManager(cordova.context)
         healthStore = HealthStore(cordova.context.applicationContext.packageName, manager, database)
-        healthConnectViewModel = HealthConnectViewModel()
-    }
 
+        healthConnectDataManager = HealthConnectDataManager()
+        healthConnectRepository = HealthConnectRepository(healthConnectDataManager)
+        healthConnectViewModel = HealthConnectViewModel(healthConnectRepository)
+    }
 
     override fun execute(
         action: String,
@@ -83,7 +87,26 @@ class OSHealthFitness : CordovaImplementation() {
     //create array of permission oauth
     private fun initAndRequestPermissions(args: JSONArray) {
         try {
-            healthConnectViewModel.initAndRequestPermissions(getActivity())
+            val customPermissions = args.getString(0)
+            val allVariables = args.getString(1)
+            val fitnessVariables = args.getString(2)
+            val healthVariables = args.getString(3)
+            val profileVariables = args.getString(4)
+
+            val customVariablesPermissions = gson.fromJson(customPermissions, Array<HealthFitnessPermission>::class.java)
+            val allVariablesPermissions = gson.fromJson(allVariables, HealthFitnessGroupPermission::class.java)
+            val fitnessVariablesPermissions = gson.fromJson(fitnessVariables, HealthFitnessGroupPermission::class.java)
+            val healthVariablesPermissions = gson.fromJson(healthVariables, HealthFitnessGroupPermission::class.java)
+            val profileVariablesPermissions = gson.fromJson(profileVariables, HealthFitnessGroupPermission::class.java)
+
+            healthConnectViewModel.initAndRequestPermissions(
+                getActivity(),
+                customVariablesPermissions,
+                allVariablesPermissions,
+                fitnessVariablesPermissions,
+                healthVariablesPermissions,
+                profileVariablesPermissions
+            )
             setAsActivityResultCallback()
         } catch (hse: HealthStoreException) {
             sendPluginResult(null, Pair(hse.error.code.toString(), hse.error.message))
