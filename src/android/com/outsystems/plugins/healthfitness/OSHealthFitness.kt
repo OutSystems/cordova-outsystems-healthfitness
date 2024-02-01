@@ -17,6 +17,7 @@ import com.outsystems.plugins.healthfitness.store.*
 import com.outsystems.plugins.oscordova.CordovaImplementation
 import org.apache.cordova.*
 import org.json.JSONArray
+import org.json.JSONException
 
 class OSHealthFitness : CordovaImplementation() {
     override var callbackContext: CallbackContext? = null
@@ -85,29 +86,15 @@ class OSHealthFitness : CordovaImplementation() {
         return true
     }
 
-
-    //create array of permission oauth
     private fun initAndRequestPermissions(args: JSONArray) {
         try {
-            val customPermissions = args.getString(0)
-            val allVariables = args.getString(1)
-            val fitnessVariables = args.getString(2)
-            val healthVariables = args.getString(3)
-            val profileVariables = args.getString(4)
-
-            val customVariablesPermissions = gson.fromJson(customPermissions, Array<HealthFitnessPermission>::class.java)
-            val allVariablesPermissions = gson.fromJson(allVariables, HealthFitnessGroupPermission::class.java)
-            val fitnessVariablesPermissions = gson.fromJson(fitnessVariables, HealthFitnessGroupPermission::class.java)
-            val healthVariablesPermissions = gson.fromJson(healthVariables, HealthFitnessGroupPermission::class.java)
-            val profileVariablesPermissions = gson.fromJson(profileVariables, HealthFitnessGroupPermission::class.java)
-
             healthConnectViewModel.initAndRequestPermissions(
                 getActivity(),
-                customVariablesPermissions,
-                allVariablesPermissions,
-                fitnessVariablesPermissions,
-                healthVariablesPermissions,
-                profileVariablesPermissions,
+                gson.fromJson(args.getString(0), Array<HealthFitnessPermission>::class.java),
+                gson.fromJson(args.getString(1), HealthFitnessGroupPermission::class.java),
+                gson.fromJson(args.getString(2), HealthFitnessGroupPermission::class.java),
+                gson.fromJson(args.getString(3), HealthFitnessGroupPermission::class.java),
+                gson.fromJson(args.getString(4), HealthFitnessGroupPermission::class.java),
                 {
                     setAsActivityResultCallback()
                 },
@@ -115,9 +102,24 @@ class OSHealthFitness : CordovaImplementation() {
                     sendPluginResult(null, Pair(it.code.toString(), it.message))
                 }
             )
-
         } catch (hse: HealthStoreException) {
             sendPluginResult(null, Pair(hse.error.code.toString(), hse.error.message))
+        } catch (e: JSONException) {
+            sendPluginResult(
+                null,
+                Pair(
+                    HealthFitnessError.PARSING_PARAMETERS_ERROR.code.toString(),
+                    HealthFitnessError.PARSING_PARAMETERS_ERROR.message
+                )
+            )
+        } catch (e: Exception) {
+            sendPluginResult(
+                null,
+                Pair(
+                    HealthFitnessError.REQUEST_PERMISSIONS_GENERAL_ERROR.code.toString(),
+                    HealthFitnessError.REQUEST_PERMISSIONS_GENERAL_ERROR.message
+                )
+            )
         }
     }
 
