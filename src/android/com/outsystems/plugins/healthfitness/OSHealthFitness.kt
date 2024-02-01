@@ -284,8 +284,8 @@ class OSHealthFitness : CordovaImplementation() {
             {
                 sendPluginResult("success", null)
             },
-            {error ->
-                sendPluginResult(null, Pair(error.code.toString(), error.message))
+            {
+                sendPluginResult(null, Pair(it.code.toString(), it.message))
             }
         )
     }
