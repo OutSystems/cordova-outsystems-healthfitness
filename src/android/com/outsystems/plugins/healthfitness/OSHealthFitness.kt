@@ -27,6 +27,7 @@ class OSHealthFitness : CordovaImplementation() {
     lateinit var healthConnectViewModel: HealthConnectViewModel
     lateinit var healthConnectRepository: HealthConnectRepository
     lateinit var healthConnectDataManager: HealthConnectDataManager
+    lateinit var healthConnectHelper: HealthConnectHelper
 
     override fun initialize(cordova: CordovaInterface, webView: CordovaWebView) {
         super.initialize(cordova, webView)
@@ -36,7 +37,8 @@ class OSHealthFitness : CordovaImplementation() {
 
         healthConnectDataManager = HealthConnectDataManager()
         healthConnectRepository = HealthConnectRepository(healthConnectDataManager)
-        healthConnectViewModel = HealthConnectViewModel(healthConnectRepository)
+        healthConnectHelper = HealthConnectHelper()
+        healthConnectViewModel = HealthConnectViewModel(healthConnectRepository, healthConnectHelper)
     }
 
     override fun execute(
@@ -86,7 +88,6 @@ class OSHealthFitness : CordovaImplementation() {
 
     //create array of permission oauth
     private fun initAndRequestPermissions(args: JSONArray) {
-        setAsActivityResultCallback()
         try {
             val customPermissions = args.getString(0)
             val allVariables = args.getString(1)
@@ -106,7 +107,13 @@ class OSHealthFitness : CordovaImplementation() {
                 allVariablesPermissions,
                 fitnessVariablesPermissions,
                 healthVariablesPermissions,
-                profileVariablesPermissions
+                profileVariablesPermissions,
+                {
+                    setAsActivityResultCallback()
+                },
+                {
+                    sendPluginResult(null, Pair(it.code.toString(), it.message))
+                }
             )
 
         } catch (hse: HealthStoreException) {
@@ -277,7 +284,8 @@ class OSHealthFitness : CordovaImplementation() {
             },
             {error ->
                 sendPluginResult(null, Pair(error.code.toString(), error.message))
-            })
+            }
+        )
     }
 
 
