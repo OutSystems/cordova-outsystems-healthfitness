@@ -17,6 +17,7 @@ import com.outsystems.plugins.healthfitness.store.*
 import com.outsystems.plugins.oscordova.CordovaImplementation
 import org.apache.cordova.*
 import org.json.JSONArray
+import org.json.JSONException
 
 class OSHealthFitness : CordovaImplementation() {
     override var callbackContext: CallbackContext? = null
@@ -24,12 +25,21 @@ class OSHealthFitness : CordovaImplementation() {
     var healthStore: HealthStoreInterface? = null
     val gson by lazy { Gson() }
     var notificationPermissions = OSNotificationPermissions()
+    lateinit var healthConnectViewModel: HealthConnectViewModel
+    lateinit var healthConnectRepository: HealthConnectRepository
+    lateinit var healthConnectDataManager: HealthConnectDataManager
+    lateinit var healthConnectHelper: HealthConnectHelper
 
     override fun initialize(cordova: CordovaInterface, webView: CordovaWebView) {
         super.initialize(cordova, webView)
         val manager = HealthFitnessManager(cordova.context, cordova.activity)
         val database = DatabaseManager(cordova.context)
         healthStore = HealthStore(cordova.context.applicationContext.packageName, manager, database)
+
+        healthConnectDataManager = HealthConnectDataManager()
+        healthConnectRepository = HealthConnectRepository(healthConnectDataManager)
+        healthConnectHelper = HealthConnectHelper()
+        healthConnectViewModel = HealthConnectViewModel(healthConnectRepository, healthConnectHelper)
     }
 
     override fun execute(
@@ -37,9 +47,10 @@ class OSHealthFitness : CordovaImplementation() {
         args: JSONArray,
         callbackContext: CallbackContext
     ): Boolean {
+
         this.callbackContext = callbackContext
 
-        if(!areGooglePlayServicesAvailable()) {
+        if (!areGooglePlayServicesAvailable()) {
             return false;
         }
 
@@ -75,58 +86,75 @@ class OSHealthFitness : CordovaImplementation() {
         return true
     }
 
-    //create array of permission oauth
-    private fun initAndRequestPermissions(args : JSONArray) {
-        val customPermissions = args.getString(0)
-        val allVariables = args.getString(1)
-        val fitnessVariables = args.getString(2)
-        val healthVariables = args.getString(3)
-        val profileVariables = args.getString(4)
-        val summaryVariables = args.getString(5)
-
+    private fun initAndRequestPermissions(args: JSONArray) {
         try {
-            healthStore?.initAndRequestPermissions(
-                customPermissions,
-                allVariables,
-                fitnessVariables,
-                healthVariables,
-                profileVariables,
-                summaryVariables)
-            checkAndGrantPermissions()
-        }
-        catch (hse : HealthStoreException) {
+            healthConnectViewModel.initAndRequestPermissions(
+                getActivity(),
+                gson.fromJson(args.getString(0), Array<HealthFitnessPermission>::class.java),
+                gson.fromJson(args.getString(1), HealthFitnessGroupPermission::class.java),
+                gson.fromJson(args.getString(2), HealthFitnessGroupPermission::class.java),
+                gson.fromJson(args.getString(3), HealthFitnessGroupPermission::class.java),
+                gson.fromJson(args.getString(4), HealthFitnessGroupPermission::class.java),
+                {
+                    setAsActivityResultCallback()
+                },
+                {
+                    sendPluginResult(null, Pair(it.code.toString(), it.message))
+                }
+            )
+        } catch (hse: HealthStoreException) {
             sendPluginResult(null, Pair(hse.error.code.toString(), hse.error.message))
+        } catch (e: JSONException) {
+            sendPluginResult(
+                null,
+                Pair(
+                    HealthFitnessError.PARSING_PARAMETERS_ERROR.code.toString(),
+                    HealthFitnessError.PARSING_PARAMETERS_ERROR.message
+                )
+            )
+        } catch (e: Exception) {
+            sendPluginResult(
+                null,
+                Pair(
+                    HealthFitnessError.REQUEST_PERMISSIONS_GENERAL_ERROR.code.toString(),
+                    HealthFitnessError.REQUEST_PERMISSIONS_GENERAL_ERROR.message
+                )
+            )
         }
     }
 
+
     private fun areAndroidPermissionsGranted(permissions: List<String>): Boolean {
         permissions.forEach {
-            if (ContextCompat.checkSelfPermission(cordova.activity, it) != PackageManager.PERMISSION_GRANTED) {
+            if (ContextCompat.checkSelfPermission(
+                    getActivity(),
+                    it
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
                 return false
             }
         }
         return true
     }
 
-    private fun checkAndGrantPermissions(){
+    private fun checkAndGrantPermissions() {
         val permissions = mutableListOf(
             Manifest.permission.ACCESS_FINE_LOCATION,
             Manifest.permission.BODY_SENSORS
         )
 
-        if(SDK_INT >= Build.VERSION_CODES.Q) {
+        if (SDK_INT >= Build.VERSION_CODES.Q) {
             permissions.add(Manifest.permission.ACTIVITY_RECOGNITION)
         }
 
         if (areAndroidPermissionsGranted(permissions)) {
-            if(!healthStore!!.areGoogleFitPermissionsGranted()){
+            if (!healthStore!!.areGoogleFitPermissionsGranted()) {
                 setAsActivityResultCallback()
             }
-            if(healthStore?.requestGoogleFitPermissions() == true) {
+            if (healthStore?.requestGoogleFitPermissions() == true) {
                 sendPluginResult("success")
             }
-        }
-        else {
+        } else {
             PermissionHelper.requestPermissions(
                 this,
                 ACTIVITY_LOCATION_PERMISSIONS_REQUEST_CODE,
@@ -135,7 +163,7 @@ class OSHealthFitness : CordovaImplementation() {
         }
     }
 
-    private fun advancedQuery(args : JSONArray) {
+    private fun advancedQuery(args: JSONArray) {
         val parameters = gson.fromJson(args.getString(0), AdvancedQueryParameters::class.java)
         healthStore?.advancedQueryAsync(
             parameters,
@@ -183,8 +211,11 @@ class OSHealthFitness : CordovaImplementation() {
     }
 
     private fun setBackgroundJob(args: JSONArray) {
-        notificationPermissions.requestNotificationPermission(this, ACTIVITY_NOTIFICATION_PERMISSIONS_REQUEST_CODE)
-        
+        notificationPermissions.requestNotificationPermission(
+            this,
+            ACTIVITY_NOTIFICATION_PERMISSIONS_REQUEST_CODE
+        )
+
         //process parameters
         val parameters = gson.fromJson(args.getString(0), BackgroundJobParameters::class.java)
         healthStore?.setBackgroundJob(
@@ -210,7 +241,7 @@ class OSHealthFitness : CordovaImplementation() {
             }
         )
     }
-                
+
     private fun listBackgroundJobs() {
         healthStore?.listBackgroundJobs(
             { response ->
@@ -235,7 +266,7 @@ class OSHealthFitness : CordovaImplementation() {
             }
         )
     }
-    
+
     private fun disconnectFromGoogleFit() {
         healthStore?.disconnectFromGoogleFit(
             {
@@ -248,27 +279,34 @@ class OSHealthFitness : CordovaImplementation() {
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, intent: Intent) {
-        //super.onActivityResult(requestCode, resultCode, intent)
-        try {
-            healthStore?.handleActivityResult(requestCode, resultCode, intent)
-        }
-        catch(hse : HealthStoreException) {
-            val error = hse.error
-            sendPluginResult(null, Pair(error.code.toString(), error.message))
-        }
+        super.onActivityResult(requestCode, resultCode, intent)
+        healthConnectViewModel.handleActivityResult(requestCode, resultCode, intent,
+            {
+                sendPluginResult("success", null)
+            },
+            {
+                sendPluginResult(null, Pair(it.code.toString(), it.message))
+            }
+        )
     }
 
     override fun areGooglePlayServicesAvailable(): Boolean {
         val googleApiAvailability = GoogleApiAvailability.getInstance()
-        val status = googleApiAvailability.isGooglePlayServicesAvailable(cordova.activity)
+        val status = googleApiAvailability.isGooglePlayServicesAvailable(getActivity())
 
         if (status != ConnectionResult.SUCCESS) {
             var result: Pair<String, String>? = null
             result = if (googleApiAvailability.isUserResolvableError(status)) {
-                googleApiAvailability.getErrorDialog(cordova.activity, status, 1)?.show()
-                Pair(HealthFitnessError.GOOGLE_SERVICES_RESOLVABLE_ERROR.code.toString(), HealthFitnessError.GOOGLE_SERVICES_RESOLVABLE_ERROR.message)
+                googleApiAvailability.getErrorDialog(getActivity(), status, 1)?.show()
+                Pair(
+                    HealthFitnessError.GOOGLE_SERVICES_RESOLVABLE_ERROR.code.toString(),
+                    HealthFitnessError.GOOGLE_SERVICES_RESOLVABLE_ERROR.message
+                )
             } else {
-                Pair(HealthFitnessError.GOOGLE_SERVICES_ERROR.code.toString(), HealthFitnessError.GOOGLE_SERVICES_ERROR.message)
+                Pair(
+                    HealthFitnessError.GOOGLE_SERVICES_ERROR.code.toString(),
+                    HealthFitnessError.GOOGLE_SERVICES_ERROR.message
+                )
             }
             sendPluginResult(null, result)
             return false
@@ -279,7 +317,8 @@ class OSHealthFitness : CordovaImplementation() {
     override fun onRequestPermissionResult(
         requestCode: Int,
         permissions: Array<String>,
-        grantResults: IntArray) {
+        grantResults: IntArray
+    ) {
         when (requestCode) {
             ACTIVITY_LOCATION_PERMISSIONS_REQUEST_CODE -> {
                 // If request is cancelled, the result arrays are empty.
