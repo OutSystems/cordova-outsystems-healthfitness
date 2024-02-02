@@ -290,9 +290,6 @@ class OSHealthFitness : CordovaImplementation() {
         )
     }
 
-
-
-
     override fun areGooglePlayServicesAvailable(): Boolean {
         val googleApiAvailability = GoogleApiAvailability.getInstance()
         val status = googleApiAvailability.isGooglePlayServicesAvailable(getActivity())
