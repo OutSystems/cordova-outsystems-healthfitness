@@ -179,6 +179,7 @@ class OSHealthFitness : CordovaImplementation() {
 
     private fun writeData(args: JSONArray) {
 
+        /*
         //process parameters
         val variable = args.getString(0)
         val value = args.getDouble(1).toFloat()
@@ -192,13 +193,59 @@ class OSHealthFitness : CordovaImplementation() {
             { error ->
                 sendPluginResult(null, Pair(error.code.toString(), error.message))
             }
-
         )
+         */
+
+        val variable = args.getString(0)
+        val value = args.getDouble(1)
+
+        var healthRecordName: HealthRecordName
+
+        when (variable) {
+            HealthRecordName.WEIGHT.name -> {
+                healthRecordName = HealthRecordName.WEIGHT
+            }
+            HealthRecordName.HEIGHT.name -> {
+                healthRecordName = HealthRecordName.HEIGHT
+            }
+            HealthRecordName.BODY_FAT_PERCENTAGE.name -> {
+                healthRecordName = HealthRecordName.BODY_FAT_PERCENTAGE
+            }
+            HealthRecordName.BASAL_METABOLIC_RATE.name -> {
+                healthRecordName = HealthRecordName.BASAL_METABOLIC_RATE
+            }
+            else -> {
+                sendPluginResult(
+                    null,
+                    Pair(
+                        HealthFitnessError.WRITE_DATA_NOT_PROFILE_ERROR.code.toString(),
+                        HealthFitnessError.WRITE_DATA_NOT_PROFILE_ERROR.message
+                    )
+                )
+                return
+            }
+        }
+
+        healthConnectViewModel.writeData(
+            healthRecordName,
+            value,
+            getActivity().packageName,
+            {
+                sendPluginResult("success", null)
+            },
+            {
+                sendPluginResult(null, Pair(it.code.toString(), it.message))
+            }
+        )
+
+
+
     }
 
     private fun getLastRecord(args: JSONArray) {
         //process parameters
         val variable = args.getString(0)
+        /*
         healthStore?.getLastRecordAsync(
             variable,
             { response ->
@@ -208,6 +255,9 @@ class OSHealthFitness : CordovaImplementation() {
             { error ->
                 sendPluginResult(null, Pair(error.code.toString(), error.message))
             })
+
+         */
+        healthConnectViewModel.getLastRecord()
     }
 
     private fun setBackgroundJob(args: JSONArray) {
