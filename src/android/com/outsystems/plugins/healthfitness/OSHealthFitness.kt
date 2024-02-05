@@ -223,18 +223,6 @@ class OSHealthFitness : CordovaImplementation() {
     private fun getLastRecord(args: JSONArray) {
         //process parameters
         val variable = args.getString(0)
-        /*
-        healthStore?.getLastRecordAsync(
-            variable,
-            { response ->
-                val pluginResponseJson = gson.toJson(response)
-                sendPluginResult(pluginResponseJson)
-            },
-            { error ->
-                sendPluginResult(null, Pair(error.code.toString(), error.message))
-            })
-
-         */
         healthConnectViewModel.getLastRecord()
     }
 
