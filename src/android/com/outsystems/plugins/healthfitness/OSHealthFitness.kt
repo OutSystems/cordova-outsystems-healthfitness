@@ -178,28 +178,9 @@ class OSHealthFitness : CordovaImplementation() {
     }
 
     private fun writeData(args: JSONArray) {
-
-        /*
-        //process parameters
-        val variable = args.getString(0)
-        val value = args.getDouble(1).toFloat()
-
-        healthStore?.updateDataAsync(
-            variable,
-            value,
-            { response ->
-                sendPluginResult(response)
-            },
-            { error ->
-                sendPluginResult(null, Pair(error.code.toString(), error.message))
-            }
-        )
-         */
-
         val variable = args.getString(0)
         val value = args.getDouble(1)
-
-        var healthRecordName: HealthRecordName
+        val healthRecordName: HealthRecordName
 
         when (variable) {
             HealthRecordName.WEIGHT.name -> {
@@ -237,9 +218,6 @@ class OSHealthFitness : CordovaImplementation() {
                 sendPluginResult(null, Pair(it.code.toString(), it.message))
             }
         )
-
-
-
     }
 
     private fun getLastRecord(args: JSONArray) {
