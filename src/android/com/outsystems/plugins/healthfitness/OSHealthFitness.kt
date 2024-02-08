@@ -18,7 +18,6 @@ import com.outsystems.plugins.oscordova.CordovaImplementation
 import org.apache.cordova.*
 import org.json.JSONArray
 import org.json.JSONException
-import java.lang.IllegalArgumentException
 
 class OSHealthFitness : CordovaImplementation() {
     override var callbackContext: CallbackContext? = null
