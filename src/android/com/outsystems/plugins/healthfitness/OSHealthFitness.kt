@@ -18,6 +18,7 @@ import com.outsystems.plugins.oscordova.CordovaImplementation
 import org.apache.cordova.*
 import org.json.JSONArray
 import org.json.JSONException
+import java.lang.IllegalArgumentException
 
 class OSHealthFitness : CordovaImplementation() {
     override var callbackContext: CallbackContext? = null
@@ -178,52 +179,42 @@ class OSHealthFitness : CordovaImplementation() {
     }
 
     private fun writeData(args: JSONArray) {
-        val variable = args.getString(0)
-        val value = args.getDouble(1)
-        val healthRecordName: HealthRecordName
+        try {
+            val variable = args.getString(0)
+            val healthRecordName = HealthRecordName.valueOf(variable)
+            val value = args.getDouble(1)
 
-        when (variable) {
-            HealthRecordName.WEIGHT.name -> {
-                healthRecordName = HealthRecordName.WEIGHT
-            }
-            HealthRecordName.HEIGHT.name -> {
-                healthRecordName = HealthRecordName.HEIGHT
-            }
-            HealthRecordName.BODY_FAT_PERCENTAGE.name -> {
-                healthRecordName = HealthRecordName.BODY_FAT_PERCENTAGE
-            }
-            HealthRecordName.BASAL_METABOLIC_RATE.name -> {
-                healthRecordName = HealthRecordName.BASAL_METABOLIC_RATE
-            }
-            else -> {
-                sendPluginResult(
-                    null,
-                    Pair(
-                        HealthFitnessError.WRITE_DATA_NOT_PROFILE_ERROR.code.toString(),
-                        HealthFitnessError.WRITE_DATA_NOT_PROFILE_ERROR.message
-                    )
-                )
-                return
-            }
+            healthConnectViewModel.writeData(
+                healthRecordName,
+                value,
+                getActivity().packageName,
+                {
+                    sendPluginResult("success", null)
+                },
+                {
+                    sendPluginResult(null, Pair(it.code.toString(), it.message))
+                }
+            )
+        } catch (e: Exception) {
+            sendPluginResult(null, Pair(HealthFitnessError.VARIABLE_NOT_AVAILABLE_ERROR.code.toString(), HealthFitnessError.VARIABLE_NOT_AVAILABLE_ERROR.message))
         }
-
-        healthConnectViewModel.writeData(
-            healthRecordName,
-            value,
-            getActivity().packageName,
-            {
-                sendPluginResult("success", null)
-            },
-            {
-                sendPluginResult(null, Pair(it.code.toString(), it.message))
-            }
-        )
     }
 
     private fun getLastRecord(args: JSONArray) {
-        //process parameters
-        val variable = args.getString(0)
-        healthConnectViewModel.getLastRecord()
+        try {
+            healthConnectViewModel.getLastRecord(
+                HealthRecordName.valueOf(args.getString(0)),
+                {
+                    sendPluginResult(it, null)
+                },
+                {
+                    sendPluginResult(null, Pair(it.code.toString(), it.message))
+                }
+            )
+        } catch (e: Exception) {
+            sendPluginResult(null, Pair(HealthFitnessError.VARIABLE_NOT_AVAILABLE_ERROR.code.toString(), HealthFitnessError.VARIABLE_NOT_AVAILABLE_ERROR.message))
+        }
+
     }
 
     private fun setBackgroundJob(args: JSONArray) {
