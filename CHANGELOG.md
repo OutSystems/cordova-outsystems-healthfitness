@@ -8,6 +8,12 @@ The changes documented here do not include those from the original repository.
 
 ## [Unreleased]
 
+## 2024-02-08
+- Re-implement `GetLastRecord` feature:
+    - GetFitnessData (https://outsystemsrd.atlassian.net/browse/RMET-3048)
+    - GetHealthData (https://outsystemsrd.atlassian.net/browse/RMET-3065)
+    - GetProfileData (https://outsystemsrd.atlassian.net/browse/RMET-3066)
+
 ## 2024-02-05
 - Re-implemented WriteProfieleData feature (https://outsystemsrd.atlassian.net/browse/RMET-3049).
 
