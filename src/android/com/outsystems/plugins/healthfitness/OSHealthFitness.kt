@@ -29,6 +29,7 @@ class OSHealthFitness : CordovaImplementation() {
     lateinit var healthConnectRepository: HealthConnectRepository
     lateinit var healthConnectDataManager: HealthConnectDataManager
     lateinit var healthConnectHelper: HealthConnectHelper
+    lateinit var backgroundParameters: BackgroundJobParameters
 
     override fun initialize(cordova: CordovaInterface, webView: CordovaWebView) {
         super.initialize(cordova, webView)
@@ -217,20 +218,26 @@ class OSHealthFitness : CordovaImplementation() {
     }
 
     private fun setBackgroundJob(args: JSONArray) {
-        notificationPermissions.requestNotificationPermission(
-            this,
-            ACTIVITY_NOTIFICATION_PERMISSIONS_REQUEST_CODE
-        )
+        // save arguments for later use in case we need to request permissions
+        backgroundParameters = gson.fromJson(args.getString(0), BackgroundJobParameters::class.java)
+        if (!notificationPermissions.hasNotificationPermission(this)) {
+            notificationPermissions.requestNotificationPermission(
+                this,
+                ACTIVITY_NOTIFICATION_PERMISSIONS_REQUEST_CODE
+            )
+        } else {
+            setBackgroundJobWithParameters(backgroundParameters)
+        }
+    }
 
-        //process parameters
-        val parameters = gson.fromJson(args.getString(0), BackgroundJobParameters::class.java)
-        healthStore?.setBackgroundJob(
+    private fun setBackgroundJobWithParameters(parameters: BackgroundJobParameters) {
+        healthConnectViewModel.setBackgroundJob(
             parameters,
-            { response ->
-                sendPluginResult(response)
+            {
+                sendPluginResult(it, null)
             },
-            { error ->
-                sendPluginResult(null, Pair(error.code.toString(), error.message))
+            {
+                sendPluginResult(null, Pair(it.code.toString(), it.message))
             }
         )
     }
@@ -335,6 +342,21 @@ class OSHealthFitness : CordovaImplementation() {
                 } else {
                 }
                 return
+            }
+            ACTIVITY_NOTIFICATION_PERMISSIONS_REQUEST_CODE -> {
+                if (grantResults.isNotEmpty() &&
+                    grantResults[0] == PackageManager.PERMISSION_GRANTED
+                ) {
+                    setBackgroundJobWithParameters(backgroundParameters)
+                } else {
+                    sendPluginResult(
+                        null,
+                        Pair(
+                            HealthFitnessError.NOTIFICATION_PERMISSION_DENIED_ERROR.code.toString(),
+                            HealthFitnessError.NOTIFICATION_PERMISSION_DENIED_ERROR.message
+                        )
+                    )
+                }
             }
         }
     }
