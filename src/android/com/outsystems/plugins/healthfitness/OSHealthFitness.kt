@@ -37,7 +37,7 @@ class OSHealthFitness : CordovaImplementation() {
         val database = DatabaseManager(cordova.context)
         healthStore = HealthStore(cordova.context.applicationContext.packageName, manager, database)
 
-        healthConnectDataManager = HealthConnectDataManager()
+        healthConnectDataManager = HealthConnectDataManager(database)
         healthConnectRepository = HealthConnectRepository(healthConnectDataManager)
         healthConnectHelper = HealthConnectHelper()
         healthConnectViewModel = HealthConnectViewModel(healthConnectRepository, healthConnectHelper)
@@ -234,7 +234,7 @@ class OSHealthFitness : CordovaImplementation() {
         healthConnectViewModel.setBackgroundJob(
             parameters,
             {
-                sendPluginResult(it, null)
+                sendPluginResult("success", null)
             },
             {
                 sendPluginResult(null, Pair(it.code.toString(), it.message))
@@ -256,13 +256,13 @@ class OSHealthFitness : CordovaImplementation() {
     }
 
     private fun listBackgroundJobs() {
-        healthStore?.listBackgroundJobs(
-            { response ->
-                val pluginResponseJson = gson.toJson(response)
+        healthConnectViewModel.listBackgroundJobs(
+            {
+                val pluginResponseJson = gson.toJson(it)
                 sendPluginResult(pluginResponseJson)
             },
-            { error ->
-                sendPluginResult(null, Pair(error.code.toString(), error.message))
+            {
+                sendPluginResult(null, Pair(it.code.toString(), it.message))
             }
         )
     }
