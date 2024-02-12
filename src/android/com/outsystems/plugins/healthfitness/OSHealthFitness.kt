@@ -176,11 +176,12 @@ class OSHealthFitness : CordovaImplementation() {
             { error ->
                 sendPluginResult(null, Pair(error.code.toString(), error.message))
             },
-            {
-
+            { error ->
+                sendPluginResult(null, Pair(error.code.toString(), error.message))
             }
         )
     }
+
 
     private fun writeData(args: JSONArray) {
         try {
