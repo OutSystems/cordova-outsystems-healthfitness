@@ -165,8 +165,9 @@ class OSHealthFitness : CordovaImplementation() {
     }
 
     private fun advancedQuery(args: JSONArray) {
-        val parameters = gson.fromJson(args.getString(0), AdvancedQueryParameters::class.java)
-        healthStore?.advancedQueryAsync(
+        val parameters = gson.fromJson(args.getString(0), HealthAdvancedQueryParameters::class.java)
+
+        healthConnectViewModel.advancedQueryAsync(
             parameters,
             { response ->
                 val pluginResponseJson = gson.toJson(response)
@@ -174,6 +175,9 @@ class OSHealthFitness : CordovaImplementation() {
             },
             { error ->
                 sendPluginResult(null, Pair(error.code.toString(), error.message))
+            },
+            {
+
             }
         )
     }
