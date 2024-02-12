@@ -52,7 +52,7 @@ class OSHealthFitness : CordovaImplementation() {
         this.callbackContext = callbackContext
 
         if (!areGooglePlayServicesAvailable()) {
-            return false;
+            return false
         }
 
         when (action) {
@@ -220,7 +220,7 @@ class OSHealthFitness : CordovaImplementation() {
     private fun setBackgroundJob(args: JSONArray) {
         // save arguments for later use in case we need to request permissions
         backgroundParameters = gson.fromJson(args.getString(0), BackgroundJobParameters::class.java)
-        if (!notificationPermissions.hasNotificationPermission(this)) {
+        if (SDK_INT >= 33 && !notificationPermissions.hasNotificationPermission(this)) {
             notificationPermissions.requestNotificationPermission(
                 this,
                 ACTIVITY_NOTIFICATION_PERMISSIONS_REQUEST_CODE
@@ -233,6 +233,7 @@ class OSHealthFitness : CordovaImplementation() {
     private fun setBackgroundJobWithParameters(parameters: BackgroundJobParameters) {
         healthConnectViewModel.setBackgroundJob(
             parameters,
+            getContext(),
             {
                 sendPluginResult(it, null)
             },
