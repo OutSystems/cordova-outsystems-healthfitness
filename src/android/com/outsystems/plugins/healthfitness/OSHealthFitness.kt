@@ -221,7 +221,6 @@ class OSHealthFitness : CordovaImplementation() {
         backgroundParameters = gson.fromJson(args.getString(0), BackgroundJobParameters::class.java)
 
         val permissions = mutableListOf<String>().apply {
-            add(Manifest.permission.BODY_SENSORS) // added in API 20
             if (SDK_INT >= 33) {
                 add(Manifest.permission.POST_NOTIFICATIONS)
                 add(Manifest.permission.ACTIVITY_RECOGNITION)
