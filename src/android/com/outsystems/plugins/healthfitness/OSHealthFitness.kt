@@ -24,7 +24,6 @@ class OSHealthFitness : CordovaImplementation() {
 
     var healthStore: HealthStoreInterface? = null
     val gson by lazy { Gson() }
-    var notificationPermissions = OSNotificationPermissions()
     lateinit var healthConnectViewModel: HealthConnectViewModel
     lateinit var healthConnectRepository: HealthConnectRepository
     lateinit var healthConnectDataManager: HealthConnectDataManager
