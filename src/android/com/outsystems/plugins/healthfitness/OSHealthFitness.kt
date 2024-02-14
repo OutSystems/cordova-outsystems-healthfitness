@@ -166,7 +166,6 @@ class OSHealthFitness : CordovaImplementation() {
 
     private fun advancedQuery(args: JSONArray) {
         val parameters = gson.fromJson(args.getString(0), HealthAdvancedQueryParameters::class.java)
-
         healthConnectViewModel.advancedQueryAsync(
             parameters,
             { response ->
@@ -181,7 +180,6 @@ class OSHealthFitness : CordovaImplementation() {
             }
         )
     }
-
 
     private fun writeData(args: JSONArray) {
         try {
