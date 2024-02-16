@@ -13,16 +13,8 @@ import com.outsystems.osnotificationpermissions.*
 import com.outsystems.plugins.healthfitness.background.BackgroundJobParameters
 import com.outsystems.plugins.healthfitness.background.DatabaseManager
 import com.outsystems.plugins.healthfitness.background.UpdateBackgroundJobParameters
-import com.outsystems.plugins.healthfitness.data.HealthConnectDataManager
-import com.outsystems.plugins.healthfitness.data.HealthRecord
 import com.outsystems.plugins.healthfitness.data.types.HealthAdvancedQueryParameters
-import com.outsystems.plugins.healthfitness.data.types.HealthFitnessError
-import com.outsystems.plugins.healthfitness.data.types.HealthFitnessGroupPermission
-import com.outsystems.plugins.healthfitness.data.types.HealthFitnessPermission
-import com.outsystems.plugins.healthfitness.repository.HealthConnectRepository
 import com.outsystems.plugins.healthfitness.store.*
-import com.outsystems.plugins.healthfitness.utils.HealthConnectHelper
-import com.outsystems.plugins.healthfitness.viewmodel.HealthConnectViewModel
 import com.outsystems.plugins.oscordova.CordovaImplementation
 import org.apache.cordova.*
 import org.json.JSONArray
@@ -31,14 +23,14 @@ import org.json.JSONException
 class OSHealthFitness : CordovaImplementation() {
     override var callbackContext: CallbackContext? = null
 
-    private var healthStore: HealthStoreInterface? = null
-    private val gson by lazy { Gson() }
-    private var notificationPermissions = OSNotificationPermissions()
-    private lateinit var healthConnectViewModel: HealthConnectViewModel
-    private lateinit var healthConnectRepository: HealthConnectRepository
-    private lateinit var healthConnectDataManager: HealthConnectDataManager
+    var healthStore: HealthStoreInterface? = null
+    val gson by lazy { Gson() }
+    var notificationPermissions = OSNotificationPermissions()
+    lateinit var healthConnectViewModel: HealthConnectViewModel
+    lateinit var healthConnectRepository: HealthConnectRepository
+    lateinit var healthConnectDataManager: HealthConnectDataManager
     lateinit var healthConnectHelper: HealthConnectHelper
-    private lateinit var backgroundParameters: BackgroundJobParameters
+    lateinit var backgroundParameters: BackgroundJobParameters
 
     override fun initialize(cordova: CordovaInterface, webView: CordovaWebView) {
         super.initialize(cordova, webView)
@@ -183,9 +175,6 @@ class OSHealthFitness : CordovaImplementation() {
             },
             { error ->
                 sendPluginResult(null, Pair(error.code.toString(), error.message))
-            },
-            {
-                sendPluginResult(null, Pair(HealthFitnessError.PERMISSIONS_DENIED_ERROR.code.toString(), HealthFitnessError.PERMISSIONS_DENIED_ERROR.message))
             }
         )
     }
