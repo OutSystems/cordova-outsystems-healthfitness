@@ -24,11 +24,11 @@ class OSHealthFitness : CordovaImplementation() {
 
     var healthStore: HealthStoreInterface? = null
     val gson by lazy { Gson() }
-    var notificationPermissions = OSNotificationPermissions()
     lateinit var healthConnectViewModel: HealthConnectViewModel
     lateinit var healthConnectRepository: HealthConnectRepository
     lateinit var healthConnectDataManager: HealthConnectDataManager
     lateinit var healthConnectHelper: HealthConnectHelper
+    lateinit var workManagerHelper: WorkManagerHelperInterface
     lateinit var backgroundParameters: BackgroundJobParameters
 
     override fun initialize(cordova: CordovaInterface, webView: CordovaWebView) {
@@ -40,7 +40,9 @@ class OSHealthFitness : CordovaImplementation() {
         healthConnectDataManager = HealthConnectDataManager(database)
         healthConnectRepository = HealthConnectRepository(healthConnectDataManager)
         healthConnectHelper = HealthConnectHelper()
-        healthConnectViewModel = HealthConnectViewModel(healthConnectRepository, healthConnectHelper)
+        workManagerHelper = WorkManagerHelper()
+        healthConnectViewModel =
+            HealthConnectViewModel(healthConnectRepository, healthConnectHelper, workManagerHelper)
     }
 
     override fun execute(
@@ -52,7 +54,7 @@ class OSHealthFitness : CordovaImplementation() {
         this.callbackContext = callbackContext
 
         if (!areGooglePlayServicesAvailable()) {
-            return false;
+            return false
         }
 
         when (action) {
@@ -221,21 +223,25 @@ class OSHealthFitness : CordovaImplementation() {
     }
 
     private fun setBackgroundJob(args: JSONArray) {
-        // save arguments for later use in case we need to request permissions
+        // save arguments for later use
         backgroundParameters = gson.fromJson(args.getString(0), BackgroundJobParameters::class.java)
-        if (!notificationPermissions.hasNotificationPermission(this)) {
-            notificationPermissions.requestNotificationPermission(
-                this,
-                ACTIVITY_NOTIFICATION_PERMISSIONS_REQUEST_CODE
-            )
-        } else {
-            setBackgroundJobWithParameters(backgroundParameters)
-        }
+
+        val permissions = mutableListOf<String>().apply {
+            if (SDK_INT >= 33) {
+                add(Manifest.permission.POST_NOTIFICATIONS)
+            }
+            if (SDK_INT >= 29) {
+                add(Manifest.permission.ACTIVITY_RECOGNITION)
+            }
+        }.toTypedArray()
+
+        PermissionHelper.requestPermissions(this, BACKGROUND_JOB_PERMISSIONS_REQUEST_CODE, permissions)
     }
 
     private fun setBackgroundJobWithParameters(parameters: BackgroundJobParameters) {
         healthConnectViewModel.setBackgroundJob(
             parameters,
+            getContext(),
             {
                 sendPluginResult("success", null)
             },
@@ -364,26 +370,26 @@ class OSHealthFitness : CordovaImplementation() {
                 }
                 return
             }
-            ACTIVITY_NOTIFICATION_PERMISSIONS_REQUEST_CODE -> {
-                if (grantResults.isNotEmpty() &&
-                    grantResults[0] == PackageManager.PERMISSION_GRANTED
-                ) {
-                    setBackgroundJobWithParameters(backgroundParameters)
-                } else {
-                    sendPluginResult(
-                        null,
-                        Pair(
-                            HealthFitnessError.NOTIFICATION_PERMISSION_DENIED_ERROR.code.toString(),
-                            HealthFitnessError.NOTIFICATION_PERMISSION_DENIED_ERROR.message
+            BACKGROUND_JOB_PERMISSIONS_REQUEST_CODE -> {
+                for (result in grantResults) {
+                    if (result == PackageManager.PERMISSION_DENIED) {
+                        sendPluginResult(
+                            null,
+                            Pair(
+                                HealthFitnessError.BACKGROUND_JOB_PERMISSIONS_DENIED_ERROR.code.toString(),
+                                HealthFitnessError.BACKGROUND_JOB_PERMISSIONS_DENIED_ERROR.message
+                            )
                         )
-                    )
+                        return
+                    }
                 }
+                setBackgroundJobWithParameters(backgroundParameters)
             }
         }
     }
 
     companion object {
         const val ACTIVITY_LOCATION_PERMISSIONS_REQUEST_CODE = 1
-        const val ACTIVITY_NOTIFICATION_PERMISSIONS_REQUEST_CODE = 2
+        const val BACKGROUND_JOB_PERMISSIONS_REQUEST_CODE = 2
     }
 }
