@@ -83,6 +83,9 @@ class OSHealthFitness : CordovaImplementation() {
             "disconnectFromGoogleFit" -> {
                 disconnectFromGoogleFit()
             }
+            "disconnectFromHealthConnect" -> {
+                disconnectFromHealthConnect()
+            }
         }
         return true
     }
@@ -280,8 +283,26 @@ class OSHealthFitness : CordovaImplementation() {
         )
     }
 
+    @Deprecated(
+        message = "The Google Fit Android API is deprecated. " +
+                "To fully disconnect from the legacy Google Fit integration, " +
+                "please visit your Google Account settings and " +
+                "revoke the OAuth token associated with the app.",
+        replaceWith = ReplaceWith("disconnectFromHealthConnect()")
+    )
     private fun disconnectFromGoogleFit() {
         healthStore?.disconnectFromGoogleFit(
+            {
+                sendPluginResult("success", null)
+            },
+            {
+                sendPluginResult(null, Pair(it.code.toString(), it.message))
+            }
+        )
+    }
+
+    private fun disconnectFromHealthConnect() {
+        healthStore?.disconnectFromHealthConnect(
             {
                 sendPluginResult("success", null)
             },

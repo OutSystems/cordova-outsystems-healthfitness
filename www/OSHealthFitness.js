@@ -60,3 +60,7 @@ exports.updateBackgroundJob = function (success, error, params) {
 exports.disconnectFromGoogleFit = function (success, error) {
     exec(success, error, 'OSHealthFitness', 'disconnectFromGoogleFit');
 };
+
+exports.disconnectFromHealthConnect = function (success, error) {
+    exec(success, error, 'OSHealthFitness', 'disconnectFromHealthConnect');
+};

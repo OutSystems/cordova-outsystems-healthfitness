@@ -8,6 +8,9 @@ The changes documented here do not include those from the original repository.
 
 ## [Unreleased]
 
+## 2024-02-20
+- Deprecated `DisableGoogleFit` feature and implemented `DisableHealthConnect` feature (https://outsystemsrd.atlassian.net/browse/RMET-3070).
+
 ## 2024-02-09
 - Re-implemented ListBackgroundJobs feature (https://outsystemsrd.atlassian.net/browse/RMET-3069).
 
