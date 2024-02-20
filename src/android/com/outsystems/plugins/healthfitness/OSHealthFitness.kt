@@ -226,9 +226,8 @@ class OSHealthFitness : CordovaImplementation() {
         val permissions = mutableListOf<String>().apply {
             if (SDK_INT >= 33) {
                 add(Manifest.permission.POST_NOTIFICATIONS)
-                add(Manifest.permission.ACTIVITY_RECOGNITION)
             }
-            else if (SDK_INT >= 29) {
+            if (SDK_INT >= 29) {
                 add(Manifest.permission.ACTIVITY_RECOGNITION)
             }
         }.toTypedArray()
