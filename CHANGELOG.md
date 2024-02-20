@@ -8,6 +8,9 @@ The changes documented here do not include those from the original repository.
 
 ## [Unreleased]
 
+## 2024-02-20
+- Re-implemented SetBackgroundJob feature (https://outsystemsrd.atlassian.net/browse/RMET-3050).
+
 ## 2024-02-08
 - Re-implement `GetLastRecord` feature:
     - GetFitnessData (https://outsystemsrd.atlassian.net/browse/RMET-3048)
