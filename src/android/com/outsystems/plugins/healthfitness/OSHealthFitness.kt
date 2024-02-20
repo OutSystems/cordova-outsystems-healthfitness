@@ -28,6 +28,7 @@ class OSHealthFitness : CordovaImplementation() {
     lateinit var healthConnectRepository: HealthConnectRepository
     lateinit var healthConnectDataManager: HealthConnectDataManager
     lateinit var healthConnectHelper: HealthConnectHelper
+    lateinit var workManagerHelper: WorkManagerHelperInterface
     lateinit var backgroundParameters: BackgroundJobParameters
 
     override fun initialize(cordova: CordovaInterface, webView: CordovaWebView) {
@@ -39,7 +40,9 @@ class OSHealthFitness : CordovaImplementation() {
         healthConnectDataManager = HealthConnectDataManager(database)
         healthConnectRepository = HealthConnectRepository(healthConnectDataManager)
         healthConnectHelper = HealthConnectHelper()
-        healthConnectViewModel = HealthConnectViewModel(healthConnectRepository, healthConnectHelper)
+        workManagerHelper = WorkManagerHelper()
+        healthConnectViewModel =
+            HealthConnectViewModel(healthConnectRepository, healthConnectHelper, workManagerHelper)
     }
 
     override fun execute(
