@@ -226,9 +226,8 @@ class OSHealthFitness : CordovaImplementation() {
         val permissions = mutableListOf<String>().apply {
             if (SDK_INT >= 33) {
                 add(Manifest.permission.POST_NOTIFICATIONS)
-                add(Manifest.permission.ACTIVITY_RECOGNITION)
             }
-            else if (SDK_INT >= 29) {
+            if (SDK_INT >= 29) {
                 add(Manifest.permission.ACTIVITY_RECOGNITION)
             }
         }.toTypedArray()
@@ -276,13 +275,13 @@ class OSHealthFitness : CordovaImplementation() {
 
     private fun updateBackgroundJob(args: JSONArray) {
         val parameters = gson.fromJson(args.getString(0), UpdateBackgroundJobParameters::class.java)
-        healthStore?.updateBackgroundJob(
+        healthConnectViewModel.updateBackgroundJob(
             parameters,
-            { response ->
-                sendPluginResult(response)
+            {
+                sendPluginResult("success", null)
             },
-            { error ->
-                sendPluginResult(null, Pair(error.code.toString(), error.message))
+            {
+                sendPluginResult(null, Pair(it.code.toString(), it.message))
             }
         )
     }
