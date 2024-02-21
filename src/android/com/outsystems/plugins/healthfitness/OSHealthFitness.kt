@@ -183,11 +183,11 @@ class OSHealthFitness : CordovaImplementation() {
     private fun writeData(args: JSONArray) {
         try {
             val variable = args.getString(0)
-            val healthRecordName = HealthRecordName.valueOf(variable)
+            val healthRecord = HealthRecord.valueOf(variable)
             val value = args.getDouble(1)
 
             healthConnectViewModel.writeData(
-                healthRecordName,
+                healthRecord,
                 value,
                 getActivity().packageName,
                 {
@@ -205,7 +205,7 @@ class OSHealthFitness : CordovaImplementation() {
     private fun getLastRecord(args: JSONArray) {
         try {
             healthConnectViewModel.getLastRecord(
-                HealthRecordName.valueOf(args.getString(0)),
+                HealthRecord.valueOf(args.getString(0)),
                 {
                     sendPluginResult(it, null)
                 },
