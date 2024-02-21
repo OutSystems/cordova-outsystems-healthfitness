@@ -13,6 +13,7 @@ import com.outsystems.osnotificationpermissions.*
 import com.outsystems.plugins.healthfitness.background.BackgroundJobParameters
 import com.outsystems.plugins.healthfitness.background.DatabaseManager
 import com.outsystems.plugins.healthfitness.background.UpdateBackgroundJobParameters
+import com.outsystems.plugins.healthfitness.data.types.HealthAdvancedQueryParameters
 import com.outsystems.plugins.healthfitness.store.*
 import com.outsystems.plugins.oscordova.CordovaImplementation
 import org.apache.cordova.*
@@ -167,8 +168,8 @@ class OSHealthFitness : CordovaImplementation() {
     }
 
     private fun advancedQuery(args: JSONArray) {
-        val parameters = gson.fromJson(args.getString(0), AdvancedQueryParameters::class.java)
-        healthStore?.advancedQueryAsync(
+        val parameters = gson.fromJson(args.getString(0), HealthAdvancedQueryParameters::class.java)
+        healthConnectViewModel.advancedQuery(
             parameters,
             { response ->
                 val pluginResponseJson = gson.toJson(response)
@@ -183,7 +184,7 @@ class OSHealthFitness : CordovaImplementation() {
     private fun writeData(args: JSONArray) {
         try {
             val variable = args.getString(0)
-            val healthRecordName = HealthRecordName.valueOf(variable)
+            val healthRecordName = HealthRecord.valueOf(variable)
             val value = args.getDouble(1)
 
             healthConnectViewModel.writeData(
@@ -205,7 +206,7 @@ class OSHealthFitness : CordovaImplementation() {
     private fun getLastRecord(args: JSONArray) {
         try {
             healthConnectViewModel.getLastRecord(
-                HealthRecordName.valueOf(args.getString(0)),
+                HealthRecord.valueOf(args.getString(0)),
                 {
                     sendPluginResult(it, null)
                 },
