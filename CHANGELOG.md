@@ -12,6 +12,9 @@ The changes documented here do not include those from the original repository.
 - Re-implemented SetBackgroundJob feature (https://outsystemsrd.atlassian.net/browse/RMET-3050).
 
 ## 2024-02-09
+- Re-implemented AdvanceQuery feature (https://outsystemsrd.atlassian.net/browse/RMET-3047).
+
+## 2024-02-09
 - Re-implemented ListBackgroundJobs feature (https://outsystemsrd.atlassian.net/browse/RMET-3069).
 
 ## 2024-02-08
