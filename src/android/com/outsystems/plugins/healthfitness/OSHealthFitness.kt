@@ -184,11 +184,11 @@ class OSHealthFitness : CordovaImplementation() {
     private fun writeData(args: JSONArray) {
         try {
             val variable = args.getString(0)
-            val healthRecordName = HealthRecord.valueOf(variable)
+            val healthRecord = HealthRecord.valueOf(variable)
             val value = args.getDouble(1)
 
             healthConnectViewModel.writeData(
-                healthRecordName,
+                healthRecord,
                 value,
                 getActivity().packageName,
                 {
@@ -276,13 +276,13 @@ class OSHealthFitness : CordovaImplementation() {
 
     private fun updateBackgroundJob(args: JSONArray) {
         val parameters = gson.fromJson(args.getString(0), UpdateBackgroundJobParameters::class.java)
-        healthStore?.updateBackgroundJob(
+        healthConnectViewModel.updateBackgroundJob(
             parameters,
-            { response ->
-                sendPluginResult(response)
+            {
+                sendPluginResult("success", null)
             },
-            { error ->
-                sendPluginResult(null, Pair(error.code.toString(), error.message))
+            {
+                sendPluginResult(null, Pair(it.code.toString(), it.message))
             }
         )
     }
