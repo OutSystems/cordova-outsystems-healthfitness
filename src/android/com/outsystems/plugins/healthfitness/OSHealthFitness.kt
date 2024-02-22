@@ -13,6 +13,7 @@ import com.outsystems.osnotificationpermissions.*
 import com.outsystems.plugins.healthfitness.background.BackgroundJobParameters
 import com.outsystems.plugins.healthfitness.background.DatabaseManager
 import com.outsystems.plugins.healthfitness.background.UpdateBackgroundJobParameters
+import com.outsystems.plugins.healthfitness.data.types.HealthAdvancedQueryParameters
 import com.outsystems.plugins.healthfitness.store.*
 import com.outsystems.plugins.oscordova.CordovaImplementation
 import org.apache.cordova.*
@@ -167,8 +168,8 @@ class OSHealthFitness : CordovaImplementation() {
     }
 
     private fun advancedQuery(args: JSONArray) {
-        val parameters = gson.fromJson(args.getString(0), AdvancedQueryParameters::class.java)
-        healthStore?.advancedQueryAsync(
+        val parameters = gson.fromJson(args.getString(0), HealthAdvancedQueryParameters::class.java)
+        healthConnectViewModel.advancedQuery(
             parameters,
             { response ->
                 val pluginResponseJson = gson.toJson(response)
