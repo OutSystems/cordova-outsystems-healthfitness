@@ -99,6 +99,7 @@ class OSHealthFitness : CordovaImplementation() {
                 gson.fromJson(args.getString(2), HealthFitnessGroupPermission::class.java),
                 gson.fromJson(args.getString(3), HealthFitnessGroupPermission::class.java),
                 gson.fromJson(args.getString(4), HealthFitnessGroupPermission::class.java),
+                privacyPolicyUrl = getActivity().resources.getString(getActivity().resources.getIdentifier("privacy_policy_url", "string", getActivity().packageName)),
                 {
                     setAsActivityResultCallback()
                 },
@@ -250,14 +251,14 @@ class OSHealthFitness : CordovaImplementation() {
     }
 
     private fun deleteBackgroundJob(args: JSONArray) {
-        val parameters = args.getString(0)
-        healthStore?.deleteBackgroundJob(
-            parameters,
-            { response ->
-                sendPluginResult(response)
+        val jobId = args.getString(0)
+        healthConnectViewModel.deleteBackgroundJob(
+            jobId,
+            {
+                sendPluginResult("success", null)
             },
-            { error ->
-                sendPluginResult(null, Pair(error.code.toString(), error.message))
+            {
+                sendPluginResult(null, Pair(it.code.toString(), it.message))
             }
         )
     }
