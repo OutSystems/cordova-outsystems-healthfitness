@@ -250,14 +250,14 @@ class OSHealthFitness : CordovaImplementation() {
     }
 
     private fun deleteBackgroundJob(args: JSONArray) {
-        val parameters = args.getString(0)
-        healthStore?.deleteBackgroundJob(
-            parameters,
-            { response ->
-                sendPluginResult(response)
+        val jobId = args.getString(0)
+        healthConnectViewModel.deleteBackgroundJob(
+            jobId,
+            {
+                sendPluginResult("success", null)
             },
-            { error ->
-                sendPluginResult(null, Pair(error.code.toString(), error.message))
+            {
+                sendPluginResult(null, Pair(it.code.toString(), it.message))
             }
         )
     }

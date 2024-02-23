@@ -8,9 +8,11 @@ The changes documented here do not include those from the original repository.
 
 ## [Unreleased]
 
-- Re-implemented UpdateBackgroundJob feature (https://outsystemsrd.atlassian.net/browse/RMET-3067).
+## 2024-02-23
+- Re-implement `DeleteBackgroundJob` feature (https://outsystemsrd.atlassian.net/browse/RMET-3068).
 
 ## 2024-02-20
+- Re-implemented UpdateBackgroundJob feature (https://outsystemsrd.atlassian.net/browse/RMET-3067).
 - Re-implemented SetBackgroundJob feature (https://outsystemsrd.atlassian.net/browse/RMET-3050).
 
 ## 2024-02-09
