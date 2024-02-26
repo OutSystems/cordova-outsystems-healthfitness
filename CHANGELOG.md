@@ -26,9 +26,9 @@ The changes documented here do not include those from the original repository.
 
 ## 2024-02-08
 - Re-implement `GetLastRecord` feature:
-  - GetFitnessData (https://outsystemsrd.atlassian.net/browse/RMET-3048)
-  - GetHealthData (https://outsystemsrd.atlassian.net/browse/RMET-3065)
-  - GetProfileData (https://outsystemsrd.atlassian.net/browse/RMET-3066)
+    - GetFitnessData (https://outsystemsrd.atlassian.net/browse/RMET-3048)
+    - GetHealthData (https://outsystemsrd.atlassian.net/browse/RMET-3065)
+    - GetProfileData (https://outsystemsrd.atlassian.net/browse/RMET-3066)
 
 ## 2024-02-05
 - Re-implemented WriteProfieleData feature (https://outsystemsrd.atlassian.net/browse/RMET-3049).
@@ -77,7 +77,7 @@ The changes documented here do not include those from the original repository.
 ## [Version 1.2.5]
 
 - Removed hook that adds swift support and added the plugin as dependecy. (https://outsystemsrd.atlassian.net/browse/RMET-1680)
-- Added to the info.plist file a property to identify the background tasks used in the plugin.(https://outsystemsrd.atlassian.net/browse/RMET-1689)
+- Added to the info.plist file a property to identify the background tasks used in the plugin.(https://outsystemsrd.atlassian.net/browse/RMET-1689) 
 
 ## [Version 1.2.4]
 
