@@ -14,5 +14,8 @@
       "ios"
     ]
   },
-  "engines": []
+  "engines": [],
+  "dependencies": {
+    "xmldom": "^0.6.0"
+  }
 }
