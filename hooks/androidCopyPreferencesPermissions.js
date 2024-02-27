@@ -1140,7 +1140,7 @@ function addBackgroundJobPermissionsToManifest(configParser, projectRoot, parser
     }
 
     // we want to include the permissions by default
-    if (disableBackgroundJobs === false || disableBackgroundJobs == "") {
+    if (disableBackgroundJobs !== "true") {
 
         const manifestFilePath = path.join(projectRoot, 'platforms/android/app/src/main/AndroidManifest.xml');
         const manifestXmlString = fs.readFileSync(manifestFilePath, 'utf-8');
