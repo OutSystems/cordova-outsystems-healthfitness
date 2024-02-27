@@ -114,7 +114,7 @@ function addPermissionsToManifest(configParser, projectRoot) {
     // Create the health_permissions.xml file
     const permissionsXmlDoc = parser.parseFromString('<?xml version="1.0" encoding="utf-8"?><resources><array name="health_permissions"></array></resources>', 'text/xml');
     // Get the <array> element
-    const arrayElement = xmlDoc.getElementsByTagName('array')[0];
+    const arrayElement = permissionsXmlDoc.getElementsByTagName('array')[0];
  
 
     // heartRate
