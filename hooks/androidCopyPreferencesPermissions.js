@@ -11,6 +11,7 @@ module.exports = async function (context) {
     const configXML = path.join(projectRoot, 'config.xml');
     const configParser = new ConfigParser(configXML);
         
+    // add health connect permissions to AndroidManifest.xml and health_permissions.xml files
     addPermissionsToManifest(configParser, projectRoot);
 };
 
@@ -99,28 +100,37 @@ function addPermissionsToManifest(configParser, projectRoot) {
     var speedSet = false
     var distanceSet = false
 
-
+    const parser = new DOMParser();
 
     // Android >= 14 dependencies should be included directly in the AndroidManifest.xml file
-    // Android <= 13 dependencies should be included in a separate XML file
-
     // Read the AndroidManifest.xml file
     const manifestFilePath = path.join(projectRoot, 'platforms/android/app/src/main/AndroidManifest.xml');
     const manifestXmlString = fs.readFileSync(manifestFilePath, 'utf-8');
 
-
     // Parse the XML string
-    const parser = new DOMParser();
     const manifestXmlDoc = parser.parseFromString(manifestXmlString, 'text/xml');
+
+    // Android <= 13 dependencies should be included in a separate XML file
+    // Create the health_permissions.xml file
+    const permissionsXmlDoc = parser.parseFromString('<?xml version="1.0" encoding="utf-8"?><resources><array name="health_permissions"></array></resources>', 'text/xml');
+    // Get the <array> element
+    const arrayElement = xmlDoc.getElementsByTagName('array')[0];
  
 
     // heartRate
     if (heartRate == "ReadWrite" || heartRate == "Read") {
         heartRateSet = true
 
+        // Android >= 14
         const newPermission = manifestXmlDoc.createElement('uses-permission');
         newPermission.setAttribute('android:name', 'android.permission.health.READ_HEART_RATE');
         manifestXmlDoc.documentElement.appendChild(newPermission);
+
+        // Android <= 13
+        const newItem = permissionsXmlDoc.createElement('item');
+        const textNode = permissionsXmlDoc.createTextNode('android.permission.health.READ_HEART_RATE');
+        newItem.appendChild(textNode);
+        arrayElement.appendChild(newItem);
     }
 
     if (heartRate == "ReadWrite" || heartRate == "Write") {
@@ -129,6 +139,11 @@ function addPermissionsToManifest(configParser, projectRoot) {
         const newPermission = manifestXmlDoc.createElement('uses-permission');
         newPermission.setAttribute('android:name', 'android.permission.health.WRITE_HEART_RATE');
         manifestXmlDoc.documentElement.appendChild(newPermission);
+
+        const newItem = permissionsXmlDoc.createElement('item');
+        const textNode = permissionsXmlDoc.createTextNode('android.permission.health.WRITE_HEART_RATE');
+        newItem.appendChild(textNode);
+        arrayElement.appendChild(newItem);
     }
 
     // steps
@@ -138,6 +153,11 @@ function addPermissionsToManifest(configParser, projectRoot) {
         const newPermission = manifestXmlDoc.createElement('uses-permission');
         newPermission.setAttribute('android:name', 'android.permission.health.READ_STEPS');
         manifestXmlDoc.documentElement.appendChild(newPermission);
+
+        const newItem = permissionsXmlDoc.createElement('item');
+        const textNode = permissionsXmlDoc.createTextNode('android.permission.health.READ_STEPS');
+        newItem.appendChild(textNode);
+        arrayElement.appendChild(newItem);
     }
 
     if (steps == "ReadWrite" || steps == "Write") {
@@ -146,6 +166,11 @@ function addPermissionsToManifest(configParser, projectRoot) {
         const newPermission = manifestXmlDoc.createElement('uses-permission');
         newPermission.setAttribute('android:name', 'android.permission.health.WRITE_STEPS');
         manifestXmlDoc.documentElement.appendChild(newPermission);
+
+        const newItem = permissionsXmlDoc.createElement('item');
+        const textNode = permissionsXmlDoc.createTextNode('android.permission.health.WRITE_STEPS');
+        newItem.appendChild(textNode);
+        arrayElement.appendChild(newItem);
     }
 
     // weight
@@ -155,6 +180,11 @@ function addPermissionsToManifest(configParser, projectRoot) {
         const newPermission = manifestXmlDoc.createElement('uses-permission');
         newPermission.setAttribute('android:name', 'android.permission.health.READ_WEIGHT');
         manifestXmlDoc.documentElement.appendChild(newPermission);
+
+        const newItem = permissionsXmlDoc.createElement('item');
+        const textNode = permissionsXmlDoc.createTextNode('android.permission.health.READ_WEIGHT');
+        newItem.appendChild(textNode);
+        arrayElement.appendChild(newItem);
     }
 
     if (weight == "ReadWrite" || weight == "Write") {
@@ -163,6 +193,11 @@ function addPermissionsToManifest(configParser, projectRoot) {
         const newPermission = manifestXmlDoc.createElement('uses-permission');
         newPermission.setAttribute('android:name', 'android.permission.health.WRITE_WEIGHT');
         manifestXmlDoc.documentElement.appendChild(newPermission);
+
+        const newItem = permissionsXmlDoc.createElement('item');
+        const textNode = permissionsXmlDoc.createTextNode('android.permission.health.WRITE_WEIGHT');
+        newItem.appendChild(textNode);
+        arrayElement.appendChild(newItem);
     }
 
     // height
@@ -172,6 +207,11 @@ function addPermissionsToManifest(configParser, projectRoot) {
         const newPermission = manifestXmlDoc.createElement('uses-permission');
         newPermission.setAttribute('android:name', 'android.permission.health.READ_HEIGHT');
         manifestXmlDoc.documentElement.appendChild(newPermission);
+
+        const newItem = permissionsXmlDoc.createElement('item');
+        const textNode = permissionsXmlDoc.createTextNode('android.permission.health.READ_HEIGHT');
+        newItem.appendChild(textNode);
+        arrayElement.appendChild(newItem);
     }
 
     if (height == "ReadWrite" || height == "Write") {
@@ -180,6 +220,11 @@ function addPermissionsToManifest(configParser, projectRoot) {
         const newPermission = manifestXmlDoc.createElement('uses-permission');
         newPermission.setAttribute('android:name', 'android.permission.health.WRITE_HEIGHT');
         manifestXmlDoc.documentElement.appendChild(newPermission);
+
+        const newItem = permissionsXmlDoc.createElement('item');
+        const textNode = permissionsXmlDoc.createTextNode('android.permission.health.WRITE_HEIGHT');
+        newItem.appendChild(textNode);
+        arrayElement.appendChild(newItem);
     }
 
     // calories
@@ -189,6 +234,11 @@ function addPermissionsToManifest(configParser, projectRoot) {
         const newPermission = manifestXmlDoc.createElement('uses-permission');
         newPermission.setAttribute('android:name', 'android.permission.health.READ_TOTAL_CALORIES_BURNED');
         manifestXmlDoc.documentElement.appendChild(newPermission);
+
+        const newItem = permissionsXmlDoc.createElement('item');
+        const textNode = permissionsXmlDoc.createTextNode('android.permission.health.READ_TOTAL_CALORIES_BURNED');
+        newItem.appendChild(textNode);
+        arrayElement.appendChild(newItem);
     }
 
     if (calories == "ReadWrite" || calories == "Write") {
@@ -197,6 +247,11 @@ function addPermissionsToManifest(configParser, projectRoot) {
         const newPermission = manifestXmlDoc.createElement('uses-permission');
         newPermission.setAttribute('android:name', 'android.permission.health.WRITE_TOTAL_CALORIES_BURNED');
         manifestXmlDoc.documentElement.appendChild(newPermission);
+
+        const newItem = permissionsXmlDoc.createElement('item');
+        const textNode = permissionsXmlDoc.createTextNode('android.permission.health.WRITE_TOTAL_CALORIES_BURNED');
+        newItem.appendChild(textNode);
+        arrayElement.appendChild(newItem);
     }
 
     // sleep
@@ -206,6 +261,11 @@ function addPermissionsToManifest(configParser, projectRoot) {
         const newPermission = manifestXmlDoc.createElement('uses-permission');
         newPermission.setAttribute('android:name', 'android.permission.health.READ_SLEEP');
         manifestXmlDoc.documentElement.appendChild(newPermission);
+
+        const newItem = permissionsXmlDoc.createElement('item');
+        const textNode = permissionsXmlDoc.createTextNode('android.permission.health.READ_SLEEP');
+        newItem.appendChild(textNode);
+        arrayElement.appendChild(newItem);
     }
 
     if (sleep == "ReadWrite" || sleep == "Write") {
@@ -214,6 +274,11 @@ function addPermissionsToManifest(configParser, projectRoot) {
         const newPermission = manifestXmlDoc.createElement('uses-permission');
         newPermission.setAttribute('android:name', 'android.permission.health.WRITE_SLEEP');
         manifestXmlDoc.documentElement.appendChild(newPermission);
+
+        const newItem = permissionsXmlDoc.createElement('item');
+        const textNode = permissionsXmlDoc.createTextNode('android.permission.health.WRITE_SLEEP');
+        newItem.appendChild(textNode);
+        arrayElement.appendChild(newItem);
     }
 
     // blood pressure
@@ -223,6 +288,11 @@ function addPermissionsToManifest(configParser, projectRoot) {
         const newPermission = manifestXmlDoc.createElement('uses-permission');
         newPermission.setAttribute('android:name', 'android.permission.health.READ_BLOOD_PRESSURE');
         manifestXmlDoc.documentElement.appendChild(newPermission);
+
+        const newItem = permissionsXmlDoc.createElement('item');
+        const textNode = permissionsXmlDoc.createTextNode('android.permission.health.READ_BLOOD_PRESSURE');
+        newItem.appendChild(textNode);
+        arrayElement.appendChild(newItem);
     }
 
     if (bloodPressure == "ReadWrite" || bloodPressure == "Write") {
@@ -231,6 +301,11 @@ function addPermissionsToManifest(configParser, projectRoot) {
         const newPermission = manifestXmlDoc.createElement('uses-permission');
         newPermission.setAttribute('android:name', 'android.permission.health.WRITE_BLOOD_PRESSURE');
         manifestXmlDoc.documentElement.appendChild(newPermission);
+
+        const newItem = permissionsXmlDoc.createElement('item');
+        const textNode = permissionsXmlDoc.createTextNode('android.permission.health.WRITE_BLOOD_PRESSURE');
+        newItem.appendChild(textNode);
+        arrayElement.appendChild(newItem);
     }
 
     // blood glucose
@@ -240,6 +315,11 @@ function addPermissionsToManifest(configParser, projectRoot) {
         const newPermission = manifestXmlDoc.createElement('uses-permission');
         newPermission.setAttribute('android:name', 'android.permission.health.READ_BLOOD_GLUCOSE');
         manifestXmlDoc.documentElement.appendChild(newPermission);
+
+        const newItem = permissionsXmlDoc.createElement('item');
+        const textNode = permissionsXmlDoc.createTextNode('android.permission.health.READ_BLOOD_GLUCOSE');
+        newItem.appendChild(textNode);
+        arrayElement.appendChild(newItem);
     }
 
     if (bloodGlucose == "ReadWrite" || bloodGlucose == "Write") {
@@ -248,6 +328,11 @@ function addPermissionsToManifest(configParser, projectRoot) {
         const newPermission = manifestXmlDoc.createElement('uses-permission');
         newPermission.setAttribute('android:name', 'android.permission.health.WRITE_BLOOD_GLUCOSE');
         manifestXmlDoc.documentElement.appendChild(newPermission);
+
+        const newItem = permissionsXmlDoc.createElement('item');
+        const textNode = permissionsXmlDoc.createTextNode('android.permission.health.WRITE_BLOOD_GLUCOSE');
+        newItem.appendChild(textNode);
+        arrayElement.appendChild(newItem);
     }
 
     // body fat
@@ -257,6 +342,11 @@ function addPermissionsToManifest(configParser, projectRoot) {
         const newPermission = manifestXmlDoc.createElement('uses-permission');
         newPermission.setAttribute('android:name', 'android.permission.health.READ_BODY_FAT');
         manifestXmlDoc.documentElement.appendChild(newPermission);
+
+        const newItem = permissionsXmlDoc.createElement('item');
+        const textNode = permissionsXmlDoc.createTextNode('android.permission.health.READ_BODY_FAT');
+        newItem.appendChild(textNode);
+        arrayElement.appendChild(newItem);
     }
 
     if (bodyFat == "ReadWrite" || bodyFat == "Write") {
@@ -265,6 +355,11 @@ function addPermissionsToManifest(configParser, projectRoot) {
         const newPermission = manifestXmlDoc.createElement('uses-permission');
         newPermission.setAttribute('android:name', 'android.permission.health.WRITE_BODY_FAT');
         manifestXmlDoc.documentElement.appendChild(newPermission);
+
+        const newItem = permissionsXmlDoc.createElement('item');
+        const textNode = permissionsXmlDoc.createTextNode('android.permission.health.WRITE_BODY_FAT');
+        newItem.appendChild(textNode);
+        arrayElement.appendChild(newItem);
     }
 
     // bmr
@@ -274,6 +369,11 @@ function addPermissionsToManifest(configParser, projectRoot) {
         const newPermission = manifestXmlDoc.createElement('uses-permission');
         newPermission.setAttribute('android:name', 'android.permission.health.READ_BASAL_METABOLIC_RATE');
         manifestXmlDoc.documentElement.appendChild(newPermission);
+
+        const newItem = permissionsXmlDoc.createElement('item');
+        const textNode = permissionsXmlDoc.createTextNode('android.permission.health.READ_BASAL_METABOLIC_RATE');
+        newItem.appendChild(textNode);
+        arrayElement.appendChild(newItem);
     }
 
     if (bmr == "ReadWrite" || bmr == "Write") {
@@ -282,6 +382,11 @@ function addPermissionsToManifest(configParser, projectRoot) {
         const newPermission = manifestXmlDoc.createElement('uses-permission');
         newPermission.setAttribute('android:name', 'android.permission.health.WRITE_BASAL_METABOLIC_RATE');
         manifestXmlDoc.documentElement.appendChild(newPermission);
+
+        const newItem = permissionsXmlDoc.createElement('item');
+        const textNode = permissionsXmlDoc.createTextNode('android.permission.health.WRITE_BASAL_METABOLIC_RATE');
+        newItem.appendChild(textNode);
+        arrayElement.appendChild(newItem);
     }
 
     // speed
@@ -291,6 +396,11 @@ function addPermissionsToManifest(configParser, projectRoot) {
         const newPermission = manifestXmlDoc.createElement('uses-permission');
         newPermission.setAttribute('android:name', 'android.permission.health.READ_SPEED');
         manifestXmlDoc.documentElement.appendChild(newPermission);
+
+        const newItem = permissionsXmlDoc.createElement('item');
+        const textNode = permissionsXmlDoc.createTextNode('android.permission.health.READ_SPEED');
+        newItem.appendChild(textNode);
+        arrayElement.appendChild(newItem);
     }
 
     if (speed == "ReadWrite" || speed == "Write") {
@@ -299,6 +409,11 @@ function addPermissionsToManifest(configParser, projectRoot) {
         const newPermission = manifestXmlDoc.createElement('uses-permission');
         newPermission.setAttribute('android:name', 'android.permission.health.WRITE_SPEED');
         manifestXmlDoc.documentElement.appendChild(newPermission);
+
+        const newItem = permissionsXmlDoc.createElement('item');
+        const textNode = permissionsXmlDoc.createTextNode('android.permission.health.WRITE_SPEED');
+        newItem.appendChild(textNode);
+        arrayElement.appendChild(newItem);
     }
 
     // distance
@@ -308,6 +423,11 @@ function addPermissionsToManifest(configParser, projectRoot) {
         const newPermission = manifestXmlDoc.createElement('uses-permission');
         newPermission.setAttribute('android:name', 'android.permission.health.READ_DISTANCE');
         manifestXmlDoc.documentElement.appendChild(newPermission);
+
+        const newItem = permissionsXmlDoc.createElement('item');
+        const textNode = permissionsXmlDoc.createTextNode('android.permission.health.READ_DISTANCE');
+        newItem.appendChild(textNode);
+        arrayElement.appendChild(newItem);
     }
 
     if (distance == "ReadWrite" || distance == "Write") {
@@ -316,6 +436,11 @@ function addPermissionsToManifest(configParser, projectRoot) {
         const newPermission = manifestXmlDoc.createElement('uses-permission');
         newPermission.setAttribute('android:name', 'android.permission.health.WRITE_DISTANCE');
         manifestXmlDoc.documentElement.appendChild(newPermission);
+
+        const newItem = permissionsXmlDoc.createElement('item');
+        const textNode = permissionsXmlDoc.createTextNode('android.permission.health.WRITE_DISTANCE');
+        newItem.appendChild(textNode);
+        arrayElement.appendChild(newItem);
     }
 
     // process fitness variables
@@ -327,24 +452,44 @@ function addPermissionsToManifest(configParser, projectRoot) {
             const newPermission = manifestXmlDoc.createElement('uses-permission');
             newPermission.setAttribute('android:name', 'android.permission.health.READ_STEPS');
             manifestXmlDoc.documentElement.appendChild(newPermission);
+
+            const newItem = permissionsXmlDoc.createElement('item');
+            const textNode = permissionsXmlDoc.createTextNode('android.permission.health.READ_STEPS');
+            newItem.appendChild(textNode);
+            arrayElement.appendChild(newItem);
         }
 
         if (!caloriesSet) {
             const newPermission = manifestXmlDoc.createElement('uses-permission');
             newPermission.setAttribute('android:name', 'android.permission.health.READ_TOTAL_CALORIES_BURNED');
             manifestXmlDoc.documentElement.appendChild(newPermission);
+
+            const newItem = permissionsXmlDoc.createElement('item');
+            const textNode = permissionsXmlDoc.createTextNode('android.permission.health.READ_TOTAL_CALORIES_BURNED');
+            newItem.appendChild(textNode);
+            arrayElement.appendChild(newItem);
         }
 
         if (!speedSet) {
             const newPermission = manifestXmlDoc.createElement('uses-permission');
             newPermission.setAttribute('android:name', 'android.permission.health.READ_SPEED');
             manifestXmlDoc.documentElement.appendChild(newPermission);
+
+            const newItem = permissionsXmlDoc.createElement('item');
+            const textNode = permissionsXmlDoc.createTextNode('android.permission.health.READ_SPEED');
+            newItem.appendChild(textNode);
+            arrayElement.appendChild(newItem);
         }
 
         if (!distanceSet) {
             const newPermission = manifestXmlDoc.createElement('uses-permission');
             newPermission.setAttribute('android:name', 'android.permission.health.READ_DISTANCE');
             manifestXmlDoc.documentElement.appendChild(newPermission);
+
+            const newItem = permissionsXmlDoc.createElement('item');
+            const textNode = permissionsXmlDoc.createTextNode('android.permission.health.READ_DISTANCE');
+            newItem.appendChild(textNode);
+            arrayElement.appendChild(newItem);
         }
 
     }
@@ -357,24 +502,44 @@ function addPermissionsToManifest(configParser, projectRoot) {
             const newPermission = manifestXmlDoc.createElement('uses-permission');
             newPermission.setAttribute('android:name', 'android.permission.health.WRITE_STEPS');
             manifestXmlDoc.documentElement.appendChild(newPermission);
+
+            const newItem = permissionsXmlDoc.createElement('item');
+            const textNode = permissionsXmlDoc.createTextNode('android.permission.health.WRITE_STEPS');
+            newItem.appendChild(textNode);
+            arrayElement.appendChild(newItem);
         }
 
         if (!caloriesSet) {
             const newPermission = manifestXmlDoc.createElement('uses-permission');
             newPermission.setAttribute('android:name', 'android.permission.health.WRITE_TOTAL_CALORIES_BURNED');
             manifestXmlDoc.documentElement.appendChild(newPermission);
+
+            const newItem = permissionsXmlDoc.createElement('item');
+            const textNode = permissionsXmlDoc.createTextNode('android.permission.health.WRITE_TOTAL_CALORIES_BURNED');
+            newItem.appendChild(textNode);
+            arrayElement.appendChild(newItem);
         }
 
         if (!speedSet) {
             const newPermission = manifestXmlDoc.createElement('uses-permission');
             newPermission.setAttribute('android:name', 'android.permission.health.WRITE_SPEED');
             manifestXmlDoc.documentElement.appendChild(newPermission);
+
+            const newItem = permissionsXmlDoc.createElement('item');
+            const textNode = permissionsXmlDoc.createTextNode('android.permission.health.WRITE_SPEED');
+            newItem.appendChild(textNode);
+            arrayElement.appendChild(newItem);
         }
 
         if (!distanceSet) {
             const newPermission = manifestXmlDoc.createElement('uses-permission');
             newPermission.setAttribute('android:name', 'android.permission.health.WRITE_DISTANCE');
             manifestXmlDoc.documentElement.appendChild(newPermission);
+
+            const newItem = permissionsXmlDoc.createElement('item');
+            const textNode = permissionsXmlDoc.createTextNode('android.permission.health.WRITE_DISTANCE');
+            newItem.appendChild(textNode);
+            arrayElement.appendChild(newItem);
         }
 
     }
@@ -388,24 +553,44 @@ function addPermissionsToManifest(configParser, projectRoot) {
             const newPermission = manifestXmlDoc.createElement('uses-permission');
             newPermission.setAttribute('android:name', 'android.permission.health.READ_HEART_RATE');
             manifestXmlDoc.documentElement.appendChild(newPermission);
+
+            const newItem = permissionsXmlDoc.createElement('item');
+            const textNode = permissionsXmlDoc.createTextNode('android.permission.health.READ_HEART_RATE');
+            newItem.appendChild(textNode);
+            arrayElement.appendChild(newItem);
         }
 
         if (!sleepSet) {
             const newPermission = manifestXmlDoc.createElement('uses-permission');
             newPermission.setAttribute('android:name', 'android.permission.health.READ_SLEEP');
             manifestXmlDoc.documentElement.appendChild(newPermission);
+
+            const newItem = permissionsXmlDoc.createElement('item');
+            const textNode = permissionsXmlDoc.createTextNode('android.permission.health.READ_SLEEP');
+            newItem.appendChild(textNode);
+            arrayElement.appendChild(newItem);
         }
 
         if (!bloodPressureSet) {
             const newPermission = manifestXmlDoc.createElement('uses-permission');
             newPermission.setAttribute('android:name', 'android.permission.health.READ_BLOOD_PRESSURE');
             manifestXmlDoc.documentElement.appendChild(newPermission);
+
+            const newItem = permissionsXmlDoc.createElement('item');
+            const textNode = permissionsXmlDoc.createTextNode('android.permission.health.READ_BLOOD_PRESSURE');
+            newItem.appendChild(textNode);
+            arrayElement.appendChild(newItem);
         }
 
         if (!bloodGlucoseSet) {
             const newPermission = manifestXmlDoc.createElement('uses-permission');
             newPermission.setAttribute('android:name', 'android.permission.health.READ_BLOOD_GLUCOSE');
             manifestXmlDoc.documentElement.appendChild(newPermission);
+
+            const newItem = permissionsXmlDoc.createElement('item');
+            const textNode = permissionsXmlDoc.createTextNode('android.permission.health.READ_BLOOD_GLUCOSE');
+            newItem.appendChild(textNode);
+            arrayElement.appendChild(newItem);
         }
 
     }
@@ -418,24 +603,44 @@ function addPermissionsToManifest(configParser, projectRoot) {
             const newPermission = manifestXmlDoc.createElement('uses-permission');
             newPermission.setAttribute('android:name', 'android.permission.health.WRITE_HEART_RATE');
             manifestXmlDoc.documentElement.appendChild(newPermission);
+
+            const newItem = permissionsXmlDoc.createElement('item');
+            const textNode = permissionsXmlDoc.createTextNode('android.permission.health.WRITE_HEART_RATE');
+            newItem.appendChild(textNode);
+            arrayElement.appendChild(newItem);
         }
 
         if (!sleepSet) {
             const newPermission = manifestXmlDoc.createElement('uses-permission');
             newPermission.setAttribute('android:name', 'android.permission.health.WRITE_SLEEP');
             manifestXmlDoc.documentElement.appendChild(newPermission);
+
+            const newItem = permissionsXmlDoc.createElement('item');
+            const textNode = permissionsXmlDoc.createTextNode('android.permission.health.WRITE_SLEEP');
+            newItem.appendChild(textNode);
+            arrayElement.appendChild(newItem);
         }
 
         if (!bloodPressureSet) {
             const newPermission = manifestXmlDoc.createElement('uses-permission');
             newPermission.setAttribute('android:name', 'android.permission.health.WRITE_BLOOD_PRESSURE');
             manifestXmlDoc.documentElement.appendChild(newPermission);
+
+            const newItem = permissionsXmlDoc.createElement('item');
+            const textNode = permissionsXmlDoc.createTextNode('android.permission.health.WRITE_BLOOD_PRESSURE');
+            newItem.appendChild(textNode);
+            arrayElement.appendChild(newItem);
         }
 
         if (!bloodGlucoseSet) {
             const newPermission = manifestXmlDoc.createElement('uses-permission');
             newPermission.setAttribute('android:name', 'android.permission.health.WRITE_BLOOD_GLUCOSE');
             manifestXmlDoc.documentElement.appendChild(newPermission);
+
+            const newItem = permissionsXmlDoc.createElement('item');
+            const textNode = permissionsXmlDoc.createTextNode('android.permission.health.WRITE_BLOOD_GLUCOSE');
+            newItem.appendChild(textNode);
+            arrayElement.appendChild(newItem);
         }
 
     }
@@ -449,24 +654,44 @@ function addPermissionsToManifest(configParser, projectRoot) {
             const newPermission = manifestXmlDoc.createElement('uses-permission');
             newPermission.setAttribute('android:name', 'android.permission.health.READ_WEIGHT');
             manifestXmlDoc.documentElement.appendChild(newPermission);
+
+            const newItem = permissionsXmlDoc.createElement('item');
+            const textNode = permissionsXmlDoc.createTextNode('android.permission.health.READ_WEIGHT');
+            newItem.appendChild(textNode);
+            arrayElement.appendChild(newItem);
         }
 
         if (!heightSet) {
             const newPermission = manifestXmlDoc.createElement('uses-permission');
             newPermission.setAttribute('android:name', 'android.permission.health.READ_HEIGHT');
             manifestXmlDoc.documentElement.appendChild(newPermission);
+
+            const newItem = permissionsXmlDoc.createElement('item');
+            const textNode = permissionsXmlDoc.createTextNode('android.permission.health.READ_HEIGHT');
+            newItem.appendChild(textNode);
+            arrayElement.appendChild(newItem);
         }
 
         if (!bodyFatSet) {
             const newPermission = manifestXmlDoc.createElement('uses-permission');
             newPermission.setAttribute('android:name', 'android.permission.health.READ_BODY_FAT');
             manifestXmlDoc.documentElement.appendChild(newPermission);
+
+            const newItem = permissionsXmlDoc.createElement('item');
+            const textNode = permissionsXmlDoc.createTextNode('android.permission.health.READ_BODY_FAT');
+            newItem.appendChild(textNode);
+            arrayElement.appendChild(newItem);
         }
 
         if (!bmrSet) {
             const newPermission = manifestXmlDoc.createElement('uses-permission');
             newPermission.setAttribute('android:name', 'android.permission.health.READ_BASAL_METABOLIC_RATE');
             manifestXmlDoc.documentElement.appendChild(newPermission);
+
+            const newItem = permissionsXmlDoc.createElement('item');
+            const textNode = permissionsXmlDoc.createTextNode('android.permission.health.READ_BASAL_METABOLIC_RATE');
+            newItem.appendChild(textNode);
+            arrayElement.appendChild(newItem);
         }
 
     }
@@ -479,24 +704,44 @@ function addPermissionsToManifest(configParser, projectRoot) {
             const newPermission = manifestXmlDoc.createElement('uses-permission');
             newPermission.setAttribute('android:name', 'android.permission.health.WRITE_WEIGHT');
             manifestXmlDoc.documentElement.appendChild(newPermission);
+
+            const newItem = permissionsXmlDoc.createElement('item');
+            const textNode = permissionsXmlDoc.createTextNode('android.permission.health.WRITE_WEIGHT');
+            newItem.appendChild(textNode);
+            arrayElement.appendChild(newItem);
         }
 
         if (!heightSet) {
             const newPermission = manifestXmlDoc.createElement('uses-permission');
             newPermission.setAttribute('android:name', 'android.permission.health.WRITE_HEIGHT');
             manifestXmlDoc.documentElement.appendChild(newPermission);
+
+            const newItem = permissionsXmlDoc.createElement('item');
+            const textNode = permissionsXmlDoc.createTextNode('android.permission.health.WRITE_HEIGHT');
+            newItem.appendChild(textNode);
+            arrayElement.appendChild(newItem);
         }
 
         if (!bodyFatSet) {
             const newPermission = manifestXmlDoc.createElement('uses-permission');
             newPermission.setAttribute('android:name', 'android.permission.health.WRITE_BODY_FAT');
             manifestXmlDoc.documentElement.appendChild(newPermission);
+
+            const newItem = permissionsXmlDoc.createElement('item');
+            const textNode = permissionsXmlDoc.createTextNode('android.permission.health.WRITE_BODY_FAT');
+            newItem.appendChild(textNode);
+            arrayElement.appendChild(newItem);
         }
 
         if (!bmrSet) {
             const newPermission = manifestXmlDoc.createElement('uses-permission');
             newPermission.setAttribute('android:name', 'android.permission.health.WRITE_BASAL_METABOLIC_RATE');
             manifestXmlDoc.documentElement.appendChild(newPermission);
+
+            const newItem = permissionsXmlDoc.createElement('item');
+            const textNode = permissionsXmlDoc.createTextNode('android.permission.health.WRITE_BASAL_METABOLIC_RATE');
+            newItem.appendChild(textNode);
+            arrayElement.appendChild(newItem);
         }
 
     }
@@ -511,24 +756,44 @@ function addPermissionsToManifest(configParser, projectRoot) {
             const newPermission = manifestXmlDoc.createElement('uses-permission');
             newPermission.setAttribute('android:name', 'android.permission.health.READ_STEPS');
             manifestXmlDoc.documentElement.appendChild(newPermission);
+
+            const newItem = permissionsXmlDoc.createElement('item');
+            const textNode = permissionsXmlDoc.createTextNode('android.permission.health.READ_STEPS');
+            newItem.appendChild(textNode);
+            arrayElement.appendChild(newItem);
         }
 
         if (!fitnessSet && !caloriesSet) {
             const newPermission = manifestXmlDoc.createElement('uses-permission');
             newPermission.setAttribute('android:name', 'android.permission.health.READ_TOTAL_CALORIES_BURNED');
             manifestXmlDoc.documentElement.appendChild(newPermission);
+
+            const newItem = permissionsXmlDoc.createElement('item');
+            const textNode = permissionsXmlDoc.createTextNode('android.permission.health.READ_TOTAL_CALORIES_BURNED');
+            newItem.appendChild(textNode);
+            arrayElement.appendChild(newItem);
         }
 
         if (!fitnessSet && !speedSet) {
             const newPermission = manifestXmlDoc.createElement('uses-permission');
             newPermission.setAttribute('android:name', 'android.permission.health.READ_SPEED');
             manifestXmlDoc.documentElement.appendChild(newPermission);
+
+            const newItem = permissionsXmlDoc.createElement('item');
+            const textNode = permissionsXmlDoc.createTextNode('android.permission.health.READ_SPEED');
+            newItem.appendChild(textNode);
+            arrayElement.appendChild(newItem);
         }
 
         if (!fitnessSet && !distanceSet) {
             const newPermission = manifestXmlDoc.createElement('uses-permission');
             newPermission.setAttribute('android:name', 'android.permission.health.READ_DISTANCE');
             manifestXmlDoc.documentElement.appendChild(newPermission);
+
+            const newItem = permissionsXmlDoc.createElement('item');
+            const textNode = permissionsXmlDoc.createTextNode('android.permission.health.READ_DISTANCE');
+            newItem.appendChild(textNode);
+            arrayElement.appendChild(newItem);
         }
 
         // health
@@ -536,24 +801,44 @@ function addPermissionsToManifest(configParser, projectRoot) {
             const newPermission = manifestXmlDoc.createElement('uses-permission');
             newPermission.setAttribute('android:name', 'android.permission.health.READ_HEART_RATE');
             manifestXmlDoc.documentElement.appendChild(newPermission);
+
+            const newItem = permissionsXmlDoc.createElement('item');
+            const textNode = permissionsXmlDoc.createTextNode('android.permission.health.READ_HEART_RATE');
+            newItem.appendChild(textNode);
+            arrayElement.appendChild(newItem);
         }
 
         if (!healthSet && !sleepSet) {
             const newPermission = manifestXmlDoc.createElement('uses-permission');
             newPermission.setAttribute('android:name', 'android.permission.health.READ_SLEEP');
             manifestXmlDoc.documentElement.appendChild(newPermission);
+
+            const newItem = permissionsXmlDoc.createElement('item');
+            const textNode = permissionsXmlDoc.createTextNode('android.permission.health.READ_SLEEP');
+            newItem.appendChild(textNode);
+            arrayElement.appendChild(newItem);
         }
 
         if (!healthSet && !bloodPressureSet) {
             const newPermission = manifestXmlDoc.createElement('uses-permission');
             newPermission.setAttribute('android:name', 'android.permission.health.READ_BLOOD_PRESSURE');
             manifestXmlDoc.documentElement.appendChild(newPermission);
+
+            const newItem = permissionsXmlDoc.createElement('item');
+            const textNode = permissionsXmlDoc.createTextNode('android.permission.health.READ_BLOOD_PRESSURE');
+            newItem.appendChild(textNode);
+            arrayElement.appendChild(newItem);
         }
 
         if (!healthSet && !bloodGlucoseSet) {
             const newPermission = manifestXmlDoc.createElement('uses-permission');
             newPermission.setAttribute('android:name', 'android.permission.health.READ_BLOOD_GLUCOSE');
             manifestXmlDoc.documentElement.appendChild(newPermission);
+
+            const newItem = permissionsXmlDoc.createElement('item');
+            const textNode = permissionsXmlDoc.createTextNode('android.permission.health.READ_BLOOD_GLUCOSE');
+            newItem.appendChild(textNode);
+            arrayElement.appendChild(newItem);
         }
 
         // profile
@@ -561,24 +846,44 @@ function addPermissionsToManifest(configParser, projectRoot) {
             const newPermission = manifestXmlDoc.createElement('uses-permission');
             newPermission.setAttribute('android:name', 'android.permission.health.READ_WEIGHT');
             manifestXmlDoc.documentElement.appendChild(newPermission);
+
+            const newItem = permissionsXmlDoc.createElement('item');
+            const textNode = permissionsXmlDoc.createTextNode('android.permission.health.READ_WEIGHT');
+            newItem.appendChild(textNode);
+            arrayElement.appendChild(newItem);
         }
 
         if (!profileSet && !heightSet) {
             const newPermission = manifestXmlDoc.createElement('uses-permission');
             newPermission.setAttribute('android:name', 'android.permission.health.READ_HEIGHT');
             manifestXmlDoc.documentElement.appendChild(newPermission);
+
+            const newItem = permissionsXmlDoc.createElement('item');
+            const textNode = permissionsXmlDoc.createTextNode('android.permission.health.READ_HEIGHT');
+            newItem.appendChild(textNode);
+            arrayElement.appendChild(newItem);
         }
 
         if (!profileSet && !bodyFatSet) {
             const newPermission = manifestXmlDoc.createElement('uses-permission');
             newPermission.setAttribute('android:name', 'android.permission.health.READ_BODY_FAT');
             manifestXmlDoc.documentElement.appendChild(newPermission);
+
+            const newItem = permissionsXmlDoc.createElement('item');
+            const textNode = permissionsXmlDoc.createTextNode('android.permission.health.READ_BODY_FAT');
+            newItem.appendChild(textNode);
+            arrayElement.appendChild(newItem);
         }
 
         if (!profileSet && !bmrSet) {
             const newPermission = manifestXmlDoc.createElement('uses-permission');
             newPermission.setAttribute('android:name', 'android.permission.health.READ_BASAL_METABOLIC_RATE');
             manifestXmlDoc.documentElement.appendChild(newPermission);
+
+            const newItem = permissionsXmlDoc.createElement('item');
+            const textNode = permissionsXmlDoc.createTextNode('android.permission.health.READ_BASAL_METABOLIC_RATE');
+            newItem.appendChild(textNode);
+            arrayElement.appendChild(newItem);
         }
         
     }
@@ -590,24 +895,44 @@ function addPermissionsToManifest(configParser, projectRoot) {
             const newPermission = manifestXmlDoc.createElement('uses-permission');
             newPermission.setAttribute('android:name', 'android.permission.health.WRITE_STEPS');
             manifestXmlDoc.documentElement.appendChild(newPermission);
+
+            const newItem = permissionsXmlDoc.createElement('item');
+            const textNode = permissionsXmlDoc.createTextNode('android.permission.health.WRITE_STEPS');
+            newItem.appendChild(textNode);
+            arrayElement.appendChild(newItem);
         }
 
         if (!fitnessSet && !caloriesSet) {
             const newPermission = manifestXmlDoc.createElement('uses-permission');
             newPermission.setAttribute('android:name', 'android.permission.health.WRITE_TOTAL_CALORIES_BURNED');
             manifestXmlDoc.documentElement.appendChild(newPermission);
+
+            const newItem = permissionsXmlDoc.createElement('item');
+            const textNode = permissionsXmlDoc.createTextNode('android.permission.health.WRITE_TOTAL_CALORIES_BURNED');
+            newItem.appendChild(textNode);
+            arrayElement.appendChild(newItem);
         }
 
         if (!fitnessSet && !speedSet) {
             const newPermission = manifestXmlDoc.createElement('uses-permission');
             newPermission.setAttribute('android:name', 'android.permission.health.WRITE_SPEED');
             manifestXmlDoc.documentElement.appendChild(newPermission);
+
+            const newItem = permissionsXmlDoc.createElement('item');
+            const textNode = permissionsXmlDoc.createTextNode('android.permission.health.WRITE_SPEED');
+            newItem.appendChild(textNode);
+            arrayElement.appendChild(newItem);
         }
 
         if (!fitnessSet && !distanceSet) {
             const newPermission = manifestXmlDoc.createElement('uses-permission');
             newPermission.setAttribute('android:name', 'android.permission.health.WRITE_DISTANCE');
             manifestXmlDoc.documentElement.appendChild(newPermission);
+
+            const newItem = permissionsXmlDoc.createElement('item');
+            const textNode = permissionsXmlDoc.createTextNode('android.permission.health.WRITE_DISTANCE');
+            newItem.appendChild(textNode);
+            arrayElement.appendChild(newItem);
         }
 
         // health
@@ -615,24 +940,44 @@ function addPermissionsToManifest(configParser, projectRoot) {
             const newPermission = manifestXmlDoc.createElement('uses-permission');
             newPermission.setAttribute('android:name', 'android.permission.health.WRITE_HEART_RATE');
             manifestXmlDoc.documentElement.appendChild(newPermission);
+
+            const newItem = permissionsXmlDoc.createElement('item');
+            const textNode = permissionsXmlDoc.createTextNode('android.permission.health.WRITE_HEART_RATE');
+            newItem.appendChild(textNode);
+            arrayElement.appendChild(newItem);
         }
 
         if (!healthSet && !sleepSet) {
             const newPermission = manifestXmlDoc.createElement('uses-permission');
             newPermission.setAttribute('android:name', 'android.permission.health.WRITE_SLEEP');
             manifestXmlDoc.documentElement.appendChild(newPermission);
+
+            const newItem = permissionsXmlDoc.createElement('item');
+            const textNode = permissionsXmlDoc.createTextNode('android.permission.health.WRITE_SLEEP');
+            newItem.appendChild(textNode);
+            arrayElement.appendChild(newItem);
         }
 
         if (!healthSet && !bloodPressureSet) {
             const newPermission = manifestXmlDoc.createElement('uses-permission');
             newPermission.setAttribute('android:name', 'android.permission.health.WRITE_BLOOD_PRESSURE');
             manifestXmlDoc.documentElement.appendChild(newPermission);
+
+            const newItem = permissionsXmlDoc.createElement('item');
+            const textNode = permissionsXmlDoc.createTextNode('android.permission.health.WRITE_BLOOD_PRESSURE');
+            newItem.appendChild(textNode);
+            arrayElement.appendChild(newItem);
         }
 
         if (!healthSet && !bloodGlucoseSet) {
             const newPermission = manifestXmlDoc.createElement('uses-permission');
             newPermission.setAttribute('android:name', 'android.permission.health.WRITE_BLOOD_GLUCOSE');
             manifestXmlDoc.documentElement.appendChild(newPermission);
+
+            const newItem = permissionsXmlDoc.createElement('item');
+            const textNode = permissionsXmlDoc.createTextNode('android.permission.health.WRITE_BLOOD_GLUCOSE');
+            newItem.appendChild(textNode);
+            arrayElement.appendChild(newItem);
         }
 
         // profile
@@ -640,24 +985,44 @@ function addPermissionsToManifest(configParser, projectRoot) {
             const newPermission = manifestXmlDoc.createElement('uses-permission');
             newPermission.setAttribute('android:name', 'android.permission.health.WRITE_WEIGHT');
             manifestXmlDoc.documentElement.appendChild(newPermission);
+
+            const newItem = permissionsXmlDoc.createElement('item');
+            const textNode = permissionsXmlDoc.createTextNode('android.permission.health.WRITE_WEIGHT');
+            newItem.appendChild(textNode);
+            arrayElement.appendChild(newItem);
         }
 
         if (!profileSet && !heightSet) {
             const newPermission = manifestXmlDoc.createElement('uses-permission');
             newPermission.setAttribute('android:name', 'android.permission.health.WRITE_HEIGHT');
             manifestXmlDoc.documentElement.appendChild(newPermission);
+
+            const newItem = permissionsXmlDoc.createElement('item');
+            const textNode = permissionsXmlDoc.createTextNode('android.permission.health.WRITE_HEIGHT');
+            newItem.appendChild(textNode);
+            arrayElement.appendChild(newItem);
         }
 
         if (!profileSet && !bodyFatSet) {
             const newPermission = manifestXmlDoc.createElement('uses-permission');
             newPermission.setAttribute('android:name', 'android.permission.health.WRITE_BODY_FAT');
             manifestXmlDoc.documentElement.appendChild(newPermission);
+
+            const newItem = permissionsXmlDoc.createElement('item');
+            const textNode = permissionsXmlDoc.createTextNode('android.permission.health.WRITE_BODY_FAT');
+            newItem.appendChild(textNode);
+            arrayElement.appendChild(newItem);
         }
 
         if (!profileSet && !bmrSet) {
             const newPermission = manifestXmlDoc.createElement('uses-permission');
             newPermission.setAttribute('android:name', 'android.permission.health.WRITE_BASAL_METABOLIC_RATE');
             manifestXmlDoc.documentElement.appendChild(newPermission);
+
+            const newItem = permissionsXmlDoc.createElement('item');
+            const textNode = permissionsXmlDoc.createTextNode('android.permission.health.WRITE_BASAL_METABOLIC_RATE');
+            newItem.appendChild(textNode);
+            arrayElement.appendChild(newItem);
         }
         
     }
@@ -672,46 +1037,82 @@ function addPermissionsToManifest(configParser, projectRoot) {
                 const newPermission = manifestXmlDoc.createElement('uses-permission');
                 newPermission.setAttribute('android:name', permission.name);
                 manifestXmlDoc.documentElement.appendChild(newPermission);
+
+                const newItem = permissionsXmlDoc.createElement('item');
+                const textNode = permissionsXmlDoc.createTextNode(permission.name);
+                newItem.appendChild(textNode);
+                arrayElement.appendChild(newItem);
             });
             
             fitnessPermissionsWrite.forEach(permission => {
                 const newPermission = manifestXmlDoc.createElement('uses-permission');
                 newPermission.setAttribute('android:name', permission.name);
                 manifestXmlDoc.documentElement.appendChild(newPermission);
+
+                const newItem = permissionsXmlDoc.createElement('item');
+                const textNode = permissionsXmlDoc.createTextNode(permission.name);
+                newItem.appendChild(textNode);
+                arrayElement.appendChild(newItem);
             });
     
             healthPermissionsRead.forEach(permission => {
                 const newPermission = manifestXmlDoc.createElement('uses-permission');
                 newPermission.setAttribute('android:name', permission.name);
                 manifestXmlDoc.documentElement.appendChild(newPermission);
+
+                const newItem = permissionsXmlDoc.createElement('item');
+                const textNode = permissionsXmlDoc.createTextNode(permission.name);
+                newItem.appendChild(textNode);
+                arrayElement.appendChild(newItem);
             });
             
             healthPermissionsWrite.forEach(permission => {
                 const newPermission = manifestXmlDoc.createElement('uses-permission');
                 newPermission.setAttribute('android:name', permission.name);
                 manifestXmlDoc.documentElement.appendChild(newPermission);
+
+                const newItem = permissionsXmlDoc.createElement('item');
+                const textNode = permissionsXmlDoc.createTextNode(permission.name);
+                newItem.appendChild(textNode);
+                arrayElement.appendChild(newItem);
             });
     
             profilePermissionsRead.forEach(permission => {
                 const newPermission = manifestXmlDoc.createElement('uses-permission');
                 newPermission.setAttribute('android:name', permission.name);
                 manifestXmlDoc.documentElement.appendChild(newPermission);
+
+                const newItem = permissionsXmlDoc.createElement('item');
+                const textNode = permissionsXmlDoc.createTextNode(permission.name);
+                newItem.appendChild(textNode);
+                arrayElement.appendChild(newItem);
             });
             
             profilePermissionsWrite.forEach(permission => {
                 const newPermission = manifestXmlDoc.createElement('uses-permission');
                 newPermission.setAttribute('android:name', permission.name);
                 manifestXmlDoc.documentElement.appendChild(newPermission);
+
+                const newItem = permissionsXmlDoc.createElement('item');
+                const textNode = permissionsXmlDoc.createTextNode(permission.name);
+                newItem.appendChild(textNode);
+                arrayElement.appendChild(newItem);
             });
 
         }
 
     // Serialize the updated XML document back to string
     const serializer = new XMLSerializer();
-    const updatedManifestXmlString = serializer.serializeToString(manifestXmlDoc);
 
+    // Android >= 14
+    const updatedManifestXmlString = serializer.serializeToString(manifestXmlDoc);
     // Write the updated XML string back to the same file
     fs.writeFileSync(manifestFilePath, updatedManifestXmlString, 'utf-8');
-    
+
+    // Android <= 13
+    const updatedPermissionsXmlString = serializer.serializeToString(permissionsXmlDoc);
+    const permissionsXmlFilePath = path.join(projectRoot, 'platforms/android/app/src/main/res/values/health_permissions.xml');
+    // Write the updated XML string back to the same file
+    fs.writeFileSync(permissionsXmlFilePath, updatedPermissionsXmlString, 'utf-8');
 
 }
