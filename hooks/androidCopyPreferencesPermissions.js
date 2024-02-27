@@ -10,12 +10,8 @@ module.exports = async function (context) {
 
     const configXML = path.join(projectRoot, 'config.xml');
     const configParser = new ConfigParser(configXML);
-
-    console.log('About to call addPermissionsToManfiest');
         
     addPermissionsToManifest(configParser, projectRoot);
-
-
 };
 
 function addPermissionsToManifest(configParser, projectRoot) {
@@ -719,13 +715,9 @@ function addPermissionsToManifest(configParser, projectRoot) {
 
         }
 
-    console.log('About to serialize');
-
     // Serialize the updated XML document back to string
     const serializer = new XMLSerializer();
     const updatedManifestXmlString = serializer.serializeToString(manifestXmlDoc);
-
-    console.log('About to write the file again');
 
     // Write the updated XML string back to the same file
     fs.writeFileSync(manifestFilePath, updatedManifestXmlString, 'utf-8');
