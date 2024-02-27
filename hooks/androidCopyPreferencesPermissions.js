@@ -12,10 +12,13 @@ module.exports = async function (context) {
     const configParser = new ConfigParser(configXML);
         
     // add health connect permissions to AndroidManifest.xml and health_permissions.xml files
-    addPermissionsToManifest(configParser, projectRoot);
+    addHealthConnectPermissionsToXmlFiles(configParser, projectRoot);
+
+    // add background job permissions to AndroidManfiest.xml
+    addBackgroundJobPermissionsToManifest(configParser, projectRoot);
 };
 
-function addPermissionsToManifest(configParser, projectRoot) {
+function addHealthConnectPermissionsToXmlFiles(configParser, projectRoot) {
 
     // Permission groups
     const fitnessPermissionsRead = [
@@ -1114,5 +1117,38 @@ function addPermissionsToManifest(configParser, projectRoot) {
     const permissionsXmlFilePath = path.join(projectRoot, 'platforms/android/app/src/main/res/values/health_permissions.xml');
     // Write the updated XML string back to the same file
     fs.writeFileSync(permissionsXmlFilePath, updatedPermissionsXmlString, 'utf-8');
+
+}
+
+function addBackgroundJobPermissionsToManifest(configParser, projectRoot) {
+
+    const disableBackgroundJobs = configParser.getPlatformPreference('DisableBackgroundJobs', 'android');
+
+    console.log('disableBackgroundJobs: ' + disableBackgroundJobs);
+
+    if (disableBackgroundJobs == "false" || disableBackgroundJobs == "") {
+
+        const manifestFilePath = path.join(projectRoot, 'platforms/android/app/src/main/AndroidManifest.xml');
+        const manifestXmlString = fs.readFileSync(manifestFilePath, 'utf-8');
+        // Parse the XML string
+        const manifestXmlDoc = parser.parseFromString(manifestXmlString, 'text/xml');
+
+        // if disableBackgroundJobs == true then we don't want to include the permissions in the manfiest
+        const notificationsPermission = manifestXmlDoc.createElement('uses-permission');
+        notificationsPermission.setAttribute('android:name', 'android.permission.POST_NOTIFICATIONS');
+        manifestXmlDoc.documentElement.appendChild(notificationsPermission);
+
+        const activityPermission = manifestXmlDoc.createElement('uses-permission');
+        activityPermission.setAttribute('android:name', 'android.permission.ACTIVITY_RECOGNITION');
+        manifestXmlDoc.documentElement.appendChild(activityPermission);
+
+        // Serialize the updated XML document back to string
+        const serializer = new XMLSerializer();
+        const updatedManifestXmlString = serializer.serializeToString(manifestXmlDoc);
+
+        // Write the updated XML string back to the same file
+        fs.writeFileSync(manifestFilePath, updatedManifestXmlString, 'utf-8');
+
+    }
 
 }
