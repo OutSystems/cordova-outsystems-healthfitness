@@ -1178,7 +1178,7 @@ function copyNotificationContent(configParser, projectRoot, parser) {
     }
 
     if (notificationDescription == "") {
-        notificationDescription = "The app is running on the background."
+        notificationDescription = "The app is running in the background."
     }
 
     // insert values in strings.xml
