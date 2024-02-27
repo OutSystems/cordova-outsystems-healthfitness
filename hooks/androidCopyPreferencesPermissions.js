@@ -1123,10 +1123,9 @@ function addHealthConnectPermissionsToXmlFiles(configParser, projectRoot, parser
 function addBackgroundJobPermissionsToManifest(configParser, projectRoot, parser) {
 
     const disableBackgroundJobs = configParser.getPlatformPreference('DisableBackgroundJobs', 'android');
-
-    console.log('disableBackgroundJobs: ' + disableBackgroundJobs);
-
-    if (disableBackgroundJobs == "false" || disableBackgroundJobs == "") {
+    
+    // we want to include the permissions by default
+    if (disableBackgroundJobs == false || disableBackgroundJobs == "") {
 
         const manifestFilePath = path.join(projectRoot, 'platforms/android/app/src/main/AndroidManifest.xml');
         const manifestXmlString = fs.readFileSync(manifestFilePath, 'utf-8');
