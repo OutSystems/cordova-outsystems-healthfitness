@@ -1161,9 +1161,6 @@ function copyNotificationContent(configParser, projectRoot, parser) {
     const notificationTitle = configParser.getPlatformPreference('BackgroundNotificationTitle', 'android');
     const notificationDescription = configParser.getPlatformPreference('BackgroundNotificationDescription', 'android');
 
-    console.log('BackgroundNotificationTitle: ' + notificationTitle);
-    console.log('BackgroundNotificationDescription: ' + notificationDescription);
-
     // we only want a default value for the title
     if (notificationTitle == "") {
         notificationTitle = "Measuring your health and fitness data."
@@ -1173,31 +1170,9 @@ function copyNotificationContent(configParser, projectRoot, parser) {
     const stringsXmlPath = path.join(projectRoot, 'platforms/android/app/src/main/res/values/strings.xml');
     const stringsXmlString = fs.readFileSync(stringsXmlPath, 'utf-8');
     const stringsXmlDoc = parser.parseFromString(stringsXmlString, 'text/xml')
-
-    console.log('strings.xml: ' + stringsXmlString);
-
-    stringsXmlDoc.getElementsByTagName
-
-    /*
-
-    const titleElement = stringsXmlDoc.getElementById('background_notification_title');
-    console.log('titleElement: ' + titleElement);
-    if (titleElement) {
-        console.log('Setting Title');
-        titleElement.textContent = notificationTitle;
-    }
-
-    const descriptionElement = stringsXmlDoc.getElementById('background_notification_description');
-    console.log('descriptionElement: ' + descriptionElement);
-    if (descriptionElement) {
-        console.log('Setting Description');
-        descriptionElement.textContent = notificationDescription;
-    }
-    */
-
     const stringElements = stringsXmlDoc.getElementsByTagName('string');
 
-    // Set text for each <string> element
+    // set text for each <string> element
     for (let i = 0; i < stringElements.length; i++) {
         const name = stringElements[i].getAttribute('name');
         if (name == "background_notification_title") {
