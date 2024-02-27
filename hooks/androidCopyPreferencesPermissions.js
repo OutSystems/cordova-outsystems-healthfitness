@@ -1159,11 +1159,14 @@ function copyNotificationContent(configParser, projectRoot, parser) {
 
     // get values from config.xml
     var notificationTitle = configParser.getPlatformPreference('BackgroundNotificationTitle', 'android');
-    const notificationDescription = configParser.getPlatformPreference('BackgroundNotificationDescription', 'android');
+    var notificationDescription = configParser.getPlatformPreference('BackgroundNotificationDescription', 'android');
 
-    // we only want a default value for the title
     if (notificationTitle == "") {
         notificationTitle = "Measuring your health and fitness data."
+    }
+
+    if (notificationDescription == "") {
+        notificationDescription = "The app is running on the background."
     }
 
     // insert values in strings.xml
