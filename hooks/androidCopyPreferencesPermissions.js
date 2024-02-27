@@ -1158,7 +1158,7 @@ function addBackgroundJobPermissionsToManifest(configParser, projectRoot, parser
 function copyNotificationContent(configParser, projectRoot, parser) {
 
     // get values from config.xml
-    const notificationTitle = configParser.getPlatformPreference('BackgroundNotificationTitle', 'android');
+    var notificationTitle = configParser.getPlatformPreference('BackgroundNotificationTitle', 'android');
     const notificationDescription = configParser.getPlatformPreference('BackgroundNotificationDescription', 'android');
 
     // we only want a default value for the title
@@ -1176,11 +1176,9 @@ function copyNotificationContent(configParser, projectRoot, parser) {
     for (let i = 0; i < stringElements.length; i++) {
         const name = stringElements[i].getAttribute('name');
         if (name == "background_notification_title") {
-            console.log('Setting Title');
             stringElements[i].textContent = notificationTitle;
         }
         else if (name == "background_notification_description") {
-            console.log('Setting Description');
             stringElements[i].textContent = notificationDescription;
         }
     }
