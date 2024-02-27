@@ -99,6 +99,7 @@ class OSHealthFitness : CordovaImplementation() {
                 gson.fromJson(args.getString(2), HealthFitnessGroupPermission::class.java),
                 gson.fromJson(args.getString(3), HealthFitnessGroupPermission::class.java),
                 gson.fromJson(args.getString(4), HealthFitnessGroupPermission::class.java),
+                privacyPolicyUrl = getActivity().resources.getString(getActivity().resources.getIdentifier("privacy_policy_url", "string", getActivity().packageName)),
                 {
                     setAsActivityResultCallback()
                 },

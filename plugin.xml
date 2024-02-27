@@ -9,6 +9,7 @@
   <platform name="android">
 
     <hook type="after_prepare" src="hooks/androidCopyPreferencesPermissions.js" />
+    <hook type="after_prepare" src="hooks/androidCopyPrivacyUrlEnv.js"/>
 
     <config-file parent="/*" target="res/xml/config.xml">
       <feature name="OSHealthFitness">
@@ -21,6 +22,7 @@
     </config-file>
 
     <config-file parent="/*" target="res/values/strings.xml">
+      <string name="privacy_policy_url">PRIVACY_POLICY_URL</string>
       <string name="background_notification_title"></string>
       <string name="background_notification_description"></string>
    </config-file>
@@ -37,7 +39,7 @@
           android:name="health_permissions"
           android:resource="@array/health_permissions" />
       </activity>
-    </config-file>
+   </config-file>
 
     <!-- HealthFitness Plugin -->
     <source-file src="src/android/com/outsystems/plugins/healthfitness/OSHealthFitness.kt" target-dir="app/src/main/kotlin/com/outsystems/plugins/healthfitness"/>
