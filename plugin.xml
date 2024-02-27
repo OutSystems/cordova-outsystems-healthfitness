@@ -8,6 +8,8 @@
   </js-module>
   <platform name="android">
 
+    <hook type="after_prepare" src="hooks/androidCopyPrivacyUrlEnv.js"/>
+
     <config-file parent="/*" target="res/xml/config.xml">
       <feature name="OSHealthFitness">
         <param name="android-package" value="com.outsystems.plugins.healthfitness.OSHealthFitness"/>
@@ -17,6 +19,10 @@
       <preference name="GradlePluginKotlinCodeStyle" value="official" />
       <preference name="AndroidXEnabled" value="true"/>
     </config-file>
+
+    <config-file parent="/*" target="res/values/strings.xml">
+      <string name="privacy_policy_url">PRIVACY_POLICY_URL</string>
+   </config-file>
 
     <config-file parent="/*" target="AndroidManifest.xml">
       <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
