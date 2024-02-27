@@ -1161,6 +1161,9 @@ function copyNotificationContent(configParser, projectRoot, parser) {
     const notificationTitle = configParser.getPlatformPreference('BackgroundNotificationTitle', 'android');
     const notificationDescription = configParser.getPlatformPreference('BackgroundNotificationDescription', 'android');
 
+    console.log('BackgroundNotificationTitle: ' + notificationTitle);
+    console.log('BackgroundNotificationDescription: ' + notificationDescription);
+
     // we only want a default value for the title
     if (notificationTitle == "") {
         notificationTitle = "Measuring your health and fitness data."
@@ -1173,11 +1176,13 @@ function copyNotificationContent(configParser, projectRoot, parser) {
 
     const titleElement = stringsXmlDoc.getElementById('background_notification_title');
     if (titleElement) {
+        console.log('Setting Title');
         titleElement.textContent = notificationTitle;
     }
 
     const descriptionElement = stringsXmlDoc.getElementById('background_notification_description');
     if (descriptionElement) {
+        console.log('Setting Description');
         descriptionElement.textContent = notificationDescription;
     }
 
