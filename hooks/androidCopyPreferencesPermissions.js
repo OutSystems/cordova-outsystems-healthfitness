@@ -1174,6 +1174,8 @@ function copyNotificationContent(configParser, projectRoot, parser) {
     const stringsXmlString = fs.readFileSync(stringsXmlPath, 'utf-8');
     const stringsXmlDoc = parser.parseFromString(stringsXmlString, 'text/xml')
 
+    console.log('strings.xml: ' + stringsXmlString);
+
     const titleElement = stringsXmlDoc.getElementById('background_notification_title');
     if (titleElement) {
         console.log('Setting Title');
