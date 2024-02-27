@@ -677,7 +677,7 @@ function addPermissionsToManifest(configParser, projectRoot) {
 
     console.log('allVariables: ' + allVariables);
 
-    if (allVariables === undefined) {
+    if (allVariables == "") {
         console.log('allVariables is undefined');
     }
 
