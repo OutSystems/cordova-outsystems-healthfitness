@@ -1171,12 +1171,12 @@ function copyNotificationContent(configParser, projectRoot, parser) {
     const stringsXmlString = fs.readFileSync(stringsXmlPath, 'utf-8');
     const stringsXmlDoc = parser.parseFromString(stringsXmlString, 'text/xml')
 
-    const titleElement = stringsXmlDoc.querySelector(`string[name="background_notification_title"]`);
+    const titleElement = stringsXmlDoc.getElementById('background_notification_title');
     if (titleElement) {
         titleElement.textContent = notificationTitle;
     }
 
-    const descriptionElement = stringsXmlDoc.querySelector(`string[name="background_notification_description"]`);
+    const descriptionElement = stringsXmlDoc.getElementById('background_notification_description');
     if (descriptionElement) {
         descriptionElement.textContent = notificationDescription;
     }
