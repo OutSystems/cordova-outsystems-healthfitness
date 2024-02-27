@@ -675,18 +675,11 @@ function addPermissionsToManifest(configParser, projectRoot) {
         
     }
 
-    console.log('allVariables: ' + allVariables);
-
-    if (allVariables == "") {
-        console.log('allVariables is undefined');
-    }
-
-
     // if there is no AllVariables nor anything else, then by default we add all the permissions
-    if (allVariables == null && fitnessVariables == null && healthVariables == null && profileVariables == null
-        && heartRate == null && steps == null && weight == null && height == null
-        && calories == null && sleep == null && bloodPressure == null && bloodGlucose == null
-        && bodyFat == null && bmr == null && speed == null && distance == null) {
+    if (allVariables == "" && fitnessVariables == "" && healthVariables == "" && profileVariables == ""
+        && heartRate == "" && steps == "" && weight == "" && height == ""
+        && calories == "" && sleep == "" && bloodPressure == "" && bloodGlucose == ""
+        && bodyFat == "" && bmr == "" && speed == "" && distance == "") {
 
             fitnessPermissionsRead.forEach(permission => {
                 const newPermission = manifestXmlDoc.createElement('uses-permission');
