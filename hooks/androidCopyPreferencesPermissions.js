@@ -1128,6 +1128,7 @@ function addBackgroundJobPermissionsToManifest(configParser, projectRoot, parser
     const disableBackgroundJobs = configParser.getPlatformPreference('DisableBackgroundJobs', 'android');
 
     // we want to include the permissions by default
+    // if disableBackgroundJobs == true then we don't want to include the permissions in the manfiest
     if (disableBackgroundJobs !== "true") {
 
         const manifestFilePath = path.join(projectRoot, 'platforms/android/app/src/main/AndroidManifest.xml');
@@ -1136,7 +1137,6 @@ function addBackgroundJobPermissionsToManifest(configParser, projectRoot, parser
         // Parse the XML string
         const manifestXmlDoc = parser.parseFromString(manifestXmlString, 'text/xml');
 
-        // if disableBackgroundJobs == true then we don't want to include the permissions in the manfiest
         const notificationsPermission = manifestXmlDoc.createElement('uses-permission');
         notificationsPermission.setAttribute('android:name', 'android.permission.POST_NOTIFICATIONS');
         manifestXmlDoc.documentElement.appendChild(notificationsPermission);
@@ -1144,6 +1144,18 @@ function addBackgroundJobPermissionsToManifest(configParser, projectRoot, parser
         const activityPermission = manifestXmlDoc.createElement('uses-permission');
         activityPermission.setAttribute('android:name', 'android.permission.ACTIVITY_RECOGNITION');
         manifestXmlDoc.documentElement.appendChild(activityPermission);
+
+        const foregroundServicePermission = manifestXmlDoc.createElement('uses-permission');
+        foregroundServicePermission.setAttribute('android:name', 'android.permission.FOREGROUND_SERVICE');
+        manifestXmlDoc.documentElement.appendChild(foregroundServicePermission);
+
+        const foregroundServiceHealthPermission = manifestXmlDoc.createElement('uses-permission');
+        foregroundServiceHealthPermission.setAttribute('android:name', 'android.permission.FOREGROUND_SERVICE_HEALTH');
+        manifestXmlDoc.documentElement.appendChild(foregroundServiceHealthPermission);
+
+        const highSamplingPermission = manifestXmlDoc.createElement('uses-permission');
+        highSamplingPermission.setAttribute('android:name', 'android.permission.HIGH_SAMPLING_RATE_SENSORS');
+        manifestXmlDoc.documentElement.appendChild(highSamplingPermission);
 
         // serialize the updated XML document back to string
         const serializer = new XMLSerializer();
