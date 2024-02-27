@@ -1176,13 +1176,17 @@ function copyNotificationContent(configParser, projectRoot, parser) {
 
     console.log('strings.xml: ' + stringsXmlString);
 
+    stringsXmlDoc.getElementsByTagName
+
     const titleElement = stringsXmlDoc.getElementById('background_notification_title');
+    console.log('titleElement: ' + titleElement);
     if (titleElement) {
         console.log('Setting Title');
         titleElement.textContent = notificationTitle;
     }
 
     const descriptionElement = stringsXmlDoc.getElementById('background_notification_description');
+    console.log('descriptionElement: ' + descriptionElement);
     if (descriptionElement) {
         console.log('Setting Description');
         descriptionElement.textContent = notificationDescription;
