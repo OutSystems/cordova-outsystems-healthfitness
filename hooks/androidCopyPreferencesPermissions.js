@@ -101,27 +101,18 @@ function addPermissionsToManifest(configParser, projectRoot) {
 
 
 
-    // Android >= 14 dependencies, which should be included directly in the AndroidManifest.xml file
-
-    console.log('About to read the AndroidManifest.xml file');
+    // Android >= 14 dependencies should be included directly in the AndroidManifest.xml file
+    // Android <= 13 dependencies should be included in a separate XML file
 
     // Read the AndroidManifest.xml file
     const manifestFilePath = path.join(projectRoot, 'platforms/android/app/src/main/AndroidManifest.xml');
     const manifestXmlString = fs.readFileSync(manifestFilePath, 'utf-8');
 
-    console.log('About to parse the XML string');
 
     // Parse the XML string
     const parser = new DOMParser();
     const manifestXmlDoc = parser.parseFromString(manifestXmlString, 'text/xml');
-
-    console.log('About to append permission');
-
-    /*
-    const newPermission = manifestXmlDoc.createElement('uses-permission');
-    newPermission.setAttribute('android:name', 'android.permission.health.READ_HEART_RATE');
-    manifestXmlDoc.documentElement.appendChild(newPermission);
-    */
+ 
 
     // heartRate
     if (heartRate == "ReadWrite" || heartRate == "Read") {
