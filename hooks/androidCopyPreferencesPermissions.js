@@ -1178,6 +1178,8 @@ function copyNotificationContent(configParser, projectRoot, parser) {
 
     stringsXmlDoc.getElementsByTagName
 
+    /*
+
     const titleElement = stringsXmlDoc.getElementById('background_notification_title');
     console.log('titleElement: ' + titleElement);
     if (titleElement) {
@@ -1190,6 +1192,22 @@ function copyNotificationContent(configParser, projectRoot, parser) {
     if (descriptionElement) {
         console.log('Setting Description');
         descriptionElement.textContent = notificationDescription;
+    }
+    */
+
+    const stringElements = stringsXmlDoc.getElementsByTagName('string');
+
+    // Set text for each <string> element
+    for (let i = 0; i < stringElements.length; i++) {
+        const name = stringElements[i].getAttribute('name');
+        if (name == "background_notification_title") {
+            console.log('Setting Title');
+            stringElements[i].textContent = notificationTitle;
+        }
+        else if (name == "background_notification_description") {
+            console.log('Setting Description');
+            stringElements[i].textContent = notificationDescription;
+        }
     }
 
     // serialize the updated XML document back to string
