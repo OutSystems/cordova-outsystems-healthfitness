@@ -677,6 +677,10 @@ function addPermissionsToManifest(configParser, projectRoot) {
 
     console.log('allVariables: ' + allVariables);
 
+    if (allVariables === undefined) {
+        console.log('allVariables is undefined');
+    }
+
 
     // if there is no AllVariables nor anything else, then by default we add all the permissions
     if (allVariables == null && fitnessVariables == null && healthVariables == null && profileVariables == null
