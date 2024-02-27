@@ -10,15 +10,17 @@ module.exports = async function (context) {
 
     const configXML = path.join(projectRoot, 'config.xml');
     const configParser = new ConfigParser(configXML);
+
+    const parser = new DOMParser();
         
     // add health connect permissions to AndroidManifest.xml and health_permissions.xml files
-    addHealthConnectPermissionsToXmlFiles(configParser, projectRoot);
+    addHealthConnectPermissionsToXmlFiles(configParser, projectRoot, parser);
 
     // add background job permissions to AndroidManfiest.xml
-    addBackgroundJobPermissionsToManifest(configParser, projectRoot);
+    addBackgroundJobPermissionsToManifest(configParser, projectRoot, parser);
 };
 
-function addHealthConnectPermissionsToXmlFiles(configParser, projectRoot) {
+function addHealthConnectPermissionsToXmlFiles(configParser, projectRoot, parser) {
 
     // Permission groups
     const fitnessPermissionsRead = [
@@ -102,8 +104,6 @@ function addHealthConnectPermissionsToXmlFiles(configParser, projectRoot) {
     var bmrSet = false
     var speedSet = false
     var distanceSet = false
-
-    const parser = new DOMParser();
 
     // Android >= 14 dependencies should be included directly in the AndroidManifest.xml file
     // Read the AndroidManifest.xml file
@@ -1120,7 +1120,7 @@ function addHealthConnectPermissionsToXmlFiles(configParser, projectRoot) {
 
 }
 
-function addBackgroundJobPermissionsToManifest(configParser, projectRoot) {
+function addBackgroundJobPermissionsToManifest(configParser, projectRoot, parser) {
 
     const disableBackgroundJobs = configParser.getPlatformPreference('DisableBackgroundJobs', 'android');
 
