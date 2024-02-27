@@ -19,6 +19,8 @@ module.exports = async function (context) {
     // add background job permissions to AndroidManfiest.xml
     addBackgroundJobPermissionsToManifest(configParser, projectRoot, parser);
 
+    // copy notification title and content for notificaiton for Foreground Service
+    copyNotificationContent(configParser, projectRoot, parser);
 };
 
 function addHealthConnectPermissionsToXmlFiles(configParser, projectRoot, parser) {
@@ -1125,25 +1127,12 @@ function addBackgroundJobPermissionsToManifest(configParser, projectRoot, parser
 
     const disableBackgroundJobs = configParser.getPlatformPreference('DisableBackgroundJobs', 'android');
 
-    console.log('disableBackgroundJobs: ' + disableBackgroundJobs);
-
-    if (disableBackgroundJobs === false) {
-        console.log('first');
-    }
-
-    if (disableBackgroundJobs == "false") {
-        console.log('second');
-    }
-
-    if (disableBackgroundJobs === "false") {
-        console.log('third');
-    }
-
     // we want to include the permissions by default
     if (disableBackgroundJobs !== "true") {
 
         const manifestFilePath = path.join(projectRoot, 'platforms/android/app/src/main/AndroidManifest.xml');
         const manifestXmlString = fs.readFileSync(manifestFilePath, 'utf-8');
+
         // Parse the XML string
         const manifestXmlDoc = parser.parseFromString(manifestXmlString, 'text/xml');
 
@@ -1156,13 +1145,46 @@ function addBackgroundJobPermissionsToManifest(configParser, projectRoot, parser
         activityPermission.setAttribute('android:name', 'android.permission.ACTIVITY_RECOGNITION');
         manifestXmlDoc.documentElement.appendChild(activityPermission);
 
-        // Serialize the updated XML document back to string
+        // serialize the updated XML document back to string
         const serializer = new XMLSerializer();
         const updatedManifestXmlString = serializer.serializeToString(manifestXmlDoc);
 
-        // Write the updated XML string back to the same file
+        // write the updated XML string back to the same file
         fs.writeFileSync(manifestFilePath, updatedManifestXmlString, 'utf-8');
-
     }
 
+}
+
+function copyNotificationContent(configParser, projectRoot, parser) {
+
+    // get values from config.xml
+    const notificationTitle = configParser.getPlatformPreference('BackgroundNotificationTitle', 'android');
+    const notificationDescription = configParser.getPlatformPreference('BackgroundNotificationDescription', 'android');
+
+    // we only want a default value for the title
+    if (notificationTitle == "") {
+        notificationTitle = "Measuring your health and fitness data."
+    }
+
+    // insert values in strings.xml
+    const stringsXmlPath = path.join(projectRoot, 'platforms/android/app/src/main/res/values/strings.xml');
+    const stringsXmlString = fs.readFileSync(stringsXmlPath, 'utf-8');
+    const stringsXmlDoc = parser.parseFromString(stringsXmlString, 'text/xml')
+
+    const titleElement = stringsXmlDoc.querySelector(`string[name="${background_notification_title}"]`);
+    if (titleElement) {
+        titleElement.textContent = notificationTitle;
+    }
+
+    const descriptionElement = stringsXmlDoc.querySelector(`string[name="${background_notification_description}"]`);
+    if (descriptionElement) {
+        descriptionElement.textContent = notificationDescription;
+    }
+
+    // serialize the updated XML document back to string
+    const serializer = new XMLSerializer();
+    const updatedXmlString = serializer.serializeToString(stringsXmlDoc);
+
+    // write the updated XML string back to the same file
+    fs.writeFileSync(stringsXmlPath, updatedXmlString, 'utf-8');
 }
