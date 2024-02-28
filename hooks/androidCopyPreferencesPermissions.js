@@ -126,331 +126,157 @@ function addHealthConnectPermissionsToXmlFiles(configParser, projectRoot, parser
     // heartRate
     if (heartRate == "ReadWrite" || heartRate == "Read") {
         heartRateSet = true
-
-        // Android >= 14
-        /*
-        const newPermission = manifestXmlDoc.createElement('uses-permission');
-        newPermission.setAttribute('android:name', 'android.permission.health.READ_HEART_RATE');
-        manifestXmlDoc.documentElement.appendChild(newPermission);
-
-        // Android <= 13
-        const newItem = permissionsXmlDoc.createElement('item');
-        const textNode = permissionsXmlDoc.createTextNode('android.permission.health.READ_HEART_RATE');
-        newItem.appendChild(textNode);
-        arrayElement.appendChild(newItem);
-        */
-
-        addEntryToManifestAndPermissionsXml(manifestXmlDoc, permissionsXmlDoc, arrayElement, 'android.permission.health.READ_HEART_RATE');
+        addEntryToManifest(manifestXmlDoc, 'android.permission.health.READ_HEART_RATE')
+        addEntryToPermissionsXML(permissionsXmlDoc, arrayElement, 'android.permission.health.READ_HEART_RATE')
     }
 
     if (heartRate == "ReadWrite" || heartRate == "Write") {
         heartRateSet = true
-
-        const newPermission = manifestXmlDoc.createElement('uses-permission');
-        newPermission.setAttribute('android:name', 'android.permission.health.WRITE_HEART_RATE');
-        manifestXmlDoc.documentElement.appendChild(newPermission);
-
-        const newItem = permissionsXmlDoc.createElement('item');
-        const textNode = permissionsXmlDoc.createTextNode('android.permission.health.WRITE_HEART_RATE');
-        newItem.appendChild(textNode);
-        arrayElement.appendChild(newItem);
+        addEntryToManifest(manifestXmlDoc, 'android.permission.health.WRITE_HEART_RATE')
+        addEntryToPermissionsXML(permissionsXmlDoc, arrayElement, 'android.permission.health.WRITE_HEART_RATE')
     }
 
     // steps
     if (steps == "ReadWrite" || steps == "Read") {
         stepsSet = true
-
-        const newPermission = manifestXmlDoc.createElement('uses-permission');
-        newPermission.setAttribute('android:name', 'android.permission.health.READ_STEPS');
-        manifestXmlDoc.documentElement.appendChild(newPermission);
-
-        const newItem = permissionsXmlDoc.createElement('item');
-        const textNode = permissionsXmlDoc.createTextNode('android.permission.health.READ_STEPS');
-        newItem.appendChild(textNode);
-        arrayElement.appendChild(newItem);
+        addEntryToManifest(manifestXmlDoc, 'android.permission.health.READ_STEPS')
+        addEntryToPermissionsXML(permissionsXmlDoc, arrayElement, 'android.permission.health.READ_STEPS')
     }
 
     if (steps == "ReadWrite" || steps == "Write") {
         stepsSet = true
-
-        const newPermission = manifestXmlDoc.createElement('uses-permission');
-        newPermission.setAttribute('android:name', 'android.permission.health.WRITE_STEPS');
-        manifestXmlDoc.documentElement.appendChild(newPermission);
-
-        const newItem = permissionsXmlDoc.createElement('item');
-        const textNode = permissionsXmlDoc.createTextNode('android.permission.health.WRITE_STEPS');
-        newItem.appendChild(textNode);
-        arrayElement.appendChild(newItem);
+        addEntryToManifest(manifestXmlDoc, 'android.permission.health.WRITE_STEPS')
+        addEntryToPermissionsXML(permissionsXmlDoc, arrayElement, 'android.permission.health.WRITE_STEPS')
     }
 
     // weight
     if (weight == "ReadWrite" || weight == "Read") {
         weightSet = true
-
-        const newPermission = manifestXmlDoc.createElement('uses-permission');
-        newPermission.setAttribute('android:name', 'android.permission.health.READ_WEIGHT');
-        manifestXmlDoc.documentElement.appendChild(newPermission);
-
-        const newItem = permissionsXmlDoc.createElement('item');
-        const textNode = permissionsXmlDoc.createTextNode('android.permission.health.READ_WEIGHT');
-        newItem.appendChild(textNode);
-        arrayElement.appendChild(newItem);
+        addEntryToManifest(manifestXmlDoc, 'android.permission.health.READ_WEIGHT')
+        addEntryToPermissionsXML(permissionsXmlDoc, arrayElement, 'android.permission.health.READ_WEIGHT')
     }
 
     if (weight == "ReadWrite" || weight == "Write") {
         weightSet = true
-
-        const newPermission = manifestXmlDoc.createElement('uses-permission');
-        newPermission.setAttribute('android:name', 'android.permission.health.WRITE_WEIGHT');
-        manifestXmlDoc.documentElement.appendChild(newPermission);
-
-        const newItem = permissionsXmlDoc.createElement('item');
-        const textNode = permissionsXmlDoc.createTextNode('android.permission.health.WRITE_WEIGHT');
-        newItem.appendChild(textNode);
-        arrayElement.appendChild(newItem);
+        addEntryToManifest(manifestXmlDoc, 'android.permission.health.WRITE_WEIGHT')
+        addEntryToPermissionsXML(permissionsXmlDoc, arrayElement, 'android.permission.health.WRITE_WEIGHT')
     }
 
     // height
     if (height == "ReadWrite" || height == "Read") {
         heightSet = true
-
-        const newPermission = manifestXmlDoc.createElement('uses-permission');
-        newPermission.setAttribute('android:name', 'android.permission.health.READ_HEIGHT');
-        manifestXmlDoc.documentElement.appendChild(newPermission);
-
-        const newItem = permissionsXmlDoc.createElement('item');
-        const textNode = permissionsXmlDoc.createTextNode('android.permission.health.READ_HEIGHT');
-        newItem.appendChild(textNode);
-        arrayElement.appendChild(newItem);
+        addEntryToManifest(manifestXmlDoc, 'android.permission.health.READ_HEIGHT')
+        addEntryToPermissionsXML(permissionsXmlDoc, arrayElement, 'android.permission.health.READ_HEIGHT')
     }
 
     if (height == "ReadWrite" || height == "Write") {
         heightSet = true
-
-        const newPermission = manifestXmlDoc.createElement('uses-permission');
-        newPermission.setAttribute('android:name', 'android.permission.health.WRITE_HEIGHT');
-        manifestXmlDoc.documentElement.appendChild(newPermission);
-
-        const newItem = permissionsXmlDoc.createElement('item');
-        const textNode = permissionsXmlDoc.createTextNode('android.permission.health.WRITE_HEIGHT');
-        newItem.appendChild(textNode);
-        arrayElement.appendChild(newItem);
+        addEntryToManifest(manifestXmlDoc, 'android.permission.health.WRITE_HEIGHT')
+        addEntryToPermissionsXML(permissionsXmlDoc, arrayElement, 'android.permission.health.WRITE_HEIGHT')
     }
 
     // calories
     if (calories == "ReadWrite" || calories == "Read") {
         caloriesSet = true
-
-        const newPermission = manifestXmlDoc.createElement('uses-permission');
-        newPermission.setAttribute('android:name', 'android.permission.health.READ_TOTAL_CALORIES_BURNED');
-        manifestXmlDoc.documentElement.appendChild(newPermission);
-
-        const newItem = permissionsXmlDoc.createElement('item');
-        const textNode = permissionsXmlDoc.createTextNode('android.permission.health.READ_TOTAL_CALORIES_BURNED');
-        newItem.appendChild(textNode);
-        arrayElement.appendChild(newItem);
+        addEntryToManifest(manifestXmlDoc, 'android.permission.health.READ_TOTAL_CALORIES_BURNED')
+        addEntryToPermissionsXML(permissionsXmlDoc, arrayElement, 'android.permission.health.READ_TOTAL_CALORIES_BURNED')
     }
 
     if (calories == "ReadWrite" || calories == "Write") {
         caloriesSet = true
-
-        const newPermission = manifestXmlDoc.createElement('uses-permission');
-        newPermission.setAttribute('android:name', 'android.permission.health.WRITE_TOTAL_CALORIES_BURNED');
-        manifestXmlDoc.documentElement.appendChild(newPermission);
-
-        const newItem = permissionsXmlDoc.createElement('item');
-        const textNode = permissionsXmlDoc.createTextNode('android.permission.health.WRITE_TOTAL_CALORIES_BURNED');
-        newItem.appendChild(textNode);
-        arrayElement.appendChild(newItem);
+        addEntryToManifest(manifestXmlDoc, 'android.permission.health.WRITE_TOTAL_CALORIES_BURNED')
+        addEntryToPermissionsXML(permissionsXmlDoc, arrayElement, 'android.permission.health.WRITE_TOTAL_CALORIES_BURNED')
     }
 
     // sleep
     if (sleep == "ReadWrite" || sleep == "Read") {
         sleepSet = true
-
-        const newPermission = manifestXmlDoc.createElement('uses-permission');
-        newPermission.setAttribute('android:name', 'android.permission.health.READ_SLEEP');
-        manifestXmlDoc.documentElement.appendChild(newPermission);
-
-        const newItem = permissionsXmlDoc.createElement('item');
-        const textNode = permissionsXmlDoc.createTextNode('android.permission.health.READ_SLEEP');
-        newItem.appendChild(textNode);
-        arrayElement.appendChild(newItem);
+        addEntryToManifest(manifestXmlDoc, 'android.permission.health.READ_SLEEP')
+        addEntryToPermissionsXML(permissionsXmlDoc, arrayElement, 'android.permission.health.READ_SLEEP')
     }
 
     if (sleep == "ReadWrite" || sleep == "Write") {
         sleepSet = true
-
-        const newPermission = manifestXmlDoc.createElement('uses-permission');
-        newPermission.setAttribute('android:name', 'android.permission.health.WRITE_SLEEP');
-        manifestXmlDoc.documentElement.appendChild(newPermission);
-
-        const newItem = permissionsXmlDoc.createElement('item');
-        const textNode = permissionsXmlDoc.createTextNode('android.permission.health.WRITE_SLEEP');
-        newItem.appendChild(textNode);
-        arrayElement.appendChild(newItem);
+        addEntryToManifest(manifestXmlDoc, 'android.permission.health.WRITE_SLEEP')
+        addEntryToPermissionsXML(permissionsXmlDoc, arrayElement, 'android.permission.health.WRITE_SLEEP')
     }
 
     // blood pressure
     if (bloodPressure == "ReadWrite" || bloodPressure == "Read") {
         bloodPressureSet = true
-
-        const newPermission = manifestXmlDoc.createElement('uses-permission');
-        newPermission.setAttribute('android:name', 'android.permission.health.READ_BLOOD_PRESSURE');
-        manifestXmlDoc.documentElement.appendChild(newPermission);
-
-        const newItem = permissionsXmlDoc.createElement('item');
-        const textNode = permissionsXmlDoc.createTextNode('android.permission.health.READ_BLOOD_PRESSURE');
-        newItem.appendChild(textNode);
-        arrayElement.appendChild(newItem);
+        addEntryToManifest(manifestXmlDoc, 'android.permission.health.READ_BLOOD_PRESSURE')
+        addEntryToPermissionsXML(permissionsXmlDoc, arrayElement, 'android.permission.health.READ_BLOOD_PRESSURE')
     }
 
     if (bloodPressure == "ReadWrite" || bloodPressure == "Write") {
         bloodPressureSet = true
-
-        const newPermission = manifestXmlDoc.createElement('uses-permission');
-        newPermission.setAttribute('android:name', 'android.permission.health.WRITE_BLOOD_PRESSURE');
-        manifestXmlDoc.documentElement.appendChild(newPermission);
-
-        const newItem = permissionsXmlDoc.createElement('item');
-        const textNode = permissionsXmlDoc.createTextNode('android.permission.health.WRITE_BLOOD_PRESSURE');
-        newItem.appendChild(textNode);
-        arrayElement.appendChild(newItem);
+        addEntryToManifest(manifestXmlDoc, 'android.permission.health.WRITE_BLOOD_PRESSURE')
+        addEntryToPermissionsXML(permissionsXmlDoc, arrayElement, 'android.permission.health.WRITE_BLOOD_PRESSURE')
     }
 
     // blood glucose
     if (bloodGlucose == "ReadWrite" || bloodGlucose == "Read") {
         bloodGlucoseSet = true
-
-        const newPermission = manifestXmlDoc.createElement('uses-permission');
-        newPermission.setAttribute('android:name', 'android.permission.health.READ_BLOOD_GLUCOSE');
-        manifestXmlDoc.documentElement.appendChild(newPermission);
-
-        const newItem = permissionsXmlDoc.createElement('item');
-        const textNode = permissionsXmlDoc.createTextNode('android.permission.health.READ_BLOOD_GLUCOSE');
-        newItem.appendChild(textNode);
-        arrayElement.appendChild(newItem);
+        addEntryToManifest(manifestXmlDoc, 'android.permission.health.READ_BLOOD_GLUCOSE')
+        addEntryToPermissionsXML(permissionsXmlDoc, arrayElement, 'android.permission.health.READ_BLOOD_GLUCOSE')
     }
 
     if (bloodGlucose == "ReadWrite" || bloodGlucose == "Write") {
         bloodGlucoseSet = true
-
-        const newPermission = manifestXmlDoc.createElement('uses-permission');
-        newPermission.setAttribute('android:name', 'android.permission.health.WRITE_BLOOD_GLUCOSE');
-        manifestXmlDoc.documentElement.appendChild(newPermission);
-
-        const newItem = permissionsXmlDoc.createElement('item');
-        const textNode = permissionsXmlDoc.createTextNode('android.permission.health.WRITE_BLOOD_GLUCOSE');
-        newItem.appendChild(textNode);
-        arrayElement.appendChild(newItem);
+        addEntryToManifest(manifestXmlDoc, 'android.permission.health.WRITE_BLOOD_GLUCOSE')
+        addEntryToPermissionsXML(permissionsXmlDoc, arrayElement, 'android.permission.health.WRITE_BLOOD_GLUCOSE')
     }
 
     // body fat
     if (bodyFat == "ReadWrite" || bodyFat == "Read") {
         bodyFatSet = true
-
-        const newPermission = manifestXmlDoc.createElement('uses-permission');
-        newPermission.setAttribute('android:name', 'android.permission.health.READ_BODY_FAT');
-        manifestXmlDoc.documentElement.appendChild(newPermission);
-
-        const newItem = permissionsXmlDoc.createElement('item');
-        const textNode = permissionsXmlDoc.createTextNode('android.permission.health.READ_BODY_FAT');
-        newItem.appendChild(textNode);
-        arrayElement.appendChild(newItem);
+        addEntryToManifest(manifestXmlDoc, 'android.permission.health.READ_BODY_FAT')
+        addEntryToPermissionsXML(permissionsXmlDoc, arrayElement, 'android.permission.health.READ_BODY_FAT')
     }
 
     if (bodyFat == "ReadWrite" || bodyFat == "Write") {
         bodyFatSet = true
-
-        const newPermission = manifestXmlDoc.createElement('uses-permission');
-        newPermission.setAttribute('android:name', 'android.permission.health.WRITE_BODY_FAT');
-        manifestXmlDoc.documentElement.appendChild(newPermission);
-
-        const newItem = permissionsXmlDoc.createElement('item');
-        const textNode = permissionsXmlDoc.createTextNode('android.permission.health.WRITE_BODY_FAT');
-        newItem.appendChild(textNode);
-        arrayElement.appendChild(newItem);
+        addEntryToManifest(manifestXmlDoc, 'android.permission.health.WRITE_BODY_FAT')
+        addEntryToPermissionsXML(permissionsXmlDoc, arrayElement, 'android.permission.health.WRITE_BODY_FAT')
     }
 
     // bmr
     if (bmr == "ReadWrite" || bmr == "Read") {
         bmrSet = true
-
-        const newPermission = manifestXmlDoc.createElement('uses-permission');
-        newPermission.setAttribute('android:name', 'android.permission.health.READ_BASAL_METABOLIC_RATE');
-        manifestXmlDoc.documentElement.appendChild(newPermission);
-
-        const newItem = permissionsXmlDoc.createElement('item');
-        const textNode = permissionsXmlDoc.createTextNode('android.permission.health.READ_BASAL_METABOLIC_RATE');
-        newItem.appendChild(textNode);
-        arrayElement.appendChild(newItem);
+        addEntryToManifest(manifestXmlDoc, 'android.permission.health.READ_BASAL_METABOLIC_RATE')
+        addEntryToPermissionsXML(permissionsXmlDoc, arrayElement, 'android.permission.health.READ_BASAL_METABOLIC_RATE')
     }
 
     if (bmr == "ReadWrite" || bmr == "Write") {
         bmrSet = true
-
-        const newPermission = manifestXmlDoc.createElement('uses-permission');
-        newPermission.setAttribute('android:name', 'android.permission.health.WRITE_BASAL_METABOLIC_RATE');
-        manifestXmlDoc.documentElement.appendChild(newPermission);
-
-        const newItem = permissionsXmlDoc.createElement('item');
-        const textNode = permissionsXmlDoc.createTextNode('android.permission.health.WRITE_BASAL_METABOLIC_RATE');
-        newItem.appendChild(textNode);
-        arrayElement.appendChild(newItem);
+        addEntryToManifest(manifestXmlDoc, 'android.permission.health.WRITE_BASAL_METABOLIC_RATE')
+        addEntryToPermissionsXML(permissionsXmlDoc, arrayElement, 'android.permission.health.WRITE_BASAL_METABOLIC_RATE')
     }
 
     // speed
     if (speed == "ReadWrite" || speed == "Read") {
         speedSet = true
-
-        const newPermission = manifestXmlDoc.createElement('uses-permission');
-        newPermission.setAttribute('android:name', 'android.permission.health.READ_SPEED');
-        manifestXmlDoc.documentElement.appendChild(newPermission);
-
-        const newItem = permissionsXmlDoc.createElement('item');
-        const textNode = permissionsXmlDoc.createTextNode('android.permission.health.READ_SPEED');
-        newItem.appendChild(textNode);
-        arrayElement.appendChild(newItem);
+        addEntryToManifest(manifestXmlDoc, 'android.permission.health.READ_SPEED')
+        addEntryToPermissionsXML(permissionsXmlDoc, arrayElement, 'android.permission.health.READ_SPEED')
     }
 
     if (speed == "ReadWrite" || speed == "Write") {
         speedSet = true
-
-        const newPermission = manifestXmlDoc.createElement('uses-permission');
-        newPermission.setAttribute('android:name', 'android.permission.health.WRITE_SPEED');
-        manifestXmlDoc.documentElement.appendChild(newPermission);
-
-        const newItem = permissionsXmlDoc.createElement('item');
-        const textNode = permissionsXmlDoc.createTextNode('android.permission.health.WRITE_SPEED');
-        newItem.appendChild(textNode);
-        arrayElement.appendChild(newItem);
+        addEntryToManifest(manifestXmlDoc, 'android.permission.health.WRITE_SPEED')
+        addEntryToPermissionsXML(permissionsXmlDoc, arrayElement, 'android.permission.health.WRITE_SPEED')
     }
 
     // distance
     if (distance == "ReadWrite" || distance == "Read") {
         distanceSet = true
-
-        const newPermission = manifestXmlDoc.createElement('uses-permission');
-        newPermission.setAttribute('android:name', 'android.permission.health.READ_DISTANCE');
-        manifestXmlDoc.documentElement.appendChild(newPermission);
-
-        const newItem = permissionsXmlDoc.createElement('item');
-        const textNode = permissionsXmlDoc.createTextNode('android.permission.health.READ_DISTANCE');
-        newItem.appendChild(textNode);
-        arrayElement.appendChild(newItem);
+        addEntryToManifest(manifestXmlDoc, 'android.permission.health.READ_DISTANCE')
+        addEntryToPermissionsXML(permissionsXmlDoc, arrayElement, 'android.permission.health.READ_DISTANCE')
     }
 
     if (distance == "ReadWrite" || distance == "Write") {
         distanceSet = true
-
-        const newPermission = manifestXmlDoc.createElement('uses-permission');
-        newPermission.setAttribute('android:name', 'android.permission.health.WRITE_DISTANCE');
-        manifestXmlDoc.documentElement.appendChild(newPermission);
-
-        const newItem = permissionsXmlDoc.createElement('item');
-        const textNode = permissionsXmlDoc.createTextNode('android.permission.health.WRITE_DISTANCE');
-        newItem.appendChild(textNode);
-        arrayElement.appendChild(newItem);
+        addEntryToManifest(manifestXmlDoc, 'android.permission.health.WRITE_DISTANCE')
+        addEntryToPermissionsXML(permissionsXmlDoc, arrayElement, 'android.permission.health.WRITE_DISTANCE')
     }
 
     // process fitness variables
@@ -459,47 +285,23 @@ function addHealthConnectPermissionsToXmlFiles(configParser, projectRoot, parser
         fitnessSet = true
 
         if (!stepsSet) {
-            const newPermission = manifestXmlDoc.createElement('uses-permission');
-            newPermission.setAttribute('android:name', 'android.permission.health.READ_STEPS');
-            manifestXmlDoc.documentElement.appendChild(newPermission);
-
-            const newItem = permissionsXmlDoc.createElement('item');
-            const textNode = permissionsXmlDoc.createTextNode('android.permission.health.READ_STEPS');
-            newItem.appendChild(textNode);
-            arrayElement.appendChild(newItem);
+            addEntryToManifest(manifestXmlDoc, 'android.permission.health.READ_STEPS')
+            addEntryToPermissionsXML(permissionsXmlDoc, arrayElement, 'android.permission.health.READ_STEPS')
         }
 
         if (!caloriesSet) {
-            const newPermission = manifestXmlDoc.createElement('uses-permission');
-            newPermission.setAttribute('android:name', 'android.permission.health.READ_TOTAL_CALORIES_BURNED');
-            manifestXmlDoc.documentElement.appendChild(newPermission);
-
-            const newItem = permissionsXmlDoc.createElement('item');
-            const textNode = permissionsXmlDoc.createTextNode('android.permission.health.READ_TOTAL_CALORIES_BURNED');
-            newItem.appendChild(textNode);
-            arrayElement.appendChild(newItem);
+            addEntryToManifest(manifestXmlDoc, 'android.permission.health.READ_TOTAL_CALORIES_BURNED')
+            addEntryToPermissionsXML(permissionsXmlDoc, arrayElement, 'android.permission.health.READ_TOTAL_CALORIES_BURNED')
         }
 
         if (!speedSet) {
-            const newPermission = manifestXmlDoc.createElement('uses-permission');
-            newPermission.setAttribute('android:name', 'android.permission.health.READ_SPEED');
-            manifestXmlDoc.documentElement.appendChild(newPermission);
-
-            const newItem = permissionsXmlDoc.createElement('item');
-            const textNode = permissionsXmlDoc.createTextNode('android.permission.health.READ_SPEED');
-            newItem.appendChild(textNode);
-            arrayElement.appendChild(newItem);
+            addEntryToManifest(manifestXmlDoc, 'android.permission.health.READ_SPEED')
+            addEntryToPermissionsXML(permissionsXmlDoc, arrayElement, 'android.permission.health.READ_SPEED')
         }
 
         if (!distanceSet) {
-            const newPermission = manifestXmlDoc.createElement('uses-permission');
-            newPermission.setAttribute('android:name', 'android.permission.health.READ_DISTANCE');
-            manifestXmlDoc.documentElement.appendChild(newPermission);
-
-            const newItem = permissionsXmlDoc.createElement('item');
-            const textNode = permissionsXmlDoc.createTextNode('android.permission.health.READ_DISTANCE');
-            newItem.appendChild(textNode);
-            arrayElement.appendChild(newItem);
+            addEntryToManifest(manifestXmlDoc, 'android.permission.health.READ_DISTANCE')
+            addEntryToPermissionsXML(permissionsXmlDoc, arrayElement, 'android.permission.health.READ_DISTANCE')
         }
 
     }
@@ -509,47 +311,23 @@ function addHealthConnectPermissionsToXmlFiles(configParser, projectRoot, parser
         fitnessSet = true
 
         if (!stepsSet) {
-            const newPermission = manifestXmlDoc.createElement('uses-permission');
-            newPermission.setAttribute('android:name', 'android.permission.health.WRITE_STEPS');
-            manifestXmlDoc.documentElement.appendChild(newPermission);
-
-            const newItem = permissionsXmlDoc.createElement('item');
-            const textNode = permissionsXmlDoc.createTextNode('android.permission.health.WRITE_STEPS');
-            newItem.appendChild(textNode);
-            arrayElement.appendChild(newItem);
+            addEntryToManifest(manifestXmlDoc, 'android.permission.health.WRITE_STEPS')
+            addEntryToPermissionsXML(permissionsXmlDoc, arrayElement, 'android.permission.health.WRITE_STEPS')
         }
 
         if (!caloriesSet) {
-            const newPermission = manifestXmlDoc.createElement('uses-permission');
-            newPermission.setAttribute('android:name', 'android.permission.health.WRITE_TOTAL_CALORIES_BURNED');
-            manifestXmlDoc.documentElement.appendChild(newPermission);
-
-            const newItem = permissionsXmlDoc.createElement('item');
-            const textNode = permissionsXmlDoc.createTextNode('android.permission.health.WRITE_TOTAL_CALORIES_BURNED');
-            newItem.appendChild(textNode);
-            arrayElement.appendChild(newItem);
+            addEntryToManifest(manifestXmlDoc, 'android.permission.health.WRITE_TOTAL_CALORIES_BURNED')
+            addEntryToPermissionsXML(permissionsXmlDoc, arrayElement, 'android.permission.health.WRITE_TOTAL_CALORIES_BURNED')
         }
 
         if (!speedSet) {
-            const newPermission = manifestXmlDoc.createElement('uses-permission');
-            newPermission.setAttribute('android:name', 'android.permission.health.WRITE_SPEED');
-            manifestXmlDoc.documentElement.appendChild(newPermission);
-
-            const newItem = permissionsXmlDoc.createElement('item');
-            const textNode = permissionsXmlDoc.createTextNode('android.permission.health.WRITE_SPEED');
-            newItem.appendChild(textNode);
-            arrayElement.appendChild(newItem);
+            addEntryToManifest(manifestXmlDoc, 'android.permission.health.WRITE_SPEED')
+            addEntryToPermissionsXML(permissionsXmlDoc, arrayElement, 'android.permission.health.WRITE_SPEED')
         }
 
         if (!distanceSet) {
-            const newPermission = manifestXmlDoc.createElement('uses-permission');
-            newPermission.setAttribute('android:name', 'android.permission.health.WRITE_DISTANCE');
-            manifestXmlDoc.documentElement.appendChild(newPermission);
-
-            const newItem = permissionsXmlDoc.createElement('item');
-            const textNode = permissionsXmlDoc.createTextNode('android.permission.health.WRITE_DISTANCE');
-            newItem.appendChild(textNode);
-            arrayElement.appendChild(newItem);
+            addEntryToManifest(manifestXmlDoc, 'android.permission.health.WRITE_DISTANCE')
+            addEntryToPermissionsXML(permissionsXmlDoc, arrayElement, 'android.permission.health.WRITE_DISTANCE')
         }
 
     }
@@ -560,47 +338,23 @@ function addHealthConnectPermissionsToXmlFiles(configParser, projectRoot, parser
         healthSet = true
 
         if (!heartRateSet) {
-            const newPermission = manifestXmlDoc.createElement('uses-permission');
-            newPermission.setAttribute('android:name', 'android.permission.health.READ_HEART_RATE');
-            manifestXmlDoc.documentElement.appendChild(newPermission);
-
-            const newItem = permissionsXmlDoc.createElement('item');
-            const textNode = permissionsXmlDoc.createTextNode('android.permission.health.READ_HEART_RATE');
-            newItem.appendChild(textNode);
-            arrayElement.appendChild(newItem);
+            addEntryToManifest(manifestXmlDoc, 'android.permission.health.READ_HEART_RATE')
+            addEntryToPermissionsXML(permissionsXmlDoc, arrayElement, 'android.permission.health.READ_HEART_RATE')
         }
 
         if (!sleepSet) {
-            const newPermission = manifestXmlDoc.createElement('uses-permission');
-            newPermission.setAttribute('android:name', 'android.permission.health.READ_SLEEP');
-            manifestXmlDoc.documentElement.appendChild(newPermission);
-
-            const newItem = permissionsXmlDoc.createElement('item');
-            const textNode = permissionsXmlDoc.createTextNode('android.permission.health.READ_SLEEP');
-            newItem.appendChild(textNode);
-            arrayElement.appendChild(newItem);
+            addEntryToManifest(manifestXmlDoc, 'android.permission.health.READ_SLEEP')
+            addEntryToPermissionsXML(permissionsXmlDoc, arrayElement, 'android.permission.health.READ_SLEEP')
         }
 
         if (!bloodPressureSet) {
-            const newPermission = manifestXmlDoc.createElement('uses-permission');
-            newPermission.setAttribute('android:name', 'android.permission.health.READ_BLOOD_PRESSURE');
-            manifestXmlDoc.documentElement.appendChild(newPermission);
-
-            const newItem = permissionsXmlDoc.createElement('item');
-            const textNode = permissionsXmlDoc.createTextNode('android.permission.health.READ_BLOOD_PRESSURE');
-            newItem.appendChild(textNode);
-            arrayElement.appendChild(newItem);
+            addEntryToManifest(manifestXmlDoc, 'android.permission.health.READ_BLOOD_PRESSURE')
+            addEntryToPermissionsXML(permissionsXmlDoc, arrayElement, 'android.permission.health.READ_BLOOD_PRESSURE')
         }
 
         if (!bloodGlucoseSet) {
-            const newPermission = manifestXmlDoc.createElement('uses-permission');
-            newPermission.setAttribute('android:name', 'android.permission.health.READ_BLOOD_GLUCOSE');
-            manifestXmlDoc.documentElement.appendChild(newPermission);
-
-            const newItem = permissionsXmlDoc.createElement('item');
-            const textNode = permissionsXmlDoc.createTextNode('android.permission.health.READ_BLOOD_GLUCOSE');
-            newItem.appendChild(textNode);
-            arrayElement.appendChild(newItem);
+            addEntryToManifest(manifestXmlDoc, 'android.permission.health.READ_BLOOD_GLUCOSE')
+            addEntryToPermissionsXML(permissionsXmlDoc, arrayElement, 'android.permission.health.READ_BLOOD_GLUCOSE')
         }
 
     }
@@ -610,47 +364,23 @@ function addHealthConnectPermissionsToXmlFiles(configParser, projectRoot, parser
         healthSet = true
 
         if (!heartRateSet) {
-            const newPermission = manifestXmlDoc.createElement('uses-permission');
-            newPermission.setAttribute('android:name', 'android.permission.health.WRITE_HEART_RATE');
-            manifestXmlDoc.documentElement.appendChild(newPermission);
-
-            const newItem = permissionsXmlDoc.createElement('item');
-            const textNode = permissionsXmlDoc.createTextNode('android.permission.health.WRITE_HEART_RATE');
-            newItem.appendChild(textNode);
-            arrayElement.appendChild(newItem);
+            addEntryToManifest(manifestXmlDoc, 'android.permission.health.WRITE_HEART_RATE')
+            addEntryToPermissionsXML(permissionsXmlDoc, arrayElement, 'android.permission.health.WRITE_HEART_RATE')
         }
 
         if (!sleepSet) {
-            const newPermission = manifestXmlDoc.createElement('uses-permission');
-            newPermission.setAttribute('android:name', 'android.permission.health.WRITE_SLEEP');
-            manifestXmlDoc.documentElement.appendChild(newPermission);
-
-            const newItem = permissionsXmlDoc.createElement('item');
-            const textNode = permissionsXmlDoc.createTextNode('android.permission.health.WRITE_SLEEP');
-            newItem.appendChild(textNode);
-            arrayElement.appendChild(newItem);
+            addEntryToManifest(manifestXmlDoc, 'android.permission.health.WRITE_SLEEP')
+            addEntryToPermissionsXML(permissionsXmlDoc, arrayElement, 'android.permission.health.WRITE_SLEEP')
         }
 
         if (!bloodPressureSet) {
-            const newPermission = manifestXmlDoc.createElement('uses-permission');
-            newPermission.setAttribute('android:name', 'android.permission.health.WRITE_BLOOD_PRESSURE');
-            manifestXmlDoc.documentElement.appendChild(newPermission);
-
-            const newItem = permissionsXmlDoc.createElement('item');
-            const textNode = permissionsXmlDoc.createTextNode('android.permission.health.WRITE_BLOOD_PRESSURE');
-            newItem.appendChild(textNode);
-            arrayElement.appendChild(newItem);
+            addEntryToManifest(manifestXmlDoc, 'android.permission.health.WRITE_BLOOD_PRESSURE')
+            addEntryToPermissionsXML(permissionsXmlDoc, arrayElement, 'android.permission.health.WRITE_BLOOD_PRESSURE')
         }
 
         if (!bloodGlucoseSet) {
-            const newPermission = manifestXmlDoc.createElement('uses-permission');
-            newPermission.setAttribute('android:name', 'android.permission.health.WRITE_BLOOD_GLUCOSE');
-            manifestXmlDoc.documentElement.appendChild(newPermission);
-
-            const newItem = permissionsXmlDoc.createElement('item');
-            const textNode = permissionsXmlDoc.createTextNode('android.permission.health.WRITE_BLOOD_GLUCOSE');
-            newItem.appendChild(textNode);
-            arrayElement.appendChild(newItem);
+            addEntryToManifest(manifestXmlDoc, 'android.permission.health.WRITE_BLOOD_GLUCOSE')
+            addEntryToPermissionsXML(permissionsXmlDoc, arrayElement, 'android.permission.health.WRITE_BLOOD_GLUCOSE')
         }
 
     }
@@ -661,47 +391,23 @@ function addHealthConnectPermissionsToXmlFiles(configParser, projectRoot, parser
         profileSet = true
 
         if (!weightSet) {
-            const newPermission = manifestXmlDoc.createElement('uses-permission');
-            newPermission.setAttribute('android:name', 'android.permission.health.READ_WEIGHT');
-            manifestXmlDoc.documentElement.appendChild(newPermission);
-
-            const newItem = permissionsXmlDoc.createElement('item');
-            const textNode = permissionsXmlDoc.createTextNode('android.permission.health.READ_WEIGHT');
-            newItem.appendChild(textNode);
-            arrayElement.appendChild(newItem);
+            addEntryToManifest(manifestXmlDoc, 'android.permission.health.READ_WEIGHT')
+            addEntryToPermissionsXML(permissionsXmlDoc, arrayElement, 'android.permission.health.READ_WEIGHT')
         }
 
         if (!heightSet) {
-            const newPermission = manifestXmlDoc.createElement('uses-permission');
-            newPermission.setAttribute('android:name', 'android.permission.health.READ_HEIGHT');
-            manifestXmlDoc.documentElement.appendChild(newPermission);
-
-            const newItem = permissionsXmlDoc.createElement('item');
-            const textNode = permissionsXmlDoc.createTextNode('android.permission.health.READ_HEIGHT');
-            newItem.appendChild(textNode);
-            arrayElement.appendChild(newItem);
+            addEntryToManifest(manifestXmlDoc, 'android.permission.health.READ_HEIGHT')
+            addEntryToPermissionsXML(permissionsXmlDoc, arrayElement, 'android.permission.health.READ_HEIGHT')
         }
 
         if (!bodyFatSet) {
-            const newPermission = manifestXmlDoc.createElement('uses-permission');
-            newPermission.setAttribute('android:name', 'android.permission.health.READ_BODY_FAT');
-            manifestXmlDoc.documentElement.appendChild(newPermission);
-
-            const newItem = permissionsXmlDoc.createElement('item');
-            const textNode = permissionsXmlDoc.createTextNode('android.permission.health.READ_BODY_FAT');
-            newItem.appendChild(textNode);
-            arrayElement.appendChild(newItem);
+            addEntryToManifest(manifestXmlDoc, 'android.permission.health.READ_BODY_FAT')
+            addEntryToPermissionsXML(permissionsXmlDoc, arrayElement, 'android.permission.health.READ_BODY_FAT')
         }
 
         if (!bmrSet) {
-            const newPermission = manifestXmlDoc.createElement('uses-permission');
-            newPermission.setAttribute('android:name', 'android.permission.health.READ_BASAL_METABOLIC_RATE');
-            manifestXmlDoc.documentElement.appendChild(newPermission);
-
-            const newItem = permissionsXmlDoc.createElement('item');
-            const textNode = permissionsXmlDoc.createTextNode('android.permission.health.READ_BASAL_METABOLIC_RATE');
-            newItem.appendChild(textNode);
-            arrayElement.appendChild(newItem);
+            addEntryToManifest(manifestXmlDoc, 'android.permission.health.READ_BASAL_METABOLIC_RATE')
+            addEntryToPermissionsXML(permissionsXmlDoc, arrayElement, 'android.permission.health.READ_BASAL_METABOLIC_RATE')
         }
 
     }
@@ -711,47 +417,23 @@ function addHealthConnectPermissionsToXmlFiles(configParser, projectRoot, parser
         profileSet = true
 
         if (!weightSet) {
-            const newPermission = manifestXmlDoc.createElement('uses-permission');
-            newPermission.setAttribute('android:name', 'android.permission.health.WRITE_WEIGHT');
-            manifestXmlDoc.documentElement.appendChild(newPermission);
-
-            const newItem = permissionsXmlDoc.createElement('item');
-            const textNode = permissionsXmlDoc.createTextNode('android.permission.health.WRITE_WEIGHT');
-            newItem.appendChild(textNode);
-            arrayElement.appendChild(newItem);
+            addEntryToManifest(manifestXmlDoc, 'android.permission.health.WRITE_WEIGHT')
+            addEntryToPermissionsXML(permissionsXmlDoc, arrayElement, 'android.permission.health.WRITE_WEIGHT')
         }
 
         if (!heightSet) {
-            const newPermission = manifestXmlDoc.createElement('uses-permission');
-            newPermission.setAttribute('android:name', 'android.permission.health.WRITE_HEIGHT');
-            manifestXmlDoc.documentElement.appendChild(newPermission);
-
-            const newItem = permissionsXmlDoc.createElement('item');
-            const textNode = permissionsXmlDoc.createTextNode('android.permission.health.WRITE_HEIGHT');
-            newItem.appendChild(textNode);
-            arrayElement.appendChild(newItem);
+            addEntryToManifest(manifestXmlDoc, 'android.permission.health.WRITE_HEIGHT')
+            addEntryToPermissionsXML(permissionsXmlDoc, arrayElement, 'android.permission.health.WRITE_HEIGHT')
         }
 
         if (!bodyFatSet) {
-            const newPermission = manifestXmlDoc.createElement('uses-permission');
-            newPermission.setAttribute('android:name', 'android.permission.health.WRITE_BODY_FAT');
-            manifestXmlDoc.documentElement.appendChild(newPermission);
-
-            const newItem = permissionsXmlDoc.createElement('item');
-            const textNode = permissionsXmlDoc.createTextNode('android.permission.health.WRITE_BODY_FAT');
-            newItem.appendChild(textNode);
-            arrayElement.appendChild(newItem);
+            addEntryToManifest(manifestXmlDoc, 'android.permission.health.WRITE_BODY_FAT')
+            addEntryToPermissionsXML(permissionsXmlDoc, arrayElement, 'android.permission.health.WRITE_BODY_FAT')
         }
 
         if (!bmrSet) {
-            const newPermission = manifestXmlDoc.createElement('uses-permission');
-            newPermission.setAttribute('android:name', 'android.permission.health.WRITE_BASAL_METABOLIC_RATE');
-            manifestXmlDoc.documentElement.appendChild(newPermission);
-
-            const newItem = permissionsXmlDoc.createElement('item');
-            const textNode = permissionsXmlDoc.createTextNode('android.permission.health.WRITE_BASAL_METABOLIC_RATE');
-            newItem.appendChild(textNode);
-            arrayElement.appendChild(newItem);
+            addEntryToManifest(manifestXmlDoc, 'android.permission.health.WRITE_BASAL_METABOLIC_RATE')
+            addEntryToPermissionsXML(permissionsXmlDoc, arrayElement, 'android.permission.health.WRITE_BASAL_METABOLIC_RATE')
         }
 
     }
@@ -763,137 +445,65 @@ function addHealthConnectPermissionsToXmlFiles(configParser, projectRoot, parser
 
         // fitness
         if (!fitnessSet && !stepsSet) {
-            const newPermission = manifestXmlDoc.createElement('uses-permission');
-            newPermission.setAttribute('android:name', 'android.permission.health.READ_STEPS');
-            manifestXmlDoc.documentElement.appendChild(newPermission);
-
-            const newItem = permissionsXmlDoc.createElement('item');
-            const textNode = permissionsXmlDoc.createTextNode('android.permission.health.READ_STEPS');
-            newItem.appendChild(textNode);
-            arrayElement.appendChild(newItem);
+            addEntryToManifest(manifestXmlDoc, 'android.permission.health.READ_STEPS')
+            addEntryToPermissionsXML(permissionsXmlDoc, arrayElement, 'android.permission.health.READ_STEPS')
         }
 
         if (!fitnessSet && !caloriesSet) {
-            const newPermission = manifestXmlDoc.createElement('uses-permission');
-            newPermission.setAttribute('android:name', 'android.permission.health.READ_TOTAL_CALORIES_BURNED');
-            manifestXmlDoc.documentElement.appendChild(newPermission);
-
-            const newItem = permissionsXmlDoc.createElement('item');
-            const textNode = permissionsXmlDoc.createTextNode('android.permission.health.READ_TOTAL_CALORIES_BURNED');
-            newItem.appendChild(textNode);
-            arrayElement.appendChild(newItem);
+            addEntryToManifest(manifestXmlDoc, 'android.permission.health.READ_TOTAL_CALORIES_BURNED')
+            addEntryToPermissionsXML(permissionsXmlDoc, arrayElement, 'android.permission.health.READ_TOTAL_CALORIES_BURNED')
         }
 
         if (!fitnessSet && !speedSet) {
-            const newPermission = manifestXmlDoc.createElement('uses-permission');
-            newPermission.setAttribute('android:name', 'android.permission.health.READ_SPEED');
-            manifestXmlDoc.documentElement.appendChild(newPermission);
-
-            const newItem = permissionsXmlDoc.createElement('item');
-            const textNode = permissionsXmlDoc.createTextNode('android.permission.health.READ_SPEED');
-            newItem.appendChild(textNode);
-            arrayElement.appendChild(newItem);
+            addEntryToManifest(manifestXmlDoc, 'android.permission.health.READ_SPEED')
+            addEntryToPermissionsXML(permissionsXmlDoc, arrayElement, 'android.permission.health.READ_SPEED')
         }
 
         if (!fitnessSet && !distanceSet) {
-            const newPermission = manifestXmlDoc.createElement('uses-permission');
-            newPermission.setAttribute('android:name', 'android.permission.health.READ_DISTANCE');
-            manifestXmlDoc.documentElement.appendChild(newPermission);
-
-            const newItem = permissionsXmlDoc.createElement('item');
-            const textNode = permissionsXmlDoc.createTextNode('android.permission.health.READ_DISTANCE');
-            newItem.appendChild(textNode);
-            arrayElement.appendChild(newItem);
+            addEntryToManifest(manifestXmlDoc, 'android.permission.health.READ_DISTANCE')
+            addEntryToPermissionsXML(permissionsXmlDoc, arrayElement, 'android.permission.health.READ_DISTANCE')
         }
 
         // health
         if (!healthSet && !heartRateSet) {
-            const newPermission = manifestXmlDoc.createElement('uses-permission');
-            newPermission.setAttribute('android:name', 'android.permission.health.READ_HEART_RATE');
-            manifestXmlDoc.documentElement.appendChild(newPermission);
-
-            const newItem = permissionsXmlDoc.createElement('item');
-            const textNode = permissionsXmlDoc.createTextNode('android.permission.health.READ_HEART_RATE');
-            newItem.appendChild(textNode);
-            arrayElement.appendChild(newItem);
+            addEntryToManifest(manifestXmlDoc, 'android.permission.health.READ_HEART_RATE')
+            addEntryToPermissionsXML(permissionsXmlDoc, arrayElement, 'android.permission.health.READ_HEART_RATE')
         }
 
         if (!healthSet && !sleepSet) {
-            const newPermission = manifestXmlDoc.createElement('uses-permission');
-            newPermission.setAttribute('android:name', 'android.permission.health.READ_SLEEP');
-            manifestXmlDoc.documentElement.appendChild(newPermission);
-
-            const newItem = permissionsXmlDoc.createElement('item');
-            const textNode = permissionsXmlDoc.createTextNode('android.permission.health.READ_SLEEP');
-            newItem.appendChild(textNode);
-            arrayElement.appendChild(newItem);
+            addEntryToManifest(manifestXmlDoc, 'android.permission.health.READ_SLEEP')
+            addEntryToPermissionsXML(permissionsXmlDoc, arrayElement, 'android.permission.health.READ_SLEEP')
         }
 
         if (!healthSet && !bloodPressureSet) {
-            const newPermission = manifestXmlDoc.createElement('uses-permission');
-            newPermission.setAttribute('android:name', 'android.permission.health.READ_BLOOD_PRESSURE');
-            manifestXmlDoc.documentElement.appendChild(newPermission);
-
-            const newItem = permissionsXmlDoc.createElement('item');
-            const textNode = permissionsXmlDoc.createTextNode('android.permission.health.READ_BLOOD_PRESSURE');
-            newItem.appendChild(textNode);
-            arrayElement.appendChild(newItem);
+            addEntryToManifest(manifestXmlDoc, 'android.permission.health.READ_BLOOD_PRESSURE')
+            addEntryToPermissionsXML(permissionsXmlDoc, arrayElement, 'android.permission.health.READ_BLOOD_PRESSURE')
         }
 
         if (!healthSet && !bloodGlucoseSet) {
-            const newPermission = manifestXmlDoc.createElement('uses-permission');
-            newPermission.setAttribute('android:name', 'android.permission.health.READ_BLOOD_GLUCOSE');
-            manifestXmlDoc.documentElement.appendChild(newPermission);
-
-            const newItem = permissionsXmlDoc.createElement('item');
-            const textNode = permissionsXmlDoc.createTextNode('android.permission.health.READ_BLOOD_GLUCOSE');
-            newItem.appendChild(textNode);
-            arrayElement.appendChild(newItem);
+            addEntryToManifest(manifestXmlDoc, 'android.permission.health.READ_BLOOD_GLUCOSE')
+            addEntryToPermissionsXML(permissionsXmlDoc, arrayElement, 'android.permission.health.READ_BLOOD_GLUCOSE')
         }
 
         // profile
         if (!profileSet && !weightSet) {
-            const newPermission = manifestXmlDoc.createElement('uses-permission');
-            newPermission.setAttribute('android:name', 'android.permission.health.READ_WEIGHT');
-            manifestXmlDoc.documentElement.appendChild(newPermission);
-
-            const newItem = permissionsXmlDoc.createElement('item');
-            const textNode = permissionsXmlDoc.createTextNode('android.permission.health.READ_WEIGHT');
-            newItem.appendChild(textNode);
-            arrayElement.appendChild(newItem);
+            addEntryToManifest(manifestXmlDoc, 'android.permission.health.READ_WEIGHT')
+            addEntryToPermissionsXML(permissionsXmlDoc, arrayElement, 'android.permission.health.READ_WEIGHT')
         }
 
         if (!profileSet && !heightSet) {
-            const newPermission = manifestXmlDoc.createElement('uses-permission');
-            newPermission.setAttribute('android:name', 'android.permission.health.READ_HEIGHT');
-            manifestXmlDoc.documentElement.appendChild(newPermission);
-
-            const newItem = permissionsXmlDoc.createElement('item');
-            const textNode = permissionsXmlDoc.createTextNode('android.permission.health.READ_HEIGHT');
-            newItem.appendChild(textNode);
-            arrayElement.appendChild(newItem);
+            addEntryToManifest(manifestXmlDoc, 'android.permission.health.READ_HEIGHT')
+            addEntryToPermissionsXML(permissionsXmlDoc, arrayElement, 'android.permission.health.READ_HEIGHT')
         }
 
         if (!profileSet && !bodyFatSet) {
-            const newPermission = manifestXmlDoc.createElement('uses-permission');
-            newPermission.setAttribute('android:name', 'android.permission.health.READ_BODY_FAT');
-            manifestXmlDoc.documentElement.appendChild(newPermission);
-
-            const newItem = permissionsXmlDoc.createElement('item');
-            const textNode = permissionsXmlDoc.createTextNode('android.permission.health.READ_BODY_FAT');
-            newItem.appendChild(textNode);
-            arrayElement.appendChild(newItem);
+            addEntryToManifest(manifestXmlDoc, 'android.permission.health.READ_BODY_FAT')
+            addEntryToPermissionsXML(permissionsXmlDoc, arrayElement, 'android.permission.health.READ_BODY_FAT')
         }
 
         if (!profileSet && !bmrSet) {
-            const newPermission = manifestXmlDoc.createElement('uses-permission');
-            newPermission.setAttribute('android:name', 'android.permission.health.READ_BASAL_METABOLIC_RATE');
-            manifestXmlDoc.documentElement.appendChild(newPermission);
-
-            const newItem = permissionsXmlDoc.createElement('item');
-            const textNode = permissionsXmlDoc.createTextNode('android.permission.health.READ_BASAL_METABOLIC_RATE');
-            newItem.appendChild(textNode);
-            arrayElement.appendChild(newItem);
+            addEntryToManifest(manifestXmlDoc, 'android.permission.health.READ_BASAL_METABOLIC_RATE')
+            addEntryToPermissionsXML(permissionsXmlDoc, arrayElement, 'android.permission.health.READ_BASAL_METABOLIC_RATE')
         }
         
     }
@@ -902,137 +512,65 @@ function addHealthConnectPermissionsToXmlFiles(configParser, projectRoot, parser
 
         // fitness
         if (!fitnessSet && !stepsSet) {
-            const newPermission = manifestXmlDoc.createElement('uses-permission');
-            newPermission.setAttribute('android:name', 'android.permission.health.WRITE_STEPS');
-            manifestXmlDoc.documentElement.appendChild(newPermission);
-
-            const newItem = permissionsXmlDoc.createElement('item');
-            const textNode = permissionsXmlDoc.createTextNode('android.permission.health.WRITE_STEPS');
-            newItem.appendChild(textNode);
-            arrayElement.appendChild(newItem);
+            addEntryToManifest(manifestXmlDoc, 'android.permission.health.WRITE_STEPS')
+            addEntryToPermissionsXML(permissionsXmlDoc, arrayElement, 'android.permission.health.WRITE_STEPS')
         }
 
         if (!fitnessSet && !caloriesSet) {
-            const newPermission = manifestXmlDoc.createElement('uses-permission');
-            newPermission.setAttribute('android:name', 'android.permission.health.WRITE_TOTAL_CALORIES_BURNED');
-            manifestXmlDoc.documentElement.appendChild(newPermission);
-
-            const newItem = permissionsXmlDoc.createElement('item');
-            const textNode = permissionsXmlDoc.createTextNode('android.permission.health.WRITE_TOTAL_CALORIES_BURNED');
-            newItem.appendChild(textNode);
-            arrayElement.appendChild(newItem);
+            addEntryToManifest(manifestXmlDoc, 'android.permission.health.WRITE_TOTAL_CALORIES_BURNED')
+            addEntryToPermissionsXML(permissionsXmlDoc, arrayElement, 'android.permission.health.WRITE_TOTAL_CALORIES_BURNED')
         }
 
         if (!fitnessSet && !speedSet) {
-            const newPermission = manifestXmlDoc.createElement('uses-permission');
-            newPermission.setAttribute('android:name', 'android.permission.health.WRITE_SPEED');
-            manifestXmlDoc.documentElement.appendChild(newPermission);
-
-            const newItem = permissionsXmlDoc.createElement('item');
-            const textNode = permissionsXmlDoc.createTextNode('android.permission.health.WRITE_SPEED');
-            newItem.appendChild(textNode);
-            arrayElement.appendChild(newItem);
+            addEntryToManifest(manifestXmlDoc, 'android.permission.health.WRITE_SPEED')
+            addEntryToPermissionsXML(permissionsXmlDoc, arrayElement, 'android.permission.health.WRITE_SPEED')
         }
 
         if (!fitnessSet && !distanceSet) {
-            const newPermission = manifestXmlDoc.createElement('uses-permission');
-            newPermission.setAttribute('android:name', 'android.permission.health.WRITE_DISTANCE');
-            manifestXmlDoc.documentElement.appendChild(newPermission);
-
-            const newItem = permissionsXmlDoc.createElement('item');
-            const textNode = permissionsXmlDoc.createTextNode('android.permission.health.WRITE_DISTANCE');
-            newItem.appendChild(textNode);
-            arrayElement.appendChild(newItem);
+            addEntryToManifest(manifestXmlDoc, 'android.permission.health.WRITE_DISTANCE')
+            addEntryToPermissionsXML(permissionsXmlDoc, arrayElement, 'android.permission.health.WRITE_DISTANCE')
         }
 
         // health
         if (!healthSet && !heartRateSet) {
-            const newPermission = manifestXmlDoc.createElement('uses-permission');
-            newPermission.setAttribute('android:name', 'android.permission.health.WRITE_HEART_RATE');
-            manifestXmlDoc.documentElement.appendChild(newPermission);
-
-            const newItem = permissionsXmlDoc.createElement('item');
-            const textNode = permissionsXmlDoc.createTextNode('android.permission.health.WRITE_HEART_RATE');
-            newItem.appendChild(textNode);
-            arrayElement.appendChild(newItem);
+            addEntryToManifest(manifestXmlDoc, 'android.permission.health.WRITE_HEART_RATE')
+            addEntryToPermissionsXML(permissionsXmlDoc, arrayElement, 'android.permission.health.WRITE_HEART_RATE')
         }
 
         if (!healthSet && !sleepSet) {
-            const newPermission = manifestXmlDoc.createElement('uses-permission');
-            newPermission.setAttribute('android:name', 'android.permission.health.WRITE_SLEEP');
-            manifestXmlDoc.documentElement.appendChild(newPermission);
-
-            const newItem = permissionsXmlDoc.createElement('item');
-            const textNode = permissionsXmlDoc.createTextNode('android.permission.health.WRITE_SLEEP');
-            newItem.appendChild(textNode);
-            arrayElement.appendChild(newItem);
+            addEntryToManifest(manifestXmlDoc, 'android.permission.health.WRITE_SLEEP')
+            addEntryToPermissionsXML(permissionsXmlDoc, arrayElement, 'android.permission.health.WRITE_SLEEP')
         }
 
         if (!healthSet && !bloodPressureSet) {
-            const newPermission = manifestXmlDoc.createElement('uses-permission');
-            newPermission.setAttribute('android:name', 'android.permission.health.WRITE_BLOOD_PRESSURE');
-            manifestXmlDoc.documentElement.appendChild(newPermission);
-
-            const newItem = permissionsXmlDoc.createElement('item');
-            const textNode = permissionsXmlDoc.createTextNode('android.permission.health.WRITE_BLOOD_PRESSURE');
-            newItem.appendChild(textNode);
-            arrayElement.appendChild(newItem);
+            addEntryToManifest(manifestXmlDoc, 'android.permission.health.WRITE_BLOOD_PRESSURE')
+            addEntryToPermissionsXML(permissionsXmlDoc, arrayElement, 'android.permission.health.WRITE_BLOOD_PRESSURE')
         }
 
         if (!healthSet && !bloodGlucoseSet) {
-            const newPermission = manifestXmlDoc.createElement('uses-permission');
-            newPermission.setAttribute('android:name', 'android.permission.health.WRITE_BLOOD_GLUCOSE');
-            manifestXmlDoc.documentElement.appendChild(newPermission);
-
-            const newItem = permissionsXmlDoc.createElement('item');
-            const textNode = permissionsXmlDoc.createTextNode('android.permission.health.WRITE_BLOOD_GLUCOSE');
-            newItem.appendChild(textNode);
-            arrayElement.appendChild(newItem);
+            addEntryToManifest(manifestXmlDoc, 'android.permission.health.WRITE_BLOOD_GLUCOSE')
+            addEntryToPermissionsXML(permissionsXmlDoc, arrayElement, 'android.permission.health.WRITE_BLOOD_GLUCOSE')
         }
 
         // profile
         if (!profileSet && !weightSet) {
-            const newPermission = manifestXmlDoc.createElement('uses-permission');
-            newPermission.setAttribute('android:name', 'android.permission.health.WRITE_WEIGHT');
-            manifestXmlDoc.documentElement.appendChild(newPermission);
-
-            const newItem = permissionsXmlDoc.createElement('item');
-            const textNode = permissionsXmlDoc.createTextNode('android.permission.health.WRITE_WEIGHT');
-            newItem.appendChild(textNode);
-            arrayElement.appendChild(newItem);
+            addEntryToManifest(manifestXmlDoc, 'android.permission.health.WRITE_WEIGHT')
+            addEntryToPermissionsXML(permissionsXmlDoc, arrayElement, 'android.permission.health.WRITE_WEIGHT')
         }
 
         if (!profileSet && !heightSet) {
-            const newPermission = manifestXmlDoc.createElement('uses-permission');
-            newPermission.setAttribute('android:name', 'android.permission.health.WRITE_HEIGHT');
-            manifestXmlDoc.documentElement.appendChild(newPermission);
-
-            const newItem = permissionsXmlDoc.createElement('item');
-            const textNode = permissionsXmlDoc.createTextNode('android.permission.health.WRITE_HEIGHT');
-            newItem.appendChild(textNode);
-            arrayElement.appendChild(newItem);
+            addEntryToManifest(manifestXmlDoc, 'android.permission.health.WRITE_HEIGHT')
+            addEntryToPermissionsXML(permissionsXmlDoc, arrayElement, 'android.permission.health.WRITE_HEIGHT')
         }
 
         if (!profileSet && !bodyFatSet) {
-            const newPermission = manifestXmlDoc.createElement('uses-permission');
-            newPermission.setAttribute('android:name', 'android.permission.health.WRITE_BODY_FAT');
-            manifestXmlDoc.documentElement.appendChild(newPermission);
-
-            const newItem = permissionsXmlDoc.createElement('item');
-            const textNode = permissionsXmlDoc.createTextNode('android.permission.health.WRITE_BODY_FAT');
-            newItem.appendChild(textNode);
-            arrayElement.appendChild(newItem);
+            addEntryToManifest(manifestXmlDoc, 'android.permission.health.WRITE_BODY_FAT')
+            addEntryToPermissionsXML(permissionsXmlDoc, arrayElement, 'android.permission.health.WRITE_BODY_FAT')
         }
 
         if (!profileSet && !bmrSet) {
-            const newPermission = manifestXmlDoc.createElement('uses-permission');
-            newPermission.setAttribute('android:name', 'android.permission.health.WRITE_BASAL_METABOLIC_RATE');
-            manifestXmlDoc.documentElement.appendChild(newPermission);
-
-            const newItem = permissionsXmlDoc.createElement('item');
-            const textNode = permissionsXmlDoc.createTextNode('android.permission.health.WRITE_BASAL_METABOLIC_RATE');
-            newItem.appendChild(textNode);
-            arrayElement.appendChild(newItem);
+            addEntryToManifest(manifestXmlDoc, 'android.permission.health.WRITE_BASAL_METABOLIC_RATE')
+            addEntryToPermissionsXML(permissionsXmlDoc, arrayElement, 'android.permission.health.WRITE_BASAL_METABOLIC_RATE')
         }
         
     }
@@ -1044,69 +582,33 @@ function addHealthConnectPermissionsToXmlFiles(configParser, projectRoot, parser
         && bodyFat == "" && bmr == "" && speed == "" && distance == "") {
 
             fitnessPermissionsRead.forEach(permission => {
-                const newPermission = manifestXmlDoc.createElement('uses-permission');
-                newPermission.setAttribute('android:name', permission.name);
-                manifestXmlDoc.documentElement.appendChild(newPermission);
-
-                const newItem = permissionsXmlDoc.createElement('item');
-                const textNode = permissionsXmlDoc.createTextNode(permission.name);
-                newItem.appendChild(textNode);
-                arrayElement.appendChild(newItem);
+                addEntryToManifest(manifestXmlDoc, permission.name)
+                addEntryToPermissionsXML(permissionsXmlDoc, arrayElement, permission.name)
             });
             
             fitnessPermissionsWrite.forEach(permission => {
-                const newPermission = manifestXmlDoc.createElement('uses-permission');
-                newPermission.setAttribute('android:name', permission.name);
-                manifestXmlDoc.documentElement.appendChild(newPermission);
-
-                const newItem = permissionsXmlDoc.createElement('item');
-                const textNode = permissionsXmlDoc.createTextNode(permission.name);
-                newItem.appendChild(textNode);
-                arrayElement.appendChild(newItem);
+                addEntryToManifest(manifestXmlDoc, permission.name)
+                addEntryToPermissionsXML(permissionsXmlDoc, arrayElement, permission.name)
             });
     
             healthPermissionsRead.forEach(permission => {
-                const newPermission = manifestXmlDoc.createElement('uses-permission');
-                newPermission.setAttribute('android:name', permission.name);
-                manifestXmlDoc.documentElement.appendChild(newPermission);
-
-                const newItem = permissionsXmlDoc.createElement('item');
-                const textNode = permissionsXmlDoc.createTextNode(permission.name);
-                newItem.appendChild(textNode);
-                arrayElement.appendChild(newItem);
+                addEntryToManifest(manifestXmlDoc, permission.name)
+                addEntryToPermissionsXML(permissionsXmlDoc, arrayElement, permission.name)
             });
             
             healthPermissionsWrite.forEach(permission => {
-                const newPermission = manifestXmlDoc.createElement('uses-permission');
-                newPermission.setAttribute('android:name', permission.name);
-                manifestXmlDoc.documentElement.appendChild(newPermission);
-
-                const newItem = permissionsXmlDoc.createElement('item');
-                const textNode = permissionsXmlDoc.createTextNode(permission.name);
-                newItem.appendChild(textNode);
-                arrayElement.appendChild(newItem);
+                addEntryToManifest(manifestXmlDoc, permission.name)
+                addEntryToPermissionsXML(permissionsXmlDoc, arrayElement, permission.name)
             });
     
             profilePermissionsRead.forEach(permission => {
-                const newPermission = manifestXmlDoc.createElement('uses-permission');
-                newPermission.setAttribute('android:name', permission.name);
-                manifestXmlDoc.documentElement.appendChild(newPermission);
-
-                const newItem = permissionsXmlDoc.createElement('item');
-                const textNode = permissionsXmlDoc.createTextNode(permission.name);
-                newItem.appendChild(textNode);
-                arrayElement.appendChild(newItem);
+                addEntryToManifest(manifestXmlDoc, permission.name)
+                addEntryToPermissionsXML(permissionsXmlDoc, arrayElement, permission.name)
             });
             
             profilePermissionsWrite.forEach(permission => {
-                const newPermission = manifestXmlDoc.createElement('uses-permission');
-                newPermission.setAttribute('android:name', permission.name);
-                manifestXmlDoc.documentElement.appendChild(newPermission);
-
-                const newItem = permissionsXmlDoc.createElement('item');
-                const textNode = permissionsXmlDoc.createTextNode(permission.name);
-                newItem.appendChild(textNode);
-                arrayElement.appendChild(newItem);
+                addEntryToManifest(manifestXmlDoc, permission.name)
+                addEntryToPermissionsXML(permissionsXmlDoc, arrayElement, permission.name)
             });
 
         }
@@ -1127,22 +629,6 @@ function addHealthConnectPermissionsToXmlFiles(configParser, projectRoot, parser
 
 }
 
-function addEntryToManifestAndPermissionsXml(manifestXmlDoc, permissionsXmlDoc, arrayElement, permission) {
-
-    console.log("entered addEntryToManifestAndPermissionsXml");
-
-    // Android >= 14
-    const newPermission = manifestXmlDoc.createElement('uses-permission');
-    newPermission.setAttribute('android:name', permission);
-    manifestXmlDoc.documentElement.appendChild(newPermission);
-
-    // Android <= 13
-    const newItem = permissionsXmlDoc.createElement('item');
-    const textNode = permissionsXmlDoc.createTextNode(permission);
-    newItem.appendChild(textNode);
-    arrayElement.appendChild(newItem);
-}
-
 function addBackgroundJobPermissionsToManifest(configParser, projectRoot, parser) {
 
     const disableBackgroundJobs = configParser.getPlatformPreference('DisableBackgroundJobs', 'android');
@@ -1157,25 +643,12 @@ function addBackgroundJobPermissionsToManifest(configParser, projectRoot, parser
         // Parse the XML string
         const manifestXmlDoc = parser.parseFromString(manifestXmlString, 'text/xml');
 
-        const notificationsPermission = manifestXmlDoc.createElement('uses-permission');
-        notificationsPermission.setAttribute('android:name', 'android.permission.POST_NOTIFICATIONS');
-        manifestXmlDoc.documentElement.appendChild(notificationsPermission);
-
-        const activityPermission = manifestXmlDoc.createElement('uses-permission');
-        activityPermission.setAttribute('android:name', 'android.permission.ACTIVITY_RECOGNITION');
-        manifestXmlDoc.documentElement.appendChild(activityPermission);
-
-        const foregroundServicePermission = manifestXmlDoc.createElement('uses-permission');
-        foregroundServicePermission.setAttribute('android:name', 'android.permission.FOREGROUND_SERVICE');
-        manifestXmlDoc.documentElement.appendChild(foregroundServicePermission);
-
-        const foregroundServiceHealthPermission = manifestXmlDoc.createElement('uses-permission');
-        foregroundServiceHealthPermission.setAttribute('android:name', 'android.permission.FOREGROUND_SERVICE_HEALTH');
-        manifestXmlDoc.documentElement.appendChild(foregroundServiceHealthPermission);
-
-        const highSamplingPermission = manifestXmlDoc.createElement('uses-permission');
-        highSamplingPermission.setAttribute('android:name', 'android.permission.HIGH_SAMPLING_RATE_SENSORS');
-        manifestXmlDoc.documentElement.appendChild(highSamplingPermission);
+        // add permissions to XML document
+        addEntryToManifest(manifestXmlDoc, 'android.permission.POST_NOTIFICATIONS')
+        addEntryToManifest(manifestXmlDoc, 'android.permission.ACTIVITY_RECOGNITION')
+        addEntryToManifest(manifestXmlDoc, 'android.permission.FOREGROUND_SERVICE')
+        addEntryToManifest(manifestXmlDoc, 'android.permission.FOREGROUND_SERVICE_HEALTH')
+        addEntryToManifest(manifestXmlDoc, 'android.permission.HIGH_SAMPLING_RATE_SENSORS')
 
         // serialize the updated XML document back to string
         const serializer = new XMLSerializer();
@@ -1185,6 +658,19 @@ function addBackgroundJobPermissionsToManifest(configParser, projectRoot, parser
         fs.writeFileSync(manifestFilePath, updatedManifestXmlString, 'utf-8');
     }
 
+}
+
+function addEntryToManifest(manifestXmlDoc, permission) {
+    const newPermission = manifestXmlDoc.createElement('uses-permission');
+    newPermission.setAttribute('android:name', permission);
+    manifestXmlDoc.documentElement.appendChild(newPermission);
+}
+
+function addEntryToPermissionsXML(permissionsXmlDoc, arrayElement, permission) {
+    const newItem = permissionsXmlDoc.createElement('item');
+    const textNode = permissionsXmlDoc.createTextNode(permission);
+    newItem.appendChild(textNode);
+    arrayElement.appendChild(newItem);
 }
 
 function copyNotificationContent(configParser, projectRoot, parser) {
