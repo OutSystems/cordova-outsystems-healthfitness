@@ -140,7 +140,7 @@ function addHealthConnectPermissionsToXmlFiles(configParser, projectRoot, parser
         arrayElement.appendChild(newItem);
         */
 
-        addEntryToManifestAndPermissionsXml('android.permission.health.READ_HEART_RATE');
+        addEntryToManifestAndPermissionsXml(manifestXmlDoc, permissionsXmlDoc, 'android.permission.health.READ_HEART_RATE');
     }
 
     if (heartRate == "ReadWrite" || heartRate == "Write") {
@@ -1127,7 +1127,7 @@ function addHealthConnectPermissionsToXmlFiles(configParser, projectRoot, parser
 
 }
 
-function addEntryToManifestAndPermissionsXml(permission) {
+function addEntryToManifestAndPermissionsXml(manifestXmlDoc, permissionsXmlDoc, permission) {
 
     console.log("entered addEntryToManifestAndPermissionsXml");
 
