@@ -309,7 +309,8 @@ class OSHealthFitness : CordovaImplementation() {
     }
 
     private fun disconnectFromHealthConnect() {
-        healthStore?.disconnectFromHealthConnect(
+        healthConnectViewModel.disconnectFromHealthConnect(
+            getActivity(),
             {
                 sendPluginResult("success", null)
             },
