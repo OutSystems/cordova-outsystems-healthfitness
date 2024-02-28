@@ -16,7 +16,7 @@ module.exports = async function (context) {
     // add health connect permissions to AndroidManifest.xml and health_permissions.xml files
     addHealthConnectPermissionsToXmlFiles(configParser, projectRoot, parser);
 
-    // add background job permissions to AndroidManfiest.xml
+    // add background job permissions to AndroidManifest.xml
     addBackgroundJobPermissionsToManifest(configParser, projectRoot, parser);
 
     // copy notification title and content for notificaiton for Foreground Service
