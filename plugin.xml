@@ -8,7 +8,6 @@
   </js-module>
   <platform name="android">
 
-    <hook type="after_prepare" src="hooks/androidCopyPreferencesPermissions.js" />
     <hook type="after_prepare" src="hooks/androidCopyPrivacyUrlEnv.js"/>
 
     <config-file parent="/*" target="res/xml/config.xml">
@@ -23,22 +22,6 @@
 
     <config-file parent="/*" target="res/values/strings.xml">
       <string name="privacy_policy_url">PRIVACY_POLICY_URL</string>
-      <string name="background_notification_title"></string>
-      <string name="background_notification_description"></string>
-   </config-file>
-
-   <config-file target="AndroidManifest.xml" parent="/manifest/application">
-      <activity
-        android:name=".PermissionsRationaleActivity"
-        android:theme="@style/Theme.AppCompat"
-        android:exported="true">
-        <intent-filter>
-          <action android:name="androidx.health.ACTION_SHOW_PERMISSIONS_RATIONALE" />
-        </intent-filter>
-        <meta-data
-          android:name="health_permissions"
-          android:resource="@array/health_permissions" />
-      </activity>
    </config-file>
 
     <!-- HealthFitness Plugin -->

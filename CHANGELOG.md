@@ -11,9 +11,6 @@ The changes documented here do not include those from the original repository.
 ## 2024-02-28
 - Implemented `Open Health Connect App`  (https://outsystemsrd.atlassian.net/browse/RMET-3158).
 
-## 2024-02-27
-- Implemented hook for permissions  (https://outsystemsrd.atlassian.net/browse/RMET-3142).
-
 ## 2024-02-26
 - Implemented `Show app's privacy policy dialog`  (https://outsystemsrd.atlassian.net/browse/RMET-3145).
 
