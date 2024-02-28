@@ -128,6 +128,7 @@ function addHealthConnectPermissionsToXmlFiles(configParser, projectRoot, parser
         heartRateSet = true
 
         // Android >= 14
+        /*
         const newPermission = manifestXmlDoc.createElement('uses-permission');
         newPermission.setAttribute('android:name', 'android.permission.health.READ_HEART_RATE');
         manifestXmlDoc.documentElement.appendChild(newPermission);
@@ -137,6 +138,9 @@ function addHealthConnectPermissionsToXmlFiles(configParser, projectRoot, parser
         const textNode = permissionsXmlDoc.createTextNode('android.permission.health.READ_HEART_RATE');
         newItem.appendChild(textNode);
         arrayElement.appendChild(newItem);
+        */
+
+        addEntryToManifestAndPermissionsXml('android.permission.health.READ_HEART_RATE');
     }
 
     if (heartRate == "ReadWrite" || heartRate == "Write") {
@@ -1121,6 +1125,22 @@ function addHealthConnectPermissionsToXmlFiles(configParser, projectRoot, parser
     // Write the updated XML string back to the same file
     fs.writeFileSync(permissionsXmlFilePath, updatedPermissionsXmlString, 'utf-8');
 
+}
+
+function addEntryToManifestAndPermissionsXml(permission) {
+
+    console.log("entered addEntryToManifestAndPermissionsXml");
+
+    // Android >= 14
+    const newPermission = manifestXmlDoc.createElement('uses-permission');
+    newPermission.setAttribute('android:name', permission);
+    manifestXmlDoc.documentElement.appendChild(newPermission);
+
+    // Android <= 13
+    const newItem = permissionsXmlDoc.createElement('item');
+    const textNode = permissionsXmlDoc.createTextNode(permission);
+    newItem.appendChild(textNode);
+    arrayElement.appendChild(newItem);
 }
 
 function addBackgroundJobPermissionsToManifest(configParser, projectRoot, parser) {
