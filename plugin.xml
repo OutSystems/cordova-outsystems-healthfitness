@@ -29,7 +29,7 @@
       <uses-permission android:name="android.permission.ACTIVITY_RECOGNITION" />
       <uses-permission android:name="android.permission.BODY_SENSORS" />
       <uses-permission android:name="android.permission.BODY_SENSORS_BACKGROUND" />
-  </config-file>
+    </config-file>
 
     <!-- HealthFitness Plugin -->
     <source-file src="src/android/com/outsystems/plugins/healthfitness/OSHealthFitness.kt" target-dir="app/src/main/kotlin/com/outsystems/plugins/healthfitness"/>
