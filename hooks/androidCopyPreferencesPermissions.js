@@ -19,79 +19,79 @@ let permissions = {
         wasSet: false
     },
     Steps: {
-        variableName: "HeartRate",
-        readPermission: "android.permission.health.READ_HEART_RATE",
-        writePermission: "android.permission.health.WRITE_HEART_RATE",
+        variableName: "Steps",
+        readPermission: "android.permission.health.READ_STEPS",
+        writePermission: "android.permission.health.WRITE_STEPS",
         configValue: undefined,
         wasSet: false
     },
     Weight: {
-        variableName: "HeartRate",
-        readPermission: "android.permission.health.READ_HEART_RATE",
-        writePermission: "android.permission.health.WRITE_HEART_RATE",
+        variableName: "Weight",
+        readPermission: "android.permission.health.READ_WEIGHT",
+        writePermission: "android.permission.health.WRITE_WEIGHT",
         configValue: undefined,
         wasSet: false
     },
     Height: {
-        variableName: "HeartRate",
-        readPermission: "android.permission.health.READ_HEART_RATE",
-        writePermission: "android.permission.health.WRITE_HEART_RATE",
+        variableName: "Height",
+        readPermission: "android.permission.health.READ_HEIGHT",
+        writePermission: "android.permission.health.WRITE_HEIGHT",
         configValue: undefined,
         wasSet: false
     },
     CaloriesBurned: {
-        variableName: "HeartRate",
-        readPermission: "android.permission.health.READ_HEART_RATE",
-        writePermission: "android.permission.health.WRITE_HEART_RATE",
+        variableName: "CaloriesBurned",
+        readPermission: "android.permission.health.READ_TOTAL_CALORIES_BURNED",
+        writePermission: "android.permission.health.WRITE_TOTAL_CALORIES_BURNED",
         configValue: undefined,
         wasSet: false
     },
     Sleep: {
-        variableName: "HeartRate",
-        readPermission: "android.permission.health.READ_HEART_RATE",
-        writePermission: "android.permission.health.WRITE_HEART_RATE",
+        variableName: "Sleep",
+        readPermission: "android.permission.health.READ_SLEEP",
+        writePermission: "android.permission.health.WRITE_SLEEP",
         configValue: undefined,
         wasSet: false
     },
     BloodPressure: {
-        variableName: "HeartRate",
-        readPermission: "android.permission.health.READ_HEART_RATE",
-        writePermission: "android.permission.health.WRITE_HEART_RATE",
+        variableName: "BloodPressure",
+        readPermission: "android.permission.health.READ_BLOOD_PRESSURE",
+        writePermission: "android.permission.health.WRITE_BLOOD_PRESSURE",
         configValue: undefined,
         wasSet: false
     },
     BloodGlucose: {
-        variableName: "HeartRate",
-        readPermission: "android.permission.health.READ_HEART_RATE",
-        writePermission: "android.permission.health.WRITE_HEART_RATE",
+        variableName: "BloodGlucose",
+        readPermission: "android.permission.health.READ_BLOOD_GLUCOSE",
+        writePermission: "android.permission.health.WRITE_BLOOD_GLUCOSE",
         configValue: undefined,
         wasSet: false
     },
     BodyFatPercentage: {
-        variableName: "HeartRate",
-        readPermission: "android.permission.health.READ_HEART_RATE",
-        writePermission: "android.permission.health.WRITE_HEART_RATE",
+        variableName: "BodyFatPercentage",
+        readPermission: "android.permission.health.READ_BODY_FAT",
+        writePermission: "android.permission.health.WRITE_BODY_FAT",
         configValue: undefined,
         wasSet: false
     },
     BasalMetabolicRate: {
-        variableName: "HeartRate",
-        readPermission: "android.permission.health.READ_HEART_RATE",
-        writePermission: "android.permission.health.WRITE_HEART_RATE",
+        variableName: "BasalMetabolicRate",
+        readPermission: "android.permission.health.READ_BASAL_METABOLIC_RATE",
+        writePermission: "android.permission.health.WRITE_BASAL_METABOLIC_RATE",
         configValue: undefined,
         wasSet: false
     },
     WalkingSpeed: {
-        variableName: "HeartRate",
-        readPermission: "android.permission.health.READ_HEART_RATE",
-        writePermission: "android.permission.health.WRITE_HEART_RATE",
+        variableName: "WalkingSpeed",
+        readPermission: "android.permission.health.READ_SPEED",
+        writePermission: "android.permission.health.WRITE_SPEED",
         configValue: undefined,
         wasSet: false
     },
     Distance: {
-        variableName: "HeartRate",
-        readPermission: "android.permission.health.READ_HEART_RATE",
-        writePermission: "android.permission.health.WRITE_HEART_RATE",
+        variableName: "Distance",
+        readPermission: "android.permission.health.READ_DISTANCE",
+        writePermission: "android.permission.health.WRITE_DISTANCE",
         configValue: undefined,
         wasSet: false
     }
@@ -99,17 +99,13 @@ let permissions = {
 
 let groupPermissions = {
     AllVariables: {
-        variableName: "HeartRate",
-        readPermission: "android.permission.health.READ_HEART_RATE",
-        writePermission: "android.permission.health.WRITE_HEART_RATE",
+        variableName: "AllVariables",
         configValue: undefined,
         wasSet: false,
         groupVariables: []
     },
     FitnessVariables: {
-        variableName: "HeartRate",
-        readPermission: "android.permission.health.READ_HEART_RATE",
-        writePermission: "android.permission.health.WRITE_HEART_RATE",
+        variableName: "FitnessVariables",
         configValue: undefined,
         // we'll use these to know if we should set individual permissions or not
         // e.g. when checking HeartRate, if all healthVariables were already set, we don't need to add it again
@@ -117,20 +113,16 @@ let groupPermissions = {
         groupVariables: ["Steps", "CaloriesBurned", "WalkingSpeed", "Distance"]
     },
     HealthVariables: {
-        variableName: "HeartRate",
-        readPermission: "android.permission.health.READ_HEART_RATE",
-        writePermission: "android.permission.health.WRITE_HEART_RATE",
+        variableName: "HealthVariables",
         configValue: undefined,
         wasSet: false,
-        groupVariables: ["Steps", "CaloriesBurned", "WalkingSpeed", "Distance"]
+        groupVariables: ["HeartRate", "Sleep", "BloodPressure", "BloodGlucose"]
     },
     ProfileVariables: {
-        variableName: "HeartRate",
-        readPermission: "android.permission.health.READ_HEART_RATE",
-        writePermission: "android.permission.health.WRITE_HEART_RATE",
+        variableName: "ProfileVariables",
         configValue: undefined,
         wasSet: false,
-        groupVariables: ["Steps", "CaloriesBurned", "WalkingSpeed", "Distance"]
+        groupVariables: ["Weight", "Height", "BodyFatPercentage", "BasalMetabolicRate"]
     }
 }
 
@@ -154,13 +146,13 @@ module.exports = async function (context) {
 
 function addHealthConnectPermissionsToXmlFiles(configParser, projectRoot, parser) {
 
-    permissions.map((p) => {
-        p.configValue = configParser.getPlatformPreference(p.variableName, 'android');
-    })
+    for(const key in permissions){
+        permissions[key].configValue = configParser.getPlatformPreference(permissions[key].variableName, 'android');
+    }
 
-    groupPermissions.map((p) => {
-        p.configValue = configParser.getPlatformPreference(p.variableName, 'android');
-    })
+    for(const key in groupPermissions){
+        groupPermissions[key].configValue = configParser.getPlatformPreference(groupPermissions[key].variableName, 'android');
+    }
 
     // Android >= 14 dependencies should be included directly in the AndroidManifest.xml file
     // Read the AndroidManifest.xml file
@@ -178,7 +170,8 @@ function addHealthConnectPermissionsToXmlFiles(configParser, projectRoot, parser
  
 
     // process each individual variable
-    Object.entries(permissions).forEach( p => {
+    for(const key in permissions){
+        let p = permissions[key]
         if (p.configValue == READWRITE || p.configValue == READ) {
             p.wasSet = true;
             processPermission(manifestXmlDoc, permissionsXmlDoc, arrayElement, p.readPermission)
@@ -187,11 +180,12 @@ function addHealthConnectPermissionsToXmlFiles(configParser, projectRoot, parser
             p.wasSet = true;
             processPermission(manifestXmlDoc, permissionsXmlDoc, arrayElement, p.writePermission)
         }
-    })
+    }
 
 
     // process group variables
-    Object.entries(groupPermissions).forEach( p => {
+    for(const key in groupPermissions){
+        let p = groupPermissions[key]
         if (p.configValue == READWRITE || p.configValue == READ) {
             p.wasSet = true;
             p.groupVariables.forEach( v => {
@@ -208,41 +202,27 @@ function addHealthConnectPermissionsToXmlFiles(configParser, projectRoot, parser
                 }
             })
         }
-    })
+    }
 
-    // process AllVariables
-    Object.entries(groupPermissions).forEach( p => {
-        p.groupVariables.forEach( v => {
-            if (allVariables == READWRITE || allVariables == READ) {
-                if (!p.wasSet && !permissions[v].wasSet) {
-                    processPermission(manifestXmlDoc, permissionsXmlDoc, arrayElement, permissions[v].readPermission)
-                }
-            }
-            if ((allVariables == READWRITE || allVariables == WRITE)) {
-                if (!p.wasSet && !permissions[v].wasSet) {
-                    processPermission(manifestXmlDoc, permissionsXmlDoc, arrayElement, permissions[v].writePermission)
-                }
-            }
-
-            
-        })
-    })
+    let permissionValues = Object.values(permissions)
+    let groupPermissionValues = Object.values(groupPermissions)
 
     // process AllVariables
     if (groupPermissions.AllVariables.configValue == READWRITE || groupPermissions.AllVariables.configValue == READ) {   
-        processAllVariables(manifestXmlDoc, permissionsXmlDoc, arrayElement, READ)
+        processAllVariables(manifestXmlDoc, permissionsXmlDoc, arrayElement, READ, groupPermissionValues)
 
     }
 
     if ((groupPermissions.AllVariables.configValue == READWRITE || groupPermissions.AllVariables.configValue == WRITE)) {  
-        processAllVariables(manifestXmlDoc, permissionsXmlDoc, arrayElement, WRITE)
+        processAllVariables(manifestXmlDoc, permissionsXmlDoc, arrayElement, WRITE, groupPermissionValues)
     }
     
+    let numberOfPermissions = permissionValues.filter(p => p.configValue != "").length + groupPermissionValues.filter(p => p.configValue != "").length
 
-    let numberOfPermissions = permissions.filter(p => p.configValue != "").length + groupPermissions.filter(p => p.configValue != "").length
     // if there is no AllVariables nor anything else, then by default we add all the permissions
+
     if (numberOfPermissions == 0) {
-        Object.entries(permissions).forEach( p => {
+        permissionValues.forEach( p => {
             processPermission(manifestXmlDoc, permissionsXmlDoc, arrayElement, p.readPermission)
             processPermission(manifestXmlDoc, permissionsXmlDoc, arrayElement, p.writePermission)
         })
@@ -264,8 +244,8 @@ function addHealthConnectPermissionsToXmlFiles(configParser, projectRoot, parser
 
 }
 
-function processAllVariables(manifestXmlDoc, permissionsXmlDoc, arrayElement, permissionOperation) {
-    Object.entries(groupPermissions).forEach(p => {
+function processAllVariables(manifestXmlDoc, permissionsXmlDoc, arrayElement, permissionOperation, groupPermissionsValues) {
+    groupPermissionsValues.forEach(p => {
         p.groupVariables.forEach( v => {
             if (!p.wasSet && !permissions[v].wasSet) {
                 processPermission(manifestXmlDoc, permissionsXmlDoc, arrayElement, permissionOperation == READ ? permissions[v].readPermission : permissions[v].writePermission)
