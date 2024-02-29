@@ -1,9 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 const { ConfigParser } = require('cordova-common');
-const et = require('elementtree');
 const { DOMParser, XMLSerializer } = require('xmldom');
-const { captureRejectionSymbol } = require('events');
 
 const READ = "Read"
 const WRITE = "Write"
@@ -128,10 +126,8 @@ let groupPermissions = {
 
 module.exports = async function (context) {
     const projectRoot = context.opts.cordova.project ? context.opts.cordova.project.root : context.opts.projectRoot;
-
     const configXML = path.join(projectRoot, 'config.xml');
     const configParser = new ConfigParser(configXML);
-
     const parser = new DOMParser();
         
     // add health connect permissions to AndroidManifest.xml and health_permissions.xml files
@@ -165,10 +161,10 @@ function addHealthConnectPermissionsToXmlFiles(configParser, projectRoot, parser
     // Android <= 13 dependencies should be included in a separate XML file
     // Create the health_permissions.xml file
     const permissionsXmlDoc = parser.parseFromString('<?xml version="1.0" encoding="utf-8"?><resources><array name="health_permissions"></array></resources>', 'text/xml');
+
     // Get the <array> element
     const arrayElement = permissionsXmlDoc.getElementsByTagName('array')[0];
  
-
     // process each individual variable
     for(const key in permissions){
         let p = permissions[key]
@@ -181,7 +177,6 @@ function addHealthConnectPermissionsToXmlFiles(configParser, projectRoot, parser
             processPermission(manifestXmlDoc, permissionsXmlDoc, arrayElement, p.writePermission)
         }
     }
-
 
     // process group variables
     for(const key in groupPermissions){
@@ -220,7 +215,6 @@ function addHealthConnectPermissionsToXmlFiles(configParser, projectRoot, parser
     let numberOfPermissions = permissionValues.filter(p => p.configValue != "").length + groupPermissionValues.filter(p => p.configValue != "").length
 
     // if there is no AllVariables nor anything else, then by default we add all the permissions
-
     if (numberOfPermissions == 0) {
         permissionValues.forEach( p => {
             processPermission(manifestXmlDoc, permissionsXmlDoc, arrayElement, p.readPermission)
@@ -233,12 +227,14 @@ function addHealthConnectPermissionsToXmlFiles(configParser, projectRoot, parser
 
     // Android >= 14
     const updatedManifestXmlString = serializer.serializeToString(manifestXmlDoc);
+
     // Write the updated XML string back to the same file
     fs.writeFileSync(manifestFilePath, updatedManifestXmlString, 'utf-8');
 
     // Android <= 13
     const updatedPermissionsXmlString = serializer.serializeToString(permissionsXmlDoc);
     const permissionsXmlFilePath = path.join(projectRoot, 'platforms/android/app/src/main/res/values/health_permissions.xml');
+
     // Write the updated XML string back to the same file
     fs.writeFileSync(permissionsXmlFilePath, updatedPermissionsXmlString, 'utf-8');
 
