@@ -86,6 +86,9 @@ class OSHealthFitness : CordovaImplementation() {
             "disconnectFromGoogleFit" -> {
                 disconnectFromGoogleFit()
             }
+            "openHealthConnect" -> {
+                openHealthConnect()
+            }
         }
         return true
     }
@@ -290,6 +293,18 @@ class OSHealthFitness : CordovaImplementation() {
 
     private fun disconnectFromGoogleFit() {
         healthStore?.disconnectFromGoogleFit(
+            {
+                sendPluginResult("success", null)
+            },
+            {
+                sendPluginResult(null, Pair(it.code.toString(), it.message))
+            }
+        )
+    }
+
+    private fun openHealthConnect() {
+        healthConnectViewModel.openHealthConnect(
+            getContext(),
             {
                 sendPluginResult("success", null)
             },
