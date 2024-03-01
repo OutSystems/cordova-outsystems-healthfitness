@@ -272,6 +272,7 @@ function addBackgroundJobPermissionsToManifest(configParser, projectRoot, parser
         // add permissions to XML document
         addEntryToManifest(manifestXmlDoc, 'android.permission.POST_NOTIFICATIONS')
         addEntryToManifest(manifestXmlDoc, 'android.permission.ACTIVITY_RECOGNITION')
+        addEntryToManifest(manifestXmlDoc, 'com.google.android.gms.permission.ACTIVITY_RECOGNITION') // necessary for API 28 and below
         addEntryToManifest(manifestXmlDoc, 'android.permission.FOREGROUND_SERVICE')
         addEntryToManifest(manifestXmlDoc, 'android.permission.FOREGROUND_SERVICE_HEALTH')
         addEntryToManifest(manifestXmlDoc, 'android.permission.HIGH_SAMPLING_RATE_SENSORS')
