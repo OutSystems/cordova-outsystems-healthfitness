@@ -89,6 +89,9 @@ class OSHealthFitness : CordovaImplementation() {
             "disconnectFromHealthConnect" -> {
                 disconnectFromHealthConnect()
             }
+            "openHealthConnect" -> {
+                openHealthConnect()
+            }
         }
         return true
     }
@@ -102,6 +105,7 @@ class OSHealthFitness : CordovaImplementation() {
                 gson.fromJson(args.getString(2), HealthFitnessGroupPermission::class.java),
                 gson.fromJson(args.getString(3), HealthFitnessGroupPermission::class.java),
                 gson.fromJson(args.getString(4), HealthFitnessGroupPermission::class.java),
+                privacyPolicyUrl = getActivity().resources.getString(getActivity().resources.getIdentifier("privacy_policy_url", "string", getActivity().packageName)),
                 {
                     setAsActivityResultCallback()
                 },
@@ -311,6 +315,18 @@ class OSHealthFitness : CordovaImplementation() {
     private fun disconnectFromHealthConnect() {
         healthConnectViewModel.disconnectFromHealthConnect(
             getActivity(),
+            {
+                sendPluginResult("success", null)
+            },
+            {
+                sendPluginResult(null, Pair(it.code.toString(), it.message))
+            }
+        )
+    }
+    
+    private fun openHealthConnect() {
+        healthConnectViewModel.openHealthConnect(
+            getContext(),
             {
                 sendPluginResult("success", null)
             },

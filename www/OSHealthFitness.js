@@ -64,3 +64,7 @@ exports.disconnectFromGoogleFit = function (success, error) {
 exports.disconnectFromHealthConnect = function (success, error) {
     exec(success, error, 'OSHealthFitness', 'disconnectFromHealthConnect');
 };
+
+exports.openHealthConnect = function (success, error) {
+    exec(success, error, 'OSHealthFitness', 'openHealthConnect');
+};
