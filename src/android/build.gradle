@@ -24,7 +24,7 @@ dependencies{
     implementation 'com.google.code.findbugs:jsr305:1.3.9'
 
     implementation("com.github.outsystems:oscore-android:1.2.0@aar")
-    implementation("com.github.outsystems:oscordova-android:1.2.0@aar")
+    implementation("com.github.outsystems:oscordova-android:2.0.1@aar")
     implementation("com.github.outsystems:oshealthfitness-android:1.2.0.20@aar")
     implementation("com.github.outsystems:osnotificationpermissions-android:0.0.4@aar")
 

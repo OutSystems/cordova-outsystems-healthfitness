@@ -1,10 +1,13 @@
 package com.outsystems.plugins.healthfitness
 
 import android.Manifest
+import android.app.AlarmManager
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Build.VERSION.SDK_INT
+import android.provider.Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM
 import androidx.core.content.ContextCompat
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
@@ -31,6 +34,11 @@ class OSHealthFitness : CordovaImplementation() {
     lateinit var healthConnectHelper: HealthConnectHelper
     lateinit var workManagerHelper: WorkManagerHelperInterface
     lateinit var backgroundParameters: BackgroundJobParameters
+
+    private var requestingExactAlarmPermission = false
+    // we need this variable because the onResume is being called both when the app
+    // navigates to the permission screen and when the returning from the permission screen
+    private var isReturningFromPermissionScreen = false
 
     override fun initialize(cordova: CordovaInterface, webView: CordovaWebView) {
         super.initialize(cordova, webView)
@@ -94,6 +102,14 @@ class OSHealthFitness : CordovaImplementation() {
             }
         }
         return true
+    }
+
+    override fun onResume(multitasking: Boolean) {
+        if (!isReturningFromPermissionScreen && requestingExactAlarmPermission) {
+            requestingExactAlarmPermission = false
+            setBackgroundJobWithParameters(backgroundParameters)
+        }
+        isReturningFromPermissionScreen = false
     }
 
     private fun initAndRequestPermissions(args: JSONArray) {
@@ -244,16 +260,25 @@ class OSHealthFitness : CordovaImplementation() {
     }
 
     private fun setBackgroundJobWithParameters(parameters: BackgroundJobParameters) {
-        healthConnectViewModel.setBackgroundJob(
-            parameters,
-            getContext(),
-            {
-                sendPluginResult("success", null)
-            },
-            {
-                sendPluginResult(null, Pair(it.code.toString(), it.message))
-            }
-        )
+        //request permission for exact alarms
+        val alarmManager = getContext().getSystemService(Context.ALARM_SERVICE) as AlarmManager
+
+        if (SDK_INT >= 31 && !alarmManager.canScheduleExactAlarms()) {
+            requestingExactAlarmPermission = true
+            isReturningFromPermissionScreen = true
+            getContext().startActivity(Intent(ACTION_REQUEST_SCHEDULE_EXACT_ALARM));
+        } else { // we only want to call setBackgroundJob right away if we don't need to request exact alarm permissions
+            healthConnectViewModel.setBackgroundJob(
+                parameters,
+                getContext(),
+                {
+                    sendPluginResult("success", null)
+                },
+                {
+                    sendPluginResult(null, Pair(it.code.toString(), it.message))
+                }
+            )
+        }
     }
 
     private fun deleteBackgroundJob(args: JSONArray) {
@@ -323,7 +348,7 @@ class OSHealthFitness : CordovaImplementation() {
             }
         )
     }
-    
+
     private fun openHealthConnect() {
         healthConnectViewModel.openHealthConnect(
             getContext(),
@@ -336,7 +361,7 @@ class OSHealthFitness : CordovaImplementation() {
         )
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, intent: Intent) {
+    override fun onActivityResult(requestCode: Int, resultCode: Int, intent: Intent?) {
         super.onActivityResult(requestCode, resultCode, intent)
         healthConnectViewModel.handleActivityResult(requestCode, resultCode, intent,
             {
