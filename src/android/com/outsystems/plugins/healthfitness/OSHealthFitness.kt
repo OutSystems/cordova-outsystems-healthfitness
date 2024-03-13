@@ -37,10 +37,9 @@ class OSHealthFitness : CordovaImplementation() {
 
     private lateinit var alarmManager: AlarmManager
 
+    // we need this variable because onResume is being called when
+    // returning from the SCHEDULE_EXACT_ALARM permission screen
     private var requestingExactAlarmPermission = false
-    // we need this variable because the onResume is being called both when the app
-    // navigates to the permission screen and when the returning from the permission screen
-    private var isReturningFromPermissionScreen = false
 
     override fun initialize(cordova: CordovaInterface, webView: CordovaWebView) {
         super.initialize(cordova, webView)
@@ -108,11 +107,10 @@ class OSHealthFitness : CordovaImplementation() {
     }
 
     override fun onResume(multitasking: Boolean) {
-        if (!isReturningFromPermissionScreen && requestingExactAlarmPermission) {
+        if (requestingExactAlarmPermission) {
             requestingExactAlarmPermission = false
             onScheduleExactAlarmPermissionResult()
         }
-        isReturningFromPermissionScreen = false
     }
 
     private fun initAndRequestPermissions(args: JSONArray) {
@@ -247,13 +245,30 @@ class OSHealthFitness : CordovaImplementation() {
     }
 
     /**
-     * Requests the necessary permissions for background jobs and stores
-     * the background job parameters in a global variable to be used later.
+     * Navigates to the permission screen for exact alarms or
+     * skips it and request the other necessary permissions.
+     * Also stores the background job parameters in a global variable to be used later.
      */
     private fun setBackgroundJob(args: JSONArray) {
         // save arguments for later use
         backgroundParameters = gson.fromJson(args.getString(0), BackgroundJobParameters::class.java)
 
+        //request permission for exact alarms if necessary
+        if (SDK_INT >= 31 && !alarmManager.canScheduleExactAlarms()) {
+            requestingExactAlarmPermission = true
+            // we only need to request this permission if exact alarms need to be used
+            // when there's another way to schedule background jobs to run, we can avoid this for some variables (e.g. steps)
+            // we intended to use the Activity Recognition API, but it currently has a bug already reported to Google
+            getContext().startActivity(Intent(ACTION_REQUEST_SCHEDULE_EXACT_ALARM));
+        } else { // we can move on to other permissions if we don't need to request exact alarm permissions
+            requestBackgroundJobPermissions()
+        }
+    }
+
+    /**
+     * Requests the POST_NOTIFICATIONS and ACTIVITY_RECOGNITION permissions.
+     */
+    private fun requestBackgroundJobPermissions() {
         val permissions = mutableListOf<String>().apply {
             if (SDK_INT >= 33) {
                 add(Manifest.permission.POST_NOTIFICATIONS)
@@ -264,23 +279,6 @@ class OSHealthFitness : CordovaImplementation() {
         }.toTypedArray()
 
         PermissionHelper.requestPermissions(this, BACKGROUND_JOB_PERMISSIONS_REQUEST_CODE, permissions)
-    }
-
-    /**
-     * Handles the result of requesting the necessary permissions for setting background jobs.
-     */
-    private fun onRequestBackgroundJobPermissionsResult(parameters: BackgroundJobParameters) {
-        //request permission for exact alarms
-        if (SDK_INT >= 31 && !alarmManager.canScheduleExactAlarms()) {
-            requestingExactAlarmPermission = true
-            isReturningFromPermissionScreen = true
-            // we only need to request this permission if exact alarms need to be used
-            // when there's another way to schedule background jobs to run, we can avoid this for some variables (e.g. steps)
-            // we intended to use the Activity Recognition API, but it currently has a bug already reported to Google
-            getContext().startActivity(Intent(ACTION_REQUEST_SCHEDULE_EXACT_ALARM));
-        } else { // we only want to call setBackgroundJob right away if we don't need to request exact alarm permissions
-            setBackgroundJobWithParameters(parameters)
-        }
     }
 
     /**
@@ -300,7 +298,7 @@ class OSHealthFitness : CordovaImplementation() {
             )
             return
         }
-        setBackgroundJobWithParameters(backgroundParameters)
+        requestBackgroundJobPermissions()
     }
 
     /**
@@ -319,12 +317,11 @@ class OSHealthFitness : CordovaImplementation() {
         )
     }
 
-
-
     private fun deleteBackgroundJob(args: JSONArray) {
         val jobId = args.getString(0)
         healthConnectViewModel.deleteBackgroundJob(
             jobId,
+            getContext(),
             {
                 sendPluginResult("success", null)
             },
@@ -466,7 +463,7 @@ class OSHealthFitness : CordovaImplementation() {
                         return
                     }
                 }
-                onRequestBackgroundJobPermissionsResult(backgroundParameters)
+                setBackgroundJobWithParameters(backgroundParameters)
             }
         }
     }
