@@ -41,6 +41,12 @@ class OSHealthFitness : CordovaImplementation() {
     // returning from the SCHEDULE_EXACT_ALARM permission screen
     private var requestingExactAlarmPermission = false
 
+    // variables to hold foreground notification title and description
+    // these values are defined in build time so we only need to read
+    // them once on the initialize method
+    private lateinit var foregroundNotificationTitle: String
+    private lateinit var foregroundNotificationDescription: String
+
     override fun initialize(cordova: CordovaInterface, webView: CordovaWebView) {
         super.initialize(cordova, webView)
         val manager = HealthFitnessManager(cordova.context, cordova.activity)
@@ -54,6 +60,23 @@ class OSHealthFitness : CordovaImplementation() {
         healthConnectViewModel =
             HealthConnectViewModel(healthConnectRepository, healthConnectHelper, workManagerHelper)
         alarmManager = getContext().getSystemService(Context.ALARM_SERVICE) as AlarmManager
+
+        // get foreground notification title and description from resources (strings.xml)
+        foregroundNotificationTitle = getContext().resources.getString(
+            getActivity().resources.getIdentifier(
+                "background_notification_title",
+                "string",
+                getActivity().packageName
+            )
+        )
+        foregroundNotificationDescription = getContext().resources.getString(
+            getActivity().resources.getIdentifier(
+                "background_notification_description",
+                "string",
+                getActivity().packageName
+            )
+        )
+
     }
 
     override fun execute(
@@ -307,6 +330,8 @@ class OSHealthFitness : CordovaImplementation() {
     private fun setBackgroundJobWithParameters(parameters: BackgroundJobParameters) {
         healthConnectViewModel.setBackgroundJob(
             parameters,
+            foregroundNotificationTitle,
+            foregroundNotificationDescription,
             getContext(),
             {
                 sendPluginResult("success", null)
