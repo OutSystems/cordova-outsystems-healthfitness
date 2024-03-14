@@ -8,6 +8,9 @@ The changes documented here do not include those from the original repository.
 
 ## [Unreleased]
 
+## 2024-03-14
+- Implemented the usage of exact alarms for background jobs  (https://outsystemsrd.atlassian.net/browse/RMET-3190).
+
 ## 2024-02-28
 - Implemented `Open Health Connect App`  (https://outsystemsrd.atlassian.net/browse/RMET-3158).
 
