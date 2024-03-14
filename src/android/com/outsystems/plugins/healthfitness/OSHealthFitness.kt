@@ -32,7 +32,7 @@ class OSHealthFitness : CordovaImplementation() {
     private lateinit var healthConnectRepository: HealthConnectRepository
     private lateinit var healthConnectDataManager: HealthConnectDataManager
     private lateinit var healthConnectHelper: HealthConnectHelper
-    private lateinit var workManagerHelper: WorkManagerHelperInterface
+    private lateinit var alarmManagerHelper: AlarmManagerHelper
     private lateinit var backgroundParameters: BackgroundJobParameters
 
     private lateinit var alarmManager: AlarmManager
@@ -56,9 +56,9 @@ class OSHealthFitness : CordovaImplementation() {
         healthConnectDataManager = HealthConnectDataManager(database)
         healthConnectRepository = HealthConnectRepository(healthConnectDataManager)
         healthConnectHelper = HealthConnectHelper()
-        workManagerHelper = WorkManagerHelper()
+        alarmManagerHelper = AlarmManagerHelper()
         healthConnectViewModel =
-            HealthConnectViewModel(healthConnectRepository, healthConnectHelper, workManagerHelper)
+            HealthConnectViewModel(healthConnectRepository, healthConnectHelper, alarmManagerHelper)
         alarmManager = getContext().getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
         // get foreground notification title and description from resources (strings.xml)
