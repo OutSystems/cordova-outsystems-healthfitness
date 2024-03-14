@@ -129,6 +129,7 @@ class OSHealthFitness : CordovaImplementation() {
         return true
     }
 
+    // onResume is called when returning from the SCHEDULE_EXACT_ALARM permission screen
     override fun onResume(multitasking: Boolean) {
         if (requestingExactAlarmPermission) {
             requestingExactAlarmPermission = false
