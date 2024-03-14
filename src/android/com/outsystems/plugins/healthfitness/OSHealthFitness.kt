@@ -218,6 +218,7 @@ class OSHealthFitness : CordovaImplementation() {
         val parameters = gson.fromJson(args.getString(0), HealthAdvancedQueryParameters::class.java)
         healthConnectViewModel.advancedQuery(
             parameters,
+            getContext(),
             { response ->
                 val pluginResponseJson = gson.toJson(response)
                 sendPluginResult(pluginResponseJson)
