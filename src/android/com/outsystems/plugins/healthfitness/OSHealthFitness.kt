@@ -279,11 +279,11 @@ class OSHealthFitness : CordovaImplementation() {
         backgroundParameters = gson.fromJson(args.getString(0), BackgroundJobParameters::class.java)
 
         //request permission for exact alarms if necessary
-        if (Constants.ACTIVITY_VARIABLES.contains(backgroundParameters.variable) && SDK_INT >= 31 && !alarmManager.canScheduleExactAlarms()) {
+        if (!Constants.ACTIVITY_VARIABLES.contains(backgroundParameters.variable) && SDK_INT >= 31 && !alarmManager.canScheduleExactAlarms()) {
             requestingExactAlarmPermission = true
             // we only need to request this permission if exact alarms need to be used
-            // when there's another way to schedule background jobs to run, we can avoid this for some variables (e.g. steps)
-            // we intended to use the Activity Recognition API, but it currently has a bug already reported to Google
+            // when the variable is an activity variable (e.g. steps),
+            // we use the Activity Recognition Transition API instead of exact alarms.
             getContext().startActivity(Intent(ACTION_REQUEST_SCHEDULE_EXACT_ALARM));
         } else { // we can move on to other permissions if we don't need to request exact alarm permissions
             requestBackgroundJobPermissions()
