@@ -276,6 +276,7 @@ function addBackgroundJobPermissionsToManifest(configParser, projectRoot, parser
         addEntryToManifest(manifestXmlDoc, 'android.permission.FOREGROUND_SERVICE')
         addEntryToManifest(manifestXmlDoc, 'android.permission.FOREGROUND_SERVICE_HEALTH')
         addEntryToManifest(manifestXmlDoc, 'android.permission.HIGH_SAMPLING_RATE_SENSORS')
+        addEntryToManifest(manifestXmlDoc, 'android.permission.SCHEDULE_EXACT_ALARM')
 
         // serialize the updated XML document back to string
         const serializer = new XMLSerializer();

@@ -8,6 +8,9 @@ The changes documented here do not include those from the original repository.
 
 ## [Unreleased]
 
+## 2024-03-14
+- Implemented the usage of exact alarms for background jobs  (https://outsystemsrd.atlassian.net/browse/RMET-3190).
+
 ## 2024-02-28
 - Implemented `Open Health Connect App`  (https://outsystemsrd.atlassian.net/browse/RMET-3158).
 
@@ -21,8 +24,10 @@ The changes documented here do not include those from the original repository.
 - Re-implement `DeleteBackgroundJob` feature (https://outsystemsrd.atlassian.net/browse/RMET-3068).
 
 ## 2024-02-20
+- Deprecated `DisableGoogleFit` feature and implemented `DisableHealthConnect` feature (https://outsystemsrd.atlassian.net/browse/RMET-3070).
 - Re-implemented UpdateBackgroundJob feature (https://outsystemsrd.atlassian.net/browse/RMET-3067).
 - Re-implemented SetBackgroundJob feature (https://outsystemsrd.atlassian.net/browse/RMET-3050).
+
 
 ## 2024-02-09
 - Re-implemented AdvanceQuery feature (https://outsystemsrd.atlassian.net/browse/RMET-3047).

@@ -1,10 +1,13 @@
 package com.outsystems.plugins.healthfitness
 
 import android.Manifest
+import android.app.AlarmManager
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Build.VERSION.SDK_INT
+import android.provider.Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM
 import androidx.core.content.ContextCompat
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
@@ -25,12 +28,24 @@ class OSHealthFitness : CordovaImplementation() {
 
     var healthStore: HealthStoreInterface? = null
     val gson by lazy { Gson() }
-    lateinit var healthConnectViewModel: HealthConnectViewModel
-    lateinit var healthConnectRepository: HealthConnectRepository
-    lateinit var healthConnectDataManager: HealthConnectDataManager
-    lateinit var healthConnectHelper: HealthConnectHelper
-    lateinit var workManagerHelper: WorkManagerHelperInterface
-    lateinit var backgroundParameters: BackgroundJobParameters
+    private lateinit var healthConnectViewModel: HealthConnectViewModel
+    private lateinit var healthConnectRepository: HealthConnectRepository
+    private lateinit var healthConnectDataManager: HealthConnectDataManager
+    private lateinit var healthConnectHelper: HealthConnectHelper
+    private lateinit var alarmManagerHelper: AlarmManagerHelper
+    private lateinit var backgroundParameters: BackgroundJobParameters
+
+    private lateinit var alarmManager: AlarmManager
+
+    // we need this variable because onResume is being called when
+    // returning from the SCHEDULE_EXACT_ALARM permission screen
+    private var requestingExactAlarmPermission = false
+
+    // variables to hold foreground notification title and description
+    // these values are defined in build time so we only need to read
+    // them once on the initialize method
+    private lateinit var foregroundNotificationTitle: String
+    private lateinit var foregroundNotificationDescription: String
 
     override fun initialize(cordova: CordovaInterface, webView: CordovaWebView) {
         super.initialize(cordova, webView)
@@ -41,9 +56,27 @@ class OSHealthFitness : CordovaImplementation() {
         healthConnectDataManager = HealthConnectDataManager(database)
         healthConnectRepository = HealthConnectRepository(healthConnectDataManager)
         healthConnectHelper = HealthConnectHelper()
-        workManagerHelper = WorkManagerHelper()
+        alarmManagerHelper = AlarmManagerHelper()
         healthConnectViewModel =
-            HealthConnectViewModel(healthConnectRepository, healthConnectHelper, workManagerHelper)
+            HealthConnectViewModel(healthConnectRepository, healthConnectHelper, alarmManagerHelper)
+        alarmManager = getContext().getSystemService(Context.ALARM_SERVICE) as AlarmManager
+
+        // get foreground notification title and description from resources (strings.xml)
+        foregroundNotificationTitle = getContext().resources.getString(
+            getActivity().resources.getIdentifier(
+                "background_notification_title",
+                "string",
+                getActivity().packageName
+            )
+        )
+        foregroundNotificationDescription = getContext().resources.getString(
+            getActivity().resources.getIdentifier(
+                "background_notification_description",
+                "string",
+                getActivity().packageName
+            )
+        )
+
     }
 
     override fun execute(
@@ -86,11 +119,22 @@ class OSHealthFitness : CordovaImplementation() {
             "disconnectFromGoogleFit" -> {
                 disconnectFromGoogleFit()
             }
+            "disconnectFromHealthConnect" -> {
+                disconnectFromHealthConnect()
+            }
             "openHealthConnect" -> {
                 openHealthConnect()
             }
         }
         return true
+    }
+
+    // onResume is called when returning from the SCHEDULE_EXACT_ALARM permission screen
+    override fun onResume(multitasking: Boolean) {
+        if (requestingExactAlarmPermission) {
+            requestingExactAlarmPermission = false
+            onScheduleExactAlarmPermissionResult()
+        }
     }
 
     private fun initAndRequestPermissions(args: JSONArray) {
@@ -175,6 +219,7 @@ class OSHealthFitness : CordovaImplementation() {
         val parameters = gson.fromJson(args.getString(0), HealthAdvancedQueryParameters::class.java)
         healthConnectViewModel.advancedQuery(
             parameters,
+            getContext(),
             { response ->
                 val pluginResponseJson = gson.toJson(response)
                 sendPluginResult(pluginResponseJson)
@@ -224,10 +269,31 @@ class OSHealthFitness : CordovaImplementation() {
 
     }
 
+    /**
+     * Navigates to the permission screen for exact alarms or
+     * skips it and request the other necessary permissions.
+     * Also stores the background job parameters in a global variable to be used later.
+     */
     private fun setBackgroundJob(args: JSONArray) {
         // save arguments for later use
         backgroundParameters = gson.fromJson(args.getString(0), BackgroundJobParameters::class.java)
 
+        //request permission for exact alarms if necessary
+        if (SDK_INT >= 31 && !alarmManager.canScheduleExactAlarms()) {
+            requestingExactAlarmPermission = true
+            // we only need to request this permission if exact alarms need to be used
+            // when there's another way to schedule background jobs to run, we can avoid this for some variables (e.g. steps)
+            // we intended to use the Activity Recognition API, but it currently has a bug already reported to Google
+            getContext().startActivity(Intent(ACTION_REQUEST_SCHEDULE_EXACT_ALARM));
+        } else { // we can move on to other permissions if we don't need to request exact alarm permissions
+            requestBackgroundJobPermissions()
+        }
+    }
+
+    /**
+     * Requests the POST_NOTIFICATIONS and ACTIVITY_RECOGNITION permissions.
+     */
+    private fun requestBackgroundJobPermissions() {
         val permissions = mutableListOf<String>().apply {
             if (SDK_INT >= 33) {
                 add(Manifest.permission.POST_NOTIFICATIONS)
@@ -240,9 +306,34 @@ class OSHealthFitness : CordovaImplementation() {
         PermissionHelper.requestPermissions(this, BACKGROUND_JOB_PERMISSIONS_REQUEST_CODE, permissions)
     }
 
+    /**
+     * Handles user response to exact alarm permission request.
+     *
+     */
+    private fun onScheduleExactAlarmPermissionResult() {
+        val permissionDenied = SDK_INT >= 31 && !alarmManager.canScheduleExactAlarms()
+        if (permissionDenied) {
+            // send plugin result with error
+            sendPluginResult(
+                null,
+                Pair(
+                    HealthFitnessError.BACKGROUND_JOB_EXACT_ALARM_PERMISSION_DENIED_ERROR.code.toString(),
+                    HealthFitnessError.BACKGROUND_JOB_EXACT_ALARM_PERMISSION_DENIED_ERROR.message
+                )
+            )
+            return
+        }
+        requestBackgroundJobPermissions()
+    }
+
+    /**
+     * Sets a background job by calling the setBackgroundJob method of the ViewModel
+     */
     private fun setBackgroundJobWithParameters(parameters: BackgroundJobParameters) {
         healthConnectViewModel.setBackgroundJob(
             parameters,
+            foregroundNotificationTitle,
+            foregroundNotificationDescription,
             getContext(),
             {
                 sendPluginResult("success", null)
@@ -257,6 +348,7 @@ class OSHealthFitness : CordovaImplementation() {
         val jobId = args.getString(0)
         healthConnectViewModel.deleteBackgroundJob(
             jobId,
+            getContext(),
             {
                 sendPluginResult("success", null)
             },
@@ -291,8 +383,27 @@ class OSHealthFitness : CordovaImplementation() {
         )
     }
 
+    @Deprecated(
+        message = "The Google Fit Android API is deprecated. " +
+                "To fully disconnect from the legacy Google Fit integration, " +
+                "please visit your Google Account settings and " +
+                "revoke the OAuth token associated with the app.",
+        replaceWith = ReplaceWith("disconnectFromHealthConnect()")
+    )
     private fun disconnectFromGoogleFit() {
         healthStore?.disconnectFromGoogleFit(
+            {
+                sendPluginResult("success", null)
+            },
+            {
+                sendPluginResult(null, Pair(it.code.toString(), it.message))
+            }
+        )
+    }
+
+    private fun disconnectFromHealthConnect() {
+        healthConnectViewModel.disconnectFromHealthConnect(
+            getActivity(),
             {
                 sendPluginResult("success", null)
             },
@@ -314,7 +425,7 @@ class OSHealthFitness : CordovaImplementation() {
         )
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, intent: Intent) {
+    override fun onActivityResult(requestCode: Int, resultCode: Int, intent: Intent?) {
         super.onActivityResult(requestCode, resultCode, intent)
         healthConnectViewModel.handleActivityResult(requestCode, resultCode, intent,
             {
