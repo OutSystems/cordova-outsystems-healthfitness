@@ -284,7 +284,7 @@ class OSHealthFitness : CordovaImplementation() {
             // we only need to request this permission if exact alarms need to be used
             // when the variable is an activity variable (e.g. steps),
             // we use the Activity Recognition Transition API instead of exact alarms.
-            getContext().startActivity(Intent(ACTION_REQUEST_SCHEDULE_EXACT_ALARM));
+            getContext().startActivity(Intent(ACTION_REQUEST_SCHEDULE_EXACT_ALARM))
         } else { // we can move on to other permissions if we don't need to request exact alarm permissions
             requestBackgroundJobPermissions()
         }
