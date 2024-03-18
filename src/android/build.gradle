@@ -38,9 +38,6 @@ dependencies{
     // health connect sdk
     implementation "androidx.health.connect:connect-client:1.1.0-alpha07"
 
-    // work manager
-    implementation "androidx.work:work-runtime-ktx:2.9.0"
-
     // compose
     implementation 'androidx.activity:activity-compose:1.8.2'
     implementation 'androidx.compose.material3:material3:1.2.0'
