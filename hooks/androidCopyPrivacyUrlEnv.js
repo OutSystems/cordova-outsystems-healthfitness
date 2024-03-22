@@ -14,8 +14,6 @@ module.exports = async function (context) {
     if (fileExists(platformPath) || policyFileExists()) {
         const configXML = path.join(projectRoot, 'config.xml');
         const configParser = new ConfigParser(configXML);
-
-        console.log("file exists");
         
         setPrivacyPolicyUrl(configParser, projectRoot);
     } else {
@@ -28,10 +26,6 @@ function setPrivacyPolicyUrl(configParser, projectRoot) {
     const applicationNameUrl = configParser.getPreference('DefaultApplicationURL', 'android');
     
     if (hostname && applicationNameUrl) {
-
-
-        console.log("inside if");
-
         const url = `https://${hostname}/${applicationNameUrl}/${fileNamePrivacyPolicy}`;
         const stringsPath = path.join(projectRoot, 'platforms/android/app/src/main/res/values/strings.xml');
         const stringsFile = fs.readFileSync(stringsPath).toString();
@@ -53,15 +47,10 @@ function setPrivacyPolicyUrl(configParser, projectRoot) {
 function policyFileExists() {
     const directoryPath = 'platforms/android/app/src/main/assets/www';
     const searchString = 'HealthConnect_PrivacyPolicy';
-
-    console.log("about to readdirSync");
-
     try {
         const files = fs.readdirSync(directoryPath);
         const matchingFiles = files.filter(fileName => fileName.includes(searchString));
-    
-        console.log("about to return policyFileExists");
-
+        
         // return true if there are matching files, false otherwise
         return matchingFiles.length > 0;
     } catch (error) {
