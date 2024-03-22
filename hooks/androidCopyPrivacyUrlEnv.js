@@ -11,7 +11,7 @@ module.exports = async function (context) {
     const projectRoot = context.opts.cordova.project ? context.opts.cordova.project.root : context.opts.projectRoot;
     const platformPath = path.join(projectRoot, `platforms/android/app/src/main/assets/www/${fileNamePrivacyPolicy}`);
 
-    if (fileExists(platformPath)) {
+    if (fileExists(platformPath) || policyFileExists()) {
         const configXML = path.join(projectRoot, 'config.xml');
         const configParser = new ConfigParser(configXML);
         
@@ -41,5 +41,20 @@ function setPrivacyPolicyUrl(configParser, projectRoot) {
         fs.writeFileSync(stringsPath, resultXmlStrings);
     } else {
         throw new Error("Error getting the environment variables.");
+    }
+}
+
+function policyFileExists() {
+    const directoryPath = 'platforms/android/app/src/main/assets/www';
+    const searchString = 'HealthConnect_PrivacyPolicy';
+    try {
+        const files = fs.readdirSync(directoryPath);
+        const matchingFiles = files.filter(fileName => fileName.includes(searchString));
+        
+        // return true if there are matching files, false otherwise
+        return matchingFiles.length > 0;
+    } catch (error) {
+        console.error('An error occurred:', error);
+        return false;
     }
 }
