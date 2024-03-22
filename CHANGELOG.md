@@ -8,8 +8,11 @@ The changes documented here do not include those from the original repository.
 
 ## [Unreleased]
 
+## 2024-03-22
+- Fixed hook for ODC  (https://outsystemsrd.atlassian.net/browse/RMET-3191).
+
 ## 2024-03-18
-- Implemented the usage of the Activity Transition Recognition API for background jobs  (https://outsystemsrd.atlassian.net/browse/RMET-3191).
+- Implemented the usage of the Activity Transition Recognition API for background jobs  (https://outsystemsrd.atlassian.net/browse/RMET-3246).
 
 ## 2024-03-14
 - Implemented the usage of exact alarms for background jobs  (https://outsystemsrd.atlassian.net/browse/RMET-3190).
