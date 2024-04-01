@@ -8,6 +8,9 @@ The changes documented here do not include those from the original repository.
 
 ## [Unreleased]
 
+## 2024-04-01
+- Remove old code and re-arrange file structure (https://outsystemsrd.atlassian.net/browse/RMET-3134).
+
 ## 2024-03-22
 - Fixed hook for ODC  (https://outsystemsrd.atlassian.net/browse/RMET-3191).
 
