@@ -8,6 +8,8 @@ import android.content.pm.PackageManager
 import android.os.Build.VERSION.SDK_INT
 import android.provider.Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM
 import androidx.core.content.ContextCompat
+import com.google.android.gms.common.ConnectionResult
+import com.google.android.gms.common.GoogleApiAvailability
 import com.google.gson.Gson
 import com.outsystems.osnotificationpermissions.*
 import com.outsystems.plugins.healthfitness.background.BackgroundJobParameters
@@ -387,7 +389,26 @@ class OSHealthFitness : CordovaImplementation() {
     }
 
     override fun areGooglePlayServicesAvailable(): Boolean {
-        // do nothing
+        val googleApiAvailability = GoogleApiAvailability.getInstance()
+        val status = googleApiAvailability.isGooglePlayServicesAvailable(getActivity())
+
+        if (status != ConnectionResult.SUCCESS) {
+            var result: Pair<String, String>? = null
+            result = if (googleApiAvailability.isUserResolvableError(status)) {
+                googleApiAvailability.getErrorDialog(getActivity(), status, 1)?.show()
+                Pair(
+                    HealthFitnessError.GOOGLE_SERVICES_RESOLVABLE_ERROR.code.toString(),
+                    HealthFitnessError.GOOGLE_SERVICES_RESOLVABLE_ERROR.message
+                )
+            } else {
+                Pair(
+                    HealthFitnessError.GOOGLE_SERVICES_ERROR.code.toString(),
+                    HealthFitnessError.GOOGLE_SERVICES_ERROR.message
+                )
+            }
+            sendPluginResult(null, result)
+            return false
+        }
         return true
     }
 
