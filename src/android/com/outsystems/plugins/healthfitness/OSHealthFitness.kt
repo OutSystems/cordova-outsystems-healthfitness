@@ -5,7 +5,6 @@ import android.app.AlarmManager
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.os.Build
 import android.os.Build.VERSION.SDK_INT
 import android.provider.Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM
 import androidx.core.content.ContextCompat
@@ -16,8 +15,19 @@ import com.outsystems.osnotificationpermissions.*
 import com.outsystems.plugins.healthfitness.background.BackgroundJobParameters
 import com.outsystems.plugins.healthfitness.background.DatabaseManager
 import com.outsystems.plugins.healthfitness.background.UpdateBackgroundJobParameters
+import com.outsystems.plugins.healthfitness.data.Constants
+import com.outsystems.plugins.healthfitness.data.HealthFitnessError
+import com.outsystems.plugins.healthfitness.data.HealthRecord
 import com.outsystems.plugins.healthfitness.data.types.HealthAdvancedQueryParameters
+import com.outsystems.plugins.healthfitness.data.types.HealthFitnessGroupPermission
+import com.outsystems.plugins.healthfitness.data.types.HealthFitnessPermission
+import com.outsystems.plugins.healthfitness.helpers.ActivityTransitionHelper
+import com.outsystems.plugins.healthfitness.helpers.AlarmManagerHelper
+import com.outsystems.plugins.healthfitness.helpers.HealthConnectHelper
+import com.outsystems.plugins.healthfitness.repository.HealthConnectRepository
 import com.outsystems.plugins.healthfitness.store.*
+import com.outsystems.plugins.healthfitness.viewmodel.HealthConnectDataManager
+import com.outsystems.plugins.healthfitness.viewmodel.HealthConnectViewModel
 import com.outsystems.plugins.oscordova.CordovaImplementation
 import org.apache.cordova.*
 import org.json.JSONArray
@@ -26,7 +36,6 @@ import org.json.JSONException
 class OSHealthFitness : CordovaImplementation() {
     override var callbackContext: CallbackContext? = null
 
-    var healthStore: HealthStoreInterface? = null
     val gson by lazy { Gson() }
     private lateinit var healthConnectViewModel: HealthConnectViewModel
     private lateinit var healthConnectRepository: HealthConnectRepository
@@ -50,9 +59,7 @@ class OSHealthFitness : CordovaImplementation() {
 
     override fun initialize(cordova: CordovaInterface, webView: CordovaWebView) {
         super.initialize(cordova, webView)
-        val manager = HealthFitnessManager(cordova.context, cordova.activity)
         val database = DatabaseManager(cordova.context)
-        healthStore = HealthStore(cordova.context.applicationContext.packageName, manager, database)
 
         healthConnectDataManager = HealthConnectDataManager(database)
         healthConnectRepository = HealthConnectRepository(healthConnectDataManager)
@@ -117,9 +124,6 @@ class OSHealthFitness : CordovaImplementation() {
             }
             "updateBackgroundJob" -> {
                 updateBackgroundJob(args)
-            }
-            "disconnectFromGoogleFit" -> {
-                disconnectFromGoogleFit()
             }
             "disconnectFromHealthConnect" -> {
                 disconnectFromHealthConnect()
@@ -189,32 +193,6 @@ class OSHealthFitness : CordovaImplementation() {
             }
         }
         return true
-    }
-
-    private fun checkAndGrantPermissions() {
-        val permissions = mutableListOf(
-            Manifest.permission.ACCESS_FINE_LOCATION,
-            Manifest.permission.BODY_SENSORS
-        )
-
-        if (SDK_INT >= Build.VERSION_CODES.Q) {
-            permissions.add(Manifest.permission.ACTIVITY_RECOGNITION)
-        }
-
-        if (areAndroidPermissionsGranted(permissions)) {
-            if (!healthStore!!.areGoogleFitPermissionsGranted()) {
-                setAsActivityResultCallback()
-            }
-            if (healthStore?.requestGoogleFitPermissions() == true) {
-                sendPluginResult("success")
-            }
-        } else {
-            PermissionHelper.requestPermissions(
-                this,
-                ACTIVITY_LOCATION_PERMISSIONS_REQUEST_CODE,
-                permissions.toTypedArray()
-            )
-        }
     }
 
     private fun advancedQuery(args: JSONArray) {
@@ -385,24 +363,6 @@ class OSHealthFitness : CordovaImplementation() {
         )
     }
 
-    @Deprecated(
-        message = "The Google Fit Android API is deprecated. " +
-                "To fully disconnect from the legacy Google Fit integration, " +
-                "please visit your Google Account settings and " +
-                "revoke the OAuth token associated with the app.",
-        replaceWith = ReplaceWith("disconnectFromHealthConnect()")
-    )
-    private fun disconnectFromGoogleFit() {
-        healthStore?.disconnectFromGoogleFit(
-            {
-                sendPluginResult("success", null)
-            },
-            {
-                sendPluginResult(null, Pair(it.code.toString(), it.message))
-            }
-        )
-    }
-
     private fun disconnectFromHealthConnect() {
         healthConnectViewModel.disconnectFromHealthConnect(
             getActivity(),
@@ -469,16 +429,6 @@ class OSHealthFitness : CordovaImplementation() {
         grantResults: IntArray
     ) {
         when (requestCode) {
-            ACTIVITY_LOCATION_PERMISSIONS_REQUEST_CODE -> {
-                // If request is cancelled, the result arrays are empty.
-                if (grantResults.isNotEmpty() &&
-                    grantResults[0] == PackageManager.PERMISSION_GRANTED
-                ) {
-                    checkAndGrantPermissions()
-                } else {
-                }
-                return
-            }
             BACKGROUND_JOB_PERMISSIONS_REQUEST_CODE -> {
                 for (result in grantResults) {
                     if (result == PackageManager.PERMISSION_DENIED) {
@@ -498,7 +448,6 @@ class OSHealthFitness : CordovaImplementation() {
     }
 
     companion object {
-        const val ACTIVITY_LOCATION_PERMISSIONS_REQUEST_CODE = 1
         const val BACKGROUND_JOB_PERMISSIONS_REQUEST_CODE = 2
     }
 }
