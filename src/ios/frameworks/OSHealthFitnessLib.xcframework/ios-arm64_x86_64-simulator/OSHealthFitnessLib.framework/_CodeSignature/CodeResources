@@ -26,7 +26,7 @@
 		</data>
 		<key>Info.plist</key>
 		<data>
-		P953UGaWh0AJIzLmDo8gOMYd9W8=
+		OlBN7pQMeLN9ByFYKpm0E/JK1KI=
 		</data>
 		<key>Modules/OSHealthFitnessLib.swiftmodule/arm64-apple-ios-simulator.abi.json</key>
 		<data>
@@ -71,6 +71,10 @@
 		<key>Modules/module.modulemap</key>
 		<data>
 		sw87f2yJ3lU2kd25gEKxIZALetM=
+		</data>
+		<key>PrivacyInfo.xcprivacy</key>
+		<data>
+		MiuKzpVIs0pYdHP2HzUd3nlWjzM=
 		</data>
 	</dict>
 	<key>files2</key>
@@ -185,6 +189,13 @@
 			<key>hash2</key>
 			<data>
 			P7SE820E52XFwuSc9IyT2YlJFy1uZqPxi8tOPOxwGfg=
+			</data>
+		</dict>
+		<key>PrivacyInfo.xcprivacy</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			tJsHvjtv5Yj/fAdXa5lrQhNxNvF1CYow/Bte4ARYb4I=
 			</data>
 		</dict>
 	</dict>
