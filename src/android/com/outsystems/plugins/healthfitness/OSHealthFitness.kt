@@ -362,6 +362,17 @@ class OSHealthFitness : CordovaImplementation() {
             }
         )
     }
+    
+    private fun disconnectFromGoogleFit() {
+        healthStore?.disconnectFromGoogleFit(
+            {
+                sendPluginResult("success", null)
+            },
+            {
+                sendPluginResult(null, Pair(it.code.toString(), it.message))
+            }
+        )
+    }
 
     private fun disconnectFromHealthConnect() {
         healthConnectViewModel.disconnectFromHealthConnect(
