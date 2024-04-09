@@ -6,7 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 The changes documented here do not include those from the original repository.
 
-## [Unreleased]
+## [2.0.0]
 
 ### 2024-04-05
 - Fix privacy policy opening for Android <= 13 (https://outsystemsrd.atlassian.net/browse/RMET-3134).
