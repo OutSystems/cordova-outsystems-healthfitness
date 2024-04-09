@@ -8,11 +8,10 @@ exports.requestPermissions = function (success, error, params) {
         fitnessVariables, 
         healthVariables, 
         profileVariables, 
-        summaryVariables,
         workoutVariables 
     } = params;
 
-    var args = [customPermissions, allVariables, fitnessVariables, healthVariables, profileVariables, summaryVariables, workoutVariables];
+    var args = [customPermissions, allVariables, fitnessVariables, healthVariables, profileVariables, workoutVariables];
 
     exec(success, error, 'OSHealthFitness', 'requestPermissions', args);
 };
@@ -57,6 +56,10 @@ exports.updateBackgroundJob = function (success, error, params) {
     exec(success, error, 'OSHealthFitness', 'updateBackgroundJob', [params]);
 };
 
-exports.disconnectFromGoogleFit = function (success, error) {
-    exec(success, error, 'OSHealthFitness', 'disconnectFromGoogleFit');
+exports.disconnectFromHealthConnect = function (success, error) {
+    exec(success, error, 'OSHealthFitness', 'disconnectFromHealthConnect');
+};
+
+exports.openHealthConnect = function (success, error) {
+    exec(success, error, 'OSHealthFitness', 'openHealthConnect');
 };
