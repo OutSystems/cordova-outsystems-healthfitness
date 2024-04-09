@@ -8,6 +8,9 @@
   </js-module>
   <platform name="android">
 
+    <hook type="after_prepare" src="hooks/androidCopyPreferencesPermissions.js" />
+    <hook type="after_prepare" src="hooks/androidCopyPrivacyUrlEnv.js"/>
+
     <config-file parent="/*" target="res/xml/config.xml">
       <feature name="OSHealthFitness">
         <param name="android-package" value="com.outsystems.plugins.healthfitness.OSHealthFitness"/>
@@ -18,12 +21,11 @@
       <preference name="AndroidXEnabled" value="true"/>
     </config-file>
 
-    <config-file parent="/*" target="AndroidManifest.xml">
-      <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-      <uses-permission android:name="android.permission.ACTIVITY_RECOGNITION" />
-      <uses-permission android:name="android.permission.BODY_SENSORS" />
-      <uses-permission android:name="android.permission.BODY_SENSORS_BACKGROUND" />
-    </config-file>
+    <config-file parent="/*" target="res/values/strings.xml">
+      <string name="privacy_policy_url">PRIVACY_POLICY_URL</string>
+      <string name="background_notification_title"></string>
+      <string name="background_notification_description"></string>
+   </config-file>
 
     <!-- HealthFitness Plugin -->
     <source-file src="src/android/com/outsystems/plugins/healthfitness/OSHealthFitness.kt" target-dir="app/src/main/kotlin/com/outsystems/plugins/healthfitness"/>

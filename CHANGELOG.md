@@ -6,6 +6,62 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 The changes documented here do not include those from the original repository.
 
+## [2.0.0]
+
+### 2024-04-05
+- Fix privacy policy opening for Android <= 13 (https://outsystemsrd.atlassian.net/browse/RMET-3134).
+
+### 2024-04-04
+- Update the iOS framework. This adds the Privacy Manifest file (https://outsystemsrd.atlassian.net/browse/RMET-3280).
+- Update GSON version to remove vulnerability (https://outsystemsrd.atlassian.net/browse/RMET-3134).
+
+### 2024-04-01
+- Remove old code and re-arrange file structure (https://outsystemsrd.atlassian.net/browse/RMET-3134).
+
+### 2024-03-22
+- Fixed hook for ODC  (https://outsystemsrd.atlassian.net/browse/RMET-3191).
+
+### 2024-03-18
+- Implemented the usage of the Activity Transition Recognition API for background jobs  (https://outsystemsrd.atlassian.net/browse/RMET-3246).
+
+### 2024-03-14
+- Implemented the usage of exact alarms for background jobs  (https://outsystemsrd.atlassian.net/browse/RMET-3190).
+
+### 2024-02-28
+- Implemented `Open Health Connect App`  (https://outsystemsrd.atlassian.net/browse/RMET-3158).
+
+### 2024-02-27
+- Implemented hook for permissions  (https://outsystemsrd.atlassian.net/browse/RMET-3142).
+
+### 2024-02-26
+- Implemented `Show app's privacy policy dialog`  (https://outsystemsrd.atlassian.net/browse/RMET-3145).
+
+### 2024-02-23
+- Re-implement `DeleteBackgroundJob` feature (https://outsystemsrd.atlassian.net/browse/RMET-3068).
+
+### 2024-02-20
+- Deprecated `DisableGoogleFit` feature and implemented `DisableHealthConnect` feature (https://outsystemsrd.atlassian.net/browse/RMET-3070).
+- Re-implemented UpdateBackgroundJob feature (https://outsystemsrd.atlassian.net/browse/RMET-3067).
+- Re-implemented SetBackgroundJob feature (https://outsystemsrd.atlassian.net/browse/RMET-3050).
+
+### 2024-02-09
+- Re-implemented AdvanceQuery feature (https://outsystemsrd.atlassian.net/browse/RMET-3047).
+
+### 2024-02-09
+- Re-implemented ListBackgroundJobs feature (https://outsystemsrd.atlassian.net/browse/RMET-3069).
+
+### 2024-02-08
+- Re-implement `GetLastRecord` feature:
+    - GetFitnessData (https://outsystemsrd.atlassian.net/browse/RMET-3048)
+    - GetHealthData (https://outsystemsrd.atlassian.net/browse/RMET-3065)
+    - GetProfileData (https://outsystemsrd.atlassian.net/browse/RMET-3066)
+
+### 2024-02-05
+- Re-implemented WriteProfieleData feature (https://outsystemsrd.atlassian.net/browse/RMET-3049).
+
+### 2024-02-01
+- Re-implemented RequestPermissions feature (https://outsystemsrd.atlassian.net/browse/RMET-3046).
+
 ## [Version 1.4.0]
 
 ## 2023-08-25
@@ -18,6 +74,8 @@ The changes documented here do not include those from the original repository.
 
 ### 16-12-2022
 - Replaced jcenter with more up to date mavenCentral [RMET-2036](https://outsystemsrd.atlassian.net/browse/RMET-2036)
+## [Version 1.3.0]
+- Feat: [iOS] Add a method to retrieve workouts raw data from HealthKit (https://outsystemsrd.atlassian.net/browse/RMET-2128).
 
 ## [Version 1.2.11]
 - Fix: [iOS] Replace the old `OSCore` framework for the new `OSCommonPluginLib` pod.
