@@ -8,6 +8,9 @@ The changes documented here do not include those from the original repository.
 
 ## [Unreleased]
 
+## 2024-05-09
+- Implemented support for `OxygenSaturation` variable when using advanced query or getHealthData (https://outsystemsrd.atlassian.net/browse/RMET-3363).
+
 ## 2024-03-22
 - Fixed hook for ODC  (https://outsystemsrd.atlassian.net/browse/RMET-3191).
 
