@@ -92,6 +92,13 @@ let permissions = {
         writePermission: "android.permission.health.WRITE_DISTANCE",
         configValue: undefined,
         wasSet: false
+    },
+    OxygenSaturation: {
+        variableName: "OxygenSaturation",
+        readPermission: "android.permission.health.READ_OXYGEN_SATURATION",
+        writePermission: "android.permission.health.WRITE_OXYGEN_SATURATION",
+        configValue: undefined,
+        wasSet: false
     }
 }
 
@@ -114,7 +121,7 @@ let groupPermissions = {
         variableName: "HealthVariables",
         configValue: undefined,
         wasSet: false,
-        groupVariables: ["HeartRate", "Sleep", "BloodPressure", "BloodGlucose"]
+        groupVariables: ["HeartRate", "Sleep", "BloodPressure", "BloodGlucose", "OxygenSaturation"]
     },
     ProfileVariables: {
         variableName: "ProfileVariables",
