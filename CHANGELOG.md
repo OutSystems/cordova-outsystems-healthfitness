@@ -11,6 +11,9 @@ The changes documented here do not include those from the original repository.
 ### 2024-05-09
 - Fix: Use proper unit for percentage values (https://outsystemsrd.atlassian.net/browse/RMET-3414).
 
+## 2024-05-09
+- Implemented support for `OxygenSaturation` variable when using advanced query or getHealthData (https://outsystemsrd.atlassian.net/browse/RMET-3363).
+
 ### 2024-04-24
 - Chore: Update cordova hooks with new OutSystems specific errors. (https://outsystemsrd.atlassian.net/browse/RMET-3388).
 
