@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 The changes documented here do not include those from the original repository.
 
+## [2.1.0]
+
+- Feat: Implemented support for `OxygenSaturation` variable when using requestPermissions, advancedQuery, getHealthData, and background jobs (https://outsystemsrd.atlassian.net/browse/RMET-3363).
+
 ## [2.0.1]
 
 ### 2024-05-09
