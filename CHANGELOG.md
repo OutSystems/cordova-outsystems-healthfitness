@@ -9,6 +9,7 @@ The changes documented here do not include those from the original repository.
 ## [2.1.0]
 
 ### 2024-05-09
+- Fix: Add format verification for Android's Privacy Policy file (https://outsystemsrd.atlassian.net/browse/RMET-3406).
 - Feat: Implemented support for `OxygenSaturation` variable when using requestPermissions, advancedQuery, getHealthData, and background jobs (https://outsystemsrd.atlassian.net/browse/RMET-3363).
 
 ### 2024-05-09

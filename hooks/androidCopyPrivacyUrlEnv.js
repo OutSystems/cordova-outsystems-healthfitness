@@ -5,13 +5,16 @@ const path = require('path');
 const { ConfigParser } = require('cordova-common');
 const et = require('elementtree');
 const { fileExists } = require('./utils');
+
 let fileNamePrivacyPolicy = "HealthConnect_PrivacyPolicy.txt";
+let mainFolder = "platforms/android/app/src/main/";
 
 module.exports = async function (context) {
     const projectRoot = context.opts.cordova.project ? context.opts.cordova.project.root : context.opts.projectRoot;
-    const platformPath = path.join(projectRoot, `platforms/android/app/src/main/assets/www/${fileNamePrivacyPolicy}`);
+    const directoryPath = path.join(projectRoot, mainFolder);
+    const platformPath = path.join(directoryPath, `assets/www/${fileNamePrivacyPolicy}`);
 
-    if (fileExists(platformPath) || policyFileExists()) {
+    if (fileExists(platformPath) || policyFileExists(directoryPath)) {
         const configXML = path.join(projectRoot, 'config.xml');
         const configParser = new ConfigParser(configXML);
         
@@ -27,7 +30,7 @@ function setPrivacyPolicyUrl(configParser, projectRoot) {
     
     if (hostname && applicationNameUrl) {
         const url = `https://${hostname}/${applicationNameUrl}/${fileNamePrivacyPolicy}`;
-        const stringsPath = path.join(projectRoot, 'platforms/android/app/src/main/res/values/strings.xml');
+        const stringsPath = path.join(projectRoot, mainFolder, 'res/values/strings.xml');
         const stringsFile = fs.readFileSync(stringsPath).toString();
         const etreeStrings = et.parse(stringsFile);
     
@@ -43,12 +46,14 @@ function setPrivacyPolicyUrl(configParser, projectRoot) {
     }
 }
 
-function policyFileExists() {
-    const directoryPath = 'platforms/android/app/src/main/assets/www';
-    const searchString = 'HealthConnect_PrivacyPolicy';
+function policyFileExists(platformPath) {
+    const directoryPath = path.join(platformPath, 'assets/www');
+    // splits the file in name & format.
+    const searchStrings = fileNamePrivacyPolicy.split('.');
+
     try {
         const files = fs.readdirSync(directoryPath);
-        const matchingFiles = files.filter(fileName => fileName.includes(searchString));
+        const matchingFiles = files.filter(fileName => fileName.startsWith(searchStrings[0]) && fileName.endsWith(searchStrings[1]));
         
         // return true if there are matching files, false otherwise
         return matchingFiles.length > 0;
