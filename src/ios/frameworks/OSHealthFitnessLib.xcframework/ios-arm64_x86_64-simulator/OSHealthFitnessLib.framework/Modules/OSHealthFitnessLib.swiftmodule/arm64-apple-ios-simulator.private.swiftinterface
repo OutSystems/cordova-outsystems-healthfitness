@@ -1,5 +1,5 @@
 // swift-interface-format-version: 1.0
-// swift-compiler-version: Apple Swift version 5.7.1 (swiftlang-5.7.1.135.3 clang-1400.0.29.51)
+// swift-compiler-version: Apple Swift version 5.9.2 (swiftlang-5.9.2.2.56 clang-1500.1.0.2.5)
 // swift-module-flags: -target arm64-apple-ios13.0-simulator -enable-objc-interop -enable-library-evolution -swift-version 5 -enforce-exclusivity=checked -O -module-name OSHealthFitnessLib
 // swift-module-flags-ignorable: -enable-bare-slash-regex
 import CloudKit
@@ -11,6 +11,7 @@ import Swift
 import UserNotifications
 import _Concurrency
 import _StringProcessing
+import _SwiftConcurrencyShims
 public enum HealthKitErrors : Swift.Int, Foundation.CustomNSError, Foundation.LocalizedError {
   case variableNotAvailable
   case variableNotAuthorized
@@ -168,8 +169,8 @@ extension OSHealthFitnessLib.UInt128 : Swift.Comparable {
   public static func < (lhs: OSHealthFitnessLib.UInt128, rhs: OSHealthFitnessLib.UInt128) -> Swift.Bool
 }
 extension OSHealthFitnessLib.UInt128 : Swift.Codable {
-  public init(from decoder: Swift.Decoder) throws
-  public func encode(to encoder: Swift.Encoder) throws
+  public init(from decoder: any Swift.Decoder) throws
+  public func encode(to encoder: any Swift.Encoder) throws
 }
 extension Swift.BinaryFloatingPoint {
   public init(_ value: OSHealthFitnessLib.UInt128)
@@ -217,8 +218,8 @@ public class BackgroundJobParameters : Swift.Codable {
   final public let isActive: Swift.Bool?
   public init(id: Swift.Int64?, variable: Swift.String?, timeUnit: Swift.String?, timeUnitGrouping: Swift.Int?, notificationFrequency: Swift.String?, notificationFrequencyGrouping: Swift.Int?, jobFrequency: Swift.String?, condition: Swift.String?, value: Swift.Double?, notificationHeader: Swift.String?, notificationBody: Swift.String?, isActive: Swift.Bool?)
   @objc deinit
-  public func encode(to encoder: Swift.Encoder) throws
-  required public init(from decoder: Swift.Decoder) throws
+  public func encode(to encoder: any Swift.Encoder) throws
+  required public init(from decoder: any Swift.Decoder) throws
 }
 public enum WorkoutTypeEnum : Swift.String {
   case americanFootball
@@ -351,16 +352,16 @@ extension OSHealthFitnessLib.AdvancedQueryResultType {
   final public let advancedQueryReturnType: Swift.String?
   final public let advancedQueryResultType: Swift.String?
   @objc deinit
-  public func encode(to encoder: Swift.Encoder) throws
-  required public init(from decoder: Swift.Decoder) throws
+  public func encode(to encoder: any Swift.Encoder) throws
+  required public init(from decoder: any Swift.Decoder) throws
 }
 @_hasMissingDesignatedInitializers public class WorkoutAdvancedQueryParameters : Swift.Codable {
   final public let workoutTypeVariables: [OSHealthFitnessLib.WorkoutTypeVariableMapping]
   final public let startDate: Swift.String?
   final public let endDate: Swift.String?
   @objc deinit
-  public func encode(to encoder: Swift.Encoder) throws
-  required public init(from decoder: Swift.Decoder) throws
+  public func encode(to encoder: any Swift.Encoder) throws
+  required public init(from decoder: any Swift.Decoder) throws
 }
 public typealias WorkoutTypeVariableDictionary = [OSHealthFitnessLib.WorkoutType : OSHealthFitnessLib.VariableType]
 extension OSHealthFitnessLib.WorkoutAdvancedQueryParameters {
@@ -372,8 +373,8 @@ extension OSHealthFitnessLib.WorkoutAdvancedQueryParameters {
   final public let workoutType: Swift.String
   final public let variables: [Swift.String]
   @objc deinit
-  public func encode(to encoder: Swift.Encoder) throws
-  required public init(from decoder: Swift.Decoder) throws
+  public func encode(to encoder: any Swift.Encoder) throws
+  required public init(from decoder: any Swift.Decoder) throws
 }
 @objc @_inheritsConvenienceInitializers public class BackgroundJob : CoreData.NSManagedObject {
   @objc override dynamic public init(entity: CoreData.NSEntityDescription, insertInto context: CoreData.NSManagedObjectContext?)
