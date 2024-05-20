@@ -48,10 +48,12 @@ function setPrivacyPolicyUrl(configParser, projectRoot) {
 
 function policyFileExists(platformPath) {
     const directoryPath = path.join(platformPath, 'assets/www');
-    //const searchString = 'HealthConnect_PrivacyPolicy';
+    // splits the file in name & format.
+    const searchStrings = fileNamePrivacyPolicy.split('.');
+
     try {
         const files = fs.readdirSync(directoryPath);
-        const matchingFiles = files.filter(fileName => fileName.includes(fileNamePrivacyPolicy));
+        const matchingFiles = files.filter(fileName => fileName.startsWith(searchStrings[0]) && fileName.endsWith(searchStrings[1]));
         
         // return true if there are matching files, false otherwise
         return matchingFiles.length > 0;
