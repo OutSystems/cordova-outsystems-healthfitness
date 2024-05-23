@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 The changes documented here do not include those from the original repository.
 
+## [2.1.1]
+
+### 2024-05-22
+- Fix: Fixes incompatibility with AppShield plugin by updating dependency to Android native library (https://outsystemsrd.atlassian.net/browse/RMET-3393).
+
 ## [2.1.0]
 
 ### 2024-05-09
