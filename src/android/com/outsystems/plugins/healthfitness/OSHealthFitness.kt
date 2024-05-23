@@ -257,7 +257,7 @@ class OSHealthFitness : CordovaImplementation() {
     private fun setBackgroundJob(args: JSONArray) {
         // save arguments for later use
         backgroundParameters = gson.fromJson(args.getString(0), BackgroundJobParameters::class.java)
-        
+
         //request permission for exact alarms if necessary
         if (!Constants.ACTIVITY_VARIABLES.contains(backgroundParameters.variable) && SDK_INT >= 31 && !alarmManager.canScheduleExactAlarms()) {
             requestingExactAlarmPermission = true
