@@ -298,12 +298,15 @@ function addBackgroundJobPermissionsToManifest(configParser, projectRoot, parser
 
         addEntryToPermissionsXML(permissionsXmlDoc, arrayElement, 'android.permission.health.READ_HEALTH_DATA_IN_BACKGROUND')
 
-        // serialize the updated XML document back to string
+        // serialize the updated XML documents back to strings
         const serializer = new XMLSerializer();
         const updatedManifestXmlString = serializer.serializeToString(manifestXmlDoc);
 
-        // write the updated XML string back to the same file
+        const updatedPermissionsXmlString = serializer.serializeToString(permissionsXmlDoc);
+
+        // write the updated XML strings back to the same files
         fs.writeFileSync(manifestFilePath, updatedManifestXmlString, 'utf-8');
+        fs.writeFileSync(permissionsXmlFilePath, updatedPermissionsXmlString, 'utf-8');
     }
 
 }
