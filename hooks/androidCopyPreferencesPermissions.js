@@ -276,6 +276,12 @@ function addBackgroundJobPermissionsToManifest(configParser, projectRoot, parser
         // Parse the XML string
         const manifestXmlDoc = parser.parseFromString(manifestXmlString, 'text/xml');
 
+        const permissionsXmlFilePath = path.join(projectRoot, 'platforms/android/app/src/main/res/values/health_permissions.xml');
+        const permissionsXmlString = fs.readFileSync(permissionsXmlFilePath, 'utf-8');
+
+        // Parse the XML string
+        const permissionsXmlDoc = parser.parseFromString(manifestXmlString, 'text/xml');
+
         // add permissions to XML document
         addEntryToManifest(manifestXmlDoc, 'android.permission.POST_NOTIFICATIONS')
         addEntryToManifest(manifestXmlDoc, 'android.permission.ACTIVITY_RECOGNITION')
@@ -288,7 +294,6 @@ function addBackgroundJobPermissionsToManifest(configParser, projectRoot, parser
         // add permissions necessary on Android 15 (API 35)
         addEntryToManifest(manifestXmlDoc, 'android.permission.health.READ_HEALTH_DATA_IN_BACKGROUND')
         
-        const permissionsXmlDoc = parser.parseFromString('<?xml version="1.0" encoding="utf-8"?><resources><array name="health_permissions"></array></resources>', 'text/xml');
         const arrayElement = permissionsXmlDoc.getElementsByTagName('array')[0];
 
         addEntryToPermissionsXML(permissionsXmlDoc, arrayElement, 'android.permission.health.READ_HEALTH_DATA_IN_BACKGROUND')
