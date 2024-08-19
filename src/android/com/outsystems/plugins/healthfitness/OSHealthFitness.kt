@@ -306,6 +306,15 @@ class OSHealthFitness : CordovaImplementation() {
         requestBackgroundJobPermissions()
     }
 
+    private fun requestReadDataBackgroundPermission() {
+        if (SDK_INT >= 35) {
+            setAsActivityResultCallback()
+            healthConnectViewModel.requestReadDataBackgroundPermission(this.getActivity())
+        } else {
+            setBackgroundJobWithParameters(backgroundParameters)
+        }
+    }
+
     /**
      * Sets a background job by calling the setBackgroundJob method of the ViewModel
      */
@@ -389,6 +398,30 @@ class OSHealthFitness : CordovaImplementation() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, intent: Intent?) {
         super.onActivityResult(requestCode, resultCode, intent)
+
+        //check if result comes for requesting READ_HEALTH_DATA_IN_BACKGROUND permission
+        intent?.let {
+            if (intent.getBooleanExtra(Constants.EXTRA_CONTAINS_READ_DATA_BACKGROUND, false)) {
+                if (intent.getIntExtra(
+                        Constants.EXTRA_RESULT_PERMISSION_KEY_GLOBAL,
+                        Constants.EXTRA_RESULT_PERMISSION_DENIED
+                    ) == Constants.EXTRA_RESULT_PERMISSION_GRANTED
+                ) {
+                    setBackgroundJobWithParameters(backgroundParameters)
+                    return
+                }
+                sendPluginResult(
+                    null,
+                    Pair(
+                        HealthFitnessError.BACKGROUND_JOB_READ_DATA_PERMISSION_DENIED.code.toString(),
+                        HealthFitnessError.BACKGROUND_JOB_READ_DATA_PERMISSION_DENIED.message
+                    )
+                )
+                return
+            }
+        }
+
+        // if result comes from requesting standard permissions
         healthConnectViewModel.handleActivityResult(requestCode, resultCode, intent,
             {
                 sendPluginResult("success", null)
@@ -442,7 +475,7 @@ class OSHealthFitness : CordovaImplementation() {
                         return
                     }
                 }
-                setBackgroundJobWithParameters(backgroundParameters)
+                requestReadDataBackgroundPermission()
             }
         }
     }
