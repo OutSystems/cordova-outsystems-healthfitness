@@ -280,7 +280,7 @@ function addBackgroundJobPermissionsToManifest(configParser, projectRoot, parser
         const permissionsXmlString = fs.readFileSync(permissionsXmlFilePath, 'utf-8');
 
         // Parse the XML string
-        const permissionsXmlDoc = parser.parseFromString(manifestXmlString, 'text/xml');
+        const permissionsXmlDoc = parser.parseFromString(permissionsXmlString, 'text/xml');
 
         // add permissions to XML document
         addEntryToManifest(manifestXmlDoc, 'android.permission.POST_NOTIFICATIONS')
