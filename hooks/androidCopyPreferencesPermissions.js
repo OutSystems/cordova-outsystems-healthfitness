@@ -281,6 +281,11 @@ function addBackgroundJobPermissionsToManifest(configParser, projectRoot, parser
 
         // Parse the XML string
         const permissionsXmlDoc = parser.parseFromString(permissionsXmlString, 'text/xml');
+        const arrayElement = permissionsXmlDoc.getElementsByTagName('array')[0];
+
+        // add permissions necessary on Android 15 (API 35)
+        addEntryToManifest(manifestXmlDoc, 'android.permission.health.READ_HEALTH_DATA_IN_BACKGROUND')
+        addEntryToPermissionsXML(permissionsXmlDoc, arrayElement, 'android.permission.health.READ_HEALTH_DATA_IN_BACKGROUND')
 
         // add permissions to XML document
         addEntryToManifest(manifestXmlDoc, 'android.permission.POST_NOTIFICATIONS')
@@ -291,17 +296,9 @@ function addBackgroundJobPermissionsToManifest(configParser, projectRoot, parser
         addEntryToManifest(manifestXmlDoc, 'android.permission.HIGH_SAMPLING_RATE_SENSORS')
         addEntryToManifest(manifestXmlDoc, 'android.permission.SCHEDULE_EXACT_ALARM')
 
-        // add permissions necessary on Android 15 (API 35)
-        addEntryToManifest(manifestXmlDoc, 'android.permission.health.READ_HEALTH_DATA_IN_BACKGROUND')
-        
-        const arrayElement = permissionsXmlDoc.getElementsByTagName('array')[0];
-
-        addEntryToPermissionsXML(permissionsXmlDoc, arrayElement, 'android.permission.health.READ_HEALTH_DATA_IN_BACKGROUND')
-
         // serialize the updated XML documents back to strings
         const serializer = new XMLSerializer();
         const updatedManifestXmlString = serializer.serializeToString(manifestXmlDoc);
-
         const updatedPermissionsXmlString = serializer.serializeToString(permissionsXmlDoc);
 
         // write the updated XML strings back to the same files
