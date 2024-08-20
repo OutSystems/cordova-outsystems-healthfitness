@@ -306,6 +306,10 @@ class OSHealthFitness : CordovaImplementation() {
         requestBackgroundJobPermissions()
     }
 
+    /**
+     * Requests permission to read health data in the background for API 35,
+     * or calls setBackgroundJobWithParameters otherwise
+     */
     private fun requestReadDataBackgroundPermission() {
         if (SDK_INT >= 35) {
             setAsActivityResultCallback()
