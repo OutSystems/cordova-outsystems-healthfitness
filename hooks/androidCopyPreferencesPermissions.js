@@ -1,7 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 const { ConfigParser } = require('cordova-common');
-const { DOMParser, XMLSerializer } = require('xmldom');
+const { DOMParser, XMLSerializer } = require('@xmldom/xmldom');
 
 const READ = "Read"
 const WRITE = "Write"
