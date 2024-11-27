@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 The changes documented here do not include those from the original repository.
 
+## [2.3.1]
+
+- Implemented support for `TotalCaloriesBurned` variable (https://outsystemsrd.atlassian.net/browse/RMET-3829).
+
 ## [2.3.0]
 
 ### Fixes

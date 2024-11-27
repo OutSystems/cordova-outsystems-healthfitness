@@ -39,6 +39,13 @@ let permissions = {
     },
     CaloriesBurned: {
         variableName: "CaloriesBurned",
+        readPermission: "android.permission.health.READ_ACTIVE_CALORIES_BURNED",
+        writePermission: "android.permission.health.WRITE_ACTIVE_CALORIES_BURNED",
+        configValue: undefined,
+        wasSet: false
+    },
+    TotalCaloriesBurned: {
+        variableName: "TotalCaloriesBurned",
         readPermission: "android.permission.health.READ_TOTAL_CALORIES_BURNED",
         writePermission: "android.permission.health.WRITE_TOTAL_CALORIES_BURNED",
         configValue: undefined,
@@ -106,6 +113,13 @@ let permissions = {
         writePermission: "android.permission.health.WRITE_BODY_TEMPERATURE",
         configValue: undefined,
         wasSet: false
+    },
+    ActiveCaloriesBurned: {
+        variableName: "ActiveCaloriesBurned",
+        readPermission: "android.permission.health.READ_ACTIVE_CALORIES_BURNED",
+        writePermission: "android.permission.health.WRITE_ACTIVE_CALORIES_BURNED",
+        configValue: undefined,
+        wasSet: false
     }
 }
 
@@ -119,10 +133,8 @@ let groupPermissions = {
     FitnessVariables: {
         variableName: "FitnessVariables",
         configValue: undefined,
-        // we'll use these to know if we should set individual permissions or not
-        // e.g. when checking HeartRate, if all healthVariables were already set, we don't need to add it again
         wasSet: false,
-        groupVariables: ["Steps", "CaloriesBurned", "WalkingSpeed", "Distance"]
+        groupVariables: ["Steps", "CaloriesBurned", "TotalCaloriesBurned", "WalkingSpeed", "Distance"]
     },
     HealthVariables: {
         variableName: "HealthVariables",
