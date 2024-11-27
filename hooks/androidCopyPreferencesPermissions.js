@@ -133,6 +133,8 @@ let groupPermissions = {
     FitnessVariables: {
         variableName: "FitnessVariables",
         configValue: undefined,
+        // we'll use these to know if we should set individual permissions or not
+        // e.g. when checking HeartRate, if all healthVariables were already set, we don't need to add it again
         wasSet: false,
         groupVariables: ["Steps", "CaloriesBurned", "TotalCaloriesBurned", "WalkingSpeed", "Distance"]
     },
