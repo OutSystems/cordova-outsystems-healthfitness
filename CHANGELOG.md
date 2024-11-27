@@ -8,7 +8,7 @@ The changes documented here do not include those from the original repository.
 
 ## [2.3.1]
 
-- Implemented support for `TotalCaloriesBurned` variable (https://outsystemsrd.atlassian.net/browse/RMET-3829).
+- (android): Adds support for `TotalCaloriesBurned` variable and `ActiveCaloriesBurned` permissions (https://outsystemsrd.atlassian.net/browse/RMET-3829).
 
 ## [2.3.0]
 
