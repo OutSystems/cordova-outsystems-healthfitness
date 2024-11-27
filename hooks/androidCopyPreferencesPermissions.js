@@ -113,13 +113,6 @@ let permissions = {
         writePermission: "android.permission.health.WRITE_BODY_TEMPERATURE",
         configValue: undefined,
         wasSet: false
-    },
-    ActiveCaloriesBurned: {
-        variableName: "ActiveCaloriesBurned",
-        readPermission: "android.permission.health.READ_ACTIVE_CALORIES_BURNED",
-        writePermission: "android.permission.health.WRITE_ACTIVE_CALORIES_BURNED",
-        configValue: undefined,
-        wasSet: false
     }
 }
 

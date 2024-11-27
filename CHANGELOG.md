@@ -6,11 +6,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 The changes documented here do not include those from the original repository.
 
-## [2.3.1]
+## [2.3.0]
+
+### Features
 
 - (android): Adds support for `TotalCaloriesBurned` variable and `ActiveCaloriesBurned` permissions (https://outsystemsrd.atlassian.net/browse/RMET-3829).
-
-## [2.3.0]
 
 ### Fixes
 
