@@ -1,5 +1,6 @@
 package com.outsystems.plugins.healthfitness
 
+import TimeUnitSerializer
 import android.Manifest
 import android.app.AlarmManager
 import android.content.Context
@@ -11,11 +12,13 @@ import androidx.core.content.ContextCompat
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
 import com.google.gson.Gson
+import com.google.gson.GsonBuilder
 import com.outsystems.osnotificationpermissions.*
 import com.outsystems.plugins.healthfitness.background.BackgroundJobParameters
 import com.outsystems.plugins.healthfitness.background.DatabaseManager
 import com.outsystems.plugins.healthfitness.background.UpdateBackgroundJobParameters
 import com.outsystems.plugins.healthfitness.data.Constants
+import com.outsystems.plugins.healthfitness.data.HealthEnumTimeUnit
 import com.outsystems.plugins.healthfitness.data.HealthFitnessError
 import com.outsystems.plugins.healthfitness.data.HealthRecord
 import com.outsystems.plugins.healthfitness.data.types.HealthAdvancedQueryParameters
@@ -28,13 +31,13 @@ import com.outsystems.plugins.healthfitness.repository.HealthConnectRepository
 import com.outsystems.plugins.healthfitness.store.*
 import com.outsystems.plugins.healthfitness.viewmodel.HealthConnectDataManager
 import com.outsystems.plugins.healthfitness.viewmodel.HealthConnectViewModel
-import com.outsystems.plugins.oscordova.CordovaImplementation
 import org.apache.cordova.*
 import org.json.JSONArray
 import org.json.JSONException
+import org.json.JSONObject
 
-class OSHealthFitness : CordovaImplementation() {
-    override var callbackContext: CallbackContext? = null
+class OSHealthFitness : CordovaPlugin() {
+    var callbackContext: CallbackContext? = null
 
     val gson by lazy { Gson() }
     private lateinit var healthConnectViewModel: HealthConnectViewModel
@@ -67,22 +70,27 @@ class OSHealthFitness : CordovaImplementation() {
         alarmManagerHelper = AlarmManagerHelper()
         activityTransitionHelper = ActivityTransitionHelper()
         healthConnectViewModel =
-            HealthConnectViewModel(healthConnectRepository, healthConnectHelper, alarmManagerHelper, activityTransitionHelper)
-        alarmManager = getContext().getSystemService(Context.ALARM_SERVICE) as AlarmManager
+            HealthConnectViewModel(
+                healthConnectRepository,
+                healthConnectHelper,
+                alarmManagerHelper,
+                activityTransitionHelper
+            )
+        alarmManager = cordova.context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
 
         // get foreground notification title and description from resources (strings.xml)
-        foregroundNotificationTitle = getContext().resources.getString(
-            getActivity().resources.getIdentifier(
+        foregroundNotificationTitle = cordova.context.resources.getString(
+            cordova.activity.resources.getIdentifier(
                 "background_notification_title",
                 "string",
-                getActivity().packageName
+                cordova.context.packageName
             )
         )
-        foregroundNotificationDescription = getContext().resources.getString(
-            getActivity().resources.getIdentifier(
+        foregroundNotificationDescription = cordova.context.resources.getString(
+            cordova.activity.resources.getIdentifier(
                 "background_notification_description",
                 "string",
-                getActivity().packageName
+                cordova.activity.packageName
             )
         )
 
@@ -102,34 +110,43 @@ class OSHealthFitness : CordovaImplementation() {
 
         when (action) {
             "requestPermissions" -> {
-                initAndRequestPermissions(args)
+                initAndRequestPermissions(args, callbackContext)
             }
+
             "getData" -> {
-                advancedQuery(args)
+                advancedQuery(args, callbackContext)
             }
+
             "writeData" -> {
-                writeData(args)
+                writeData(args, callbackContext)
             }
+
             "getLastRecord" -> {
-                getLastRecord(args)
+                getLastRecord(args, callbackContext)
             }
+
             "setBackgroundJob" -> {
                 setBackgroundJob(args)
             }
+
             "deleteBackgroundJob" -> {
-                deleteBackgroundJob(args)
+                deleteBackgroundJob(args, callbackContext)
             }
+
             "listBackgroundJobs" -> {
-                listBackgroundJobs()
+                listBackgroundJobs(callbackContext)
             }
+
             "updateBackgroundJob" -> {
-                updateBackgroundJob(args)
+                updateBackgroundJob(args, callbackContext)
             }
+
             "disconnectFromHealthConnect" -> {
-                disconnectFromHealthConnect()
+                disconnectFromHealthConnect(callbackContext)
             }
+
             "openHealthConnect" -> {
-                openHealthConnect()
+                openHealthConnect(callbackContext)
             }
         }
         return true
@@ -143,74 +160,65 @@ class OSHealthFitness : CordovaImplementation() {
         }
     }
 
-    private fun initAndRequestPermissions(args: JSONArray) {
+    private fun initAndRequestPermissions(args: JSONArray, callbackContext: CallbackContext) {
         try {
             healthConnectViewModel.initAndRequestPermissions(
-                getActivity(),
+                cordova.activity,
                 gson.fromJson(args.getString(0), Array<HealthFitnessPermission>::class.java),
                 gson.fromJson(args.getString(1), HealthFitnessGroupPermission::class.java),
                 gson.fromJson(args.getString(2), HealthFitnessGroupPermission::class.java),
                 gson.fromJson(args.getString(3), HealthFitnessGroupPermission::class.java),
                 gson.fromJson(args.getString(4), HealthFitnessGroupPermission::class.java),
-                privacyPolicyUrl = getActivity().resources.getString(getActivity().resources.getIdentifier("privacy_policy_url", "string", getActivity().packageName)),
-                {
-                    setAsActivityResultCallback()
-                },
-                {
-                    sendPluginResult(null, Pair(it.code.toString(), it.message))
-                }
+                privacyPolicyUrl = cordova.activity.resources.getString(
+                    cordova.activity.resources.getIdentifier(
+                        "privacy_policy_url",
+                        "string",
+                        cordova.activity.packageName
+                    )
+                ),
+                { cordova.setActivityResultCallback(this) },
+                { sendError(callbackContext, it) }
             )
         } catch (hse: HealthStoreException) {
-            sendPluginResult(null, Pair(hse.error.code.toString(), hse.error.message))
+            sendError(callbackContext, hse.error)
         } catch (e: JSONException) {
-            sendPluginResult(
-                null,
-                Pair(
-                    HealthFitnessError.PARSING_PARAMETERS_ERROR.code.toString(),
-                    HealthFitnessError.PARSING_PARAMETERS_ERROR.message
-                )
-            )
+            sendError(callbackContext, HealthFitnessError.PARSING_PARAMETERS_ERROR)
         } catch (e: Exception) {
-            sendPluginResult(
-                null,
-                Pair(
-                    HealthFitnessError.REQUEST_PERMISSIONS_GENERAL_ERROR.code.toString(),
-                    HealthFitnessError.REQUEST_PERMISSIONS_GENERAL_ERROR.message
-                )
-            )
+            sendError(callbackContext, HealthFitnessError.REQUEST_PERMISSIONS_GENERAL_ERROR)
         }
     }
 
-
-    private fun areAndroidPermissionsGranted(permissions: List<String>): Boolean {
-        permissions.forEach {
-            if (ContextCompat.checkSelfPermission(
-                    getActivity(),
-                    it
-                ) != PackageManager.PERMISSION_GRANTED
-            ) {
-                return false
-            }
+    private fun advancedQuery(args: JSONArray, callbackContext: CallbackContext) {
+        var deprecationWarning = false
+        val onDeprecatedUsage: () -> Unit = {
+            deprecationWarning = true
         }
-        return true
-    }
-
-    private fun advancedQuery(args: JSONArray) {
-        val parameters = gson.fromJson(args.getString(0), HealthAdvancedQueryParameters::class.java)
+        val customGson = GsonBuilder().registerTypeAdapter(
+            HealthEnumTimeUnit::class.java,
+            TimeUnitSerializer(onDeprecatedUsage)
+        )
+            .create()
+        val parameters =
+            customGson.fromJson(args.getString(0), HealthAdvancedQueryParameters::class.java)
         healthConnectViewModel.advancedQuery(
             parameters,
-            getContext(),
+            cordova.context,
             { response ->
-                val pluginResponseJson = gson.toJson(response)
-                sendPluginResult(pluginResponseJson)
+                if (!deprecationWarning)
+                    sendSuccess(callbackContext, response)
+                else {
+                    sendSuccessWithWarning(
+                        callbackContext,
+                        response,
+                        OSHealthFitnessWarning.DEPRECATED_TIME_UNIT
+                    )
+                }
             },
-            { error ->
-                sendPluginResult(null, Pair(error.code.toString(), error.message))
-            }
+            { error -> sendError(callbackContext, error) }
         )
     }
 
-    private fun writeData(args: JSONArray) {
+    private fun writeData(args: JSONArray, callbackContext: CallbackContext) {
         try {
             val variable = args.getString(0)
             val healthRecord = HealthRecord.valueOf(variable)
@@ -219,34 +227,29 @@ class OSHealthFitness : CordovaImplementation() {
             healthConnectViewModel.writeData(
                 healthRecord,
                 value,
-                getActivity().packageName,
+                cordova.activity.packageName,
                 {
-                    sendPluginResult("success", null)
+                    sendSuccess(callbackContext)
                 },
                 {
-                    sendPluginResult(null, Pair(it.code.toString(), it.message))
+                    sendError(callbackContext, it)
                 }
             )
         } catch (e: Exception) {
-            sendPluginResult(null, Pair(HealthFitnessError.VARIABLE_NOT_AVAILABLE_ERROR.code.toString(), HealthFitnessError.VARIABLE_NOT_AVAILABLE_ERROR.message))
+            sendError(callbackContext, HealthFitnessError.VARIABLE_NOT_AVAILABLE_ERROR)
         }
     }
 
-    private fun getLastRecord(args: JSONArray) {
+    private fun getLastRecord(args: JSONArray, callbackContext: CallbackContext) {
         try {
             healthConnectViewModel.getLastRecord(
                 HealthRecord.valueOf(args.getString(0)),
-                {
-                    sendPluginResult(it, null)
-                },
-                {
-                    sendPluginResult(null, Pair(it.code.toString(), it.message))
-                }
+                { sendSuccess(callbackContext, it) },
+                { sendError(callbackContext, it) }
             )
         } catch (e: Exception) {
-            sendPluginResult(null, Pair(HealthFitnessError.VARIABLE_NOT_AVAILABLE_ERROR.code.toString(), HealthFitnessError.VARIABLE_NOT_AVAILABLE_ERROR.message))
+            sendError(callbackContext, HealthFitnessError.VARIABLE_NOT_AVAILABLE_ERROR)
         }
-
     }
 
     /**
@@ -264,7 +267,7 @@ class OSHealthFitness : CordovaImplementation() {
             // we only need to request this permission if exact alarms need to be used
             // when the variable is an activity variable (e.g. steps),
             // we use the Activity Recognition Transition API instead of exact alarms.
-            getContext().startActivity(Intent(ACTION_REQUEST_SCHEDULE_EXACT_ALARM))
+            cordova.context.startActivity(Intent(ACTION_REQUEST_SCHEDULE_EXACT_ALARM))
         } else { // we can move on to other permissions if we don't need to request exact alarm permissions
             requestBackgroundJobPermissions()
         }
@@ -283,7 +286,11 @@ class OSHealthFitness : CordovaImplementation() {
             }
         }.toTypedArray()
 
-        PermissionHelper.requestPermissions(this, BACKGROUND_JOB_PERMISSIONS_REQUEST_CODE, permissions)
+        PermissionHelper.requestPermissions(
+            this,
+            BACKGROUND_JOB_PERMISSIONS_REQUEST_CODE,
+            permissions
+        )
     }
 
     /**
@@ -294,13 +301,12 @@ class OSHealthFitness : CordovaImplementation() {
         val permissionDenied = SDK_INT >= 31 && !alarmManager.canScheduleExactAlarms()
         if (permissionDenied) {
             // send plugin result with error
-            sendPluginResult(
-                null,
-                Pair(
-                    HealthFitnessError.BACKGROUND_JOB_EXACT_ALARM_PERMISSION_DENIED_ERROR.code.toString(),
-                    HealthFitnessError.BACKGROUND_JOB_EXACT_ALARM_PERMISSION_DENIED_ERROR.message
+            callbackContext?.let {
+                sendError(
+                    it,
+                    HealthFitnessError.BACKGROUND_JOB_EXACT_ALARM_PERMISSION_DENIED_ERROR
                 )
-            )
+            }
             return
         }
         requestBackgroundJobPermissions()
@@ -310,93 +316,71 @@ class OSHealthFitness : CordovaImplementation() {
      * Requests permission to read health data in the background for API 35,
      * or calls setBackgroundJobWithParameters otherwise
      */
-    private fun requestReadDataBackgroundPermission() {
+    private fun requestReadDataBackgroundPermission(callbackContext: CallbackContext) {
         if (SDK_INT >= 35) {
-            setAsActivityResultCallback()
-            healthConnectViewModel.requestReadDataBackgroundPermission(this.getActivity())
+            cordova.setActivityResultCallback(this)
+            healthConnectViewModel.requestReadDataBackgroundPermission(this.cordova.activity)
         } else {
-            setBackgroundJobWithParameters(backgroundParameters)
+            setBackgroundJobWithParameters(backgroundParameters, callbackContext)
         }
     }
 
     /**
      * Sets a background job by calling the setBackgroundJob method of the ViewModel
      */
-    private fun setBackgroundJobWithParameters(parameters: BackgroundJobParameters) {
+    private fun setBackgroundJobWithParameters(
+        parameters: BackgroundJobParameters,
+        callbackContext: CallbackContext
+    ) {
         healthConnectViewModel.setBackgroundJob(
             parameters,
             foregroundNotificationTitle,
             foregroundNotificationDescription,
-            getContext(),
-            {
-                sendPluginResult("success", null)
-            },
-            {
-                sendPluginResult(null, Pair(it.code.toString(), it.message))
-            }
+            cordova.context,
+            { sendSuccess(callbackContext) },
+            { sendError(callbackContext, it) }
         )
     }
 
-    private fun deleteBackgroundJob(args: JSONArray) {
+    private fun deleteBackgroundJob(args: JSONArray, callbackContext: CallbackContext) {
         val jobId = args.getString(0)
         healthConnectViewModel.deleteBackgroundJob(
             jobId,
-            getContext(),
-            {
-                sendPluginResult("success", null)
-            },
-            {
-                sendPluginResult(null, Pair(it.code.toString(), it.message))
-            }
+            cordova.context,
+            { sendSuccess(callbackContext) },
+            { sendError(callbackContext, it) }
         )
     }
 
-    private fun listBackgroundJobs() {
+    private fun listBackgroundJobs(callbackContext: CallbackContext) {
         healthConnectViewModel.listBackgroundJobs(
-            {
-                val pluginResponseJson = gson.toJson(it)
-                sendPluginResult(pluginResponseJson)
-            },
-            {
-                sendPluginResult(null, Pair(it.code.toString(), it.message))
-            }
+            { sendSuccess(callbackContext, it) },
+            { sendError(callbackContext, it) }
         )
     }
 
-    private fun updateBackgroundJob(args: JSONArray) {
+    private fun updateBackgroundJob(args: JSONArray, callbackContext: CallbackContext) {
         val parameters = gson.fromJson(args.getString(0), UpdateBackgroundJobParameters::class.java)
         healthConnectViewModel.updateBackgroundJob(
             parameters,
-            {
-                sendPluginResult("success", null)
-            },
-            {
-                sendPluginResult(null, Pair(it.code.toString(), it.message))
-            }
+            { sendSuccess(callbackContext) },
+            { sendError(callbackContext, it) }
         )
     }
 
-    private fun disconnectFromHealthConnect() {
+    private fun disconnectFromHealthConnect(callbackContext: CallbackContext) {
         healthConnectViewModel.disconnectFromHealthConnect(
-            getActivity(),
-            {
-                sendPluginResult("success", null)
-            },
-            {
-                sendPluginResult(null, Pair(it.code.toString(), it.message))
-            }
+            cordova.activity,
+            { sendSuccess(callbackContext) },
+            { sendError(callbackContext, it) }
         )
     }
 
-    private fun openHealthConnect() {
+    private fun openHealthConnect(callbackContext: CallbackContext) {
         healthConnectViewModel.openHealthConnect(
-            getContext(),
-            {
-                sendPluginResult("success", null)
-            },
-            {
-                sendPluginResult(null, Pair(it.code.toString(), it.message))
-            }
+            cordova.context,
+            { sendSuccess(callbackContext) },
+            { sendError(callbackContext, it) }
         )
     }
 
@@ -411,16 +395,21 @@ class OSHealthFitness : CordovaImplementation() {
                         Constants.EXTRA_RESULT_PERMISSION_DENIED
                     ) == Constants.EXTRA_RESULT_PERMISSION_GRANTED
                 ) {
-                    setBackgroundJobWithParameters(backgroundParameters)
+                    callbackContext?.let {
+                        setBackgroundJobWithParameters(
+                            backgroundParameters,
+                            it
+                        )
+                    }
                     return
                 }
-                sendPluginResult(
-                    null,
-                    Pair(
-                        HealthFitnessError.BACKGROUND_JOB_READ_DATA_PERMISSION_DENIED.code.toString(),
-                        HealthFitnessError.BACKGROUND_JOB_READ_DATA_PERMISSION_DENIED.message
+                callbackContext?.let {
+                    sendError(
+                        it,
+                        HealthFitnessError.BACKGROUND_JOB_READ_DATA_PERMISSION_DENIED
                     )
-                )
+                }
+
                 return
             }
         }
@@ -428,22 +417,19 @@ class OSHealthFitness : CordovaImplementation() {
         // if result comes from requesting standard permissions
         healthConnectViewModel.handleActivityResult(requestCode, resultCode, intent,
             {
-                sendPluginResult("success", null)
+                callbackContext?.let { sendSuccess(it) }
             },
-            {
-                sendPluginResult(null, Pair(it.code.toString(), it.message))
-            }
+            { error -> callbackContext?.let { sendError(it, error) } }
         )
     }
 
-    override fun areGooglePlayServicesAvailable(): Boolean {
+    fun areGooglePlayServicesAvailable(): Boolean {
         val googleApiAvailability = GoogleApiAvailability.getInstance()
-        val status = googleApiAvailability.isGooglePlayServicesAvailable(getActivity())
+        val status = googleApiAvailability.isGooglePlayServicesAvailable(cordova.activity)
 
         if (status != ConnectionResult.SUCCESS) {
-            var result: Pair<String, String>? = null
-            result = if (googleApiAvailability.isUserResolvableError(status)) {
-                googleApiAvailability.getErrorDialog(getActivity(), status, 1)?.show()
+            var result: Pair<String, String>? = if (googleApiAvailability.isUserResolvableError(status)) {
+                googleApiAvailability.getErrorDialog(cordova.activity, status, 1)?.show()
                 Pair(
                     HealthFitnessError.GOOGLE_SERVICES_RESOLVABLE_ERROR.code.toString(),
                     HealthFitnessError.GOOGLE_SERVICES_RESOLVABLE_ERROR.message
@@ -454,7 +440,9 @@ class OSHealthFitness : CordovaImplementation() {
                     HealthFitnessError.GOOGLE_SERVICES_ERROR.message
                 )
             }
-            sendPluginResult(null, result)
+            callbackContext?.let {
+                sendSuccess(it, result)
+            }
             return false
         }
         return true
@@ -469,17 +457,16 @@ class OSHealthFitness : CordovaImplementation() {
             BACKGROUND_JOB_PERMISSIONS_REQUEST_CODE -> {
                 for (result in grantResults) {
                     if (result == PackageManager.PERMISSION_DENIED) {
-                        sendPluginResult(
-                            null,
-                            Pair(
-                                HealthFitnessError.BACKGROUND_JOB_PERMISSIONS_DENIED_ERROR.code.toString(),
-                                HealthFitnessError.BACKGROUND_JOB_PERMISSIONS_DENIED_ERROR.message
+                        callbackContext?.let {
+                            sendError(
+                                it,
+                                HealthFitnessError.BACKGROUND_JOB_PERMISSIONS_DENIED_ERROR
                             )
-                        )
+                        }
                         return
                     }
                 }
-                requestReadDataBackgroundPermission()
+                callbackContext?.let { requestReadDataBackgroundPermission(it) }
             }
         }
     }
@@ -487,4 +474,59 @@ class OSHealthFitness : CordovaImplementation() {
     companion object {
         const val BACKGROUND_JOB_PERMISSIONS_REQUEST_CODE = 2
     }
+
+    /**
+     * Helper method to send a success result
+     * @param callbackContext CallbackContext to send the result to
+     */
+    private fun sendSuccess(callbackContext: CallbackContext, result: Any? = null) {
+        var pluginResult = PluginResult(PluginResult.Status.OK)
+        result?.let {
+            val resultJson = gson.toJson(result)
+            pluginResult = PluginResult(PluginResult.Status.OK, resultJson)
+        }
+        callbackContext.sendPluginResult(pluginResult)
+    }
+
+    /**
+     * Helper method to send a result with warning
+     * @param callbackContext CallbackContext to send the result to
+     * @param warning Warning to be sent in the result
+     */
+    private fun sendSuccessWithWarning(
+        callbackContext: CallbackContext,
+        result: Any?,
+        warning: OSHealthFitnessWarning
+    ) {
+        val warningObject = JSONObject().apply {
+            put("code", warning.code)
+            put("message", warning.message)
+        }
+        val pluginResult = PluginResult(
+            PluginResult.Status.OK,
+            JSONObject().apply {
+                put("response", gson.toJson(result))
+                put("warning", warningObject)
+            }
+        )
+        callbackContext.sendPluginResult(pluginResult)
+    }
+
+
+    /**
+     * Helper method to send an error result
+     * @param callbackContext CallbackContext to send the result to
+     * @param error Error to be sent in the result
+     */
+    private fun sendError(callbackContext: CallbackContext, error: HealthFitnessError) {
+        val pluginResult = PluginResult(
+            PluginResult.Status.ERROR,
+            JSONObject().apply {
+                put("code", error.code)
+                put("message", error.message)
+            }
+        )
+        callbackContext.sendPluginResult(pluginResult)
+    }
+
 }

@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 The changes documented here do not include those from the original repository.
 
+## [2.3.0]
+
+### Fixes
+
+- (android): Fixes advanced query for custom aggregation metrics (https://outsystemsrd.atlassian.net/browse/RMET-3831)
+
 ## [2.2.1]
 
 ### Fixes
