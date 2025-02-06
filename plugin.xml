@@ -41,12 +41,11 @@
 
   <platform name="ios">
     <config-file parent="/*" target="config.xml">
-			<feature name="OSHealthFitness">
-				<param name="ios-package" value="OSHealthFitness" />
-			</feature>
-			<preference name="deployment-target" value="13" />
-      <preference name="UseSwiftLanguageVersion" value="5" />
-		</config-file>
+      <feature name="OSHealthFitness">
+        <param name="ios-package" value="OSHealthFitness" />
+      </feature>
+      <preference name="SwiftVersion" value="5" />
+    </config-file>
 
     <!-- iOS Permissions -->
     <preference name="HEALTH_SHARE_DESCRIPTION" default="App needs to shared health data" />
@@ -105,13 +104,11 @@
 
     <config-file target="*/Entitlements-Release.plist" parent="com.apple.developer.healthkit.recalibrate-estimates">
       <true/>
-    </config-file>     
+    </config-file>
 
-		<!-- iOS Source Files -->
-		<source-file src="src/ios/OSHealthFitness.swift" />
+    <!-- iOS Source Files -->
+    <source-file src="src/ios/OSHealthFitness.swift" />
     <framework src="src/ios/frameworks/OSHealthFitnessLib.xcframework" embed="true" custom="true" />
-    
-    <dependency id="cordova-plugin-add-swift-support" url="https://github.com/OutSystems/cordova-plugin-add-swift-support.git#2.0.3-OS1"/>
 
     <podspec>
         <config>
