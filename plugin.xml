@@ -31,6 +31,7 @@
     <source-file src="src/android/com/outsystems/plugins/healthfitness/OSHealthFitness.kt" target-dir="app/src/main/kotlin/com/outsystems/plugins/healthfitness"/>
     <source-file src="src/android/com/outsystems/plugins/healthfitness/OSHealthFitnessWarning.kt" target-dir="app/src/main/kotlin/com/outsystems/plugins/healthfitness"/>
     <source-file src="src/android/com/outsystems/plugins/healthfitness/TimeUnitSerializer.kt" target-dir="app/src/main/kotlin/com/outsystems/plugins/healthfitness"/>
+    <source-file src="src/android/libs/OSHealthFitnessLib-debug.aar" target-dir="app/libs" />
 
     <framework src="src/android/build.gradle" custom="true" type="gradleReference" />
     <framework src="org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.4.3" />
