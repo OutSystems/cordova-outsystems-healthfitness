@@ -21,6 +21,7 @@
     "@babel/preset-typescript": "^7.23.0"
   },
   "scripts": {
-    "capacitor:sync:after": "node hooks/capacitorCopyHealthFitnessConfigs.js"
+    "capacitor:sync:after": "node hooks/capacitorCopyHealthFitnessConfigs.js",
+    "capacitor:update:after": "node hooks/capacitorKaptGradleFix.js"
   }
 }
