@@ -48,7 +48,7 @@
     </config-file>
 
     <!-- iOS Permissions -->
-    <preference name="HEALTH_SHARE_DESCRIPTION" default="App needs to shared health data" />
+    <preference name="HEALTH_SHARE_DESCRIPTION" default="App needs to share health data" />
     <config-file target="*-Info.plist" parent="NSHealthShareUsageDescription">
         <string>$HEALTH_SHARE_DESCRIPTION</string>
     </config-file>
