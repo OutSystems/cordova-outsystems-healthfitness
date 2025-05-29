@@ -12,47 +12,91 @@ variables:
     type: string
     default: "The app is running in the background."
   
-  # Individual Health Permissions (boolean flags)
-  ENABLE_HEART_RATE:
+  # Health Permissions - Read
+  READ_HEART_RATE:
     type: boolean
     default: true
-  ENABLE_STEPS:
+  READ_STEPS:
     type: boolean
     default: true
-  ENABLE_WEIGHT:
+  READ_WEIGHT:
     type: boolean
     default: true
-  ENABLE_HEIGHT:
+  READ_HEIGHT:
     type: boolean
     default: true
-  ENABLE_CALORIES_BURNED:
+  READ_CALORIES_BURNED:
     type: boolean
     default: true
-  ENABLE_SLEEP:
+  READ_SLEEP:
     type: boolean
     default: true
-  ENABLE_BLOOD_PRESSURE:
+  READ_BLOOD_PRESSURE:
     type: boolean
     default: true
-  ENABLE_BLOOD_GLUCOSE:
+  READ_BLOOD_GLUCOSE:
     type: boolean
     default: true
-  ENABLE_BODY_FAT_PERCENTAGE:
+  READ_BODY_FAT_PERCENTAGE:
     type: boolean
     default: true
-  ENABLE_BASAL_METABOLIC_RATE:
+  READ_BASAL_METABOLIC_RATE:
     type: boolean
     default: true
-  ENABLE_WALKING_SPEED:
+  READ_WALKING_SPEED:
     type: boolean
     default: true
-  ENABLE_DISTANCE:
+  READ_DISTANCE:
     type: boolean
     default: true
-  ENABLE_OXYGEN_SATURATION:
+  READ_OXYGEN_SATURATION:
     type: boolean
     default: true
-  ENABLE_BODY_TEMPERATURE:
+  READ_BODY_TEMPERATURE:
+    type: boolean
+    default: true
+
+  # Health Permissions - Write
+  WRITE_HEART_RATE:
+    type: boolean
+    default: true
+  WRITE_STEPS:
+    type: boolean
+    default: true
+  WRITE_WEIGHT:
+    type: boolean
+    default: true
+  WRITE_HEIGHT:
+    type: boolean
+    default: true
+  WRITE_CALORIES_BURNED:
+    type: boolean
+    default: true
+  WRITE_SLEEP:
+    type: boolean
+    default: true
+  WRITE_BLOOD_PRESSURE:
+    type: boolean
+    default: true
+  WRITE_BLOOD_GLUCOSE:
+    type: boolean
+    default: true
+  WRITE_BODY_FAT_PERCENTAGE:
+    type: boolean
+    default: true
+  WRITE_BASAL_METABOLIC_RATE:
+    type: boolean
+    default: true
+  WRITE_WALKING_SPEED:
+    type: boolean
+    default: true
+  WRITE_DISTANCE:
+    type: boolean
+    default: true
+  WRITE_OXYGEN_SATURATION:
+    type: boolean
+    default: true
+  WRITE_BODY_TEMPERATURE:
     type: boolean
     default: true
   
@@ -71,149 +115,242 @@ variables:
 
 platforms:
   android:
+    # Create the health_permissions.xml file
+    res:
+      - path: values
+        file: health_permissions.xml
+        text: |
+          <?xml version="1.0" encoding="utf-8"?>
+          <resources>
+              <array name="health_permissions">
+              </array>
+          </resources>
+    
     xml:
-      # Privacy Policy URL Override
+      # Privacy Policy URL Override - Replace if exists
       - resFile: values/strings.xml
         target: resources/string[@name="privacy_policy_url"]
         replace: |
           <string name="privacy_policy_url">$PRIVACY_POLICY_URL</string>
         condition: ne($PRIVACY_POLICY_URL ?? "", "")
       
-      # Background Notifications
+      # Privacy Policy URL Override - Create if doesn't exist
+      - resFile: values/strings.xml
+        target: resources
+        inject: |
+          <string name="privacy_policy_url">$PRIVACY_POLICY_URL</string>
+        condition: ne($PRIVACY_POLICY_URL ?? "", "")
+      
+      # Background Notification Title - Replace if exists
       - resFile: values/strings.xml
         target: resources/string[@name="background_notification_title"]
         replace: |
           <string name="background_notification_title">$BACKGROUND_NOTIFICATION_TITLE</string>
+      
+      # Background Notification Title - Create if doesn't exist  
+      - resFile: values/strings.xml
+        target: resources
+        inject: |
+          <string name="background_notification_title">$BACKGROUND_NOTIFICATION_TITLE</string>
+      
+      # Background Notification Description - Replace if exists
       - resFile: values/strings.xml
         target: resources/string[@name="background_notification_description"]
         replace: |
           <string name="background_notification_description">$BACKGROUND_NOTIFICATION_DESCRIPTION</string>
       
-      # Create health_permissions.xml file
-      - resFile: values/health_permissions.xml
+      # Background Notification Description - Create if doesn't exist
+      - resFile: values/strings.xml
         target: resources
-        merge: |
-          <resources>
-            <array name="health_permissions">
-            </array>
-          </resources>
+        inject: |
+          <string name="background_notification_description">$BACKGROUND_NOTIFICATION_DESCRIPTION</string>
       
       # Heart Rate Permissions
       - resFile: values/health_permissions.xml
         target: resources/array[@name="health_permissions"]
-        merge: |
+        inject: |
           <item>android.permission.health.READ_HEART_RATE</item>
+        condition: eq($READ_HEART_RATE, true)
+
+      - resFile: values/health_permissions.xml
+        target: resources/array[@name="health_permissions"]
+        inject: |
           <item>android.permission.health.WRITE_HEART_RATE</item>
-        condition: eq($ENABLE_HEART_RATE, true)
+        condition: eq($WRITE_HEART_RATE, true)
       
       # Steps Permissions
       - resFile: values/health_permissions.xml
         target: resources/array[@name="health_permissions"]
-        merge: |
+        inject: |
           <item>android.permission.health.READ_STEPS</item>
+        condition: eq($READ_STEPS, true)
+
+      - resFile: values/health_permissions.xml
+        target: resources/array[@name="health_permissions"]
+        inject: |
           <item>android.permission.health.WRITE_STEPS</item>
-        condition: eq($ENABLE_STEPS, true)
+        condition: eq($WRITE_STEPS, true)
       
       # Weight Permissions
       - resFile: values/health_permissions.xml
         target: resources/array[@name="health_permissions"]
-        merge: |
+        inject: |
           <item>android.permission.health.READ_WEIGHT</item>
+        condition: eq($READ_WEIGHT, true)
+
+      - resFile: values/health_permissions.xml
+        target: resources/array[@name="health_permissions"]
+        inject: |
           <item>android.permission.health.WRITE_WEIGHT</item>
-        condition: eq($ENABLE_WEIGHT, true)
+        condition: eq($WRITE_WEIGHT, true)
       
       # Height Permissions
       - resFile: values/health_permissions.xml
         target: resources/array[@name="health_permissions"]
-        merge: |
+        inject: |
           <item>android.permission.health.READ_HEIGHT</item>
+        condition: eq($READ_HEIGHT, true)
+
+      - resFile: values/health_permissions.xml
+        target: resources/array[@name="health_permissions"]
+        inject: |
           <item>android.permission.health.WRITE_HEIGHT</item>
-        condition: eq($ENABLE_HEIGHT, true)
+        condition: eq($WRITE_HEIGHT, true)
       
       # Calories Burned Permissions
       - resFile: values/health_permissions.xml
         target: resources/array[@name="health_permissions"]
-        merge: |
+        inject: |
           <item>android.permission.health.READ_TOTAL_CALORIES_BURNED</item>
+        condition: eq($READ_CALORIES_BURNED, true)
+
+      - resFile: values/health_permissions.xml
+        target: resources/array[@name="health_permissions"]
+        inject: |
           <item>android.permission.health.WRITE_TOTAL_CALORIES_BURNED</item>
-        condition: eq($ENABLE_CALORIES_BURNED, true)
+        condition: eq($WRITE_CALORIES_BURNED, true)
       
       # Sleep Permissions
       - resFile: values/health_permissions.xml
         target: resources/array[@name="health_permissions"]
-        merge: |
+        inject: |
           <item>android.permission.health.READ_SLEEP</item>
+        condition: eq($READ_SLEEP, true)
+
+      - resFile: values/health_permissions.xml
+        target: resources/array[@name="health_permissions"]
+        inject: |
           <item>android.permission.health.WRITE_SLEEP</item>
-        condition: eq($ENABLE_SLEEP, true)
+        condition: eq($WRITE_SLEEP, true)
       
       # Blood Pressure Permissions
       - resFile: values/health_permissions.xml
         target: resources/array[@name="health_permissions"]
-        merge: |
+        inject: |
           <item>android.permission.health.READ_BLOOD_PRESSURE</item>
+        condition: eq($READ_BLOOD_PRESSURE, true)
+
+      - resFile: values/health_permissions.xml
+        target: resources/array[@name="health_permissions"]
+        inject: |
           <item>android.permission.health.WRITE_BLOOD_PRESSURE</item>
-        condition: eq($ENABLE_BLOOD_PRESSURE, true)
+        condition: eq($WRITE_BLOOD_PRESSURE, true)
       
       # Blood Glucose Permissions
       - resFile: values/health_permissions.xml
         target: resources/array[@name="health_permissions"]
-        merge: |
+        inject: |
           <item>android.permission.health.READ_BLOOD_GLUCOSE</item>
+        condition: eq($READ_BLOOD_GLUCOSE, true)
+
+      - resFile: values/health_permissions.xml
+        target: resources/array[@name="health_permissions"]
+        inject: |
           <item>android.permission.health.WRITE_BLOOD_GLUCOSE</item>
-        condition: eq($ENABLE_BLOOD_GLUCOSE, true)
+        condition: eq($WRITE_BLOOD_GLUCOSE, true)
       
       # Body Fat Percentage Permissions
       - resFile: values/health_permissions.xml
         target: resources/array[@name="health_permissions"]
-        merge: |
+        inject: |
           <item>android.permission.health.READ_BODY_FAT</item>
+        condition: eq($READ_BODY_FAT_PERCENTAGE, true)
+
+      - resFile: values/health_permissions.xml
+        target: resources/array[@name="health_permissions"]
+        inject: |
           <item>android.permission.health.WRITE_BODY_FAT</item>
-        condition: eq($ENABLE_BODY_FAT_PERCENTAGE, true)
+        condition: eq($WRITE_BODY_FAT_PERCENTAGE, true)
       
       # Basal Metabolic Rate Permissions
       - resFile: values/health_permissions.xml
         target: resources/array[@name="health_permissions"]
-        merge: |
+        inject: |
           <item>android.permission.health.READ_BASAL_METABOLIC_RATE</item>
+        condition: eq($READ_BASAL_METABOLIC_RATE, true)
+
+      - resFile: values/health_permissions.xml
+        target: resources/array[@name="health_permissions"]
+        inject: |
           <item>android.permission.health.WRITE_BASAL_METABOLIC_RATE</item>
-        condition: eq($ENABLE_BASAL_METABOLIC_RATE, true)
+        condition: eq($WRITE_BASAL_METABOLIC_RATE, true)
       
       # Walking Speed Permissions
       - resFile: values/health_permissions.xml
         target: resources/array[@name="health_permissions"]
-        merge: |
+        inject: |
           <item>android.permission.health.READ_SPEED</item>
+        condition: eq($READ_WALKING_SPEED, true)
+
+      - resFile: values/health_permissions.xml
+        target: resources/array[@name="health_permissions"]
+        inject: |
           <item>android.permission.health.WRITE_SPEED</item>
-        condition: eq($ENABLE_WALKING_SPEED, true)
+        condition: eq($WRITE_WALKING_SPEED, true)
       
       # Distance Permissions
       - resFile: values/health_permissions.xml
         target: resources/array[@name="health_permissions"]
-        merge: |
+        inject: |
           <item>android.permission.health.READ_DISTANCE</item>
+        condition: eq($READ_DISTANCE, true)
+
+      - resFile: values/health_permissions.xml
+        target: resources/array[@name="health_permissions"]
+        inject: |
           <item>android.permission.health.WRITE_DISTANCE</item>
-        condition: eq($ENABLE_DISTANCE, true)
+        condition: eq($WRITE_DISTANCE, true)
       
       # Oxygen Saturation Permissions
       - resFile: values/health_permissions.xml
         target: resources/array[@name="health_permissions"]
-        merge: |
+        inject: |
           <item>android.permission.health.READ_OXYGEN_SATURATION</item>
+        condition: eq($READ_OXYGEN_SATURATION, true)
+
+      - resFile: values/health_permissions.xml
+        target: resources/array[@name="health_permissions"]
+        inject: |
           <item>android.permission.health.WRITE_OXYGEN_SATURATION</item>
-        condition: eq($ENABLE_OXYGEN_SATURATION, true)
+        condition: eq($WRITE_OXYGEN_SATURATION, true)
       
       # Body Temperature Permissions
       - resFile: values/health_permissions.xml
         target: resources/array[@name="health_permissions"]
-        merge: |
+        inject: |
           <item>android.permission.health.READ_BODY_TEMPERATURE</item>
+        condition: eq($READ_BODY_TEMPERATURE, true)
+
+      - resFile: values/health_permissions.xml
+        target: resources/array[@name="health_permissions"]
+        inject: |
           <item>android.permission.health.WRITE_BODY_TEMPERATURE</item>
-        condition: eq($ENABLE_BODY_TEMPERATURE, true)
+        condition: eq($WRITE_BODY_TEMPERATURE, true)
       
       # Background Job Permissions
       - resFile: values/health_permissions.xml
         target: resources/array[@name="health_permissions"]
-        merge: |
+        inject: |
           <item>android.permission.health.READ_HEALTH_DATA_IN_BACKGROUND</item>
         condition: eq($DISABLE_BACKGROUND_JOBS, false)
     
@@ -222,126 +359,231 @@ platforms:
       # Heart Rate Permissions
       - file: AndroidManifest.xml
         target: manifest
-        merge: |
+        inject: |
           <uses-permission android:name="android.permission.health.READ_HEART_RATE" />
+        condition: eq($READ_HEART_RATE, true)
+
+      - file: AndroidManifest.xml
+        target: manifest
+        inject: |
           <uses-permission android:name="android.permission.health.WRITE_HEART_RATE" />
-        condition: eq($ENABLE_HEART_RATE, true)
+        condition: eq($WRITE_HEART_RATE, true)
       
       # Steps Permissions
       - file: AndroidManifest.xml
         target: manifest
-        merge: |
+        inject: |
           <uses-permission android:name="android.permission.health.READ_STEPS" />
+        condition: eq($READ_STEPS, true)
+
+      - file: AndroidManifest.xml
+        target: manifest
+        inject: |
           <uses-permission android:name="android.permission.health.WRITE_STEPS" />
-        condition: eq($ENABLE_STEPS, true)
+        condition: eq($WRITE_STEPS, true)
       
       # Weight Permissions
       - file: AndroidManifest.xml
         target: manifest
-        merge: |
+        inject: |
           <uses-permission android:name="android.permission.health.READ_WEIGHT" />
+        condition: eq($READ_WEIGHT, true)
+
+      - file: AndroidManifest.xml
+        target: manifest
+        inject: |
           <uses-permission android:name="android.permission.health.WRITE_WEIGHT" />
-        condition: eq($ENABLE_WEIGHT, true)
+        condition: eq($WRITE_WEIGHT, true)
       
       # Height Permissions
       - file: AndroidManifest.xml
         target: manifest
-        merge: |
+        inject: |
           <uses-permission android:name="android.permission.health.READ_HEIGHT" />
+        condition: eq($READ_HEIGHT, true)
+
+      - file: AndroidManifest.xml
+        target: manifest
+        inject: |
           <uses-permission android:name="android.permission.health.WRITE_HEIGHT" />
-        condition: eq($ENABLE_HEIGHT, true)
+        condition: eq($WRITE_HEIGHT, true)
       
       # Calories Burned Permissions
       - file: AndroidManifest.xml
         target: manifest
-        merge: |
+        inject: |
           <uses-permission android:name="android.permission.health.READ_TOTAL_CALORIES_BURNED" />
+        condition: eq($READ_CALORIES_BURNED, true)
+
+      - file: AndroidManifest.xml
+        target: manifest
+        inject: |
           <uses-permission android:name="android.permission.health.WRITE_TOTAL_CALORIES_BURNED" />
-        condition: eq($ENABLE_CALORIES_BURNED, true)
+        condition: eq($WRITE_CALORIES_BURNED, true)
       
       # Sleep Permissions
       - file: AndroidManifest.xml
         target: manifest
-        merge: |
+        inject: |
           <uses-permission android:name="android.permission.health.READ_SLEEP" />
+        condition: eq($READ_SLEEP, true)
+
+      - file: AndroidManifest.xml
+        target: manifest
+        inject: |
           <uses-permission android:name="android.permission.health.WRITE_SLEEP" />
-        condition: eq($ENABLE_SLEEP, true)
+        condition: eq($WRITE_SLEEP, true)
       
       # Blood Pressure Permissions
       - file: AndroidManifest.xml
         target: manifest
-        merge: |
+        inject: |
           <uses-permission android:name="android.permission.health.READ_BLOOD_PRESSURE" />
+        condition: eq($READ_BLOOD_PRESSURE, true)
+
+      - file: AndroidManifest.xml
+        target: manifest
+        inject: |
           <uses-permission android:name="android.permission.health.WRITE_BLOOD_PRESSURE" />
-        condition: eq($ENABLE_BLOOD_PRESSURE, true)
+        condition: eq($WRITE_BLOOD_PRESSURE, true)
       
       # Blood Glucose Permissions
       - file: AndroidManifest.xml
         target: manifest
-        merge: |
+        inject: |
           <uses-permission android:name="android.permission.health.READ_BLOOD_GLUCOSE" />
+        condition: eq($READ_BLOOD_GLUCOSE, true)
+
+      - file: AndroidManifest.xml
+        target: manifest
+        inject: |
           <uses-permission android:name="android.permission.health.WRITE_BLOOD_GLUCOSE" />
-        condition: eq($ENABLE_BLOOD_GLUCOSE, true)
+        condition: eq($WRITE_BLOOD_GLUCOSE, true)
       
       # Body Fat Percentage Permissions
       - file: AndroidManifest.xml
         target: manifest
-        merge: |
+        inject: |
           <uses-permission android:name="android.permission.health.READ_BODY_FAT" />
+        condition: eq($READ_BODY_FAT_PERCENTAGE, true)
+
+      - file: AndroidManifest.xml
+        target: manifest
+        inject: |
           <uses-permission android:name="android.permission.health.WRITE_BODY_FAT" />
-        condition: eq($ENABLE_BODY_FAT_PERCENTAGE, true)
+        condition: eq($WRITE_BODY_FAT_PERCENTAGE, true)
       
       # Basal Metabolic Rate Permissions
       - file: AndroidManifest.xml
         target: manifest
-        merge: |
+        inject: |
           <uses-permission android:name="android.permission.health.READ_BASAL_METABOLIC_RATE" />
+        condition: eq($READ_BASAL_METABOLIC_RATE, true)
+
+      - file: AndroidManifest.xml
+        target: manifest
+        inject: |
           <uses-permission android:name="android.permission.health.WRITE_BASAL_METABOLIC_RATE" />
-        condition: eq($ENABLE_BASAL_METABOLIC_RATE, true)
+        condition: eq($WRITE_BASAL_METABOLIC_RATE, true)
       
       # Walking Speed Permissions
       - file: AndroidManifest.xml
         target: manifest
-        merge: |
+        inject: |
           <uses-permission android:name="android.permission.health.READ_SPEED" />
+        condition: eq($READ_WALKING_SPEED, true)
+
+      - file: AndroidManifest.xml
+        target: manifest
+        inject: |
           <uses-permission android:name="android.permission.health.WRITE_SPEED" />
-        condition: eq($ENABLE_WALKING_SPEED, true)
+        condition: eq($WRITE_WALKING_SPEED, true)
       
       # Distance Permissions
       - file: AndroidManifest.xml
         target: manifest
-        merge: |
+        inject: |
           <uses-permission android:name="android.permission.health.READ_DISTANCE" />
+        condition: eq($READ_DISTANCE, true)
+
+      - file: AndroidManifest.xml
+        target: manifest
+        inject: |
           <uses-permission android:name="android.permission.health.WRITE_DISTANCE" />
-        condition: eq($ENABLE_DISTANCE, true)
+        condition: eq($WRITE_DISTANCE, true)
       
       # Oxygen Saturation Permissions
       - file: AndroidManifest.xml
         target: manifest
-        merge: |
+        inject: |
           <uses-permission android:name="android.permission.health.READ_OXYGEN_SATURATION" />
+        condition: eq($READ_OXYGEN_SATURATION, true)
+
+      - file: AndroidManifest.xml
+        target: manifest
+        inject: |
           <uses-permission android:name="android.permission.health.WRITE_OXYGEN_SATURATION" />
-        condition: eq($ENABLE_OXYGEN_SATURATION, true)
+        condition: eq($WRITE_OXYGEN_SATURATION, true)
       
       # Body Temperature Permissions
       - file: AndroidManifest.xml
         target: manifest
-        merge: |
+        inject: |
           <uses-permission android:name="android.permission.health.READ_BODY_TEMPERATURE" />
+        condition: eq($READ_BODY_TEMPERATURE, true)
+
+      - file: AndroidManifest.xml
+        target: manifest
+        inject: |
           <uses-permission android:name="android.permission.health.WRITE_BODY_TEMPERATURE" />
-        condition: eq($ENABLE_BODY_TEMPERATURE, true)
+        condition: eq($WRITE_BODY_TEMPERATURE, true)
       
       # Background Job Permissions
       - file: AndroidManifest.xml
         target: manifest
-        merge: |
+        inject: |
           <uses-permission android:name="android.permission.health.READ_HEALTH_DATA_IN_BACKGROUND" />
+        condition: eq($DISABLE_BACKGROUND_JOBS, false)
+      
+      - file: AndroidManifest.xml
+        target: manifest
+        inject: |
           <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+        condition: eq($DISABLE_BACKGROUND_JOBS, false)
+      
+      - file: AndroidManifest.xml
+        target: manifest
+        inject: |
           <uses-permission android:name="android.permission.ACTIVITY_RECOGNITION" />
+        condition: eq($DISABLE_BACKGROUND_JOBS, false)
+      
+      - file: AndroidManifest.xml
+        target: manifest
+        inject: |
           <uses-permission android:name="com.google.android.gms.permission.ACTIVITY_RECOGNITION" />
+        condition: eq($DISABLE_BACKGROUND_JOBS, false)
+      
+      - file: AndroidManifest.xml
+        target: manifest
+        inject: |
           <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+        condition: eq($DISABLE_BACKGROUND_JOBS, false)
+      
+      - file: AndroidManifest.xml
+        target: manifest
+        inject: |
           <uses-permission android:name="android.permission.FOREGROUND_SERVICE_HEALTH" />
+        condition: eq($DISABLE_BACKGROUND_JOBS, false)
+      
+      - file: AndroidManifest.xml
+        target: manifest
+        inject: |
           <uses-permission android:name="android.permission.HIGH_SAMPLING_RATE_SENSORS" />
+        condition: eq($DISABLE_BACKGROUND_JOBS, false)
+      
+      - file: AndroidManifest.xml
+        target: manifest
+        inject: |
           <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
         condition: eq($DISABLE_BACKGROUND_JOBS, false)
 
