@@ -599,6 +599,7 @@ platforms:
           - NSHealthShareUsageDescription: "$HEALTH_SHARE_DESCRIPTION"
           - NSHealthUpdateUsageDescription: "$HEALTH_UPDATE_DESCRIPTION"
     entitlements:
+    # Extensiblity Config does not currently support boolean values, so we need to use strings and convert them in a hook
       entries:
         - com.apple.developer.healthkit: "true"
         - com.apple.developer.healthkit.access: []

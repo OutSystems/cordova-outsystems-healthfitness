@@ -13,7 +13,11 @@ if (!platform || !projectRoot) {
 const fileNamePrivacyPolicy = "HealthConnect_PrivacyPolicy.txt";
 
 function getAppDir() {
-    return path.join(projectRoot, "android");
+    if (platform === "android") {
+        return path.join(projectRoot, "android");
+    } else if (platform === "ios") {
+        return path.join(projectRoot, "ios");
+    }
 }
 
 function getCapacitorConfig() {
@@ -190,6 +194,49 @@ function configureAndroid() {
     }
 }
 
+// Handle iOS - Fix entitlements boolean values
+if (platform === "ios") {
+    console.log("OUTSYSTEMS_PLUGIN: Fixing iOS HealthKit entitlement boolean values...");
+    
+    const appDir = getAppDir();
+    const entitlementFiles = [
+        path.join(appDir, "App", "App", "App.entitlements")
+    ];
+    
+    entitlementFiles.forEach(entitlementFile => {
+        if (fs.existsSync(entitlementFile)) {
+            console.log(`OUTSYSTEMS_PLUGIN: Processing entitlement file: ${entitlementFile}`);
+            
+            let entitlementContent = fs.readFileSync(entitlementFile, 'utf8');
+            
+            // Convert HealthKit boolean strings to proper plist booleans
+            const healthKitBooleanFixes = [
+                { key: 'com.apple.developer.healthkit', from: '<string>true</string>', to: '<true/>' },
+                { key: 'com.apple.developer.healthkit', from: '<string>false</string>', to: '<false/>' },
+                { key: 'com.apple.developer.healthkit.background-delivery', from: '<string>true</string>', to: '<true/>' },
+                { key: 'com.apple.developer.healthkit.background-delivery', from: '<string>false</string>', to: '<false/>' },
+                { key: 'com.apple.developer.healthkit.recalibrate-estimates', from: '<string>true</string>', to: '<true/>' },
+                { key: 'com.apple.developer.healthkit.recalibrate-estimates', from: '<string>false</string>', to: '<false/>' }
+            ];
+            
+            healthKitBooleanFixes.forEach(fix => {
+                const keyPattern = new RegExp(`(<key>${fix.key}</key>\\s*\\n?\\s*)${fix.from.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}`, 'g');
+                if (keyPattern.test(entitlementContent)) {
+                    entitlementContent = entitlementContent.replace(keyPattern, `$1${fix.to}`);
+                    console.log(`OUTSYSTEMS_PLUGIN: Fixed ${fix.key} boolean value`);
+                }
+            });
+            
+            fs.writeFileSync(entitlementFile, entitlementContent, 'utf8');
+        } else {
+            console.log(`OUTSYSTEMS_PLUGIN: Entitlement file not found: ${entitlementFile}`);
+        }
+    });
+    
+    return;
+}
+
+// Handle Android - Privacy Policy URL configuration
 if (platform === "android") {
     configureAndroid();
 }
