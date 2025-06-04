@@ -12,6 +12,141 @@ if (!platform || !projectRoot) {
 
 const fileNamePrivacyPolicy = "HealthConnect_PrivacyPolicy.txt";
 
+// Health permission constants
+const READ = "Read";
+const WRITE = "Write";
+const READWRITE = "ReadWrite";
+
+// Individual permissions mapping
+const permissions = {
+    HeartRate: {
+        configKey: "HEART_RATE",
+        readPermission: "android.permission.health.READ_HEART_RATE",
+        writePermission: "android.permission.health.WRITE_HEART_RATE",
+        configValue: undefined,
+        wasSet: false
+    },
+    Steps: {
+        configKey: "STEPS",
+        readPermission: "android.permission.health.READ_STEPS",
+        writePermission: "android.permission.health.WRITE_STEPS",
+        configValue: undefined,
+        wasSet: false
+    },
+    Weight: {
+        configKey: "WEIGHT",
+        readPermission: "android.permission.health.READ_WEIGHT",
+        writePermission: "android.permission.health.WRITE_WEIGHT",
+        configValue: undefined,
+        wasSet: false
+    },
+    Height: {
+        configKey: "HEIGHT",
+        readPermission: "android.permission.health.READ_HEIGHT",
+        writePermission: "android.permission.health.WRITE_HEIGHT",
+        configValue: undefined,
+        wasSet: false
+    },
+    CaloriesBurned: {
+        configKey: "CALORIES_BURNED",
+        readPermission: "android.permission.health.READ_TOTAL_CALORIES_BURNED",
+        writePermission: "android.permission.health.WRITE_TOTAL_CALORIES_BURNED",
+        configValue: undefined,
+        wasSet: false
+    },
+    Sleep: {
+        configKey: "SLEEP",
+        readPermission: "android.permission.health.READ_SLEEP",
+        writePermission: "android.permission.health.WRITE_SLEEP",
+        configValue: undefined,
+        wasSet: false
+    },
+    BloodPressure: {
+        configKey: "BLOOD_PRESSURE",
+        readPermission: "android.permission.health.READ_BLOOD_PRESSURE",
+        writePermission: "android.permission.health.WRITE_BLOOD_PRESSURE",
+        configValue: undefined,
+        wasSet: false
+    },
+    BloodGlucose: {
+        configKey: "BLOOD_GLUCOSE",
+        readPermission: "android.permission.health.READ_BLOOD_GLUCOSE",
+        writePermission: "android.permission.health.WRITE_BLOOD_GLUCOSE",
+        configValue: undefined,
+        wasSet: false
+    },
+    BodyFatPercentage: {
+        configKey: "BODY_FAT_PERCENTAGE",
+        readPermission: "android.permission.health.READ_BODY_FAT",
+        writePermission: "android.permission.health.WRITE_BODY_FAT",
+        configValue: undefined,
+        wasSet: false
+    },
+    BasalMetabolicRate: {
+        configKey: "BASAL_METABOLIC_RATE",
+        readPermission: "android.permission.health.READ_BASAL_METABOLIC_RATE",
+        writePermission: "android.permission.health.WRITE_BASAL_METABOLIC_RATE",
+        configValue: undefined,
+        wasSet: false
+    },
+    WalkingSpeed: {
+        configKey: "WALKING_SPEED",
+        readPermission: "android.permission.health.READ_SPEED",
+        writePermission: "android.permission.health.WRITE_SPEED",
+        configValue: undefined,
+        wasSet: false
+    },
+    Distance: {
+        configKey: "DISTANCE",
+        readPermission: "android.permission.health.READ_DISTANCE",
+        writePermission: "android.permission.health.WRITE_DISTANCE",
+        configValue: undefined,
+        wasSet: false
+    },
+    OxygenSaturation: {
+        configKey: "OXYGEN_SATURATION",
+        readPermission: "android.permission.health.READ_OXYGEN_SATURATION",
+        writePermission: "android.permission.health.WRITE_OXYGEN_SATURATION",
+        configValue: undefined,
+        wasSet: false
+    },
+    BodyTemperature: {
+        configKey: "BODY_TEMPERATURE",
+        readPermission: "android.permission.health.READ_BODY_TEMPERATURE",
+        writePermission: "android.permission.health.WRITE_BODY_TEMPERATURE",
+        configValue: undefined,
+        wasSet: false
+    }
+};
+
+// Group permissions mapping
+const groupPermissions = {
+    AllVariables: {
+        configKey: "ALL_VARIABLES",
+        configValue: undefined,
+        wasSet: false,
+        groupVariables: []
+    },
+    FitnessVariables: {
+        configKey: "FITNESS_VARIABLES",
+        configValue: undefined,
+        wasSet: false,
+        groupVariables: ["Steps", "CaloriesBurned", "WalkingSpeed", "Distance"]
+    },
+    HealthVariables: {
+        configKey: "HEALTH_VARIABLES",
+        configValue: undefined,
+        wasSet: false,
+        groupVariables: ["HeartRate", "Sleep", "BloodPressure", "BloodGlucose", "OxygenSaturation", "BodyTemperature"]
+    },
+    ProfileVariables: {
+        configKey: "PROFILE_VARIABLES",
+        configValue: undefined,
+        wasSet: false,
+        groupVariables: ["Weight", "Height", "BodyFatPercentage", "BasalMetabolicRate"]
+    }
+};
+
 function getAppDir() {
     return path.join(projectRoot, "android");
 }
@@ -87,6 +222,132 @@ function policyFileExists(platformPath) {
         console.error("HealthFitness: Error checking policy file existence:", error);
         return false;
     }
+}
+
+function getConfigValue(config, key) {
+    if (!config || !config.outsystems || !config.outsystems.buildConfigurations || 
+        !config.outsystems.buildConfigurations.buildActions || !config.outsystems.buildConfigurations.buildActions[0] ||
+        !config.outsystems.buildConfigurations.buildActions[0].parameters) {
+        return undefined;
+    }
+    return config.outsystems.buildConfigurations.buildActions[0].parameters[key];
+}
+
+function addHealthConnectPermissions(config) {
+    const parser = new DOMParser();
+    
+    // Get individual permission values from config
+    for(const key in permissions){
+        permissions[key].configValue = getConfigValue(config, permissions[key].configKey);
+    }
+
+    // Get group permission values from config  
+    for(const key in groupPermissions){
+        groupPermissions[key].configValue = getConfigValue(config, groupPermissions[key].configKey);
+    }
+
+    // Read AndroidManifest.xml
+    const manifestFilePath = path.join(getAppDir(), 'app/src/main/AndroidManifest.xml');
+    if (!fs.existsSync(manifestFilePath)) {
+        console.log('HealthFitness: AndroidManifest.xml not found, skipping permission setup');
+        return;
+    }
+    
+    const manifestXmlString = fs.readFileSync(manifestFilePath, 'utf-8');
+    const manifestXmlDoc = parser.parseFromString(manifestXmlString, 'text/xml');
+
+    // Process individual permissions
+    for(const key in permissions){
+        let p = permissions[key];
+        if (p.configValue == READWRITE || p.configValue == READ) {
+            p.wasSet = true;
+            addEntryToManifest(manifestXmlDoc, p.readPermission);
+        }
+        if (p.configValue == READWRITE || p.configValue == WRITE) {
+            p.wasSet = true;
+            addEntryToManifest(manifestXmlDoc, p.writePermission);
+        }
+    }
+
+    // Process group permissions
+    for(const key in groupPermissions){
+        let p = groupPermissions[key];
+        if (p.configValue == READWRITE || p.configValue == READ) {
+            p.wasSet = true;
+            p.groupVariables.forEach( v => {
+                if (!permissions[v].wasSet) {
+                    addEntryToManifest(manifestXmlDoc, permissions[v].readPermission);
+                }
+            });
+        }
+        if (p.configValue == READWRITE || p.configValue == WRITE) {
+            p.wasSet = true;
+            p.groupVariables.forEach( v => {
+                if (!permissions[v].wasSet) {
+                    addEntryToManifest(manifestXmlDoc, permissions[v].writePermission);
+                }
+            });
+        }
+    }
+
+    // Process AllVariables
+    if (groupPermissions.AllVariables.configValue == READWRITE || groupPermissions.AllVariables.configValue == READ) {   
+        processAllVariables(manifestXmlDoc, READ, Object.values(groupPermissions));
+    }
+    if (groupPermissions.AllVariables.configValue == READWRITE || groupPermissions.AllVariables.configValue == WRITE) {  
+        processAllVariables(manifestXmlDoc, WRITE, Object.values(groupPermissions));
+    }
+    
+    // Check if any permissions were set
+    let numberOfPermissions = Object.values(permissions).filter(p => p.configValue && p.configValue !== "").length + 
+                             Object.values(groupPermissions).filter(p => p.configValue && p.configValue !== "").length;
+
+    // If no permissions set, add all by default (matching Cordova behavior)
+    if (numberOfPermissions == 0) {
+        Object.values(permissions).forEach( p => {
+            addEntryToManifest(manifestXmlDoc, p.readPermission);
+            addEntryToManifest(manifestXmlDoc, p.writePermission);
+        });
+    }
+
+    // Write updated files
+    const serializer = new XMLSerializer();
+    
+    // Update AndroidManifest.xml
+    const updatedManifestXmlString = serializer.serializeToString(manifestXmlDoc);
+    fs.writeFileSync(manifestFilePath, updatedManifestXmlString, 'utf-8');
+    
+    console.log('HealthFitness: Health permissions configured successfully');
+}
+
+function processAllVariables(manifestXmlDoc, permissionOperation, groupPermissionsValues) {
+    groupPermissionsValues.forEach(p => {
+        p.groupVariables.forEach( v => {
+            if (!p.wasSet && !permissions[v].wasSet) {
+                addEntryToManifest(manifestXmlDoc, permissionOperation == READ ? permissions[v].readPermission : permissions[v].writePermission);
+            }
+        });
+    });  
+}
+
+function addEntryToManifest(manifestXmlDoc, permission) {
+    // Check if permission already exists
+    const existingPermissions = manifestXmlDoc.getElementsByTagName('uses-permission');
+    for (let i = 0; i < existingPermissions.length; i++) {
+        if (existingPermissions[i].getAttribute('android:name') === permission) {
+            return; // Permission already exists
+        }
+    }
+
+    const indent = manifestXmlDoc.createTextNode('    ');
+    manifestXmlDoc.documentElement.appendChild(indent);
+
+    const newPermission = manifestXmlDoc.createElement('uses-permission');
+    newPermission.setAttribute('android:name', permission);
+    manifestXmlDoc.documentElement.appendChild(newPermission);
+
+    const newline = manifestXmlDoc.createTextNode('\n');
+    manifestXmlDoc.documentElement.appendChild(newline);
 }
 
 function setPrivacyPolicyUrl(config) {
@@ -180,6 +441,9 @@ function configureAndroid() {
     const platformPath = path.join(appDir, 'app/src/main');
     const assetsPath = path.join(platformPath, `assets/public/${fileNamePrivacyPolicy}`);
     
+    // Configure health permissions
+    addHealthConnectPermissions(capacitorConfig);
+    
     // Check if privacy policy file exists or if we should construct URL
     if (fileExists(assetsPath) || policyFileExists(platformPath)) {
         setPrivacyPolicyUrl(capacitorConfig);
@@ -188,7 +452,6 @@ function configureAndroid() {
     }
 }
 
-// Handle Android - Privacy Policy URL configuration
 if (platform === "android") {
     configureAndroid();
 }
