@@ -27,7 +27,6 @@ dependencies{
     implementation("com.github.outsystems:oscordova-android:2.0.1@aar")
     implementation("com.github.outsystems:oshealthfitness-android:2.4.0@aar")
     implementation("com.github.outsystems:osnotificationpermissions-android:0.0.4@aar")
-    implementation(files("libs/OSHealthFitnessLib-debug.aar"))
 
     // activity
     implementation "androidx.activity:activity-ktx:1.8.2"
