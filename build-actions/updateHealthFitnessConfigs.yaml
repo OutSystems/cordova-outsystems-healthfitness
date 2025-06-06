@@ -47,6 +47,12 @@ platforms:
     
     # AndroidManifest.xml permissions
     manifest:
+      # Health Data History (older than 30 days)
+      - file: AndroidManifest.xml
+        target: manifest
+        inject: |
+          <uses-permission android:name="android.permission.READ_HEALTH_DATA_HISTORY" />
+
       # Background Job Permissions
       - file: AndroidManifest.xml
         target: manifest

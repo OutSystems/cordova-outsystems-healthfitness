@@ -354,7 +354,9 @@ function setPrivacyPolicyUrl(config) {
     let hostname, applicationNameUrl;
 
     if (config && config.server) {
-        hostname = config.server.hostname ?? "localhost";
+        hostname = config.server.hostname ?? 
+                   config.plugins?.OutSystemsCore?.defaultHostname ??  
+                   "localhost";
         applicationNameUrl = config.server.url;
     }
 

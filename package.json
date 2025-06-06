@@ -23,6 +23,6 @@
   },
   "scripts": {
     "capacitor:sync:after": "node hooks/capacitorCopyHealthFitnessConfigs.js",
-    "capacitor:update:after": "node hooks/capacitorKaptGradleFix.js"
+    "capacitor:update:after": "node hooks/capacitorKaptGradleFix.js && node hooks/capacitorInsertAzureRepository.js"
   }
 }
