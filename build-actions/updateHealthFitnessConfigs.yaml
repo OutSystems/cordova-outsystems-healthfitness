@@ -17,6 +17,11 @@ variables:
     type: boolean
     default: false
 
+  # Health Data History (older than 30 days)
+  DISABLE_READ_HEALTH_DATA_HISTORY:
+    type: boolean
+    default: false
+
 platforms:
   android:
     xml:
@@ -52,6 +57,7 @@ platforms:
         target: manifest
         inject: |
           <uses-permission android:name="android.permission.READ_HEALTH_DATA_HISTORY" />
+        condition: eq($DISABLE_READ_HEALTH_DATA_HISTORY, false)
 
       # Background Job Permissions
       - file: AndroidManifest.xml
