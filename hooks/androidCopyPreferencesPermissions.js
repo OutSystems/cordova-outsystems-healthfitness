@@ -150,6 +150,9 @@ module.exports = async function (context) {
     // add background job permissions to AndroidManifest.xml
     addBackgroundJobPermissionsToManifest(configParser, projectRoot, parser);
 
+    // add read health data permission to AndroidManifest.xml - allows apps to read data older than 30 days before first permission granting of HealthConnect in the app
+    addReadHealthDataHistoryPermissionToManifest(configParser, projectRoot, parser);
+
     // copy notification title and content for notificaiton for Foreground Service
     copyNotificationContent(configParser, projectRoot, parser);
 };
@@ -313,6 +316,30 @@ function addBackgroundJobPermissionsToManifest(configParser, projectRoot, parser
         fs.writeFileSync(permissionsXmlFilePath, updatedPermissionsXmlString, 'utf-8');
     }
 
+}
+
+function addReadHealthDataHistoryPermissionToManifest(configParser, projectRoot, parser) {
+    const disableReadHealthHistory = configParser.getPlatformPreference('DisableReadHealthDataHistory', 'android');
+
+    // we want to include the permission by default
+    // if disableReadHealthHistory == true then we don't want to include the permission in the manfiest
+    if (disableReadHealthHistory !== "true") {
+        const manifestFilePath = path.join(projectRoot, 'platforms/android/app/src/main/AndroidManifest.xml');
+        const manifestXmlString = fs.readFileSync(manifestFilePath, 'utf-8');
+
+        // Parse the XML string
+        const manifestXmlDoc = parser.parseFromString(manifestXmlString, 'text/xml');
+
+        // add permission for reading health history data over 30 days before first permission granting of HealthConnect in the app
+        addEntryToManifest(manifestXmlDoc, 'android.permission.health.READ_HEALTH_DATA_HISTORY')
+
+        // serialize the updated XML documents back to strings
+        const serializer = new XMLSerializer();
+        const updatedManifestXmlString = serializer.serializeToString(manifestXmlDoc);
+
+        // write the updated XML strings back to the same files
+        fs.writeFileSync(manifestFilePath, updatedManifestXmlString, 'utf-8');
+    }
 }
 
 function addEntryToManifest(manifestXmlDoc, permission) {
