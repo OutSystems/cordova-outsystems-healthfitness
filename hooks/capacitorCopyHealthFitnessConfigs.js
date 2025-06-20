@@ -175,6 +175,23 @@ function getCapacitorConfig() {
     }
 }
 
+function getOutSystemsConfig() {
+    try {
+        const outsystemsConfigPath = path.join(projectRoot, "outsystems.config.json");
+        
+        if (fs.existsSync(outsystemsConfigPath)) {
+            const configContent = fs.readFileSync(outsystemsConfigPath, "utf8");
+            return JSON.parse(configContent);
+        }
+        
+        console.log("HealthFitness: No OutSystems config file found");
+        return null;
+    } catch (err) {
+        console.log("HealthFitness: Could not read OutSystems config:", err.message);
+        return null;
+    }
+}
+
 function parseConfigFile(configPath) {
     try {
         const configContent = fs.readFileSync(configPath, "utf8");
@@ -225,16 +242,28 @@ function policyFileExists(platformPath) {
 }
 
 function getConfigValue(config, key) {
-    if (!config || !config.outsystems || !config.outsystems.buildConfigurations || 
-        !config.outsystems.buildConfigurations.buildActions || !config.outsystems.buildConfigurations.buildActions[0] ||
-        !config.outsystems.buildConfigurations.buildActions[0].parameters) {
-        return undefined;
+    // Check outsystems.config.json first
+    if (config && config.buildConfigurations && 
+        config.buildConfigurations.buildActions && config.buildConfigurations.buildActions[0] &&
+        config.buildConfigurations.buildActions[0].parameters) {
+        return config.buildConfigurations.buildActions[0].parameters[key];
     }
-    return config.outsystems.buildConfigurations.buildActions[0].parameters[key];
+    
+    // Fallback to old structure (capacitor.config.json with embedded outsystems config)
+    if (config && config.outsystems && config.outsystems.buildConfigurations && 
+        config.outsystems.buildConfigurations.buildActions && config.outsystems.buildConfigurations.buildActions[0] &&
+        config.outsystems.buildConfigurations.buildActions[0].parameters) {
+        return config.outsystems.buildConfigurations.buildActions[0].parameters[key];
+    }
+    
+    return undefined;
 }
 
-function addHealthConnectPermissions(config) {
+function addHealthConnectPermissions(capacitorConfig, outsystemsConfig) {
     const parser = new DOMParser();
+    
+    // Try to get config values from OutSystems config first, then fall back to Capacitor config
+    const config = outsystemsConfig || capacitorConfig;
     
     // Get individual permission values from config
     for(const key in permissions){
@@ -439,12 +468,13 @@ function setPrivacyPolicyUrl(config) {
 
 function configureAndroid() {
     const capacitorConfig = getCapacitorConfig();
+    const outsystemsConfig = getOutSystemsConfig();
     const appDir = getAppDir();
     const platformPath = path.join(appDir, 'app/src/main');
     const assetsPath = path.join(platformPath, `assets/public/${fileNamePrivacyPolicy}`);
     
     // Configure health permissions
-    addHealthConnectPermissions(capacitorConfig);
+    addHealthConnectPermissions(capacitorConfig, outsystemsConfig);
     
     // Check if privacy policy file exists or if we should construct URL
     if (fileExists(assetsPath) || policyFileExists(platformPath)) {
