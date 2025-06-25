@@ -22,6 +22,64 @@ variables:
     type: boolean
     default: false
 
+  # Individual Health Permissions
+  HEART_RATE:
+    type: string
+    default: ""
+  STEPS:
+    type: string
+    default: ""
+  WEIGHT:
+    type: string
+    default: ""
+  HEIGHT:
+    type: string
+    default: ""
+  CALORIES_BURNED:
+    type: string
+    default: ""
+  SLEEP:
+    type: string
+    default: ""
+  BLOOD_PRESSURE:
+    type: string
+    default: ""
+  BLOOD_GLUCOSE:
+    type: string
+    default: ""
+  BODY_FAT_PERCENTAGE:
+    type: string
+    default: ""
+  BASAL_METABOLIC_RATE:
+    type: string
+    default: ""
+  WALKING_SPEED:
+    type: string
+    default: ""
+  DISTANCE:
+    type: string
+    default: ""
+  OXYGEN_SATURATION:
+    type: string
+    default: ""
+  BODY_TEMPERATURE:
+    type: string
+    default: ""
+  
+  # Group Health Permissions
+  ALL_VARIABLES:
+    type: string
+    default: ""
+  FITNESS_VARIABLES:
+    type: string
+    default: ""
+  HEALTH_VARIABLES:
+    type: string
+    default: ""
+  PROFILE_VARIABLES:
+    type: string
+    default: ""
+
 platforms:
   android:
     xml:
@@ -107,6 +165,31 @@ platforms:
         inject: |
           <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
         condition: eq($DISABLE_BACKGROUND_JOBS, false)
+
+    # Create configuration file
+    json:
+      - file: healthfitness.config.json
+        set:
+          permissions:
+            HEART_RATE: $HEART_RATE
+            STEPS: $STEPS
+            WEIGHT: $WEIGHT
+            HEIGHT: $HEIGHT
+            CALORIES_BURNED: $CALORIES_BURNED
+            SLEEP: $SLEEP
+            BLOOD_PRESSURE: $BLOOD_PRESSURE
+            BLOOD_GLUCOSE: $BLOOD_GLUCOSE
+            BODY_FAT_PERCENTAGE: $BODY_FAT_PERCENTAGE
+            BASAL_METABOLIC_RATE: $BASAL_METABOLIC_RATE
+            WALKING_SPEED: $WALKING_SPEED
+            DISTANCE: $DISTANCE
+            OXYGEN_SATURATION: $OXYGEN_SATURATION
+            BODY_TEMPERATURE: $BODY_TEMPERATURE
+          groupPermissions:
+            ALL_VARIABLES: $ALL_VARIABLES
+            FITNESS_VARIABLES: $FITNESS_VARIABLES
+            HEALTH_VARIABLES: $HEALTH_VARIABLES
+            PROFILE_VARIABLES: $PROFILE_VARIABLES
 
   ios:
     plist:

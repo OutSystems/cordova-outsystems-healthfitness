@@ -175,19 +175,19 @@ function getCapacitorConfig() {
     }
 }
 
-function getOutSystemsConfig() {
+function getHealthFitnessConfig() {
     try {
-        const outsystemsConfigPath = path.join(projectRoot, "outsystems.config.json");
+        const configPath = path.join(projectRoot, "healthfitness.config.json");
         
-        if (fs.existsSync(outsystemsConfigPath)) {
-            const configContent = fs.readFileSync(outsystemsConfigPath, "utf8");
+        if (fs.existsSync(configPath)) {
+            const configContent = fs.readFileSync(configPath, "utf8");
             return JSON.parse(configContent);
         }
         
-        console.log("HealthFitness: No OutSystems config file found");
+        console.log("HealthFitness: No healthfitness.config.json file found");
         return null;
     } catch (err) {
-        console.log("HealthFitness: Could not read OutSystems config:", err.message);
+        console.log("HealthFitness: Could not read healthfitness config:", err.message);
         return null;
     }
 }
@@ -218,8 +218,18 @@ function parseConfigFile(configPath) {
     }
 }
 
-function fileExists(filePath) {
-    return fs.existsSync(filePath);
+function getConfigValue(config, key) {
+    if (!config || !config.permissions) {
+        return undefined;
+    }
+    return config.permissions[key];
+}
+
+function getGroupConfigValue(config, key) {
+    if (!config || !config.groupPermissions) {
+        return undefined;
+    }
+    return config.groupPermissions[key];
 }
 
 function policyFileExists(platformPath) {
@@ -241,29 +251,8 @@ function policyFileExists(platformPath) {
     }
 }
 
-function getConfigValue(config, key) {
-    // Check outsystems.config.json first
-    if (config && config.buildConfigurations && 
-        config.buildConfigurations.buildActions && config.buildConfigurations.buildActions[0] &&
-        config.buildConfigurations.buildActions[0].parameters) {
-        return config.buildConfigurations.buildActions[0].parameters[key];
-    }
-    
-    // Fallback to old structure (capacitor.config.json with embedded outsystems config)
-    if (config && config.outsystems && config.outsystems.buildConfigurations && 
-        config.outsystems.buildConfigurations.buildActions && config.outsystems.buildConfigurations.buildActions[0] &&
-        config.outsystems.buildConfigurations.buildActions[0].parameters) {
-        return config.outsystems.buildConfigurations.buildActions[0].parameters[key];
-    }
-    
-    return undefined;
-}
-
-function addHealthConnectPermissions(capacitorConfig, outsystemsConfig) {
+function addHealthConnectPermissions(config) {
     const parser = new DOMParser();
-    
-    // Try to get config values from OutSystems config first, then fall back to Capacitor config
-    const config = outsystemsConfig || capacitorConfig;
     
     // Get individual permission values from config
     for(const key in permissions){
@@ -272,7 +261,7 @@ function addHealthConnectPermissions(capacitorConfig, outsystemsConfig) {
 
     // Get group permission values from config  
     for(const key in groupPermissions){
-        groupPermissions[key].configValue = getConfigValue(config, groupPermissions[key].configKey);
+        groupPermissions[key].configValue = getGroupConfigValue(config, groupPermissions[key].configKey);
     }
 
     // Read AndroidManifest.xml
@@ -446,13 +435,13 @@ function setPrivacyPolicyUrl(config) {
             // Only update privacy policy URL if it's still the placeholder value (meaning build action didn't override it)
             if (privacyPolicyElement.textContent === 'PRIVACY_POLICY_URL') {
                 privacyPolicyElement.textContent = url;
-                
-                const serializer = new XMLSerializer();
-                let updatedXmlString = serializer.serializeToString(stringsDoc);
-                updatedXmlString = updatedXmlString.replace(/<\/resources>$/, '\n</resources>\n');
-                
-                fs.writeFileSync(stringsPath, updatedXmlString, 'utf-8');
-                
+            
+            const serializer = new XMLSerializer();
+            let updatedXmlString = serializer.serializeToString(stringsDoc);
+            updatedXmlString = updatedXmlString.replace(/<\/resources>$/, '\n</resources>\n');
+            
+            fs.writeFileSync(stringsPath, updatedXmlString, 'utf-8');
+            
                 console.log(`HealthFitness: Privacy policy URL set to: ${url}`);
             } else {
                 console.log('HealthFitness: Privacy policy URL already set via build action, skipping.');
@@ -468,17 +457,17 @@ function setPrivacyPolicyUrl(config) {
 
 function configureAndroid() {
     const capacitorConfig = getCapacitorConfig();
-    const outsystemsConfig = getOutSystemsConfig();
+    const config = getHealthFitnessConfig();
     const appDir = getAppDir();
     const platformPath = path.join(appDir, 'app/src/main');
     const assetsPath = path.join(platformPath, `assets/public/${fileNamePrivacyPolicy}`);
     
     // Configure health permissions
-    addHealthConnectPermissions(capacitorConfig, outsystemsConfig);
+    addHealthConnectPermissions(config);
     
     // Check if privacy policy file exists or if we should construct URL
-    if (fileExists(assetsPath) || policyFileExists(platformPath)) {
-        setPrivacyPolicyUrl(capacitorConfig);
+    if (fs.existsSync(assetsPath) || policyFileExists(platformPath)) {
+        setPrivacyPolicyUrl(config);
     } else {
         console.log('HealthFitness: Privacy Policy file not found, URL will need to be set via build action.');
     }
