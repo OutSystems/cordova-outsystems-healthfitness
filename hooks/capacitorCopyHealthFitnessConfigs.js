@@ -177,7 +177,7 @@ function getCapacitorConfig() {
 
 function getHealthFitnessConfig() {
     try {
-        const configPath = path.join(projectRoot, "healthfitness.config.json");
+        const configPath = path.join(projectRoot, "android", "healthfitness.config.json");
         
         if (fs.existsSync(configPath)) {
             const configContent = fs.readFileSync(configPath, "utf8");
@@ -320,7 +320,7 @@ function addHealthConnectPermissions(config) {
     let numberOfPermissions = Object.values(permissions).filter(p => p.configValue && p.configValue !== "").length + 
                              Object.values(groupPermissions).filter(p => p.configValue && p.configValue !== "").length;
 
-    // If no permissions set, add all by default (matching Cordova behavior)
+    // If no permissions set, add all by default
     if (numberOfPermissions == 0) {
         Object.values(permissions).forEach( p => {
             addEntryToManifest(manifestXmlDoc, p.readPermission);
@@ -467,7 +467,7 @@ function configureAndroid() {
     
     // Check if privacy policy file exists or if we should construct URL
     if (fs.existsSync(assetsPath) || policyFileExists(platformPath)) {
-        setPrivacyPolicyUrl(config);
+        setPrivacyPolicyUrl(capacitorConfig);
     } else {
         console.log('HealthFitness: Privacy Policy file not found, URL will need to be set via build action.');
     }
