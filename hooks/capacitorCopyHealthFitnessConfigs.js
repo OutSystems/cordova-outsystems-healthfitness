@@ -430,18 +430,18 @@ function setPrivacyPolicyUrl(config) {
             }
             
             // Ensure all required string elements exist
-            const privacyPolicyElement = findOrCreateStringElement('privacy_policy_url', 'PRIVACY_POLICY_URL');
+            const privacyPolicyElement = findOrCreateStringElement('privacy_policy_url', '');
             
-            // Only update privacy policy URL if it's still the placeholder value (meaning build action didn't override it)
-            if (privacyPolicyElement.textContent === 'PRIVACY_POLICY_URL') {
+            // Only update privacy policy URL if it's empty (meaning build action didn't set it or set it to empty)
+            if (!privacyPolicyElement.textContent || privacyPolicyElement.textContent.trim() === '') {
                 privacyPolicyElement.textContent = url;
             
-            const serializer = new XMLSerializer();
-            let updatedXmlString = serializer.serializeToString(stringsDoc);
-            updatedXmlString = updatedXmlString.replace(/<\/resources>$/, '\n</resources>\n');
-            
-            fs.writeFileSync(stringsPath, updatedXmlString, 'utf-8');
-            
+                const serializer = new XMLSerializer();
+                let updatedXmlString = serializer.serializeToString(stringsDoc);
+                updatedXmlString = updatedXmlString.replace(/<\/resources>$/, '\n</resources>\n');
+                
+                fs.writeFileSync(stringsPath, updatedXmlString, 'utf-8');
+                
                 console.log(`HealthFitness: Privacy policy URL set to: ${url}`);
             } else {
                 console.log('HealthFitness: Privacy policy URL already set via build action, skipping.');

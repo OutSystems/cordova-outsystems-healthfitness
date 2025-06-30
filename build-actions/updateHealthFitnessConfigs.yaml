@@ -90,7 +90,6 @@ platforms:
           <resources>
             <string name="privacy_policy_url">$PRIVACY_POLICY_URL</string>
           </resources>
-        condition: ne($PRIVACY_POLICY_URL ?? "", "")
       
       # Background Notification Title
       - resFile: values/strings.xml
