@@ -33,12 +33,27 @@ function setPrivacyPolicyUrl(configParser, projectRoot) {
         const stringsPath = path.join(projectRoot, mainFolder, 'res/values/strings.xml');
         const stringsFile = fs.readFileSync(stringsPath).toString();
         const etreeStrings = et.parse(stringsFile);
-    
-        let privacyPolicyUrl = etreeStrings.find('./string[@name="privacy_policy_url"]');
-        if (!privacyPolicyUrl) {
-            throw new Error (`OUTSYSTEMS_PLUGIN_ERROR: Privacy policy URL string not found in strings.xml.`)
+        const resources = etreeStrings.getroot();
+
+        // find all matching elements
+        const existingEntries = resources.findall('./string[@name="privacy_policy_url"]');
+
+        if (existingEntries.length > 0) {
+            // update the first match
+            existingEntries[0].text = url;
+
+            // remove any extra duplicates (if they exist)
+            for (let i = 1; i < existingEntries.length; i++) {
+                resources.remove(existingEntries[i]);
+            }
+        } else {
+            // create a new <string> element for privacy_policy_url if it does not exist
+            const newElement = new et.Element('string');
+            newElement.set('name', 'privacy_policy_url');
+            newElement.text = url;
+            resources.append(newElement);
         }
-        privacyPolicyUrl.text = url;
+
         const resultXmlStrings = etreeStrings.write({method: 'xml'});
         fs.writeFileSync(stringsPath, resultXmlStrings);
     } else {

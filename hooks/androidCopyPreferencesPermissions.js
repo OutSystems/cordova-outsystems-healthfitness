@@ -150,6 +150,9 @@ module.exports = async function (context) {
     // add background job permissions to AndroidManifest.xml
     addBackgroundJobPermissionsToManifest(configParser, projectRoot, parser);
 
+    // add read health data permission to AndroidManifest.xml - allows apps to read data older than 30 days before first permission granting of HealthConnect in the app
+    addReadHealthDataHistoryPermissionToManifest(configParser, projectRoot, parser);
+
     // copy notification title and content for notificaiton for Foreground Service
     copyNotificationContent(configParser, projectRoot, parser);
 };
@@ -315,17 +318,58 @@ function addBackgroundJobPermissionsToManifest(configParser, projectRoot, parser
 
 }
 
+function addReadHealthDataHistoryPermissionToManifest(configParser, projectRoot, parser) {
+    const disableReadHealthHistory = configParser.getPlatformPreference('DisableReadHealthDataHistory', 'android');
+
+    // we want to include the permission by default
+    // if disableReadHealthHistory == true then we don't want to include the permission in the manfiest
+    if (disableReadHealthHistory !== "true") {
+        const manifestFilePath = path.join(projectRoot, 'platforms/android/app/src/main/AndroidManifest.xml');
+        const manifestXmlString = fs.readFileSync(manifestFilePath, 'utf-8');
+
+        // Parse the XML string
+        const manifestXmlDoc = parser.parseFromString(manifestXmlString, 'text/xml');
+
+        // add permission for reading health history data over 30 days before first permission granting of HealthConnect in the app
+        addEntryToManifest(manifestXmlDoc, 'android.permission.health.READ_HEALTH_DATA_HISTORY')
+
+        // serialize the updated XML documents back to strings
+        const serializer = new XMLSerializer();
+        const updatedManifestXmlString = serializer.serializeToString(manifestXmlDoc);
+
+        // write the updated XML strings back to the same files
+        fs.writeFileSync(manifestFilePath, updatedManifestXmlString, 'utf-8');
+    }
+}
+
 function addEntryToManifest(manifestXmlDoc, permission) {
-    const newPermission = manifestXmlDoc.createElement('uses-permission');
-    newPermission.setAttribute('android:name', permission);
-    manifestXmlDoc.documentElement.appendChild(newPermission);
+    const existingPermissions = Array.from(manifestXmlDoc.getElementsByTagName('uses-permission'));
+    const alreadyExists = existingPermissions.some(el => el.getAttribute('android:name') === permission);
+
+    // we only add the permission if it's not already there
+    if (!alreadyExists) {
+        const newPermission = manifestXmlDoc.createElement('uses-permission');
+        newPermission.setAttribute('android:name', permission);
+        manifestXmlDoc.documentElement.appendChild(newPermission);
+    }
+    
 }
 
 function addEntryToPermissionsXML(permissionsXmlDoc, arrayElement, permission) {
-    const newItem = permissionsXmlDoc.createElement('item');
-    const textNode = permissionsXmlDoc.createTextNode(permission);
-    newItem.appendChild(textNode);
-    arrayElement.appendChild(newItem);
+    const existingItems = Array.from(arrayElement.getElementsByTagName('item'));
+
+    const alreadyExists = existingItems.some(item => {
+        const textContent = item.textContent?.trim();
+        return textContent === permission;
+    });
+
+    // we only add the permission if it's not already there
+    if (!alreadyExists) {
+        const newItem = permissionsXmlDoc.createElement('item');
+        const textNode = permissionsXmlDoc.createTextNode(permission);
+        newItem.appendChild(textNode);
+        arrayElement.appendChild(newItem);
+    }
 }
 
 function copyNotificationContent(configParser, projectRoot, parser) {
@@ -346,18 +390,9 @@ function copyNotificationContent(configParser, projectRoot, parser) {
     const stringsXmlPath = path.join(projectRoot, 'platforms/android/app/src/main/res/values/strings.xml');
     const stringsXmlString = fs.readFileSync(stringsXmlPath, 'utf-8');
     const stringsXmlDoc = parser.parseFromString(stringsXmlString, 'text/xml')
-    const stringElements = stringsXmlDoc.getElementsByTagName('string');
 
-    // set text for each <string> element
-    for (let i = 0; i < stringElements.length; i++) {
-        const name = stringElements[i].getAttribute('name');
-        if (name == "background_notification_title") {
-            stringElements[i].textContent = notificationTitle;
-        }
-        else if (name == "background_notification_description") {
-            stringElements[i].textContent = notificationDescription;
-        }
-    }
+    upsertString("background_notification_title", notificationTitle, stringsXmlDoc);
+    upsertString("background_notification_description", notificationDescription, stringsXmlDoc);
 
     // serialize the updated XML document back to string
     const serializer = new XMLSerializer();
@@ -365,4 +400,25 @@ function copyNotificationContent(configParser, projectRoot, parser) {
 
     // write the updated XML string back to the same file
     fs.writeFileSync(stringsXmlPath, updatedXmlString, 'utf-8');
+}
+
+function upsertString(name, value, stringsXmlDoc) {
+    const resourcesNode = stringsXmlDoc.getElementsByTagName('resources')[0];
+    const stringElementsArray = Array.from(stringsXmlDoc.getElementsByTagName('string'));
+    const matchingElements = stringElementsArray.filter(el => el.getAttribute('name') === name);
+
+    if (matchingElements.length > 0) {
+        // update the first match
+        matchingElements[0].textContent = value;
+
+        // remove any duplicates
+        for (let i = 1; i < matchingElements.length; i++) {
+            resourcesNode.removeChild(matchingElements[i]);
+        }
+    } else { // add element to file if it does not exist
+        const newStringElement = stringsXmlDoc.createElement('string');
+        newStringElement.setAttribute('name', name);
+        newStringElement.appendChild(stringsXmlDoc.createTextNode(value));
+        resourcesNode.appendChild(newStringElement);
+    }
 }

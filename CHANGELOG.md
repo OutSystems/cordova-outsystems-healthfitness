@@ -6,6 +6,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 The changes documented here do not include those from the original repository.
 
+## [Unreleased]
+
+### Features
+- (android) Updates hooks to avoid duplicates in XML files (https://outsystemsrd.atlassian.net/browse/RMET-4025).
+- (ios) Fix: Ensure accurate distance retrieval for all supported workout types by mapping `HKWorkoutActivityType` to the correct `HKQuantityTypeIdentifier`. (https://outsystemsrd.atlassian.net/browse/RMET-4254).
+
+## [2.3.2]
+
+### Features
+- (android) Allow app to request health data older than 30 days (https://outsystemsrd.atlassian.net/browse/RMET-4179).
+
 ## [2.3.1]
 
 ### Chores
