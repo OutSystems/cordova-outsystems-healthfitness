@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 
 const platform = process.env.CAPACITOR_PLATFORM_NAME;
-console.log("\tPayments plugin - running hook after update - for " + platform);
+console.log("\Health & Fitness plugin - running hook after update - for " + platform);
 const projectDirPath = process.env.CAPACITOR_ROOT_DIR;
 
 if (platform == 'android') {
@@ -10,7 +10,7 @@ if (platform == 'android') {
 }
 
 /**
- * Add the azure repository (where payments native Android library is housed) to project root's build.gradle
+ * Add the azure repository (where health&fitness native Android library is housed) to project root's build.gradle
  * Because capacitor plugins are injected as separate gradle modules, this is necessary for release builds lintVital gradle tasks to pass.
  */
 function fixAndroidAzureRepository() {

@@ -113,7 +113,7 @@ platforms:
       - file: AndroidManifest.xml
         target: manifest
         inject: |
-          <uses-permission android:name="android.permission.READ_HEALTH_DATA_HISTORY" />
+          <uses-permission android:name="android.permission.health.READ_HEALTH_DATA_HISTORY" />
         condition: eq($DISABLE_READ_HEALTH_DATA_HISTORY, false)
 
       # Background Job Permissions
