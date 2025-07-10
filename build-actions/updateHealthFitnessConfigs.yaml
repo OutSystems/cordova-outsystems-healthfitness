@@ -1,0 +1,208 @@
+variables:
+  # Privacy Policy Override
+  PRIVACY_POLICY_URL:
+    type: string
+    default: ""
+  
+  # Background Notifications
+  BACKGROUND_NOTIFICATION_TITLE:
+    type: string
+    default: "Measuring your health and fitness data."
+  BACKGROUND_NOTIFICATION_DESCRIPTION:
+    type: string
+    default: "The app is running in the background."
+
+  # Background Jobs
+  DISABLE_BACKGROUND_JOBS:
+    type: boolean
+    default: false
+
+  # Health Data History (older than 30 days)
+  DISABLE_READ_HEALTH_DATA_HISTORY:
+    type: boolean
+    default: false
+
+  # Individual Health Permissions
+  HEART_RATE:
+    type: string
+    default: ""
+  STEPS:
+    type: string
+    default: ""
+  WEIGHT:
+    type: string
+    default: ""
+  HEIGHT:
+    type: string
+    default: ""
+  CALORIES_BURNED:
+    type: string
+    default: ""
+  SLEEP:
+    type: string
+    default: ""
+  BLOOD_PRESSURE:
+    type: string
+    default: ""
+  BLOOD_GLUCOSE:
+    type: string
+    default: ""
+  BODY_FAT_PERCENTAGE:
+    type: string
+    default: ""
+  BASAL_METABOLIC_RATE:
+    type: string
+    default: ""
+  WALKING_SPEED:
+    type: string
+    default: ""
+  DISTANCE:
+    type: string
+    default: ""
+  OXYGEN_SATURATION:
+    type: string
+    default: ""
+  BODY_TEMPERATURE:
+    type: string
+    default: ""
+  
+  # Group Health Permissions
+  ALL_VARIABLES:
+    type: string
+    default: ""
+  FITNESS_VARIABLES:
+    type: string
+    default: ""
+  HEALTH_VARIABLES:
+    type: string
+    default: ""
+  PROFILE_VARIABLES:
+    type: string
+    default: ""
+
+platforms:
+  android:
+    xml:
+      # Privacy Policy URL Override
+      - resFile: values/strings.xml
+        target: resources
+        merge: |
+          <resources>
+            <string name="privacy_policy_url">$PRIVACY_POLICY_URL</string>
+          </resources>
+      
+      # Background Notification Title
+      - resFile: values/strings.xml
+        target: resources
+        merge: |
+          <resources>
+            <string name="background_notification_title">$BACKGROUND_NOTIFICATION_TITLE</string>
+          </resources>
+      
+      # Background Notification Description
+      - resFile: values/strings.xml
+        target: resources
+        merge: |
+          <resources>
+            <string name="background_notification_description">$BACKGROUND_NOTIFICATION_DESCRIPTION</string>
+          </resources>
+    
+    # AndroidManifest.xml permissions
+    manifest:
+      # Health Data History (older than 30 days)
+      - file: AndroidManifest.xml
+        target: manifest
+        inject: |
+          <uses-permission android:name="android.permission.health.READ_HEALTH_DATA_HISTORY" />
+        condition: eq($DISABLE_READ_HEALTH_DATA_HISTORY, false)
+
+      # Background Job Permissions
+      - file: AndroidManifest.xml
+        target: manifest
+        inject: |
+          <uses-permission android:name="android.permission.health.READ_HEALTH_DATA_IN_BACKGROUND" />
+        condition: eq($DISABLE_BACKGROUND_JOBS, false)
+      
+      - file: AndroidManifest.xml
+        target: manifest
+        inject: |
+          <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+        condition: eq($DISABLE_BACKGROUND_JOBS, false)
+      
+      - file: AndroidManifest.xml
+        target: manifest
+        inject: |
+          <uses-permission android:name="android.permission.ACTIVITY_RECOGNITION" />
+        condition: eq($DISABLE_BACKGROUND_JOBS, false)
+      
+      - file: AndroidManifest.xml
+        target: manifest
+        inject: |
+          <uses-permission android:name="com.google.android.gms.permission.ACTIVITY_RECOGNITION" />
+        condition: eq($DISABLE_BACKGROUND_JOBS, false)
+      
+      - file: AndroidManifest.xml
+        target: manifest
+        inject: |
+          <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+        condition: eq($DISABLE_BACKGROUND_JOBS, false)
+      
+      - file: AndroidManifest.xml
+        target: manifest
+        inject: |
+          <uses-permission android:name="android.permission.FOREGROUND_SERVICE_HEALTH" />
+        condition: eq($DISABLE_BACKGROUND_JOBS, false)
+      
+      - file: AndroidManifest.xml
+        target: manifest
+        inject: |
+          <uses-permission android:name="android.permission.HIGH_SAMPLING_RATE_SENSORS" />
+        condition: eq($DISABLE_BACKGROUND_JOBS, false)
+      
+      - file: AndroidManifest.xml
+        target: manifest
+        inject: |
+          <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
+        condition: eq($DISABLE_BACKGROUND_JOBS, false)
+
+    # Create configuration file
+    json:
+      - file: healthfitness.config.json
+        set:
+          permissions:
+            HEART_RATE: $HEART_RATE
+            STEPS: $STEPS
+            WEIGHT: $WEIGHT
+            HEIGHT: $HEIGHT
+            CALORIES_BURNED: $CALORIES_BURNED
+            SLEEP: $SLEEP
+            BLOOD_PRESSURE: $BLOOD_PRESSURE
+            BLOOD_GLUCOSE: $BLOOD_GLUCOSE
+            BODY_FAT_PERCENTAGE: $BODY_FAT_PERCENTAGE
+            BASAL_METABOLIC_RATE: $BASAL_METABOLIC_RATE
+            WALKING_SPEED: $WALKING_SPEED
+            DISTANCE: $DISTANCE
+            OXYGEN_SATURATION: $OXYGEN_SATURATION
+            BODY_TEMPERATURE: $BODY_TEMPERATURE
+          groupPermissions:
+            ALL_VARIABLES: $ALL_VARIABLES
+            FITNESS_VARIABLES: $FITNESS_VARIABLES
+            HEALTH_VARIABLES: $HEALTH_VARIABLES
+            PROFILE_VARIABLES: $PROFILE_VARIABLES
+
+  ios:
+    plist:
+      - replace: false
+        entries:
+          - UIBackgroundModes:
+              - fetch
+              - processing
+          - BGTaskSchedulerPermittedIdentifiers:
+              - com.outsystems.health.default
+    entitlements:
+    # Extensiblity Config does not currently support boolean values, so we need to use strings and convert them in a hook
+      entries:
+        - com.apple.developer.healthkit: true
+        - com.apple.developer.healthkit.access: []
+        - com.apple.developer.healthkit.background-delivery: true
+        - com.apple.developer.healthkit.recalibrate-estimates: true
