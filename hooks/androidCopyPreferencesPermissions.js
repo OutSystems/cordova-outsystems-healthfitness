@@ -343,16 +343,33 @@ function addReadHealthDataHistoryPermissionToManifest(configParser, projectRoot,
 }
 
 function addEntryToManifest(manifestXmlDoc, permission) {
-    const newPermission = manifestXmlDoc.createElement('uses-permission');
-    newPermission.setAttribute('android:name', permission);
-    manifestXmlDoc.documentElement.appendChild(newPermission);
+    const existingPermissions = Array.from(manifestXmlDoc.getElementsByTagName('uses-permission'));
+    const alreadyExists = existingPermissions.some(el => el.getAttribute('android:name') === permission);
+
+    // we only add the permission if it's not already there
+    if (!alreadyExists) {
+        const newPermission = manifestXmlDoc.createElement('uses-permission');
+        newPermission.setAttribute('android:name', permission);
+        manifestXmlDoc.documentElement.appendChild(newPermission);
+    }
+    
 }
 
 function addEntryToPermissionsXML(permissionsXmlDoc, arrayElement, permission) {
-    const newItem = permissionsXmlDoc.createElement('item');
-    const textNode = permissionsXmlDoc.createTextNode(permission);
-    newItem.appendChild(textNode);
-    arrayElement.appendChild(newItem);
+    const existingItems = Array.from(arrayElement.getElementsByTagName('item'));
+
+    const alreadyExists = existingItems.some(item => {
+        const textContent = item.textContent?.trim();
+        return textContent === permission;
+    });
+
+    // we only add the permission if it's not already there
+    if (!alreadyExists) {
+        const newItem = permissionsXmlDoc.createElement('item');
+        const textNode = permissionsXmlDoc.createTextNode(permission);
+        newItem.appendChild(textNode);
+        arrayElement.appendChild(newItem);
+    }
 }
 
 function copyNotificationContent(configParser, projectRoot, parser) {
@@ -373,18 +390,9 @@ function copyNotificationContent(configParser, projectRoot, parser) {
     const stringsXmlPath = path.join(projectRoot, 'platforms/android/app/src/main/res/values/strings.xml');
     const stringsXmlString = fs.readFileSync(stringsXmlPath, 'utf-8');
     const stringsXmlDoc = parser.parseFromString(stringsXmlString, 'text/xml')
-    const stringElements = stringsXmlDoc.getElementsByTagName('string');
 
-    // set text for each <string> element
-    for (let i = 0; i < stringElements.length; i++) {
-        const name = stringElements[i].getAttribute('name');
-        if (name == "background_notification_title") {
-            stringElements[i].textContent = notificationTitle;
-        }
-        else if (name == "background_notification_description") {
-            stringElements[i].textContent = notificationDescription;
-        }
-    }
+    upsertString("background_notification_title", notificationTitle, stringsXmlDoc);
+    upsertString("background_notification_description", notificationDescription, stringsXmlDoc);
 
     // serialize the updated XML document back to string
     const serializer = new XMLSerializer();
@@ -392,4 +400,25 @@ function copyNotificationContent(configParser, projectRoot, parser) {
 
     // write the updated XML string back to the same file
     fs.writeFileSync(stringsXmlPath, updatedXmlString, 'utf-8');
+}
+
+function upsertString(name, value, stringsXmlDoc) {
+    const resourcesNode = stringsXmlDoc.getElementsByTagName('resources')[0];
+    const stringElementsArray = Array.from(stringsXmlDoc.getElementsByTagName('string'));
+    const matchingElements = stringElementsArray.filter(el => el.getAttribute('name') === name);
+
+    if (matchingElements.length > 0) {
+        // update the first match
+        matchingElements[0].textContent = value;
+
+        // remove any duplicates
+        for (let i = 1; i < matchingElements.length; i++) {
+            resourcesNode.removeChild(matchingElements[i]);
+        }
+    } else { // add element to file if it does not exist
+        const newStringElement = stringsXmlDoc.createElement('string');
+        newStringElement.setAttribute('name', name);
+        newStringElement.appendChild(stringsXmlDoc.createTextNode(value));
+        resourcesNode.appendChild(newStringElement);
+    }
 }

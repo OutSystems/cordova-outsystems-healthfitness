@@ -6,6 +6,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 The changes documented here do not include those from the original repository.
 
+## [2.4.0]
+
+### Features
+
+- (android/ios) MABS12 :: Update Extensibility Configurations (https://outsystemsrd.atlassian.net/browse/RMET-3641)
+
+### Fixes
+
+- (android) Updates hooks to avoid duplicates in XML files (https://outsystemsrd.atlassian.net/browse/RMET-4025).
+- (ios) Fix: Ensure accurate distance retrieval for all supported workout types by mapping `HKWorkoutActivityType` to the correct `HKQuantityTypeIdentifier`. (https://outsystemsrd.atlassian.net/browse/RMET-4254).
+
 ## [2.3.2]
 
 ### Features

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<plugin id="com.outsystems.plugins.healthfitness" version="2.3.2" xmlns="http://apache.org/cordova/ns/plugins/1.0" xmlns:android="http://schemas.android.com/apk/res/android">
+<plugin id="com.outsystems.plugins.healthfitness" version="2.4.0" xmlns="http://apache.org/cordova/ns/plugins/1.0" xmlns:android="http://schemas.android.com/apk/res/android">
   <name>HealthFitness</name>
   <description>Health &amp; Fitness cordova plugin for OutSystems applications.</description>
   <author>OutSystems Inc</author>
@@ -48,7 +48,7 @@
     </config-file>
 
     <!-- iOS Permissions -->
-    <preference name="HEALTH_SHARE_DESCRIPTION" default="App needs to shared health data" />
+    <preference name="HEALTH_SHARE_DESCRIPTION" default="App needs to share health data" />
     <config-file target="*-Info.plist" parent="NSHealthShareUsageDescription">
         <string>$HEALTH_SHARE_DESCRIPTION</string>
     </config-file>
