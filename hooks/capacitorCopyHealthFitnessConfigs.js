@@ -369,27 +369,14 @@ function addEntryToManifest(manifestXmlDoc, permission) {
 }
 
 function setPrivacyPolicyUrl(config) {
-    let hostname, applicationNameUrl;
+    let applicationNameUrl;
 
     if (config && config.server) {
-        hostname = config.server.hostname ?? 
-                   config.plugins?.OutSystemsCore?.defaultHostname ??  
-                   "localhost";
         applicationNameUrl = config.server.url;
     }
 
-    if (hostname && applicationNameUrl) {
-        // Clean up the applicationNameUrl if it contains the full URL
-        if (applicationNameUrl.startsWith('http')) {
-            try {
-                const url = new URL(applicationNameUrl);
-                applicationNameUrl = url.pathname.replace(/^\//, '').replace(/\/$/, '');
-            } catch (e) {
-                console.log("HealthFitness: Could not parse application URL, using as-is");
-            }
-        }
-        
-        const url = `https://${hostname}/${applicationNameUrl}/${fileNamePrivacyPolicy}`;
+    if (applicationNameUrl) {
+        const url = `${applicationNameUrl}${fileNamePrivacyPolicy}`;
         const stringsPath = path.join(getAppDir(), 'app/src/main/res/values/strings.xml');
         
         if (!fs.existsSync(stringsPath)) {
@@ -450,8 +437,7 @@ function setPrivacyPolicyUrl(config) {
             console.error('HealthFitness: Error updating strings.xml:', xmlError.message);
         }
     } else {
-        console.log('HealthFitness: Could not determine hostname and application URL for privacy policy construction.');
-        console.log(`HealthFitness: hostname=${hostname}, applicationNameUrl=${applicationNameUrl}`);
+        console.log('HealthFitness: Could not determine application URL for privacy policy construction.');
     }
 }
 
