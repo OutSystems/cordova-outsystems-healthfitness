@@ -11,6 +11,8 @@ The changes documented here do not include those from the original repository.
 ### Fixes
 
 - (android) MABS 12 ::: Properly set PrivacyPolicyURL in Capacitor hook (https://outsystemsrd.atlassian.net/browse/RMET-4334)
+- (android) :: Properly show status bar icons on Privacy Policy screen (https://outsystemsrd.atlassian.net/browse/RMET-4353)
+
 
 ## [2.4.0]
 
