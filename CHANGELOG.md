@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 The changes documented here do not include those from the original repository.
 
+### [2.4.2]
+
+### Fixes
+
+- (android) MABS 12 ::: Update build action to add Kotlin Gradle Plugin to app's build.gradle file (https://outsystemsrd.atlassian.net/browse/RMET-4515)
+
 ### [2.4.1]
 
 ### Fixes
