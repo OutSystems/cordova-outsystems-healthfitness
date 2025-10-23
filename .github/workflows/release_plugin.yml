@@ -26,20 +26,30 @@ jobs:
 
       - name: Install dependencies
         run: npm ci
+      
+      - name: Read package.json version before release
+        id: before
+        run: |
+          echo "PACKAGE_VERSION_BEFORE=$(node -p \"require('./package.json').version\")" >> $GITHUB_ENV
 
       - name: Run Semantic Release
         env:
           GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN_GITHUB }}
         run: npx semantic-release
+      
+      - name: Read package.json version after release
+        id: after
+        run: |
+          echo "PACKAGE_VERSION_AFTER=$(node -p \"require('./package.json').version\")" >> $GITHUB_ENV
 
       - name: Create PR to main
-        if: github.ref_name == 'release'
+        if: github.ref_name == 'release' && env.PACKAGE_VERSION_BEFORE != env.PACKAGE_VERSION_AFTER
         run: |
           git checkout -b release-pr-${GITHUB_RUN_NUMBER}
           gh auth login --with-token <<< "${GITHUB_TOKEN}"
           git push origin HEAD
           gh pr create \
             --title "Release ${{ github.run_number }}" \
-            --body "Automated release PR from release branch" \
+            --body "(Merge PR - Do NOT squash nor rebase) Automated release PR from release branch" \
             --base main \
             --head release-pr-${GITHUB_RUN_NUMBER}
