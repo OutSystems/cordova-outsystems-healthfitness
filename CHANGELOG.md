@@ -1,3 +1,10 @@
+## [2.5.1](https://github.com/OS-pedrogustavobilro/cordova-outsystems-healthfitness/compare/2.5.0...2.5.1) (2025-10-23)
+
+
+### Bug Fixes
+
+* Semantic release branch setup ([4c8034e](https://github.com/OS-pedrogustavobilro/cordova-outsystems-healthfitness/commit/4c8034e963a7534553e47765d69abfc59d911250))
+
 # [2.5.0](https://github.com/OS-pedrogustavobilro/cordova-outsystems-healthfitness/compare/2.4.1...2.5.0) (2025-10-23)
 
 
