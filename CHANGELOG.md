@@ -1,3 +1,10 @@
+# [2.6.0](https://github.com/OS-pedrogustavobilro/cordova-outsystems-healthfitness/compare/2.5.2...2.6.0) (2025-10-23)
+
+
+### Features
+
+* Open PR to main ([bfb099b](https://github.com/OS-pedrogustavobilro/cordova-outsystems-healthfitness/commit/bfb099b381e89e0fd9ec1931452ef8b58c8a7b4e))
+
 ## [2.5.2](https://github.com/OS-pedrogustavobilro/cordova-outsystems-healthfitness/compare/2.5.1...2.5.2) (2025-10-23)
 
 
