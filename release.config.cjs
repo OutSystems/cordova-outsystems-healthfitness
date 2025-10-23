@@ -25,7 +25,7 @@ module.exports = {
         npmPublish: false
       }
     ],
-    // upddate plugin.xml version
+    // update plugin.xml version
     {
       async prepare(pluginConfig, context) {
         const { nextRelease } = context;
