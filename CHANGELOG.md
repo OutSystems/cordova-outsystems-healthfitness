@@ -1,3 +1,10 @@
+## [2.6.1](https://github.com/OS-pedrogustavobilro/cordova-outsystems-healthfitness/compare/2.6.0...2.6.1) (2025-10-23)
+
+
+### Bug Fixes
+
+* PR creation ([8db73d4](https://github.com/OS-pedrogustavobilro/cordova-outsystems-healthfitness/commit/8db73d40af30158bf1c2748a1cd8e38bc98df5a6))
+
 # [2.6.0](https://github.com/OS-pedrogustavobilro/cordova-outsystems-healthfitness/compare/2.5.2...2.6.0) (2025-10-23)
 
 
