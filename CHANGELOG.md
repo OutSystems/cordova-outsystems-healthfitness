@@ -1,3 +1,10 @@
+# [2.5.0](https://github.com/OS-pedrogustavobilro/cordova-outsystems-healthfitness/compare/2.4.1...2.5.0) (2025-10-23)
+
+
+### Features
+
+* Generate new release ([834666f](https://github.com/OS-pedrogustavobilro/cordova-outsystems-healthfitness/commit/834666fec213188eac46aa306c3d31f97df9c315))
+
 ### [2.4.2]
 
 ### Fixes
