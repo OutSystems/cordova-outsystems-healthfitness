@@ -1,10 +1,16 @@
-# Changelog
-All notable changes to this project will be documented in this file.
+## [2.5.1](https://github.com/OS-pedrogustavobilro/cordova-outsystems-healthfitness/compare/2.5.0...2.5.1) (2025-10-23)
 
-The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
-and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-The changes documented here do not include those from the original repository.
+### Bug Fixes
+
+* Semantic release branch setup ([4c8034e](https://github.com/OS-pedrogustavobilro/cordova-outsystems-healthfitness/commit/4c8034e963a7534553e47765d69abfc59d911250))
+
+# [2.5.0](https://github.com/OS-pedrogustavobilro/cordova-outsystems-healthfitness/compare/2.4.1...2.5.0) (2025-10-23)
+
+
+### Features
+
+* Generate new release ([834666f](https://github.com/OS-pedrogustavobilro/cordova-outsystems-healthfitness/commit/834666fec213188eac46aa306c3d31f97df9c315))
 
 ### [2.4.2]
 
