@@ -3,8 +3,8 @@ const xml2js = require('xml2js');
 
 module.exports = {
   branches: [ // releases done in "release" branch, PR opened to main
-    { name: 'main', prerelease: false },
-    { name: 'release', prerelease: false }
+    { name: 'main', channel: 'latest', prerelease: false },
+    { name: 'release', channel: 'latest', prerelease: false }
   ],
   // releases done in "release" branch, PR opened to main
   tagFormat: '${version}',  // semantic-release uses vX.Y.Z by default, but our cordova plugins expect X.Y.Z
