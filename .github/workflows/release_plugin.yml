@@ -44,12 +44,14 @@ jobs:
 
       - name: Create PR to main
         if: github.ref_name == 'release' && env.PACKAGE_VERSION_BEFORE != env.PACKAGE_VERSION_AFTER
+        env:
+          GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN_GITHUB }}
         run: |
           git checkout -b release-pr-${GITHUB_RUN_NUMBER}
-          gh auth login --with-token <<< "${GITHUB_TOKEN}"
           git push origin HEAD
           gh pr create \
-            --title "Release ${{ github.run_number }}" \
-            --body "(Merge PR - Do NOT squash nor rebase) Automated release PR from release branch" \
+            --title "Release $VERSION" \
+            --body "[Merge this PR - Do NOT squash nor rebase, in order to keep commit hashes and tags] Automated release PR from release branch - GitHub run ${{ github.run_number }}" \
             --base main \
-            --head release-pr-${GITHUB_RUN_NUMBER}
+            --head release-pr-${GITHUB_RUN_NUMBER} \
+            --repo $GITHUB_REPOSITORY
