@@ -30,7 +30,7 @@ jobs:
       - name: Run Semantic Release
         env:
           GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN_GITHUB }}
-        run: npx semantic-release --no-ci
+        run: npx semantic-release
 
       - name: Create PR to main
         if: github.ref_name == 'release'
