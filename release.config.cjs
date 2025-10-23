@@ -2,11 +2,10 @@ const fs = require('fs');
 const xml2js = require('xml2js');
 
 module.exports = {
-  branches: [ // releases done in "release" branch, PR opened to main
+  branches: [ // releases done in "release" branch, PR opened to "main"
     { name: 'main', prerelease: false },
     { name: 'release', prerelease: false }
   ],
-  // releases done in "release" branch, PR opened to main
   tagFormat: '${version}',  // semantic-release uses vX.Y.Z by default, but our cordova plugins expect X.Y.Z
   plugins: [
     '@semantic-release/commit-analyzer',
@@ -25,7 +24,7 @@ module.exports = {
         npmPublish: false
       }
     ],
-    // upddate plugin.xml version
+    // update plugin.xml version
     {
       async prepare(pluginConfig, context) {
         const { nextRelease } = context;
@@ -70,5 +69,5 @@ module.exports = {
         addReleases: 'bottom'
       }
     ],
-  ],
+  ]
 };

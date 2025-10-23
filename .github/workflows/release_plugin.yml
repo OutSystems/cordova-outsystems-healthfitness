@@ -4,10 +4,13 @@ on:
   workflow_dispatch:
 
 permissions:
-    contents: write
+  contents: write
+  pull-requests: write   # Needed to create PR
+
 
 jobs:   
   release:
+    if: github.ref_name == 'main' || github.ref_name == 'release'
     runs-on: 'ubuntu-latest'
     timeout-minutes: 20
     steps:
@@ -15,14 +18,44 @@ jobs:
         with:
           fetch-depth: 0
           token: ${{ secrets.RELEASE_TOKEN_GITHUB }}
+
       - name: Install Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 25
-      - name: Install dependencies root
-        shell: bash
+
+      - name: Install dependencies
         run: npm ci
-      - name: Release
+      
+      - name: Read package.json version before release
+        id: before
+        run: |
+          PACKAGE_VERSION_BEFORE=$(node -p 'require("./package.json").version')
+          echo "PACKAGE_VERSION_BEFORE=$PACKAGE_VERSION_BEFORE" >> $GITHUB_ENV
+          echo "PACKAGE_VERSION_BEFORE: $PACKAGE_VERSION_BEFORE"
+
+      - name: Run Semantic Release
         env:
           GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN_GITHUB }}
         run: npx semantic-release
+      
+      - name: Read package.json version after release
+        id: after
+        run: |
+          PACKAGE_VERSION_AFTER=$(node -p 'require("./package.json").version')
+          echo "PACKAGE_VERSION_AFTER=$PACKAGE_VERSION_AFTER" >> $GITHUB_ENV
+          echo "PACKAGE_VERSION_AFTER: $PACKAGE_VERSION_AFTER"
+
+      - name: Create PR to main
+        if: github.ref_name == 'release' && env.PACKAGE_VERSION_BEFORE != env.PACKAGE_VERSION_AFTER
+        env:
+          GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN_GITHUB }}
+        run: |
+          git checkout -b release-pr-${GITHUB_RUN_NUMBER}
+          git push origin HEAD
+          gh pr create \
+            --title "Release $VERSION" \
+            --body "[Merge this PR - Do NOT squash nor rebase, in order to keep commit hashes and tags] Automated release PR from release branch - GitHub run ${{ github.run_number }}" \
+            --base main \
+            --head release-pr-${GITHUB_RUN_NUMBER} \
+            --repo $GITHUB_REPOSITORY
