@@ -4,10 +4,13 @@ on:
   workflow_dispatch:
 
 permissions:
-    contents: write
+  contents: write
+  pull-requests: write   # Needed to create PR
+
 
 jobs:   
   release:
+    if: github.ref_name == 'main' || github.ref_name == 'release'
     runs-on: 'ubuntu-latest'
     timeout-minutes: 20
     steps:
@@ -15,14 +18,28 @@ jobs:
         with:
           fetch-depth: 0
           token: ${{ secrets.RELEASE_TOKEN_GITHUB }}
+
       - name: Install Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 25
-      - name: Install dependencies root
-        shell: bash
+
+      - name: Install dependencies
         run: npm ci
-      - name: Release
+
+      - name: Run Semantic Release
         env:
           GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN_GITHUB }}
-        run: npx semantic-release
+        run: npx semantic-release --no-ci
+
+      - name: Create PR to main
+        if: github.ref_name == 'release'
+        run: |
+          git checkout -b release-pr-${GITHUB_RUN_NUMBER}
+          gh auth login --with-token <<< "${GITHUB_TOKEN}"
+          git push origin HEAD
+          gh pr create \
+            --title "Release ${{ github.run_number }}" \
+            --body "Automated release PR from release branch" \
+            --base main \
+            --head release-pr-${GITHUB_RUN_NUMBER}
