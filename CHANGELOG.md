@@ -1,3 +1,10 @@
+## [2.5.2](https://github.com/OS-pedrogustavobilro/cordova-outsystems-healthfitness/compare/2.5.1...2.5.2) (2025-10-23)
+
+
+### Bug Fixes
+
+* explicitly do not use prerelease ([78c08b5](https://github.com/OS-pedrogustavobilro/cordova-outsystems-healthfitness/commit/78c08b5d44257ead6112f156c0b7fa6ee516e843))
+
 ## [2.5.1](https://github.com/OS-pedrogustavobilro/cordova-outsystems-healthfitness/compare/2.5.0...2.5.1) (2025-10-23)
 
 
