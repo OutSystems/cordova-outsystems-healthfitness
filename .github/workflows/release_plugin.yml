@@ -30,8 +30,9 @@ jobs:
       - name: Read package.json version before release
         id: before
         run: |
-          echo "PACKAGE_VERSION_BEFORE=$(node -p 'require("./package.json").version')" >> $GITHUB_ENV
-          echo $PACKAGE_VERSION_BEFORE
+          PACKAGE_VERSION_BEFORE=$(node -p 'require("./package.json").version')
+          echo "PACKAGE_VERSION_BEFORE=$PACKAGE_VERSION_BEFORE" >> $GITHUB_ENV
+          echo "PACKAGE_VERSION_BEFORE: $PACKAGE_VERSION_BEFORE"
 
       - name: Run Semantic Release
         env:
@@ -41,8 +42,9 @@ jobs:
       - name: Read package.json version after release
         id: after
         run: |
-          echo "PACKAGE_VERSION_AFTER=$(node -p 'require("./package.json").version')" >> $GITHUB_ENV
-          echo $PACKAGE_VERSION_AFTER
+          PACKAGE_VERSION_AFTER=$(node -p 'require("./package.json").version')
+          echo "PACKAGE_VERSION_AFTER=$PACKAGE_VERSION_AFTER" >> $GITHUB_ENV
+          echo "PACKAGE_VERSION_AFTER: $PACKAGE_VERSION_AFTER"
 
       - name: Create PR to main
         if: github.ref_name == 'release' && env.PACKAGE_VERSION_BEFORE != env.PACKAGE_VERSION_AFTER
