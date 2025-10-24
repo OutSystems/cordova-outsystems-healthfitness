@@ -14,6 +14,8 @@ class OSHealthFitness: CDVPlugin {
     func requestPermissions(command: CDVInvokedUrlCommand) {
         self.callbackId = command.callbackId
         
+        // new feature! 
+
         let customPermissions = command.arguments[0] as? String ?? ""
         let allVariables = command.arguments[1] as? String ?? ""
         let fitnessVariables = command.arguments[2] as? String ?? ""
