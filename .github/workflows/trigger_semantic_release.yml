@@ -60,8 +60,8 @@ jobs:
           echo "Creating PR from ${{ env.BRANCH_RELEASE }} → ${{ env.BRANCH_MAIN }}..."
           git push origin HEAD
           gh pr create \
-            --title "Release $PACKAGE_VERSION_AFTER (automated GH run $GITHUB_RUN_NUMBER)" \
-            --body "# **Do NOT squash nor rebase**, use regular merge commit, in order to keep commit hashes and tags" \
+            --title "Release $PACKAGE_VERSION_AFTER (automation)" \
+            --body "# Git tag and Release created; **Do NOT squash nor rebase**, use regular merge commit, in order to keep commit hashes and tags" \
             --base ${{ env.BRANCH_MAIN }} \
             --head ${{ env.BRANCH_RELEASE }} \
             --repo $GITHUB_REPOSITORY
