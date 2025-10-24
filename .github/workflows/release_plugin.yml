@@ -5,7 +5,6 @@ on:
 
 permissions:
   contents: write
-  pull-requests: write
 
 env:
   BRANCH_MAIN: main
@@ -36,7 +35,7 @@ jobs:
           fi
           echo "No open release PRs found - Will proceed."
 
-      - name: Cretate release branch (removing if existing)
+      - name: Create release branch (removing if existing)
         env:
           GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN_GITHUB }}
         run: |
@@ -50,54 +49,3 @@ jobs:
           git pull origin ${{ env.BRANCH_MAIN }}
           git checkout -b ${{ env.BRANCH_RELEASE }}
           git push origin ${{ env.BRANCH_RELEASE }} --force
-      
-      - name: Install Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 25
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Read package.json version before release
-        id: before
-        run: |
-          PACKAGE_VERSION_BEFORE=$(node -p 'require("./package.json").version')
-          echo "PACKAGE_VERSION_BEFORE=$PACKAGE_VERSION_BEFORE" >> $GITHUB_ENV
-          echo "PACKAGE_VERSION_BEFORE: $PACKAGE_VERSION_BEFORE"
-
-      - name: Run Semantic Release
-        env:
-          GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN_GITHUB }}
-          GITHUB_REF: refs/heads/${{ env.BRANCH_RELEASE }}
-        run: npx semantic-release --branches ${{ env.BRANCH_RELEASE }}
-
-      - name: Read package.json version after release
-        id: after
-        run: |
-          PACKAGE_VERSION_AFTER=$(node -p 'require("./package.json").version')
-          echo "PACKAGE_VERSION_AFTER=$PACKAGE_VERSION_AFTER" >> $GITHUB_ENV
-          echo "PACKAGE_VERSION_AFTER: $PACKAGE_VERSION_AFTER"
-
-      - name: Create release PR
-        if: env.PACKAGE_VERSION_BEFORE != env.PACKAGE_VERSION_AFTER
-        env:
-          GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN_GITHUB }}
-        run: |
-          echo "Creating PR from ${{ env.BRANCH_RELEASE }} → ${{ env.BRANCH_MAIN }}..."
-          git push origin HEAD
-          gh pr create \
-            --title "Release $PACKAGE_VERSION_AFTER" \
-            --body "$(cat <<'EOF'
-            # **Do NOT squash nor rebase**, use regular merge commit, in order to keep commit hashes and tags
-            ## Automated Release PR
-
-            **Plugin Version:** $PACKAGE_VERSION_AFTER  
-            **GitHub Run ID:** $GITHUB_RUN_NUMBER  
-
-            _This PR was automatically created by the release workflow._
-            EOF
-            )" \
-            --base ${{ env.BRANCH_MAIN }} \
-            --head ${{ env.BRANCH_RELEASE }} \
-            --repo $GITHUB_REPOSITORY
