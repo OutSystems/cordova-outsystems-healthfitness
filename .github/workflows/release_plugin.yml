@@ -69,6 +69,7 @@ jobs:
       - name: Run Semantic Release
         env:
           GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN_GITHUB }}
+          GITHUB_REF: refs/heads/${{ env.BRANCH_RELEASE }}
         run: npx semantic-release --branches ${{ env.BRANCH_RELEASE }}
 
       - name: Read package.json version after release
