@@ -7,9 +7,12 @@ permissions:
   contents: write
   pull-requests: write
 
+env:
+  BRANCH_MAIN: main
+  BRANCH_RELEASE: release
+
 jobs:
   release:
-    if: github.ref_name == 'main'
     runs-on: 'ubuntu-latest'
     timeout-minutes: 20
 
@@ -17,14 +20,15 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
+          ref: ${{ env.BRANCH_MAIN }}
           token: ${{ secrets.RELEASE_TOKEN_GITHUB }}
 
-      - name: Check for existing open release PR
+      - name: Check for existing open release PRs
         env:
           GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN_GITHUB }}
         run: |
           echo "🔍 Checking for existing open release PRs..."
-          existing_prs=$(gh pr list --base main --head release --state open --json number --jq '.[].number')
+          existing_prs=$(gh pr list --base ${{ env.BRANCH_MAIN }} --head ${{ env.BRANCH_RELEASE }} --state open --json number --jq '.[].number')
           if [ -n "$existing_prs" ]; then
             echo "Found existing open release PR(s): $existing_prs"
             echo "Please close or merge them before running this workflow."
@@ -32,20 +36,20 @@ jobs:
           fi
           echo "No open release PRs found - Will proceed."
 
-      - name: Cretate release branch from main (removing if existing)
+      - name: Cretate release branch (removing if existing)
         env:
           GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN_GITHUB }}
         run: |
           echo "Preparing release branch..."
           git fetch origin
-          if git show-ref --verify --quiet refs/remotes/origin/release; then
-            echo "Branch 'release' exists remotely. Deleting it..."
-            git push origin --delete release
+          if git show-ref --verify --quiet refs/remotes/origin/${{ env.BRANCH_RELEASE }}; then
+            echo "Branch '${{ env.BRANCH_RELEASE }}' exists remotely. Deleting it..."
+            git push origin --delete ${{ env.BRANCH_RELEASE }}
           fi
-          git checkout main
-          git pull origin main
-          git checkout -b release
-          git push origin release --force
+          git checkout ${{ env.BRANCH_MAIN }}
+          git pull origin ${{ env.BRANCH_MAIN }}
+          git checkout -b ${{ env.BRANCH_RELEASE }}
+          git push origin ${{ env.BRANCH_RELEASE }} --force
       
       - name: Install Node.js
         uses: actions/setup-node@v4
@@ -74,12 +78,12 @@ jobs:
           echo "PACKAGE_VERSION_AFTER=$PACKAGE_VERSION_AFTER" >> $GITHUB_ENV
           echo "PACKAGE_VERSION_AFTER: $PACKAGE_VERSION_AFTER"
 
-      - name: Create release PR to main
+      - name: Create release PR
         if: env.PACKAGE_VERSION_BEFORE != env.PACKAGE_VERSION_AFTER
         env:
           GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN_GITHUB }}
         run: |
-          echo "Creating PR from release → main..."
+          echo "Creating PR from ${{ env.BRANCH_RELEASE }} → ${{ env.BRANCH_MAIN }}..."
           git push origin HEAD
           gh pr create \
             --title "Release $PACKAGE_VERSION_AFTER" \
@@ -93,6 +97,6 @@ jobs:
             _This PR was automatically created by the release workflow._
             EOF
             )" \
-            --base main \
-            --head release \
+            --base ${{ env.BRANCH_MAIN }} \
+            --head ${{ env.BRANCH_RELEASE }} \
             --repo $GITHUB_REPOSITORY
