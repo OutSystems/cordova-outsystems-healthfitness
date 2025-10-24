@@ -5,20 +5,48 @@ on:
 
 permissions:
   contents: write
-  pull-requests: write   # Needed to create PR
+  pull-requests: write
 
-
-jobs:   
+jobs:
   release:
-    if: github.ref_name == 'main' || github.ref_name == 'release'
+    if: github.ref_name == 'main'
     runs-on: 'ubuntu-latest'
     timeout-minutes: 20
+
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
           token: ${{ secrets.RELEASE_TOKEN_GITHUB }}
 
+      - name: Check for existing open release PR
+        env:
+          GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN_GITHUB }}
+        run: |
+          echo "🔍 Checking for existing open release PRs..."
+          existing_prs=$(gh pr list --base main --head release --state open --json number --jq '.[].number')
+          if [ -n "$existing_prs" ]; then
+            echo "Found existing open release PR(s): $existing_prs"
+            echo "Please close or merge them before running this workflow."
+            exit 1
+          fi
+          echo "No open release PRs found - Will proceed."
+
+      - name: Cretate release branch from main (removing if existing)
+        env:
+          GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN_GITHUB }}
+        run: |
+          echo "Preparing release branch..."
+          git fetch origin
+          if git show-ref --verify --quiet refs/remotes/origin/release; then
+            echo "Branch 'release' exists remotely. Deleting it..."
+            git push origin --delete release
+          fi
+          git checkout main
+          git pull origin main
+          git checkout -b release
+          git push origin release --force
+      
       - name: Install Node.js
         uses: actions/setup-node@v4
         with:
@@ -26,7 +54,7 @@ jobs:
 
       - name: Install dependencies
         run: npm ci
-      
+
       - name: Read package.json version before release
         id: before
         run: |
@@ -38,7 +66,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN_GITHUB }}
         run: npx semantic-release
-      
+
       - name: Read package.json version after release
         id: after
         run: |
@@ -46,16 +74,25 @@ jobs:
           echo "PACKAGE_VERSION_AFTER=$PACKAGE_VERSION_AFTER" >> $GITHUB_ENV
           echo "PACKAGE_VERSION_AFTER: $PACKAGE_VERSION_AFTER"
 
-      - name: Create PR to main
-        if: github.ref_name == 'release' && env.PACKAGE_VERSION_BEFORE != env.PACKAGE_VERSION_AFTER
+      - name: Create release PR to main
+        if: env.PACKAGE_VERSION_BEFORE != env.PACKAGE_VERSION_AFTER
         env:
           GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN_GITHUB }}
         run: |
-          git checkout -b release-pr-${GITHUB_RUN_NUMBER}
+          echo "Creating PR from release → main..."
           git push origin HEAD
           gh pr create \
-            --title "Release $VERSION" \
-            --body "[Merge this PR - Do NOT squash nor rebase, in order to keep commit hashes and tags] Automated release PR from release branch - GitHub run ${{ github.run_number }}" \
+            --title "Release $PACKAGE_VERSION_AFTER" \
+            --body "$(cat <<'EOF'
+            # **Do NOT squash nor rebase**, use regular merge commit, in order to keep commit hashes and tags
+            ## Automated Release PR
+
+            **Plugin Version:** $PACKAGE_VERSION_AFTER  
+            **GitHub Run ID:** $GITHUB_RUN_NUMBER  
+
+            _This PR was automatically created by the release workflow._
+            EOF
+            )" \
             --base main \
-            --head release-pr-${GITHUB_RUN_NUMBER} \
+            --head release \
             --repo $GITHUB_REPOSITORY
