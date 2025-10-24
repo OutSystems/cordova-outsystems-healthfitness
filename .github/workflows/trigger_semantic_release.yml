@@ -55,21 +55,13 @@ jobs:
         if: env.PACKAGE_VERSION_BEFORE != env.PACKAGE_VERSION_AFTER
         env:
           GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN_GITHUB }}
+        shell: bash
         run: |
           echo "Creating PR from ${{ env.BRANCH_RELEASE }} → ${{ env.BRANCH_MAIN }}..."
           git push origin HEAD
           gh pr create \
-            --title "Release $PACKAGE_VERSION_AFTER" \
-            --body "$(cat <<'EOF'
-            # **Do NOT squash nor rebase**, use regular merge commit, in order to keep commit hashes and tags
-            ## Automated Release PR
-
-            **Plugin Version:** $PACKAGE_VERSION_AFTER  
-            **GitHub Run ID:** $GITHUB_RUN_NUMBER  
-
-            _This PR was automatically created by the release workflow._
-            EOF
-            )" \
+            --title "Release $PACKAGE_VERSION_AFTER (automated GH run $GITHUB_RUN_NUMBER)" \
+            --body "# **Do NOT squash nor rebase**, use regular merge commit, in order to keep commit hashes and tags" \
             --base ${{ env.BRANCH_MAIN }} \
             --head ${{ env.BRANCH_RELEASE }} \
             --repo $GITHUB_REPOSITORY
