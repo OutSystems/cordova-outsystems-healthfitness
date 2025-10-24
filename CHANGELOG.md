@@ -1,3 +1,15 @@
+# [3.0.0](https://github.com/OS-pedrogustavobilro/cordova-outsystems-healthfitness/compare/2.7.0...3.0.0) (2025-10-24)
+
+
+### Bug Fixes
+
+* Mock breaking change ([#7](https://github.com/OS-pedrogustavobilro/cordova-outsystems-healthfitness/issues/7)) ([776512a](https://github.com/OS-pedrogustavobilro/cordova-outsystems-healthfitness/commit/776512a67c721b7447efc0ce96ddf4bbd9ad7ba2))
+
+
+### BREAKING CHANGES
+
+* Document breaking change here
+
 # [2.7.0](https://github.com/OS-pedrogustavobilro/cordova-outsystems-healthfitness/compare/2.6.2...2.7.0) (2025-10-24)
 
 
