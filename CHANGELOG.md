@@ -1,3 +1,10 @@
+# [2.7.0](https://github.com/OS-pedrogustavobilro/cordova-outsystems-healthfitness/compare/2.6.2...2.7.0) (2025-10-24)
+
+
+### Features
+
+* **ios:** New mocked feature in native ([#5](https://github.com/OS-pedrogustavobilro/cordova-outsystems-healthfitness/issues/5)) ([3f70432](https://github.com/OS-pedrogustavobilro/cordova-outsystems-healthfitness/commit/3f70432add3013112dc606a66b4f54da394c2bf6))
+
 ## [2.6.2](https://github.com/OS-pedrogustavobilro/cordova-outsystems-healthfitness/compare/2.6.1...2.6.2) (2025-10-23)
 
 
