@@ -11,6 +11,7 @@ The changes documented here do not include those from the original repository.
 ### Fixes
 
 - (android) MABS 12 ::: Update build action to add Kotlin Gradle Plugin to app's build.gradle file (https://outsystemsrd.atlassian.net/browse/RMET-4515)
+- (ios) Fix race condition in callbackId by dropping class variable (https://outsystemsrd.atlassian.net/browse/RMET-4686)
 
 ### [2.4.1]
 

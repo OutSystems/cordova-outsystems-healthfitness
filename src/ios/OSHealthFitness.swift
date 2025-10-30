@@ -4,16 +4,13 @@ import OSHealthFitnessLib
 @objc(OSHealthFitness)
 class OSHealthFitness: CDVPlugin {
     var plugin: HealthFitnessPlugin?
-    var callbackId:String=""
-    
+
     override func pluginInitialize() {
         plugin = HealthFitnessPlugin()
     }
     
     @objc(requestPermissions:)
     func requestPermissions(command: CDVInvokedUrlCommand) {
-        self.callbackId = command.callbackId
-        
         let customPermissions = command.arguments[0] as? String ?? ""
         let allVariables = command.arguments[1] as? String ?? ""
         let fitnessVariables = command.arguments[2] as? String ?? ""
@@ -24,40 +21,36 @@ class OSHealthFitness: CDVPlugin {
         
         self.plugin?.requestPermissions(customPermissions:customPermissions, variable: variable) { [weak self] authorized, error in
             guard let self = self else { return }
-            
-            self.sendResult(result: "", error: !authorized ? error : nil, callBackID: self.callbackId)
+            self.sendResult(result: "", error: !authorized ? error : nil, callBackID: command.callbackId)
         }
     }
     
     @objc(writeData:)
     func writeData(command: CDVInvokedUrlCommand) {
-        callbackId = command.callbackId
-        
         guard let variable = command.arguments[0] as? String else {
-            return self.sendResult(result: "", error:HealthKitErrors.badParameterType as NSError, callBackID: self.callbackId)
+            return sendResult(result: "", error: HealthKitErrors.badParameterType as NSError, callBackID: command.callbackId)
         }
         
         guard let value = command.arguments[1] as? Double else {
-            return  self.sendResult(result: "", error:HealthKitErrors.badParameterType as NSError, callBackID: self.callbackId)
+            return sendResult(result: "", error: HealthKitErrors.badParameterType as NSError, callBackID: command.callbackId)
         }
         
-        plugin?.writeData(variable: variable, value: value) { success,error in
+        plugin?.writeData(variable: variable, value: value) { [weak self] success, error in
+            guard let self = self else { return }
             if let err = error {
-                self.sendResult(result: "", error:err, callBackID: self.callbackId)
+                self.sendResult(result: "", error: err, callBackID: command.callbackId)
             }
             if success {
-                self.sendResult(result: "", error: nil, callBackID: self.callbackId)
+                self.sendResult(result: "", error: nil, callBackID: command.callbackId)
             }
         }
     }
     
     @objc(updateBackgroundJob:)
     func updateBackgroundJob(command: CDVInvokedUrlCommand) {
-        self.callbackId = command.callbackId
-        
         let queryParameters = command.arguments[0] as? String ?? ""
-        if let parameters = self.parseUpdateParameters(parameters: queryParameters) {
-            self.plugin?.updateBackgroundJob(
+        if let parameters = parseUpdateParameters(parameters: queryParameters) {
+            plugin?.updateBackgroundJob(
                 id: parameters.id,
                 notificationFrequency: (parameters.notificationFrequency, parameters.notificationFrequencyGrouping),
                 condition: parameters.condition,
@@ -66,8 +59,7 @@ class OSHealthFitness: CDVPlugin {
                 isActive: parameters.isActive
             ) { [weak self] success, error in
                 guard let self = self else { return }
-                
-                self.sendResult(result: "", error: !success ? error : nil, callBackID: self.callbackId)
+                self.sendResult(result: "", error: !success ? error : nil, callBackID: command.callbackId)
             }
         }
     }
@@ -109,10 +101,9 @@ class OSHealthFitness: CDVPlugin {
     
     @objc(getLastRecord:)
     func getLastRecord(command: CDVInvokedUrlCommand) {
-        self.callbackId = command.callbackId
         let variable = command.arguments[0] as? String ?? ""
         
-        self.plugin?.advancedQuery(
+        plugin?.advancedQuery(
             variable: variable,
             date: (Date.distantPast, Date()),
             timeUnit: "",
@@ -125,37 +116,32 @@ class OSHealthFitness: CDVPlugin {
             guard let self = self else { return }
             
             if success {
-                self.sendResult(result: result, error: nil, callBackID: self.callbackId)
+                self.sendResult(result: result, error: nil, callBackID: command.callbackId)
             } else {
-                self.sendResult(result: nil, error: error, callBackID: self.callbackId)
+                self.sendResult(result: nil, error: error, callBackID: command.callbackId)
             }
         }
     }
     
     @objc(deleteBackgroundJob:)
     func deleteBackgroundJob(command: CDVInvokedUrlCommand) {
-        self.callbackId = command.callbackId
         let id = command.arguments[0] as? String ?? ""
         
-        self.plugin?.deleteBackgroundJobs(id: id) { [weak self] error in
+        plugin?.deleteBackgroundJobs(id: id) { [weak self] error in
             guard let self = self else { return }
             
-            self.sendResult(result: error == nil ? "" : nil, error: error, callBackID: self.callbackId)
+            self.sendResult(result: error == nil ? "" : nil, error: error, callBackID: command.callbackId)
         }
     }
     
     @objc(listBackgroundJobs:)
     func listBackgroundJobs(command: CDVInvokedUrlCommand) {
-        self.callbackId = command.callbackId
-        
-        let result = self.plugin?.listBackgroundJobs()
-        self.sendResult(result: result, error: nil, callBackID: self.callbackId)
+        let result = plugin?.listBackgroundJobs()
+        sendResult(result: result, error: nil, callBackID: command.callbackId)
     }
     
     @objc(setBackgroundJob:)
     func setBackgroundJob(command: CDVInvokedUrlCommand) {
-        self.callbackId = command.callbackId
-        
         let queryParameters = command.arguments[0] as? String ?? ""
         if let params = queryParameters.decode() as BackgroundJobParameters? {
             
@@ -170,7 +156,7 @@ class OSHealthFitness: CDVPlugin {
             let notificationHeader = params.notificationHeader ?? ""
             let notificationBody = params.notificationBody ?? ""
             
-            self.plugin?.setBackgroundJob(
+            plugin?.setBackgroundJob(
                 variable: variable,
                 timeUnit: (timeUnit,  timeUnitGrouping),
                 notificationFrequency: (notificationFrequency, notificationFrequencyGrouping),
@@ -182,9 +168,9 @@ class OSHealthFitness: CDVPlugin {
                 guard let self = self else { return }
                 
                 if success {
-                    self.sendResult(result: result, error: nil, callBackID: self.callbackId)
+                    self.sendResult(result: result, error: nil, callBackID: command.callbackId)
                 } else {
-                    self.sendResult(result: nil, error: error, callBackID: self.callbackId)
+                    self.sendResult(result: nil, error: error, callBackID: command.callbackId)
                 }
             }
         }
@@ -192,8 +178,6 @@ class OSHealthFitness: CDVPlugin {
     
     @objc(getData:)
     func getData(command: CDVInvokedUrlCommand) {
-        self.callbackId = command.callbackId
-        
         let queryParameters = command.arguments[0] as? String ?? ""
         if let params = queryParameters.decode() as AdvancedQueryParameters? {
             
@@ -219,9 +203,9 @@ class OSHealthFitness: CDVPlugin {
                 guard let self = self else { return }
                 
                 if success {
-                    self.sendResult(result: result, error: nil, callBackID: self.callbackId)
+                    self.sendResult(result: result, error: nil, callBackID: command.callbackId)
                 } else {
-                    self.sendResult(result: nil, error: error, callBackID: self.callbackId)
+                    self.sendResult(result: nil, error: error, callBackID: command.callbackId)
                 }
             }
         }
@@ -229,23 +213,20 @@ class OSHealthFitness: CDVPlugin {
     
     @objc(getWorkoutData:)
     func getWorkoutData(command: CDVInvokedUrlCommand) {
-        self.callbackId = command.callbackId
-        
         guard let arg = command.argument(at: 0) as? String, let queryParameters = arg.decode() as WorkoutAdvancedQueryParameters? else { return }
         let workoutTypeVariableDictionary = queryParameters.workoutTypeVariableDictionary
         let startDate = Date(queryParameters.startDate ?? "")
         let endDate = Date(queryParameters.endDate ?? "")
         
-        self.plugin?.workoutAdvancedQuery(workoutTypeVariableDictionary: workoutTypeVariableDictionary, date: (startDate, endDate), completion: { [weak self] success, result, error in
+        plugin?.workoutAdvancedQuery(workoutTypeVariableDictionary: workoutTypeVariableDictionary, date: (startDate, endDate), completion: { [weak self] success, result, error in
             guard let self = self else { return }
             
             if success {
-                self.sendResult(result: result, error: nil, callBackID: self.callbackId)
+                self.sendResult(result: result, error: nil, callBackID: command.callbackId)
             } else {
-                self.sendResult(result: nil, error: error, callBackID: self.callbackId)
+                self.sendResult(result: nil, error: error, callBackID: command.callbackId)
             }
         })
-        
     }
 }
 
