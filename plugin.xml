@@ -21,12 +21,6 @@
       <preference name="AndroidXEnabled" value="true"/>
     </config-file>
 
-    <config-file parent="/*" target="res/values/strings.xml">
-      <string name="privacy_policy_url">PRIVACY_POLICY_URL</string>
-      <string name="background_notification_title"></string>
-      <string name="background_notification_description"></string>
-   </config-file>
-
     <!-- HealthFitness Plugin -->
     <source-file src="src/android/com/outsystems/plugins/healthfitness/OSHealthFitness.kt" target-dir="app/src/main/kotlin/com/outsystems/plugins/healthfitness"/>
     <source-file src="src/android/com/outsystems/plugins/healthfitness/OSHealthFitnessWarning.kt" target-dir="app/src/main/kotlin/com/outsystems/plugins/healthfitness"/>
