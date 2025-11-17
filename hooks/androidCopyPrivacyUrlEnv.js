@@ -30,7 +30,7 @@ function setPrivacyPolicyUrl(configParser, projectRoot) {
     
     if (hostname && applicationNameUrl) {
         const url = `https://${hostname}/${applicationNameUrl}/${fileNamePrivacyPolicy}`;
-        const stringsPath = path.join(projectRoot, mainFolder, 'res/values/strings.xml');
+        const stringsPath = path.join(projectRoot, mainFolder, 'res/values/os_healthfitness_strings.xml');
         const stringsFile = fs.readFileSync(stringsPath).toString();
         const etreeStrings = et.parse(stringsFile);
         const resources = etreeStrings.getroot();
