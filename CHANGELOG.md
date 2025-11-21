@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 The changes documented here do not include those from the original repository.
 
+### [2.4.3]
+
+### Fixes
+
+- (android) MABS 12 ::: Fixes missing strings.xml on target project (https://outsystemsrd.atlassian.net/browse/RMET-4777)
+
 ### [2.4.2]
 
 ### Fixes
