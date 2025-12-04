@@ -1,3 +1,10 @@
+## [3.0.1](https://github.com/OS-pedrogustavobilro/cordova-outsystems-healthfitness/compare/3.0.0...3.0.1) (2025-12-04)
+
+
+### Bug Fixes
+
+* Update GH and NPM actions ([026fc6e](https://github.com/OS-pedrogustavobilro/cordova-outsystems-healthfitness/commit/026fc6e88d7a1244e82125e0fc59d7f4fccf3ee4))
+
 # [3.0.0](https://github.com/OS-pedrogustavobilro/cordova-outsystems-healthfitness/compare/2.7.0...3.0.0) (2025-10-24)
 
 
