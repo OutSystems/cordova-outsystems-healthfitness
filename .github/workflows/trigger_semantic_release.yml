@@ -1,0 +1,67 @@
+name: Trigger semantic-release for plugin
+
+on:
+  push:
+    branches:
+      - release
+
+permissions:
+  contents: write
+  pull-requests: write
+
+env:
+  BRANCH_MAIN: main
+  BRANCH_RELEASE: release
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout release branch
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+          ref: ${{ env.BRANCH_RELEASE }}
+          token: ${{ secrets.RELEASE_TOKEN_GITHUB }}
+
+      - name: Install Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 25
+
+      - name: Install dependencies
+        run: npm i
+
+      - name: Read package.json version before release
+        id: before
+        run: |
+          PACKAGE_VERSION_BEFORE=$(node -p 'require("./package.json").version')
+          echo "PACKAGE_VERSION_BEFORE=$PACKAGE_VERSION_BEFORE" >> $GITHUB_ENV
+          echo "PACKAGE_VERSION_BEFORE: $PACKAGE_VERSION_BEFORE"
+
+      - name: Run Semantic Release
+        env:
+          GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN_GITHUB }}
+        run: npx semantic-release
+
+      - name: Read package.json version after release
+        id: after
+        run: |
+          PACKAGE_VERSION_AFTER=$(node -p 'require("./package.json").version')
+          echo "PACKAGE_VERSION_AFTER=$PACKAGE_VERSION_AFTER" >> $GITHUB_ENV
+          echo "PACKAGE_VERSION_AFTER: $PACKAGE_VERSION_AFTER"
+
+      - name: Create release PR
+        if: env.PACKAGE_VERSION_BEFORE != env.PACKAGE_VERSION_AFTER
+        env:
+          GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN_GITHUB }}
+        shell: bash
+        run: |
+          echo "Creating PR from ${{ env.BRANCH_RELEASE }} → ${{ env.BRANCH_MAIN }}..."
+          git push origin HEAD
+          gh pr create \
+            --title "Release $PACKAGE_VERSION_AFTER (automation)" \
+            --body "# Git tag and Release created; **Do NOT squash nor rebase**, use regular merge commit, in order to keep commit hashes and tags" \
+            --base ${{ env.BRANCH_MAIN }} \
+            --head ${{ env.BRANCH_RELEASE }} \
+            --repo $GITHUB_REPOSITORY
