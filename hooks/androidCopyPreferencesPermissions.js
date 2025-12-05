@@ -386,8 +386,20 @@ function copyNotificationContent(configParser, projectRoot, parser) {
         notificationDescription = "The app is running in the background."
     }
 
-    // insert values in strings.xml
-    const stringsXmlPath = path.join(projectRoot, 'platforms/android/app/src/main/res/values/strings.xml');
+    // create XML with correct values directly
+    var stringsXmlPath = path.join(projectRoot, 'platforms/android/app/src/main/res/values/os_healthfitness_strings.xml');
+
+    const xmlContent = `<?xml version='1.0' encoding='utf-8'?>
+<resources>
+      <string name="privacy_policy_url">PRIVACY_POLICY_URL</string>
+      <string name="background_notification_title"></string>
+      <string name="background_notification_description"></string>
+</resources>`;
+
+    // write XML file directly
+    fs.writeFileSync(stringsXmlPath, xmlContent);
+
+    // insert values in os_healthfitness_strings.xml
     const stringsXmlString = fs.readFileSync(stringsXmlPath, 'utf-8');
     const stringsXmlDoc = parser.parseFromString(stringsXmlString, 'text/xml')
 

@@ -66,11 +66,18 @@
 
 * Generate new release ([834666f](https://github.com/OS-pedrogustavobilro/cordova-outsystems-healthfitness/commit/834666fec213188eac46aa306c3d31f97df9c315))
 
+### [2.4.3]
+
+### Fixes
+
+- (android) MABS 12 ::: Fixes missing strings.xml on target project (https://outsystemsrd.atlassian.net/browse/RMET-4777)
+
 ### [2.4.2]
 
 ### Fixes
 
 - (android) MABS 12 ::: Update build action to add Kotlin Gradle Plugin to app's build.gradle file (https://outsystemsrd.atlassian.net/browse/RMET-4515)
+- (ios) Fix race condition in callbackId by dropping class variable (https://outsystemsrd.atlassian.net/browse/RMET-4686)
 
 ### [2.4.1]
 
