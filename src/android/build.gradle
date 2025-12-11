@@ -9,7 +9,6 @@ buildscript {
     }
 }
 
-apply plugin: 'kotlin-kapt'
 allprojects {
     repositories {
         maven { url 'https://pkgs.dev.azure.com/OutSystemsRD/9e79bc5b-69b2-4476-9ca5-d67594972a52/_packaging/PublicArtifactRepository/maven/v1' }
@@ -44,8 +43,6 @@ dependencies{
     
     def roomVersion = "2.4.2"
     implementation("androidx.room:room-runtime:$roomVersion")
-    annotationProcessor("androidx.room:room-compiler:$roomVersion")
-    kapt("androidx.room:room-compiler:$roomVersion")
 }
 
 android {
