@@ -82,13 +82,6 @@ variables:
 
 platforms:
   android:
-    gradle:
-    - file: build.gradle
-      target:
-        buildscript:
-          dependencies:
-      insert:
-        - classpath: "'org.jetbrains.kotlin:kotlin-gradle-plugin:1.9.25'"
     xml:
       # Privacy Policy URL Override
       - resFile: values/strings.xml

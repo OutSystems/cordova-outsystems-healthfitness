@@ -1,6 +1,6 @@
 {
   "name": "com.outsystems.plugins.healthfitness",
-  "version": "2.4.3",
+  "version": "2.4.4",
   "description": "Health & Fitness cordova plugin for OutSystems applications.",
   "keywords": [
     "ecosystem:cordova",
@@ -23,6 +23,6 @@
   },
   "scripts": {
     "capacitor:sync:after": "node hooks/capacitorCopyHealthFitnessConfigs.js",
-    "capacitor:update:after": "node hooks/capacitorKaptGradleFix.js && node hooks/capacitorInsertAzureRepository.js"
+    "capacitor:update:after": "node hooks/capacitorInsertAzureRepository.js"
   }
 }
