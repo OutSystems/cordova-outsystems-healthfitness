@@ -31,6 +31,8 @@
     <framework src="org.jetbrains.kotlinx:kotlinx-coroutines-android:1.4.3" />
     <framework src="com.google.code.gson:gson:2.8.8" />
 
+    <lib-file src="src/android/libs/OSHealthFitnessLib-debug.aar" />
+
   </platform>
 
   <platform name="ios">
