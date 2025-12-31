@@ -830,6 +830,13 @@
             "printedName": "Sendable",
             "usr": "s:s8SendableP",
             "mangledName": "$ss8SendableP"
+          },
+          {
+            "kind": "Conformance",
+            "name": "SendableMetatype",
+            "printedName": "SendableMetatype",
+            "usr": "s:s16SendableMetatypeP",
+            "mangledName": "$ss16SendableMetatypeP"
           }
         ]
       },
@@ -2120,6 +2127,13 @@
             "printedName": "Sendable",
             "usr": "s:s8SendableP",
             "mangledName": "$ss8SendableP"
+          },
+          {
+            "kind": "Conformance",
+            "name": "SendableMetatype",
+            "printedName": "SendableMetatype",
+            "usr": "s:s16SendableMetatypeP",
+            "mangledName": "$ss16SendableMetatypeP"
           }
         ]
       },
@@ -10517,6 +10531,7 @@
         "declKind": "Import",
         "moduleName": "OSHealthFitnessLib",
         "declAttributes": [
+          "AccessControl",
           "RawDocComment"
         ]
       },
@@ -10525,7 +10540,10 @@
         "name": "CoreData",
         "printedName": "CoreData",
         "declKind": "Import",
-        "moduleName": "OSHealthFitnessLib"
+        "moduleName": "OSHealthFitnessLib",
+        "declAttributes": [
+          "AccessControl"
+        ]
       },
       {
         "kind": "TypeDecl",
@@ -10574,6 +10592,7 @@
             "declAttributes": [
               "Dynamic",
               "ObjC",
+              "Nonisolated",
               "Override"
             ],
             "init_kind": "Designated"
@@ -10636,6 +10655,7 @@
             "moduleName": "OSHealthFitnessLib",
             "declAttributes": [
               "Dynamic",
+              "Nonisolated",
               "AccessControl",
               "NSManaged",
               "ObjC"
@@ -10731,6 +10751,7 @@
             "moduleName": "OSHealthFitnessLib",
             "declAttributes": [
               "Dynamic",
+              "Nonisolated",
               "AccessControl",
               "NSManaged",
               "ObjC"
@@ -10810,6 +10831,7 @@
             "moduleName": "OSHealthFitnessLib",
             "declAttributes": [
               "Dynamic",
+              "Nonisolated",
               "AccessControl",
               "NSManaged",
               "ObjC"
@@ -10897,6 +10919,7 @@
             "moduleName": "OSHealthFitnessLib",
             "declAttributes": [
               "Dynamic",
+              "Nonisolated",
               "AccessControl",
               "NSManaged",
               "ObjC"
@@ -11000,6 +11023,7 @@
             "moduleName": "OSHealthFitnessLib",
             "declAttributes": [
               "Dynamic",
+              "Nonisolated",
               "AccessControl",
               "NSManaged",
               "ObjC"
@@ -11095,6 +11119,7 @@
             "moduleName": "OSHealthFitnessLib",
             "declAttributes": [
               "Dynamic",
+              "Nonisolated",
               "AccessControl",
               "NSManaged",
               "ObjC"
@@ -11182,6 +11207,7 @@
             "moduleName": "OSHealthFitnessLib",
             "declAttributes": [
               "Dynamic",
+              "Nonisolated",
               "AccessControl",
               "NSManaged",
               "ObjC"
@@ -11285,6 +11311,7 @@
             "moduleName": "OSHealthFitnessLib",
             "declAttributes": [
               "Dynamic",
+              "Nonisolated",
               "AccessControl",
               "NSManaged",
               "ObjC"
@@ -11380,6 +11407,7 @@
             "moduleName": "OSHealthFitnessLib",
             "declAttributes": [
               "Dynamic",
+              "Nonisolated",
               "AccessControl",
               "NSManaged",
               "ObjC"
@@ -11459,6 +11487,7 @@
             "moduleName": "OSHealthFitnessLib",
             "declAttributes": [
               "Dynamic",
+              "Nonisolated",
               "AccessControl",
               "NSManaged",
               "ObjC"
@@ -11546,6 +11575,7 @@
             "moduleName": "OSHealthFitnessLib",
             "declAttributes": [
               "Dynamic",
+              "Nonisolated",
               "AccessControl",
               "NSManaged",
               "ObjC"
@@ -11649,6 +11679,7 @@
             "moduleName": "OSHealthFitnessLib",
             "declAttributes": [
               "Dynamic",
+              "Nonisolated",
               "AccessControl",
               "NSManaged",
               "ObjC"
@@ -11732,6 +11763,7 @@
         "mangledName": "$s18OSHealthFitnessLib13BackgroundJobC",
         "moduleName": "OSHealthFitnessLib",
         "declAttributes": [
+          "Nonisolated",
           "AccessControl",
           "ObjC"
         ],
@@ -11829,6 +11861,20 @@
           },
           {
             "kind": "Conformance",
+            "name": "Sendable",
+            "printedName": "Sendable",
+            "usr": "s:s8SendableP",
+            "mangledName": "$ss8SendableP"
+          },
+          {
+            "kind": "Conformance",
+            "name": "SendableMetatype",
+            "printedName": "SendableMetatype",
+            "usr": "s:s16SendableMetatypeP",
+            "mangledName": "$ss16SendableMetatypeP"
+          },
+          {
+            "kind": "Conformance",
             "name": "Identifiable",
             "printedName": "Identifiable",
             "children": [
@@ -11858,6 +11904,7 @@
         "declKind": "Import",
         "moduleName": "OSHealthFitnessLib",
         "declAttributes": [
+          "AccessControl",
           "RawDocComment"
         ]
       },
@@ -11866,7 +11913,10 @@
         "name": "CoreData",
         "printedName": "CoreData",
         "declKind": "Import",
-        "moduleName": "OSHealthFitnessLib"
+        "moduleName": "OSHealthFitnessLib",
+        "declAttributes": [
+          "AccessControl"
+        ]
       },
       {
         "kind": "Import",
@@ -11875,6 +11925,7 @@
         "declKind": "Import",
         "moduleName": "OSHealthFitnessLib",
         "declAttributes": [
+          "AccessControl",
           "RawDocComment"
         ]
       },
@@ -11883,7 +11934,10 @@
         "name": "CoreData",
         "printedName": "CoreData",
         "declKind": "Import",
-        "moduleName": "OSHealthFitnessLib"
+        "moduleName": "OSHealthFitnessLib",
+        "declAttributes": [
+          "AccessControl"
+        ]
       },
       {
         "kind": "TypeDecl",
@@ -11932,6 +11986,7 @@
             "declAttributes": [
               "Dynamic",
               "ObjC",
+              "Nonisolated",
               "Override"
             ],
             "init_kind": "Designated"
@@ -11994,6 +12049,7 @@
             "moduleName": "OSHealthFitnessLib",
             "declAttributes": [
               "Dynamic",
+              "Nonisolated",
               "AccessControl",
               "NSManaged",
               "ObjC"
@@ -12089,6 +12145,7 @@
             "moduleName": "OSHealthFitnessLib",
             "declAttributes": [
               "Dynamic",
+              "Nonisolated",
               "AccessControl",
               "NSManaged",
               "ObjC"
@@ -12176,6 +12233,7 @@
             "moduleName": "OSHealthFitnessLib",
             "declAttributes": [
               "Dynamic",
+              "Nonisolated",
               "AccessControl",
               "NSManaged",
               "ObjC"
@@ -12279,6 +12337,7 @@
             "moduleName": "OSHealthFitnessLib",
             "declAttributes": [
               "Dynamic",
+              "Nonisolated",
               "AccessControl",
               "NSManaged",
               "ObjC"
@@ -12362,6 +12421,7 @@
         "mangledName": "$s18OSHealthFitnessLib12NotificationC",
         "moduleName": "OSHealthFitnessLib",
         "declAttributes": [
+          "Nonisolated",
           "AccessControl",
           "ObjC"
         ],
@@ -12459,6 +12519,20 @@
           },
           {
             "kind": "Conformance",
+            "name": "Sendable",
+            "printedName": "Sendable",
+            "usr": "s:s8SendableP",
+            "mangledName": "$ss8SendableP"
+          },
+          {
+            "kind": "Conformance",
+            "name": "SendableMetatype",
+            "printedName": "SendableMetatype",
+            "usr": "s:s16SendableMetatypeP",
+            "mangledName": "$ss16SendableMetatypeP"
+          },
+          {
+            "kind": "Conformance",
             "name": "Identifiable",
             "printedName": "Identifiable",
             "children": [
@@ -12488,6 +12562,7 @@
         "declKind": "Import",
         "moduleName": "OSHealthFitnessLib",
         "declAttributes": [
+          "AccessControl",
           "RawDocComment"
         ]
       },
@@ -12496,7 +12571,10 @@
         "name": "CoreData",
         "printedName": "CoreData",
         "declKind": "Import",
-        "moduleName": "OSHealthFitnessLib"
+        "moduleName": "OSHealthFitnessLib",
+        "declAttributes": [
+          "AccessControl"
+        ]
       },
       {
         "kind": "Import",
@@ -12505,6 +12583,7 @@
         "declKind": "Import",
         "moduleName": "OSHealthFitnessLib",
         "declAttributes": [
+          "AccessControl",
           "RawDocComment"
         ]
       },
@@ -12513,7 +12592,10 @@
         "name": "CoreData",
         "printedName": "CoreData",
         "declKind": "Import",
-        "moduleName": "OSHealthFitnessLib"
+        "moduleName": "OSHealthFitnessLib",
+        "declAttributes": [
+          "AccessControl"
+        ]
       },
       {
         "kind": "TypeDecl",
@@ -12688,6 +12770,13 @@
             "printedName": "Sendable",
             "usr": "s:s8SendableP",
             "mangledName": "$ss8SendableP"
+          },
+          {
+            "kind": "Conformance",
+            "name": "SendableMetatype",
+            "printedName": "SendableMetatype",
+            "usr": "s:s16SendableMetatypeP",
+            "mangledName": "$ss16SendableMetatypeP"
           },
           {
             "kind": "Conformance",
@@ -13763,6 +13852,13 @@
           },
           {
             "kind": "Conformance",
+            "name": "SendableMetatype",
+            "printedName": "SendableMetatype",
+            "usr": "s:s16SendableMetatypeP",
+            "mangledName": "$ss16SendableMetatypeP"
+          },
+          {
+            "kind": "Conformance",
             "name": "Copyable",
             "printedName": "Copyable",
             "usr": "s:s8CopyableP",
@@ -13985,6 +14081,13 @@
             "printedName": "CustomDebugStringConvertible",
             "usr": "s:s28CustomDebugStringConvertibleP",
             "mangledName": "$ss28CustomDebugStringConvertibleP"
+          },
+          {
+            "kind": "Conformance",
+            "name": "SendableMetatype",
+            "printedName": "SendableMetatype",
+            "usr": "s:s16SendableMetatypeP",
+            "mangledName": "$ss16SendableMetatypeP"
           }
         ]
       }
@@ -13993,2877 +14096,2884 @@
   },
   "ConstValues": [
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/ComparisionOperationEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/ComparisionOperationEnum.swift",
       "kind": "StringLiteral",
       "offset": 78,
       "length": 8,
       "value": "\"HIGHER\""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/ComparisionOperationEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/ComparisionOperationEnum.swift",
       "kind": "StringLiteral",
       "offset": 113,
       "length": 14,
       "value": "\"HIGHER_EQUAL\""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/ComparisionOperationEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/ComparisionOperationEnum.swift",
       "kind": "StringLiteral",
       "offset": 144,
       "length": 7,
       "value": "\"LOWER\""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/ComparisionOperationEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/ComparisionOperationEnum.swift",
       "kind": "StringLiteral",
       "offset": 175,
       "length": 13,
       "value": "\"LOWER_EQUAL\""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/ComparisionOperationEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/ComparisionOperationEnum.swift",
       "kind": "StringLiteral",
       "offset": 206,
       "length": 7,
       "value": "\"EQUAL\""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/AuthorizationErrors.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/AuthorizationErrors.swift",
       "kind": "IntegerLiteral",
       "offset": 178,
       "length": 3,
       "value": "100"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/AuthorizationErrors.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/AuthorizationErrors.swift",
       "kind": "IntegerLiteral",
       "offset": 215,
       "length": 3,
       "value": "101"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/AuthorizationErrors.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/AuthorizationErrors.swift",
       "kind": "IntegerLiteral",
       "offset": 250,
       "length": 3,
       "value": "102"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/AuthorizationErrors.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/AuthorizationErrors.swift",
       "kind": "IntegerLiteral",
       "offset": 283,
       "length": 3,
       "value": "103"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/AuthorizationErrors.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/AuthorizationErrors.swift",
       "kind": "IntegerLiteral",
       "offset": 316,
       "length": 3,
       "value": "104"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/AuthorizationErrors.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/AuthorizationErrors.swift",
       "kind": "IntegerLiteral",
       "offset": 354,
       "length": 3,
       "value": "105"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/AuthorizationErrors.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/AuthorizationErrors.swift",
       "kind": "IntegerLiteral",
       "offset": 386,
       "length": 3,
       "value": "106"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/AuthorizationErrors.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/AuthorizationErrors.swift",
       "kind": "IntegerLiteral",
       "offset": 420,
       "length": 3,
       "value": "107"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/AuthorizationErrors.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/AuthorizationErrors.swift",
       "kind": "IntegerLiteral",
       "offset": 456,
       "length": 3,
       "value": "108"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/AuthorizationErrors.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/AuthorizationErrors.swift",
       "kind": "IntegerLiteral",
       "offset": 488,
       "length": 3,
       "value": "109"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/AuthorizationErrors.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/AuthorizationErrors.swift",
       "kind": "IntegerLiteral",
       "offset": 530,
       "length": 3,
       "value": "111"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/AuthorizationErrors.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/AuthorizationErrors.swift",
       "kind": "IntegerLiteral",
       "offset": 568,
       "length": 3,
       "value": "113"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/AuthorizationErrors.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/AuthorizationErrors.swift",
       "kind": "IntegerLiteral",
       "offset": 605,
       "length": 3,
       "value": "114"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/AuthorizationErrors.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/AuthorizationErrors.swift",
       "kind": "IntegerLiteral",
       "offset": 637,
       "length": 3,
       "value": "115"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/AuthorizationErrors.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/AuthorizationErrors.swift",
       "kind": "IntegerLiteral",
       "offset": 681,
       "length": 3,
       "value": "116"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/AuthorizationErrors.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/AuthorizationErrors.swift",
       "kind": "IntegerLiteral",
       "offset": 721,
       "length": 3,
       "value": "117"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/TimeUnitEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/TimeUnitEnum.swift",
       "kind": "StringLiteral",
       "offset": 71,
       "length": 14,
       "value": "\"MILLISECONDS\""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/TimeUnitEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/TimeUnitEnum.swift",
       "kind": "StringLiteral",
       "offset": 106,
       "length": 9,
       "value": "\"SECONDS\""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/TimeUnitEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/TimeUnitEnum.swift",
       "kind": "StringLiteral",
       "offset": 135,
       "length": 8,
       "value": "\"MINUTE\""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/TimeUnitEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/TimeUnitEnum.swift",
       "kind": "StringLiteral",
       "offset": 161,
       "length": 6,
       "value": "\"HOUR\""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/TimeUnitEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/TimeUnitEnum.swift",
       "kind": "StringLiteral",
       "offset": 184,
       "length": 5,
       "value": "\"DAY\""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/TimeUnitEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/TimeUnitEnum.swift",
       "kind": "StringLiteral",
       "offset": 207,
       "length": 6,
       "value": "\"WEEK\""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/TimeUnitEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/TimeUnitEnum.swift",
       "kind": "StringLiteral",
       "offset": 232,
       "length": 7,
       "value": "\"MONTH\""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/TimeUnitEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/TimeUnitEnum.swift",
       "kind": "StringLiteral",
       "offset": 257,
       "length": 6,
       "value": "\"YEAR\""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Data Structure\/UInt128.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Data Structure\/UInt128.swift",
       "kind": "IntegerLiteral",
       "offset": 22866,
       "length": 2,
       "value": "10"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Data Structure\/UInt128.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Data Structure\/UInt128.swift",
       "kind": "BooleanLiteral",
       "offset": 22888,
       "length": 4,
       "value": "true"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Data Structure\/UInt128.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Data Structure\/UInt128.swift",
       "kind": "StringLiteral",
       "offset": 24621,
       "length": 11,
       "value": "\"upperBits\""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Data Structure\/UInt128.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Data Structure\/UInt128.swift",
       "kind": "StringLiteral",
       "offset": 24646,
       "length": 11,
       "value": "\"lowerBits\""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Data Structure\/UInt128.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Data Structure\/UInt128.swift",
       "kind": "IntegerLiteral",
       "offset": 26345,
       "length": 2,
       "value": "10"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Data Structure\/UInt128.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Data Structure\/UInt128.swift",
       "kind": "BooleanLiteral",
       "offset": 26367,
       "length": 5,
       "value": "false"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/HealthKitManager.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/HealthKitManager.swift",
       "kind": "IntegerLiteral",
       "offset": 10070,
       "length": 3,
       "value": "100"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/HealthKitManager.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/HealthKitManager.swift",
+      "kind": "BooleanLiteral",
+      "offset": 10345,
+      "length": 4,
+      "value": "true"
+    },
+    {
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/HealthKitManager.swift",
       "kind": "IntegerLiteral",
-      "offset": 10511,
+      "offset": 10653,
       "length": 1,
       "value": "1"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/HealthKitManager.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/HealthKitManager.swift",
       "kind": "IntegerLiteral",
-      "offset": 10622,
+      "offset": 10764,
       "length": 1,
       "value": "5"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/HealthKitManager.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/HealthKitManager.swift",
       "kind": "BooleanLiteral",
-      "offset": 11072,
+      "offset": 11214,
       "length": 5,
       "value": "false"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/NotificationFrequency.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/NotificationFrequency.swift",
       "kind": "StringLiteral",
       "offset": 100,
       "length": 8,
       "value": "\"ALWAYS\""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/NotificationFrequency.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/NotificationFrequency.swift",
       "kind": "StringLiteral",
       "offset": 132,
       "length": 8,
       "value": "\"SECOND\""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/NotificationFrequency.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/NotificationFrequency.swift",
       "kind": "StringLiteral",
       "offset": 164,
       "length": 8,
       "value": "\"MINUTE\""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/NotificationFrequency.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/NotificationFrequency.swift",
       "kind": "StringLiteral",
       "offset": 194,
       "length": 6,
       "value": "\"HOUR\""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/NotificationFrequency.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/NotificationFrequency.swift",
       "kind": "StringLiteral",
       "offset": 221,
       "length": 5,
       "value": "\"DAY\""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/NotificationFrequency.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/NotificationFrequency.swift",
       "kind": "StringLiteral",
       "offset": 248,
       "length": 6,
       "value": "\"WEEK\""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/NotificationFrequency.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/NotificationFrequency.swift",
       "kind": "StringLiteral",
       "offset": 277,
       "length": 7,
       "value": "\"MONTH\""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/NotificationFrequency.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/NotificationFrequency.swift",
       "kind": "StringLiteral",
       "offset": 306,
       "length": 6,
       "value": "\"YEAR\""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/HealthKitTypes.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/HealthKitTypes.swift",
       "kind": "StringLiteral",
       "offset": 650,
       "length": 5,
       "value": "\"m\/s\""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/HealthKitTypes.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/HealthKitTypes.swift",
       "kind": "StringLiteral",
       "offset": 723,
       "length": 15,
       "value": "\"Walking Speed\""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/HealthKitTypes.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/HealthKitTypes.swift",
       "kind": "StringLiteral",
       "offset": 955,
       "length": 26,
       "value": "\"Distance Walking Running\""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/HealthKitTypes.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/HealthKitTypes.swift",
       "kind": "StringLiteral",
       "offset": 1097,
       "length": 12,
       "value": "\"mL\/min·kg\""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/HealthKitTypes.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/HealthKitTypes.swift",
       "kind": "StringLiteral",
       "offset": 1174,
       "length": 9,
       "value": "\"VO2 Max\""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/HealthKitTypes.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/HealthKitTypes.swift",
       "kind": "StringLiteral",
       "offset": 1376,
       "length": 12,
       "value": "\"Step Count\""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/HealthKitTypes.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/HealthKitTypes.swift",
       "kind": "StringLiteral",
       "offset": 1510,
       "length": 11,
       "value": "\"count\/min\""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/HealthKitTypes.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/HealthKitTypes.swift",
       "kind": "StringLiteral",
       "offset": 1586,
       "length": 12,
       "value": "\"Heart Rate\""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/HealthKitTypes.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/HealthKitTypes.swift",
       "kind": "StringLiteral",
       "offset": 1797,
       "length": 11,
       "value": "\"Body Mass\""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/HealthKitTypes.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/HealthKitTypes.swift",
       "kind": "StringLiteral",
       "offset": 2005,
       "length": 8,
       "value": "\"Height\""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/HealthKitTypes.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/HealthKitTypes.swift",
       "kind": "StringLiteral",
       "offset": 2141,
       "length": 7,
       "value": "\"mg\/dL\""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/HealthKitTypes.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/HealthKitTypes.swift",
       "kind": "StringLiteral",
       "offset": 2213,
       "length": 15,
       "value": "\"Blood Glucose\""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/HealthKitTypes.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/HealthKitTypes.swift",
       "kind": "StringLiteral",
       "offset": 2442,
       "length": 25,
       "value": "\"Blood Pressure Systolic\""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/HealthKitTypes.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/HealthKitTypes.swift",
       "kind": "StringLiteral",
       "offset": 2683,
       "length": 26,
       "value": "\"Blood Pressure Diastolic\""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/HealthKitTypes.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/HealthKitTypes.swift",
       "kind": "StringLiteral",
       "offset": 2904,
       "length": 16,
       "value": "\"Sleep Analysis\""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/HealthKitTypes.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/HealthKitTypes.swift",
       "kind": "StringLiteral",
       "offset": 3123,
       "length": 19,
       "value": "\"Oxygen Saturation\""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/HealthKitTypes.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/HealthKitTypes.swift",
       "kind": "StringLiteral",
       "offset": 3359,
       "length": 22,
       "value": "\"Active Energy Burned\""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/HealthKitTypes.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/HealthKitTypes.swift",
       "kind": "StringLiteral",
       "offset": 3586,
       "length": 21,
       "value": "\"Body Fat Percentage\""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/HealthKitTypes.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/HealthKitTypes.swift",
       "kind": "StringLiteral",
       "offset": 3822,
       "length": 21,
       "value": "\"Basal Energy Burned\""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/HealthKitTypes.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/HealthKitTypes.swift",
       "kind": "StringLiteral",
       "offset": 4050,
       "length": 18,
       "value": "\"Body Temperature\""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/HealthKitTypes.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/HealthKitTypes.swift",
       "kind": "StringLiteral",
       "offset": 4267,
       "length": 15,
       "value": "\"Dietary Water\""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/HealthKitTypes.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/HealthKitTypes.swift",
       "kind": "StringLiteral",
       "offset": 4475,
       "length": 12,
       "value": "\"Push Count\""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/HealthKitTypes.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/HealthKitTypes.swift",
       "kind": "StringLiteral",
       "offset": 4710,
       "length": 25,
       "value": "\"Dietary Energy Consumed\""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/HealthKitTypes.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/HealthKitTypes.swift",
       "kind": "StringLiteral",
       "offset": 4833,
       "length": 9,
       "value": "\"Workout\""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/GroupPermissions.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/GroupPermissions.swift",
       "kind": "StringLiteral",
       "offset": 173,
       "length": 10,
       "value": "\"IsActive\""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/GroupPermissions.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/GroupPermissions.swift",
       "kind": "StringLiteral",
       "offset": 210,
       "length": 12,
       "value": "\"AccessType\""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/AdvancedQueryResponseBlock.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/AdvancedQueryResponseBlock.swift",
       "kind": "StringLiteral",
       "offset": 1189,
       "length": 7,
       "value": "\"Label\""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/AdvancedQueryResponseBlock.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/AdvancedQueryResponseBlock.swift",
       "kind": "StringLiteral",
       "offset": 1206,
       "length": 7,
       "value": "\"Value\""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/BackgroundJobParameters.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/BackgroundJobParameters.swift",
       "kind": "StringLiteral",
       "offset": 574,
       "length": 4,
       "value": "\"Id\""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/BackgroundJobParameters.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/BackgroundJobParameters.swift",
       "kind": "StringLiteral",
       "offset": 603,
       "length": 10,
       "value": "\"Variable\""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/BackgroundJobParameters.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/BackgroundJobParameters.swift",
       "kind": "StringLiteral",
       "offset": 638,
       "length": 10,
       "value": "\"TimeUnit\""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/BackgroundJobParameters.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/BackgroundJobParameters.swift",
       "kind": "StringLiteral",
       "offset": 681,
       "length": 18,
       "value": "\"TimeUnitGrouping\""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/BackgroundJobParameters.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/BackgroundJobParameters.swift",
       "kind": "StringLiteral",
       "offset": 737,
       "length": 23,
       "value": "\"NotificationFrequency\""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/BackgroundJobParameters.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/BackgroundJobParameters.swift",
       "kind": "StringLiteral",
       "offset": 806,
       "length": 31,
       "value": "\"NotificationFrequencyGrouping\""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/BackgroundJobParameters.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/BackgroundJobParameters.swift",
       "kind": "StringLiteral",
       "offset": 866,
       "length": 14,
       "value": "\"JobFrequency\""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/BackgroundJobParameters.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/BackgroundJobParameters.swift",
       "kind": "StringLiteral",
       "offset": 906,
       "length": 11,
       "value": "\"Condition\""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/BackgroundJobParameters.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/BackgroundJobParameters.swift",
       "kind": "StringLiteral",
       "offset": 939,
       "length": 7,
       "value": "\"Value\""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/BackgroundJobParameters.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/BackgroundJobParameters.swift",
       "kind": "StringLiteral",
       "offset": 981,
       "length": 20,
       "value": "\"NotificationHeader\""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/BackgroundJobParameters.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/BackgroundJobParameters.swift",
       "kind": "StringLiteral",
       "offset": 1034,
       "length": 18,
       "value": "\"NotificationBody\""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/BackgroundJobParameters.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/BackgroundJobParameters.swift",
       "kind": "StringLiteral",
       "offset": 1077,
       "length": 10,
       "value": "\"IsActive\""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/OperationTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/OperationTypeEnum.swift",
       "kind": "StringLiteral",
       "offset": 67,
       "length": 5,
       "value": "\"SUM\""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/OperationTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/OperationTypeEnum.swift",
       "kind": "StringLiteral",
       "offset": 93,
       "length": 9,
       "value": "\"AVERAGE\""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/OperationTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/OperationTypeEnum.swift",
       "kind": "StringLiteral",
       "offset": 119,
       "length": 5,
       "value": "\"MIN\""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/OperationTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/OperationTypeEnum.swift",
       "kind": "StringLiteral",
       "offset": 141,
       "length": 5,
       "value": "\"MAX\""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/OperationTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/OperationTypeEnum.swift",
       "kind": "StringLiteral",
       "offset": 163,
       "length": 5,
       "value": "\"RAW\""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/OperationTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/OperationTypeEnum.swift",
       "kind": "StringLiteral",
       "offset": 192,
       "length": 13,
       "value": "\"MOST_RECENT\""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "StringLiteral",
       "offset": 96,
       "length": 7,
       "value": "\"STEPS\""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "StringLiteral",
       "offset": 125,
       "length": 12,
       "value": "\"HEART_RATE\""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "StringLiteral",
       "offset": 156,
       "length": 8,
       "value": "\"WEIGHT\""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "StringLiteral",
       "offset": 183,
       "length": 8,
       "value": "\"HEIGHT\""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "StringLiteral",
       "offset": 216,
       "length": 15,
       "value": "\"BLOOD_GLUCOSE\""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "StringLiteral",
       "offset": 257,
       "length": 16,
       "value": "\"BLOOD_PRESSURE\""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "StringLiteral",
       "offset": 299,
       "length": 7,
       "value": "\"SLEEP\""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "StringLiteral",
       "offset": 335,
       "length": 19,
       "value": "\"OXYGEN_SATURATION\""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "StringLiteral",
       "offset": 385,
       "length": 17,
       "value": "\"CALORIES_BURNED\""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "StringLiteral",
       "offset": 432,
       "length": 21,
       "value": "\"BODY_FAT_PERCENTAGE\""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "StringLiteral",
       "offset": 483,
       "length": 22,
       "value": "\"BASAL_METABOLIC_RATE\""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "StringLiteral",
       "offset": 533,
       "length": 18,
       "value": "\"BODY_TEMPERATURE\""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "StringLiteral",
       "offset": 576,
       "length": 11,
       "value": "\"HYDRATION\""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "StringLiteral",
       "offset": 621,
       "length": 11,
       "value": "\"NUTRITION\""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "StringLiteral",
       "offset": 654,
       "length": 12,
       "value": "\"PUSH_COUNT\""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "StringLiteral",
       "offset": 685,
       "length": 8,
       "value": "\"VO2MAX\""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "StringLiteral",
       "offset": 714,
       "length": 10,
       "value": "\"DISTANCE\""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "StringLiteral",
       "offset": 749,
       "length": 15,
       "value": "\"WALKING_SPEED\""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "StringLiteral",
       "offset": 789,
       "length": 9,
       "value": "\"WORKOUT\""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "StringLiteral",
       "offset": 904,
       "length": 19,
       "value": "\"AMERICAN_FOOTBALL\""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "StringLiteral",
       "offset": 943,
       "length": 9,
       "value": "\"ARCHERY\""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "StringLiteral",
       "offset": 983,
       "length": 21,
       "value": "\"AUSTRALIAN_FOOTBALL\""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "StringLiteral",
       "offset": 1026,
       "length": 11,
       "value": "\"BADMINTON\""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "StringLiteral",
       "offset": 1055,
       "length": 7,
       "value": "\"BARRE\""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "StringLiteral",
       "offset": 1083,
       "length": 10,
       "value": "\"BASEBALL\""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "StringLiteral",
       "offset": 1116,
       "length": 12,
       "value": "\"BASKETBALL\""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "StringLiteral",
       "offset": 1148,
       "length": 9,
       "value": "\"BOWLING\""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "StringLiteral",
       "offset": 1176,
       "length": 8,
       "value": "\"BOXING\""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "StringLiteral",
       "offset": 1205,
       "length": 10,
       "value": "\"CLIMBING\""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "StringLiteral",
       "offset": 1240,
       "length": 15,
       "value": "\"CORE_TRAINING\""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "StringLiteral",
       "offset": 1286,
       "length": 22,
       "value": "\"CROSS_COUNTRY_SKIING\""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "StringLiteral",
       "offset": 1334,
       "length": 16,
       "value": "\"CROSS_TRAINING\""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "StringLiteral",
       "offset": 1370,
       "length": 9,
       "value": "\"CURLING\""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "StringLiteral",
       "offset": 1399,
       "length": 9,
       "value": "\"CYCLING\""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "StringLiteral",
       "offset": 1426,
       "length": 7,
       "value": "\"DANCE\""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "StringLiteral",
       "offset": 1467,
       "length": 25,
       "value": "\"DANCE_INSPIRED_TRAINING\""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "StringLiteral",
       "offset": 1515,
       "length": 13,
       "value": "\"DISC_SPORTS\""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "StringLiteral",
       "offset": 1555,
       "length": 17,
       "value": "\"DOWNHILL_SKIING\""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "StringLiteral",
       "offset": 1595,
       "length": 12,
       "value": "\"ELLIPTICAL\""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "StringLiteral",
       "offset": 1636,
       "length": 19,
       "value": "\"EQUESTRIAN_SPORTS\""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "StringLiteral",
       "offset": 1675,
       "length": 9,
       "value": "\"FENCING\""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "StringLiteral",
       "offset": 1710,
       "length": 16,
       "value": "\"FITNESS_GAMING\""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "StringLiteral",
       "offset": 1746,
       "length": 9,
       "value": "\"FISHING\""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "StringLiteral",
       "offset": 1779,
       "length": 13,
       "value": "\"FLEXIBILITY\""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "StringLiteral",
       "offset": 1831,
       "length": 30,
       "value": "\"FUNCTIONAL_STRENGTH_TRAINING\""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "StringLiteral",
       "offset": 1878,
       "length": 6,
       "value": "\"GOLF\""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "StringLiteral",
       "offset": 1907,
       "length": 12,
       "value": "\"GYMNASTICS\""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "StringLiteral",
       "offset": 1940,
       "length": 10,
       "value": "\"HANDBALL\""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "StringLiteral",
       "offset": 1974,
       "length": 14,
       "value": "\"HAND_CYCLING\""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "StringLiteral",
       "offset": 2030,
       "length": 34,
       "value": "\"HIGH_INTENSITY_INTERVAL_TRAINING\""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "StringLiteral",
       "offset": 2083,
       "length": 8,
       "value": "\"HIKING\""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "StringLiteral",
       "offset": 2110,
       "length": 8,
       "value": "\"HOCKEY\""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "StringLiteral",
       "offset": 2138,
       "length": 9,
       "value": "\"HUNTING\""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "StringLiteral",
       "offset": 2168,
       "length": 11,
       "value": "\"JUMP_ROPE\""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "StringLiteral",
       "offset": 2202,
       "length": 12,
       "value": "\"KICKBOXING\""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "StringLiteral",
       "offset": 2235,
       "length": 10,
       "value": "\"LACROSSE\""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "StringLiteral",
       "offset": 2269,
       "length": 14,
       "value": "\"MARTIAL_ARTS\""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "StringLiteral",
       "offset": 2307,
       "length": 15,
       "value": "\"MIND_AND_BODY\""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "StringLiteral",
       "offset": 2346,
       "length": 14,
       "value": "\"MIXED_CARDIO\""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "StringLiteral",
       "offset": 2385,
       "length": 15,
       "value": "\"PADDLE_SPORTS\""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "StringLiteral",
       "offset": 2420,
       "length": 9,
       "value": "\"PILATES\""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "StringLiteral",
       "offset": 2446,
       "length": 6,
       "value": "\"PLAY\""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "StringLiteral",
       "offset": 2487,
       "length": 26,
       "value": "\"PREPARATION_AND_RECOVERY\""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "StringLiteral",
       "offset": 2537,
       "length": 13,
       "value": "\"RACQUETBALL\""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "StringLiteral",
       "offset": 2569,
       "length": 8,
       "value": "\"ROWING\""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "StringLiteral",
       "offset": 2595,
       "length": 7,
       "value": "\"RUGBY\""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "StringLiteral",
       "offset": 2622,
       "length": 9,
       "value": "\"RUNNING\""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "StringLiteral",
       "offset": 2651,
       "length": 9,
       "value": "\"SAILING\""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "StringLiteral",
       "offset": 2686,
       "length": 16,
       "value": "\"SKATING_SPORTS\""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "StringLiteral",
       "offset": 2727,
       "length": 14,
       "value": "\"SNOWBOARDING\""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "StringLiteral",
       "offset": 2764,
       "length": 13,
       "value": "\"SNOW_SPORTS\""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "StringLiteral",
       "offset": 2796,
       "length": 8,
       "value": "\"SOCCER\""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "StringLiteral",
       "offset": 2825,
       "length": 10,
       "value": "\"SOFTBALL\""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "StringLiteral",
       "offset": 2854,
       "length": 8,
       "value": "\"SQUASH\""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "StringLiteral",
       "offset": 2888,
       "length": 16,
       "value": "\"STAIR_CLIMBING\""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "StringLiteral",
       "offset": 2923,
       "length": 8,
       "value": "\"STAIRS\""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "StringLiteral",
       "offset": 2956,
       "length": 14,
       "value": "\"STEP_TRANING\""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "StringLiteral",
       "offset": 2996,
       "length": 16,
       "value": "\"SURFING_SPORTS\""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "StringLiteral",
       "offset": 3033,
       "length": 10,
       "value": "\"SWIMMING\""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "StringLiteral",
       "offset": 3067,
       "length": 14,
       "value": "\"TABLE_TENNIS\""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "StringLiteral",
       "offset": 3100,
       "length": 9,
       "value": "\"TAI_CHI\""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "StringLiteral",
       "offset": 3128,
       "length": 8,
       "value": "\"TENNIS\""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "StringLiteral",
       "offset": 3162,
       "length": 17,
       "value": "\"TRACK_AND_FIELD\""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "StringLiteral",
       "offset": 3219,
       "length": 31,
       "value": "\"TRADITIONAL_STRENGTH_TRAINING\""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "StringLiteral",
       "offset": 3273,
       "length": 12,
       "value": "\"VOLLEYBALL\""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "StringLiteral",
       "offset": 3305,
       "length": 9,
       "value": "\"WALKING\""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "StringLiteral",
       "offset": 3339,
       "length": 15,
       "value": "\"WATER_FITNESS\""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "StringLiteral",
       "offset": 3376,
       "length": 12,
       "value": "\"WATER_POLO\""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "StringLiteral",
       "offset": 3412,
       "length": 14,
       "value": "\"WATER_SPORTS\""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "StringLiteral",
       "offset": 3456,
       "length": 21,
       "value": "\"WHEELCHAIR_RUN_PACE\""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "StringLiteral",
       "offset": 3508,
       "length": 22,
       "value": "\"WHEELCHAIR_WALK_PACE\""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "StringLiteral",
       "offset": 3552,
       "length": 11,
       "value": "\"WRESTLING\""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "StringLiteral",
       "offset": 3580,
       "length": 6,
       "value": "\"YOGA\""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "IntegerLiteral",
       "offset": 3707,
       "length": 1,
       "value": "1"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "IntegerLiteral",
       "offset": 3712,
       "length": 1,
       "value": "0"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "IntegerLiteral",
       "offset": 3753,
       "length": 1,
       "value": "1"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "IntegerLiteral",
       "offset": 3758,
       "length": 1,
       "value": "1"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "StringLiteral",
       "offset": 3930,
       "length": 6,
       "value": "\"READ\""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "StringLiteral",
       "offset": 3964,
       "length": 7,
       "value": "\"WRITE\""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "StringLiteral",
       "offset": 4003,
       "length": 11,
       "value": "\"READWRITE\""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "IntegerLiteral",
       "offset": 4876,
       "length": 1,
       "value": "1"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "IntegerLiteral",
       "offset": 4881,
       "length": 1,
       "value": "0"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "IntegerLiteral",
       "offset": 4926,
       "length": 1,
       "value": "1"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "IntegerLiteral",
       "offset": 4931,
       "length": 1,
       "value": "1"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "IntegerLiteral",
       "offset": 4973,
       "length": 1,
       "value": "1"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "IntegerLiteral",
       "offset": 4978,
       "length": 1,
       "value": "2"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "IntegerLiteral",
       "offset": 5020,
       "length": 1,
       "value": "1"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "IntegerLiteral",
       "offset": 5025,
       "length": 1,
       "value": "3"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "IntegerLiteral",
       "offset": 5073,
       "length": 1,
       "value": "1"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "IntegerLiteral",
       "offset": 5078,
       "length": 1,
       "value": "4"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "IntegerLiteral",
       "offset": 5127,
       "length": 1,
       "value": "1"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "IntegerLiteral",
       "offset": 5132,
       "length": 1,
       "value": "5"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "IntegerLiteral",
       "offset": 5181,
       "length": 1,
       "value": "1"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "IntegerLiteral",
       "offset": 5186,
       "length": 1,
       "value": "6"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "IntegerLiteral",
       "offset": 5238,
       "length": 1,
       "value": "1"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "IntegerLiteral",
       "offset": 5243,
       "length": 1,
       "value": "7"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "IntegerLiteral",
       "offset": 5297,
       "length": 1,
       "value": "1"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "IntegerLiteral",
       "offset": 5302,
       "length": 1,
       "value": "8"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "IntegerLiteral",
       "offset": 5355,
       "length": 1,
       "value": "1"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "IntegerLiteral",
       "offset": 5360,
       "length": 1,
       "value": "9"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "IntegerLiteral",
       "offset": 5413,
       "length": 1,
       "value": "1"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "IntegerLiteral",
       "offset": 5418,
       "length": 2,
       "value": "10"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "IntegerLiteral",
       "offset": 5470,
       "length": 1,
       "value": "1"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "IntegerLiteral",
       "offset": 5475,
       "length": 2,
       "value": "11"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "IntegerLiteral",
       "offset": 5524,
       "length": 1,
       "value": "1"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "IntegerLiteral",
       "offset": 5529,
       "length": 2,
       "value": "12"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "IntegerLiteral",
       "offset": 5587,
       "length": 1,
       "value": "1"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "IntegerLiteral",
       "offset": 5592,
       "length": 2,
       "value": "13"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "IntegerLiteral",
       "offset": 5638,
       "length": 1,
       "value": "1"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "IntegerLiteral",
       "offset": 5643,
       "length": 2,
       "value": "14"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "IntegerLiteral",
       "offset": 5686,
       "length": 1,
       "value": "1"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "IntegerLiteral",
       "offset": 5691,
       "length": 2,
       "value": "15"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "IntegerLiteral",
       "offset": 5736,
       "length": 1,
       "value": "1"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "IntegerLiteral",
       "offset": 5741,
       "length": 2,
       "value": "16"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "IntegerLiteral",
       "offset": 5790,
       "length": 1,
       "value": "1"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "IntegerLiteral",
       "offset": 5795,
       "length": 2,
       "value": "17"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "IntegerLiteral",
       "offset": 9150,
       "length": 1,
       "value": "1"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "IntegerLiteral",
       "offset": 9155,
       "length": 1,
       "value": "0"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "IntegerLiteral",
       "offset": 9198,
       "length": 1,
       "value": "1"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "IntegerLiteral",
       "offset": 9203,
       "length": 1,
       "value": "1"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "IntegerLiteral",
       "offset": 9257,
       "length": 1,
       "value": "1"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "IntegerLiteral",
       "offset": 9262,
       "length": 1,
       "value": "2"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "IntegerLiteral",
       "offset": 9307,
       "length": 1,
       "value": "1"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "IntegerLiteral",
       "offset": 9312,
       "length": 1,
       "value": "3"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "IntegerLiteral",
       "offset": 9353,
       "length": 1,
       "value": "1"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "IntegerLiteral",
       "offset": 9358,
       "length": 1,
       "value": "4"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "IntegerLiteral",
       "offset": 9402,
       "length": 1,
       "value": "1"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "IntegerLiteral",
       "offset": 9407,
       "length": 1,
       "value": "5"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "IntegerLiteral",
       "offset": 9453,
       "length": 1,
       "value": "1"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "IntegerLiteral",
       "offset": 9458,
       "length": 1,
       "value": "6"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "IntegerLiteral",
       "offset": 9501,
       "length": 1,
       "value": "1"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "IntegerLiteral",
       "offset": 9506,
       "length": 1,
       "value": "7"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "IntegerLiteral",
       "offset": 9548,
       "length": 1,
       "value": "1"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "IntegerLiteral",
       "offset": 9553,
       "length": 1,
       "value": "8"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "IntegerLiteral",
       "offset": 9597,
       "length": 1,
       "value": "1"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "IntegerLiteral",
       "offset": 9602,
       "length": 1,
       "value": "9"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "IntegerLiteral",
       "offset": 9650,
       "length": 1,
       "value": "1"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "IntegerLiteral",
       "offset": 9655,
       "length": 2,
       "value": "10"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "IntegerLiteral",
       "offset": 9710,
       "length": 1,
       "value": "1"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "IntegerLiteral",
       "offset": 9715,
       "length": 2,
       "value": "11"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "IntegerLiteral",
       "offset": 9765,
       "length": 1,
       "value": "1"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "IntegerLiteral",
       "offset": 9770,
       "length": 2,
       "value": "12"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "IntegerLiteral",
       "offset": 9814,
       "length": 1,
       "value": "1"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "IntegerLiteral",
       "offset": 9819,
       "length": 2,
       "value": "13"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "IntegerLiteral",
       "offset": 9863,
       "length": 1,
       "value": "1"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "IntegerLiteral",
       "offset": 9868,
       "length": 2,
       "value": "14"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "IntegerLiteral",
       "offset": 9910,
       "length": 1,
       "value": "1"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "IntegerLiteral",
       "offset": 9915,
       "length": 2,
       "value": "15"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "IntegerLiteral",
       "offset": 9973,
       "length": 1,
       "value": "1"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "IntegerLiteral",
       "offset": 9978,
       "length": 2,
       "value": "16"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "IntegerLiteral",
       "offset": 10025,
       "length": 1,
       "value": "1"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "IntegerLiteral",
       "offset": 10030,
       "length": 2,
       "value": "17"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "IntegerLiteral",
       "offset": 10081,
       "length": 1,
       "value": "1"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "IntegerLiteral",
       "offset": 10086,
       "length": 2,
       "value": "18"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "IntegerLiteral",
       "offset": 10133,
       "length": 1,
       "value": "1"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "IntegerLiteral",
       "offset": 10138,
       "length": 2,
       "value": "19"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "IntegerLiteral",
       "offset": 10191,
       "length": 1,
       "value": "1"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "IntegerLiteral",
       "offset": 10196,
       "length": 2,
       "value": "20"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "IntegerLiteral",
       "offset": 10240,
       "length": 1,
       "value": "1"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "IntegerLiteral",
       "offset": 10245,
       "length": 2,
       "value": "21"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "IntegerLiteral",
       "offset": 10295,
       "length": 1,
       "value": "1"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "IntegerLiteral",
       "offset": 10300,
       "length": 2,
       "value": "22"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "IntegerLiteral",
       "offset": 10344,
       "length": 1,
       "value": "1"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "IntegerLiteral",
       "offset": 10349,
       "length": 2,
       "value": "23"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "IntegerLiteral",
       "offset": 10397,
       "length": 1,
       "value": "1"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "IntegerLiteral",
       "offset": 10402,
       "length": 2,
       "value": "24"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "IntegerLiteral",
       "offset": 10465,
       "length": 1,
       "value": "1"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "IntegerLiteral",
       "offset": 10470,
       "length": 2,
       "value": "25"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "IntegerLiteral",
       "offset": 10511,
       "length": 1,
       "value": "1"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "IntegerLiteral",
       "offset": 10516,
       "length": 2,
       "value": "26"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "IntegerLiteral",
       "offset": 10563,
       "length": 1,
       "value": "1"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "IntegerLiteral",
       "offset": 10568,
       "length": 2,
       "value": "27"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "IntegerLiteral",
       "offset": 10613,
       "length": 1,
       "value": "1"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "IntegerLiteral",
       "offset": 10618,
       "length": 2,
       "value": "28"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "IntegerLiteral",
       "offset": 10666,
       "length": 1,
       "value": "1"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "IntegerLiteral",
       "offset": 10671,
       "length": 2,
       "value": "29"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "IntegerLiteral",
       "offset": 10737,
       "length": 1,
       "value": "1"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "IntegerLiteral",
       "offset": 10742,
       "length": 2,
       "value": "30"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "IntegerLiteral",
       "offset": 10785,
       "length": 1,
       "value": "1"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "IntegerLiteral",
       "offset": 10790,
       "length": 2,
       "value": "31"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "IntegerLiteral",
       "offset": 10833,
       "length": 1,
       "value": "1"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "IntegerLiteral",
       "offset": 10838,
       "length": 2,
       "value": "32"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "IntegerLiteral",
       "offset": 10882,
       "length": 1,
       "value": "1"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "IntegerLiteral",
       "offset": 10887,
       "length": 2,
       "value": "33"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "IntegerLiteral",
       "offset": 10932,
       "length": 1,
       "value": "1"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "IntegerLiteral",
       "offset": 10937,
       "length": 2,
       "value": "34"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "IntegerLiteral",
       "offset": 10984,
       "length": 1,
       "value": "1"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "IntegerLiteral",
       "offset": 10989,
       "length": 2,
       "value": "35"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "IntegerLiteral",
       "offset": 11034,
       "length": 1,
       "value": "1"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "IntegerLiteral",
       "offset": 11039,
       "length": 2,
       "value": "36"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "IntegerLiteral",
       "offset": 11087,
       "length": 1,
       "value": "1"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "IntegerLiteral",
       "offset": 11092,
       "length": 2,
       "value": "37"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "IntegerLiteral",
       "offset": 11140,
       "length": 1,
       "value": "1"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "IntegerLiteral",
       "offset": 11145,
       "length": 2,
       "value": "38"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "IntegerLiteral",
       "offset": 11193,
       "length": 1,
       "value": "1"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "IntegerLiteral",
       "offset": 11198,
       "length": 2,
       "value": "39"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "IntegerLiteral",
       "offset": 11247,
       "length": 1,
       "value": "1"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "IntegerLiteral",
       "offset": 11252,
       "length": 2,
       "value": "40"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "IntegerLiteral",
       "offset": 11296,
       "length": 1,
       "value": "1"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "IntegerLiteral",
       "offset": 11301,
       "length": 2,
       "value": "41"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "IntegerLiteral",
       "offset": 11342,
       "length": 1,
       "value": "1"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "IntegerLiteral",
       "offset": 11347,
       "length": 2,
       "value": "42"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "IntegerLiteral",
       "offset": 11406,
       "length": 1,
       "value": "1"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "IntegerLiteral",
       "offset": 11411,
       "length": 2,
       "value": "43"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "IntegerLiteral",
       "offset": 11459,
       "length": 1,
       "value": "1"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "IntegerLiteral",
       "offset": 11464,
       "length": 2,
       "value": "44"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "IntegerLiteral",
       "offset": 11507,
       "length": 1,
       "value": "1"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "IntegerLiteral",
       "offset": 11512,
       "length": 2,
       "value": "45"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "IntegerLiteral",
       "offset": 11554,
       "length": 1,
       "value": "1"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "IntegerLiteral",
       "offset": 11559,
       "length": 2,
       "value": "46"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "IntegerLiteral",
       "offset": 11603,
       "length": 1,
       "value": "1"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "IntegerLiteral",
       "offset": 11608,
       "length": 2,
       "value": "47"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "IntegerLiteral",
       "offset": 11652,
       "length": 1,
       "value": "1"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "IntegerLiteral",
       "offset": 11657,
       "length": 2,
       "value": "48"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "IntegerLiteral",
       "offset": 11707,
       "length": 1,
       "value": "1"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "IntegerLiteral",
       "offset": 11712,
       "length": 2,
       "value": "49"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "IntegerLiteral",
       "offset": 11761,
       "length": 1,
       "value": "1"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "IntegerLiteral",
       "offset": 11766,
       "length": 2,
       "value": "50"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "IntegerLiteral",
       "offset": 11813,
       "length": 1,
       "value": "1"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "IntegerLiteral",
       "offset": 11818,
       "length": 2,
       "value": "51"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "IntegerLiteral",
       "offset": 11861,
       "length": 1,
       "value": "1"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "IntegerLiteral",
       "offset": 11866,
       "length": 2,
       "value": "52"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "IntegerLiteral",
       "offset": 11911,
       "length": 1,
       "value": "1"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "IntegerLiteral",
       "offset": 11916,
       "length": 2,
       "value": "53"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "IntegerLiteral",
       "offset": 11959,
       "length": 1,
       "value": "1"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "IntegerLiteral",
       "offset": 11964,
       "length": 2,
       "value": "54"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "IntegerLiteral",
       "offset": 12014,
       "length": 1,
       "value": "1"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "IntegerLiteral",
       "offset": 12019,
       "length": 2,
       "value": "55"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "IntegerLiteral",
       "offset": 12062,
       "length": 1,
       "value": "1"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "IntegerLiteral",
       "offset": 12067,
       "length": 2,
       "value": "56"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "IntegerLiteral",
       "offset": 12116,
       "length": 1,
       "value": "1"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "IntegerLiteral",
       "offset": 12121,
       "length": 2,
       "value": "57"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "IntegerLiteral",
       "offset": 12171,
       "length": 1,
       "value": "1"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "IntegerLiteral",
       "offset": 12176,
       "length": 2,
       "value": "58"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "IntegerLiteral",
       "offset": 12221,
       "length": 1,
       "value": "1"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "IntegerLiteral",
       "offset": 12226,
       "length": 2,
       "value": "59"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "IntegerLiteral",
       "offset": 12274,
       "length": 1,
       "value": "1"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "IntegerLiteral",
       "offset": 12279,
       "length": 2,
       "value": "60"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "IntegerLiteral",
       "offset": 12322,
       "length": 1,
       "value": "1"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "IntegerLiteral",
       "offset": 12327,
       "length": 2,
       "value": "61"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "IntegerLiteral",
       "offset": 12370,
       "length": 1,
       "value": "1"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "IntegerLiteral",
       "offset": 12375,
       "length": 2,
       "value": "62"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "IntegerLiteral",
       "offset": 12425,
       "length": 1,
       "value": "1"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "IntegerLiteral",
       "offset": 12430,
       "length": 2,
       "value": "63"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "IntegerLiteral",
       "offset": 12494,
       "length": 1,
       "value": "1"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "IntegerLiteral",
       "offset": 12499,
       "length": 2,
       "value": "64"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "IntegerLiteral",
       "offset": 12546,
       "length": 1,
       "value": "1"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "IntegerLiteral",
       "offset": 12551,
       "length": 2,
       "value": "65"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "IntegerLiteral",
       "offset": 12595,
       "length": 1,
       "value": "1"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "IntegerLiteral",
       "offset": 12600,
       "length": 2,
       "value": "66"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "IntegerLiteral",
       "offset": 12649,
       "length": 1,
       "value": "1"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "IntegerLiteral",
       "offset": 12654,
       "length": 2,
       "value": "67"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "IntegerLiteral",
       "offset": 12700,
       "length": 1,
       "value": "1"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "IntegerLiteral",
       "offset": 12705,
       "length": 2,
       "value": "68"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "IntegerLiteral",
       "offset": 12753,
       "length": 1,
       "value": "1"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "IntegerLiteral",
       "offset": 12758,
       "length": 2,
       "value": "69"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "IntegerLiteral",
       "offset": 12812,
       "length": 1,
       "value": "1"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "IntegerLiteral",
       "offset": 12817,
       "length": 2,
       "value": "70"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "IntegerLiteral",
       "offset": 12872,
       "length": 1,
       "value": "1"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "IntegerLiteral",
       "offset": 12877,
       "length": 2,
       "value": "71"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "IntegerLiteral",
       "offset": 12923,
       "length": 1,
       "value": "1"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "IntegerLiteral",
       "offset": 12928,
       "length": 2,
       "value": "72"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "IntegerLiteral",
       "offset": 12969,
       "length": 1,
       "value": "1"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthTypeEnum.swift",
       "kind": "IntegerLiteral",
       "offset": 12974,
       "length": 2,
       "value": "73"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/AdvancedQueryEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/AdvancedQueryEnum.swift",
       "kind": "StringLiteral",
       "offset": 108,
       "length": 10,
       "value": "\"ALL_DATA\""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/AdvancedQueryEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/AdvancedQueryEnum.swift",
       "kind": "StringLiteral",
       "offset": 152,
       "length": 21,
       "value": "\"REMOVE_EMPTY_BLOCKS\""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/AdvancedQueryEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/AdvancedQueryEnum.swift",
       "kind": "IntegerLiteral",
       "offset": 476,
       "length": 1,
       "value": "1"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/AdvancedQueryEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/AdvancedQueryEnum.swift",
       "kind": "IntegerLiteral",
       "offset": 481,
       "length": 1,
       "value": "0"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/AdvancedQueryEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/AdvancedQueryEnum.swift",
       "kind": "IntegerLiteral",
       "offset": 537,
       "length": 1,
       "value": "1"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/AdvancedQueryEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/AdvancedQueryEnum.swift",
       "kind": "IntegerLiteral",
       "offset": 542,
       "length": 1,
       "value": "1"
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/AdvancedQueryEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/AdvancedQueryEnum.swift",
       "kind": "StringLiteral",
       "offset": 738,
       "length": 10,
       "value": "\"RAW_DATA\""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/AdvancedQueryEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/AdvancedQueryEnum.swift",
       "kind": "StringLiteral",
       "offset": 784,
       "length": 12,
       "value": "\"DATA_POINT\""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/AdvancedQueryEnum.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/AdvancedQueryEnum.swift",
       "kind": "StringLiteral",
       "offset": 826,
       "length": 10,
       "value": "\"ALL_DATA\""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/CustomPermissions.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/CustomPermissions.swift",
       "kind": "StringLiteral",
       "offset": 215,
       "length": 10,
       "value": "\"Variable\""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/CustomPermissions.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/CustomPermissions.swift",
       "kind": "StringLiteral",
       "offset": 252,
       "length": 12,
       "value": "\"AccessType\""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/QueryParameters.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/QueryParameters.swift",
       "kind": "StringLiteral",
       "offset": 374,
       "length": 10,
       "value": "\"Variable\""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/QueryParameters.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/QueryParameters.swift",
       "kind": "StringLiteral",
       "offset": 410,
       "length": 11,
       "value": "\"StartDate\""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/QueryParameters.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/QueryParameters.swift",
       "kind": "StringLiteral",
       "offset": 445,
       "length": 9,
       "value": "\"EndDate\""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/QueryParameters.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/QueryParameters.swift",
       "kind": "StringLiteral",
       "offset": 479,
       "length": 10,
       "value": "\"TimeUnit\""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/QueryParameters.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/QueryParameters.swift",
       "kind": "StringLiteral",
       "offset": 519,
       "length": 15,
       "value": "\"OperationType\""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/QueryParameters.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/QueryParameters.swift",
       "kind": "StringLiteral",
       "offset": 565,
       "length": 16,
       "value": "\"TimeUnitLength\""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/QueryParameters.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/QueryParameters.swift",
       "kind": "StringLiteral",
       "offset": 621,
       "length": 25,
       "value": "\"AdvancedQueryReturnType\""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/QueryParameters.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/QueryParameters.swift",
       "kind": "StringLiteral",
       "offset": 686,
       "length": 25,
       "value": "\"AdvancedQueryResultType\""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/QueryParameters.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/QueryParameters.swift",
       "kind": "StringLiteral",
       "offset": 1548,
       "length": 22,
       "value": "\"WorkoutTypeVariables\""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/QueryParameters.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/QueryParameters.swift",
       "kind": "StringLiteral",
       "offset": 1596,
       "length": 11,
       "value": "\"StartDate\""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/QueryParameters.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/QueryParameters.swift",
       "kind": "StringLiteral",
       "offset": 1631,
       "length": 9,
       "value": "\"EndDate\""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/QueryParameters.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/QueryParameters.swift",
       "kind": "StringLiteral",
       "offset": 3006,
       "length": 13,
       "value": "\"WorkoutType\""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/QueryParameters.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/QueryParameters.swift",
       "kind": "StringLiteral",
       "offset": 3045,
       "length": 14,
       "value": "\"VariableList\""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/LocalStorage\/BackgroundJobManager.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/LocalStorage\/BackgroundJobManager.swift",
       "kind": "StringLiteral",
       "offset": 120,
       "length": 21,
       "value": "\"LastBackgroundJobID\""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/LocalStorage\/BackgroundJobManager.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/LocalStorage\/BackgroundJobManager.swift",
       "kind": "StringLiteral",
       "offset": 176,
       "length": 20,
       "value": "\"LastNotificationID\""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/LocalStorage\/BackgroundJobManager.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/LocalStorage\/BackgroundJobManager.swift",
       "kind": "StringLiteral",
       "offset": 323,
       "length": 17,
       "value": "\"BackgroundModel\""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/LocalStorage\/BackgroundJobManager.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/LocalStorage\/BackgroundJobManager.swift",
       "kind": "StringLiteral",
       "offset": 498,
       "length": 6,
       "value": "\"momd\""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/LocalStorage\/BackgroundJobManager.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/LocalStorage\/BackgroundJobManager.swift",
       "kind": "StringLiteral",
       "offset": 536,
       "length": 24,
       "value": "\"Error initializing mom\""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/LocalStorage\/BackgroundJobManager.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/LocalStorage\/BackgroundJobManager.swift",
       "kind": "StringLiteral",
       "offset": 670,
       "length": 42,
       "value": "\"Error initializing mom from: \""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/LocalStorage\/BackgroundJobManager.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/LocalStorage\/BackgroundJobManager.swift",
       "kind": "StringLiteral",
       "offset": 711,
       "length": 2,
       "value": "\"\""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/LocalStorage\/BackgroundJobManager.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/LocalStorage\/BackgroundJobManager.swift",
       "kind": "StringLiteral",
       "offset": 1026,
       "length": 46,
       "value": "\"Unresolved error \""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/LocalStorage\/BackgroundJobManager.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/LocalStorage\/BackgroundJobManager.swift",
       "kind": "StringLiteral",
       "offset": 1052,
       "length": 1,
       "value": "\", \""
     },
     {
-      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/LocalStorage\/BackgroundJobManager.swift",
+      "filePath": "\/Users\/alexandre.jacinto\/Documents\/Work\/Repositories\/Libraries\/iOS\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/LocalStorage\/BackgroundJobManager.swift",
       "kind": "StringLiteral",
       "offset": 1071,
       "length": 2,

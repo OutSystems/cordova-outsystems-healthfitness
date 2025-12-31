@@ -1,7 +1,7 @@
 // swift-interface-format-version: 1.0
-// swift-compiler-version: Apple Swift version 6.1 effective-5.10 (swiftlang-6.1.0.110.21 clang-1700.0.13.3)
+// swift-compiler-version: Apple Swift version 6.2.1 effective-5.10 (swiftlang-6.2.1.4.8 clang-1700.4.4.1)
 // swift-module-flags: -target arm64-apple-ios13.0 -enable-objc-interop -enable-library-evolution -swift-version 5 -enforce-exclusivity=checked -O -enable-experimental-feature DebugDescriptionMacro -enable-bare-slash-regex -module-name OSHealthFitnessLib
-// swift-module-flags-ignorable: -no-verify-emitted-module-interface -interface-compiler-version 6.1
+// swift-module-flags-ignorable: -no-verify-emitted-module-interface -formal-cxx-interoperability-mode=off -interface-compiler-version 6.2.1
 import CloudKit
 import CoreData
 import Foundation
@@ -29,17 +29,23 @@ public enum HealthKitErrors : Swift.Int, Foundation.CustomNSError, Foundation.Lo
   case unsubscribeError
   case workoutTypeNotAvailable
   case workoutTypeNotAuthorized
+  #if compiler(>=5.3) && $NonescapableTypes
   public var errorDescription: Swift.String? {
     get
   }
+  #endif
+  #if compiler(>=5.3) && $NonescapableTypes
   public init?(rawValue: Swift.Int)
+  #endif
   public typealias RawValue = Swift.Int
   public var rawValue: Swift.Int {
     get
   }
 }
 extension Swift.String {
+  #if compiler(>=5.3) && $NonescapableTypes
   public func decode<T>() -> T? where T : Swift.Decodable
+  #endif
 }
 extension Swift.Encodable {
   public func encode() -> Swift.String
@@ -49,16 +55,32 @@ public struct VariableStruct {
 }
 open class HealthFitnessPlugin {
   public init()
+  #if compiler(>=5.3) && $NonescapableTypes
   public func deleteBackgroundJobs(id: Swift.String?, completion: @escaping (Foundation.NSError?) -> Swift.Void)
+  #endif
   public func countBackgroundJobsFor(variable: Swift.String) -> Swift.Int
   public func listBackgroundJobs() -> Swift.String
+  #if compiler(>=5.3) && $NonescapableTypes
   public func writeData(variable: Swift.String, value: Swift.Double, completion: @escaping (Swift.Bool, Foundation.NSError?) -> Swift.Void)
+  #endif
+  #if compiler(>=5.3) && $NonescapableTypes
   public func getLastRecord(variable: Swift.String, mostRecent: Swift.Bool, timeUnitLength: Swift.Int, completion: @escaping (Swift.Bool, Swift.String?, Foundation.NSError?) -> Swift.Void)
+  #endif
+  #if compiler(>=5.3) && $NonescapableTypes
   public func requestPermissions(customPermissions: Swift.String, variable: OSHealthFitnessLib.VariableStruct, completion: @escaping (Swift.Bool, Foundation.NSError?) -> Swift.Void)
+  #endif
+  #if compiler(>=5.3) && $NonescapableTypes
   public func setBackgroundJob(variable: Swift.String, timeUnit: (name: Swift.String, grouping: Swift.Int), notificationFrequency: (name: Swift.String, grouping: Swift.Int), jobFrequency: Swift.String, condition: Swift.String, value: Swift.Double, notificationText: (header: Swift.String, body: Swift.String), completion: @escaping (Swift.Bool, Swift.String?, Foundation.NSError?) -> Swift.Void)
+  #endif
+  #if compiler(>=5.3) && $NonescapableTypes
   public func updateBackgroundJob(id: Swift.Int64?, notificationFrequency: (name: Swift.String?, grouping: Swift.Int?), condition: Swift.String?, value: Swift.Double?, notificationText: (header: Swift.String?, body: Swift.String?), isActive: Swift.Bool?, completion: @escaping (Swift.Bool, Foundation.NSError?) -> Swift.Void)
+  #endif
+  #if compiler(>=5.3) && $NonescapableTypes
   public func advancedQuery(variable: Swift.String, date: (start: Foundation.Date, end: Foundation.Date), timeUnit: Swift.String, operationType: Swift.String, mostRecent: Swift.Bool, onlyFilledBlocks: Swift.Bool, resultType: OSHealthFitnessLib.AdvancedQueryResultType = .allType, timeUnitLength: Swift.Int, completion: @escaping (Swift.Bool, Swift.String?, Foundation.NSError?) -> Swift.Void)
+  #endif
+  #if compiler(>=5.3) && $NonescapableTypes
   public func workoutAdvancedQuery(workoutTypeVariableDictionary: OSHealthFitnessLib.WorkoutTypeVariableDictionary, date: (start: Foundation.Date, end: Foundation.Date), completion: @escaping (Swift.Bool, Swift.String?, Foundation.NSError?) -> Swift.Void)
+  #endif
   @objc deinit
 }
 public enum UInt128Errors : Swift.Error {
@@ -75,7 +97,9 @@ public struct UInt128 {
   }
   public init(upperBits: Swift.UInt64, lowerBits: Swift.UInt64)
   public init()
+  #if compiler(>=5.3) && $NonescapableTypes
   public init?(_ source: Swift.String)
+  #endif
 }
 extension OSHealthFitnessLib.UInt128 : Swift.FixedWidthInteger {
   public var nonzeroBitCount: Swift.Int {
@@ -117,7 +141,9 @@ extension OSHealthFitnessLib.UInt128 : Swift.BinaryInteger {
   public var trailingZeroBitCount: Swift.Int {
     get
   }
+  #if compiler(>=5.3) && $NonescapableTypes
   public init?<T>(exactly source: T) where T : Swift.BinaryFloatingPoint
+  #endif
   public init<T>(_ source: T) where T : Swift.BinaryFloatingPoint
   public static func / (lhs: OSHealthFitnessLib.UInt128, rhs: OSHealthFitnessLib.UInt128) -> OSHealthFitnessLib.UInt128
   public static func /= (lhs: inout OSHealthFitnessLib.UInt128, rhs: OSHealthFitnessLib.UInt128)
@@ -174,7 +200,9 @@ extension OSHealthFitnessLib.UInt128 : Swift.Codable {
 }
 extension Swift.BinaryFloatingPoint {
   public init(_ value: OSHealthFitnessLib.UInt128)
+  #if compiler(>=5.3) && $NonescapableTypes
   public init?(exactly value: OSHealthFitnessLib.UInt128)
+  #endif
 }
 extension Swift.String {
   public init(_ value: OSHealthFitnessLib.UInt128, radix: Swift.Int = 10, uppercase: Swift.Bool = false)
@@ -216,7 +244,9 @@ public class BackgroundJobParameters : Swift.Codable {
   final public let notificationHeader: Swift.String?
   final public let notificationBody: Swift.String?
   final public let isActive: Swift.Bool?
+  #if compiler(>=5.3) && $NonescapableTypes
   public init(id: Swift.Int64?, variable: Swift.String?, timeUnit: Swift.String?, timeUnitGrouping: Swift.Int?, notificationFrequency: Swift.String?, notificationFrequencyGrouping: Swift.Int?, jobFrequency: Swift.String?, condition: Swift.String?, value: Swift.Double?, notificationHeader: Swift.String?, notificationBody: Swift.String?, isActive: Swift.Bool?)
+  #endif
   @objc deinit
   public func encode(to encoder: any Swift.Encoder) throws
   required public init(from decoder: any Swift.Decoder) throws
@@ -296,7 +326,9 @@ public enum WorkoutTypeEnum : Swift.String {
   case wheelchairWalkPace
   case wrestling
   case yoga
+  #if compiler(>=5.3) && $NonescapableTypes
   public init?(rawValue: Swift.String)
+  #endif
   public typealias RawValue = Swift.String
   public var rawValue: Swift.String {
     get
@@ -310,7 +342,9 @@ public struct VariableType : Swift.OptionSet {
   public typealias RawValue = Swift.Int
 }
 extension OSHealthFitnessLib.VariableType {
+  #if compiler(>=5.3) && $NonescapableTypes
   public static func getVariableType(for description: Swift.String) -> OSHealthFitnessLib.VariableType?
+  #endif
 }
 public struct WorkoutType : Swift.OptionSet, Swift.Hashable {
   public let rawValue: OSHealthFitnessLib.UInt128
@@ -320,12 +354,16 @@ public struct WorkoutType : Swift.OptionSet, Swift.Hashable {
   public typealias RawValue = OSHealthFitnessLib.UInt128
 }
 extension OSHealthFitnessLib.WorkoutType {
+  #if compiler(>=5.3) && $NonescapableTypes
   public static func getWorkoutType(for description: Swift.String) -> OSHealthFitnessLib.WorkoutType?
+  #endif
 }
 public enum AdvancedQueryReturnTypeEnum : Swift.String {
   case allData
   case removeEmptyDataBlocks
+  #if compiler(>=5.3) && $NonescapableTypes
   public init?(rawValue: Swift.String)
+  #endif
   public typealias RawValue = Swift.String
   public var rawValue: Swift.String {
     get
@@ -376,90 +414,120 @@ extension OSHealthFitnessLib.WorkoutAdvancedQueryParameters {
   public func encode(to encoder: any Swift.Encoder) throws
   required public init(from decoder: any Swift.Decoder) throws
 }
-@objc @_inheritsConvenienceInitializers public class BackgroundJob : CoreData.NSManagedObject {
-  @objc override dynamic public init(entity: CoreData.NSEntityDescription, insertInto context: CoreData.NSManagedObjectContext?)
+public typealias BackgroundJobCoreDataClassSet = Foundation.NSSet
+@objc @_inheritsConvenienceInitializers nonisolated public class BackgroundJob : CoreData.NSManagedObject {
+  #if compiler(>=5.3) && $NonescapableTypes
+  @objc override nonisolated dynamic public init(entity: CoreData.NSEntityDescription, insertInto context: CoreData.NSManagedObjectContext?)
+  #endif
   @objc deinit
 }
+public typealias BackgroundJobCoreDataPropertiesSet = Foundation.NSSet
 extension OSHealthFitnessLib.BackgroundJob {
   @nonobjc public class func fetchRequest() -> CoreData.NSFetchRequest<OSHealthFitnessLib.BackgroundJob>
-  @objc @NSManaged dynamic public var comparision: Swift.String? {
+  #if compiler(>=5.3) && $NonescapableTypes
+  @objc @NSManaged nonisolated dynamic public var comparision: Swift.String? {
     @objc get
     @objc set
   }
-  @objc @NSManaged dynamic public var id: Swift.Int64 {
+  #endif
+  @objc @NSManaged nonisolated dynamic public var id: Swift.Int64 {
     @objc get
     @objc set
   }
-  @objc @NSManaged dynamic public var isActive: Swift.Bool {
+  @objc @NSManaged nonisolated dynamic public var isActive: Swift.Bool {
     @objc get
     @objc set
   }
-  @objc @NSManaged dynamic public var lastNotificationTimestamp: Foundation.Date? {
+  #if compiler(>=5.3) && $NonescapableTypes
+  @objc @NSManaged nonisolated dynamic public var lastNotificationTimestamp: Foundation.Date? {
     @objc get
     @objc set
   }
-  @objc @NSManaged dynamic public var notificationFrequency: Swift.String? {
+  #endif
+  #if compiler(>=5.3) && $NonescapableTypes
+  @objc @NSManaged nonisolated dynamic public var notificationFrequency: Swift.String? {
     @objc get
     @objc set
   }
-  @objc @NSManaged dynamic public var notificationFrequencyGrouping: Swift.Int64 {
+  #endif
+  @objc @NSManaged nonisolated dynamic public var notificationFrequencyGrouping: Swift.Int64 {
     @objc get
     @objc set
   }
-  @objc @NSManaged dynamic public var operation: Swift.String? {
+  #if compiler(>=5.3) && $NonescapableTypes
+  @objc @NSManaged nonisolated dynamic public var operation: Swift.String? {
     @objc get
     @objc set
   }
-  @objc @NSManaged dynamic public var timeUnit: Swift.String? {
+  #endif
+  #if compiler(>=5.3) && $NonescapableTypes
+  @objc @NSManaged nonisolated dynamic public var timeUnit: Swift.String? {
     @objc get
     @objc set
   }
-  @objc @NSManaged dynamic public var timeUnitGrouping: Swift.Int64 {
+  #endif
+  @objc @NSManaged nonisolated dynamic public var timeUnitGrouping: Swift.Int64 {
     @objc get
     @objc set
   }
-  @objc @NSManaged dynamic public var value: Swift.Double {
+  @objc @NSManaged nonisolated dynamic public var value: Swift.Double {
     @objc get
     @objc set
   }
-  @objc @NSManaged dynamic public var variable: Swift.String? {
+  #if compiler(>=5.3) && $NonescapableTypes
+  @objc @NSManaged nonisolated dynamic public var variable: Swift.String? {
     @objc get
     @objc set
   }
-  @objc @NSManaged dynamic public var notification: OSHealthFitnessLib.Notification? {
+  #endif
+  #if compiler(>=5.3) && $NonescapableTypes
+  @objc @NSManaged nonisolated dynamic public var notification: OSHealthFitnessLib.Notification? {
     @objc get
     @objc set
   }
+  #endif
 }
 extension OSHealthFitnessLib.BackgroundJob : Swift.Identifiable {
   public typealias ID = Swift.Int64
 }
-@objc @_inheritsConvenienceInitializers public class Notification : CoreData.NSManagedObject {
-  @objc override dynamic public init(entity: CoreData.NSEntityDescription, insertInto context: CoreData.NSManagedObjectContext?)
+public typealias NotificationCoreDataClassSet = Foundation.NSSet
+@objc @_inheritsConvenienceInitializers nonisolated public class Notification : CoreData.NSManagedObject {
+  #if compiler(>=5.3) && $NonescapableTypes
+  @objc override nonisolated dynamic public init(entity: CoreData.NSEntityDescription, insertInto context: CoreData.NSManagedObjectContext?)
+  #endif
   @objc deinit
 }
+public typealias NotificationCoreDataPropertiesSet = Foundation.NSSet
 extension OSHealthFitnessLib.Notification {
   @nonobjc public class func fetchRequest() -> CoreData.NSFetchRequest<OSHealthFitnessLib.Notification>
-  @objc @NSManaged dynamic public var body: Swift.String? {
+  #if compiler(>=5.3) && $NonescapableTypes
+  @objc @NSManaged nonisolated dynamic public var body: Swift.String? {
     @objc get
     @objc set
   }
-  @objc @NSManaged dynamic public var id: Swift.Int64 {
+  #endif
+  @objc @NSManaged nonisolated dynamic public var id: Swift.Int64 {
     @objc get
     @objc set
   }
-  @objc @NSManaged dynamic public var title: Swift.String? {
+  #if compiler(>=5.3) && $NonescapableTypes
+  @objc @NSManaged nonisolated dynamic public var title: Swift.String? {
     @objc get
     @objc set
   }
-  @objc @NSManaged dynamic public var relationship: OSHealthFitnessLib.BackgroundJob? {
+  #endif
+  #if compiler(>=5.3) && $NonescapableTypes
+  @objc @NSManaged nonisolated dynamic public var relationship: OSHealthFitnessLib.BackgroundJob? {
     @objc get
     @objc set
   }
+  #endif
 }
 extension OSHealthFitnessLib.Notification : Swift.Identifiable {
   public typealias ID = Swift.Int64
 }
+public typealias BackgroundModelFoundationFrameworkSet = Foundation.NSSet
+public typealias BackgroundModelCoreDataFrameworkManagedObject = CoreData.NSManagedObject
 extension OSHealthFitnessLib.HealthKitErrors : Swift.Equatable {}
 extension OSHealthFitnessLib.HealthKitErrors : Swift.Hashable {}
 extension OSHealthFitnessLib.HealthKitErrors : Swift.RawRepresentable {}
