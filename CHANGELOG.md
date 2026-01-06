@@ -12,6 +12,8 @@ The changes documented here do not include those from the original repository.
 
 - (ios) Remove dependency to OSCommonPluginLib on iOS (https://outsystemsrd.atlassian.net/browse/RMET-4899)
 
+### [2.4.4]
+
 ### Fixes
 
 - (android) Fix capacitor builds by removing kapt dependency (https://outsystemsrd.atlassian.net/browse/RMET-4862)
