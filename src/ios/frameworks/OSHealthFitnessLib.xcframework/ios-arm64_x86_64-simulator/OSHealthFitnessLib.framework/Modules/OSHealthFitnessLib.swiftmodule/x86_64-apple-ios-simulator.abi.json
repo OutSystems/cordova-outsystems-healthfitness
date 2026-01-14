@@ -4175,6 +4175,13 @@
         "name": "Foundation",
         "printedName": "Foundation",
         "declKind": "Import",
+        "moduleName": "OSHealthFitnessLib"
+      },
+      {
+        "kind": "Import",
+        "name": "Foundation",
+        "printedName": "Foundation",
+        "declKind": "Import",
         "moduleName": "OSHealthFitnessLib",
         "declAttributes": [
           "RawDocComment"
@@ -14360,6 +14367,13 @@
       "offset": 26367,
       "length": 5,
       "value": "false"
+    },
+    {
+      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Extensions\/Double+Extension.swift",
+      "kind": "IntegerLiteral",
+      "offset": 70,
+      "length": 2,
+      "value": "16"
     },
     {
       "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/HealthKitManager.swift",
