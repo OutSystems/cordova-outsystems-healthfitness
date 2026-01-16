@@ -14371,9 +14371,9 @@
     {
       "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Extensions\/Double+Extension.swift",
       "kind": "IntegerLiteral",
-      "offset": 70,
-      "length": 2,
-      "value": "16"
+      "offset": 281,
+      "length": 1,
+      "value": "4"
     },
     {
       "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/HealthKitManager.swift",
