@@ -14651,14 +14651,14 @@
     {
       "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/AdvancedQueryResponseBlock.swift",
       "kind": "StringLiteral",
-      "offset": 1242,
+      "offset": 1288,
       "length": 7,
       "value": "\"Label\""
     },
     {
       "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/AdvancedQueryResponseBlock.swift",
       "kind": "StringLiteral",
-      "offset": 1259,
+      "offset": 1305,
       "length": 7,
       "value": "\"Value\""
     },
