@@ -7,7 +7,16 @@ module.exports = {
   ],
   tagFormat: '${version}',  // semantic-release uses vX.Y.Z by default, but our cordova plugins expect X.Y.Z
   plugins: [
-    '@semantic-release/commit-analyzer',
+    [
+      "@semantic-release/commit-analyzer",
+      {
+        "preset": "angular",
+        "releaseRules": [
+          { "type": "refactor", "release": "patch" },
+          { "type": "chore", "release": "patch" }
+        ]
+      }
+    ],
     '@semantic-release/release-notes-generator',
     [
       '@semantic-release/changelog',
