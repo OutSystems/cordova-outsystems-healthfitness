@@ -1,0 +1,51 @@
+name: Release Cordova Plugin (GitHub)
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+env:
+  BRANCH_MAIN: main
+  BRANCH_RELEASE: release
+
+jobs:
+  release:
+    runs-on: 'ubuntu-latest'
+    timeout-minutes: 20
+
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+          ref: ${{ env.BRANCH_MAIN }}
+          token: ${{ secrets.RELEASE_TOKEN_GITHUB }}
+
+      - name: Check for existing open release PRs
+        env:
+          GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN_GITHUB }}
+        run: |
+          echo "🔍 Checking for existing open release PRs..."
+          existing_prs=$(gh pr list --base ${{ env.BRANCH_MAIN }} --head ${{ env.BRANCH_RELEASE }} --state open --json number --jq '.[].number')
+          if [ -n "$existing_prs" ]; then
+            echo "Found existing open release PR(s): $existing_prs"
+            echo "Please close or merge them before running this workflow."
+            exit 1
+          fi
+          echo "No open release PRs found - Will proceed."
+
+      - name: Create release branch (removing if existing)
+        env:
+          GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN_GITHUB }}
+        run: |
+          echo "Preparing release branch..."
+          git fetch origin
+          if git show-ref --verify --quiet refs/remotes/origin/${{ env.BRANCH_RELEASE }}; then
+            echo "Branch '${{ env.BRANCH_RELEASE }}' exists remotely. Deleting it..."
+            git push origin --delete ${{ env.BRANCH_RELEASE }}
+          fi
+          git checkout ${{ env.BRANCH_MAIN }}
+          git pull origin ${{ env.BRANCH_MAIN }}
+          git checkout -b ${{ env.BRANCH_RELEASE }}
+          git push origin ${{ env.BRANCH_RELEASE }} --force
