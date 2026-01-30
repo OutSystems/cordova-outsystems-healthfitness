@@ -28,6 +28,18 @@ The changes documented here do not include those from the original repository.
 
 - (ios) Several bugs in `operationsAllowed` and `MIN/MAX` calculations.
 
+### [2.4.6]
+
+### Chores
+
+- (android) Remove dependency to `oscore` and `oscordova` libraries (https://outsystemsrd.atlassian.net/browse/RMET-4900)
+
+### [2.4.5]
+
+### Chores
+
+- (ios) Remove dependency to OSCommonPluginLib on iOS (https://outsystemsrd.atlassian.net/browse/RMET-4899)
+
 ### [2.4.4]
 
 ### Fixes

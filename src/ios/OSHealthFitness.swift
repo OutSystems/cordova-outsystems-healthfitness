@@ -1,4 +1,3 @@
-import OSCommonPluginLib
 import OSHealthFitnessLib
 
 @objc(OSHealthFitness)
@@ -228,11 +227,8 @@ class OSHealthFitness: CDVPlugin {
             }
         })
     }
-}
-
-// MARK: - OSCommonPluginLib's PlatformProtocol Methods
-extension OSHealthFitness: PlatformProtocol {
-    func sendResult(result: String?, error: NSError?, callBackID: String) {
+    
+    private func sendResult(result: String?, error: NSError?, callBackID: String) {
         var pluginResult = CDVPluginResult (status: CDVCommandStatus_ERROR);
         
         if let error = error {
