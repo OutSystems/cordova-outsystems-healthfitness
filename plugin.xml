@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<plugin id="com.outsystems.plugins.healthfitness" version="2.4.6" xmlns="http://apache.org/cordova/ns/plugins/1.0" xmlns:android="http://schemas.android.com/apk/res/android">
+<plugin id="com.outsystems.plugins.healthfitness" version="3.0.0" xmlns="http://apache.org/cordova/ns/plugins/1.0" xmlns:android="http://schemas.android.com/apk/res/android">
   <name>HealthFitness</name>
   <description>Health &amp; Fitness cordova plugin for OutSystems applications.</description>
   <author>OutSystems Inc</author>
@@ -30,7 +30,6 @@
     <framework src="org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.4.3" />
     <framework src="org.jetbrains.kotlinx:kotlinx-coroutines-android:1.4.3" />
     <framework src="com.google.code.gson:gson:2.8.8" />
-
   </platform>
 
   <platform name="ios">

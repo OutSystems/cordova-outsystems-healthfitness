@@ -830,6 +830,13 @@
             "printedName": "Sendable",
             "usr": "s:s8SendableP",
             "mangledName": "$ss8SendableP"
+          },
+          {
+            "kind": "Conformance",
+            "name": "SendableMetatype",
+            "printedName": "SendableMetatype",
+            "usr": "s:s16SendableMetatypeP",
+            "mangledName": "$ss16SendableMetatypeP"
           }
         ]
       },
@@ -2120,6 +2127,13 @@
             "printedName": "Sendable",
             "usr": "s:s8SendableP",
             "mangledName": "$ss8SendableP"
+          },
+          {
+            "kind": "Conformance",
+            "name": "SendableMetatype",
+            "printedName": "SendableMetatype",
+            "usr": "s:s16SendableMetatypeP",
+            "mangledName": "$ss16SendableMetatypeP"
           }
         ]
       },
@@ -4161,6 +4175,13 @@
         "name": "Foundation",
         "printedName": "Foundation",
         "declKind": "Import",
+        "moduleName": "OSHealthFitnessLib"
+      },
+      {
+        "kind": "Import",
+        "name": "Foundation",
+        "printedName": "Foundation",
+        "declKind": "Import",
         "moduleName": "OSHealthFitnessLib",
         "declAttributes": [
           "RawDocComment"
@@ -4226,6 +4247,13 @@
         "kind": "Import",
         "name": "Foundation",
         "printedName": "Foundation",
+        "declKind": "Import",
+        "moduleName": "OSHealthFitnessLib"
+      },
+      {
+        "kind": "Import",
+        "name": "HealthKit",
+        "printedName": "HealthKit",
         "declKind": "Import",
         "moduleName": "OSHealthFitnessLib"
       },
@@ -10517,6 +10545,7 @@
         "declKind": "Import",
         "moduleName": "OSHealthFitnessLib",
         "declAttributes": [
+          "AccessControl",
           "RawDocComment"
         ]
       },
@@ -10525,7 +10554,10 @@
         "name": "CoreData",
         "printedName": "CoreData",
         "declKind": "Import",
-        "moduleName": "OSHealthFitnessLib"
+        "moduleName": "OSHealthFitnessLib",
+        "declAttributes": [
+          "AccessControl"
+        ]
       },
       {
         "kind": "TypeDecl",
@@ -10574,6 +10606,7 @@
             "declAttributes": [
               "Dynamic",
               "ObjC",
+              "Nonisolated",
               "Override"
             ],
             "init_kind": "Designated"
@@ -10636,6 +10669,7 @@
             "moduleName": "OSHealthFitnessLib",
             "declAttributes": [
               "Dynamic",
+              "Nonisolated",
               "AccessControl",
               "NSManaged",
               "ObjC"
@@ -10731,6 +10765,7 @@
             "moduleName": "OSHealthFitnessLib",
             "declAttributes": [
               "Dynamic",
+              "Nonisolated",
               "AccessControl",
               "NSManaged",
               "ObjC"
@@ -10810,6 +10845,7 @@
             "moduleName": "OSHealthFitnessLib",
             "declAttributes": [
               "Dynamic",
+              "Nonisolated",
               "AccessControl",
               "NSManaged",
               "ObjC"
@@ -10897,6 +10933,7 @@
             "moduleName": "OSHealthFitnessLib",
             "declAttributes": [
               "Dynamic",
+              "Nonisolated",
               "AccessControl",
               "NSManaged",
               "ObjC"
@@ -11000,6 +11037,7 @@
             "moduleName": "OSHealthFitnessLib",
             "declAttributes": [
               "Dynamic",
+              "Nonisolated",
               "AccessControl",
               "NSManaged",
               "ObjC"
@@ -11095,6 +11133,7 @@
             "moduleName": "OSHealthFitnessLib",
             "declAttributes": [
               "Dynamic",
+              "Nonisolated",
               "AccessControl",
               "NSManaged",
               "ObjC"
@@ -11182,6 +11221,7 @@
             "moduleName": "OSHealthFitnessLib",
             "declAttributes": [
               "Dynamic",
+              "Nonisolated",
               "AccessControl",
               "NSManaged",
               "ObjC"
@@ -11285,6 +11325,7 @@
             "moduleName": "OSHealthFitnessLib",
             "declAttributes": [
               "Dynamic",
+              "Nonisolated",
               "AccessControl",
               "NSManaged",
               "ObjC"
@@ -11380,6 +11421,7 @@
             "moduleName": "OSHealthFitnessLib",
             "declAttributes": [
               "Dynamic",
+              "Nonisolated",
               "AccessControl",
               "NSManaged",
               "ObjC"
@@ -11459,6 +11501,7 @@
             "moduleName": "OSHealthFitnessLib",
             "declAttributes": [
               "Dynamic",
+              "Nonisolated",
               "AccessControl",
               "NSManaged",
               "ObjC"
@@ -11546,6 +11589,7 @@
             "moduleName": "OSHealthFitnessLib",
             "declAttributes": [
               "Dynamic",
+              "Nonisolated",
               "AccessControl",
               "NSManaged",
               "ObjC"
@@ -11649,6 +11693,7 @@
             "moduleName": "OSHealthFitnessLib",
             "declAttributes": [
               "Dynamic",
+              "Nonisolated",
               "AccessControl",
               "NSManaged",
               "ObjC"
@@ -11732,6 +11777,7 @@
         "mangledName": "$s18OSHealthFitnessLib13BackgroundJobC",
         "moduleName": "OSHealthFitnessLib",
         "declAttributes": [
+          "Nonisolated",
           "AccessControl",
           "ObjC"
         ],
@@ -11829,6 +11875,20 @@
           },
           {
             "kind": "Conformance",
+            "name": "Sendable",
+            "printedName": "Sendable",
+            "usr": "s:s8SendableP",
+            "mangledName": "$ss8SendableP"
+          },
+          {
+            "kind": "Conformance",
+            "name": "SendableMetatype",
+            "printedName": "SendableMetatype",
+            "usr": "s:s16SendableMetatypeP",
+            "mangledName": "$ss16SendableMetatypeP"
+          },
+          {
+            "kind": "Conformance",
             "name": "Identifiable",
             "printedName": "Identifiable",
             "children": [
@@ -11858,6 +11918,7 @@
         "declKind": "Import",
         "moduleName": "OSHealthFitnessLib",
         "declAttributes": [
+          "AccessControl",
           "RawDocComment"
         ]
       },
@@ -11866,7 +11927,10 @@
         "name": "CoreData",
         "printedName": "CoreData",
         "declKind": "Import",
-        "moduleName": "OSHealthFitnessLib"
+        "moduleName": "OSHealthFitnessLib",
+        "declAttributes": [
+          "AccessControl"
+        ]
       },
       {
         "kind": "Import",
@@ -11875,6 +11939,7 @@
         "declKind": "Import",
         "moduleName": "OSHealthFitnessLib",
         "declAttributes": [
+          "AccessControl",
           "RawDocComment"
         ]
       },
@@ -11883,7 +11948,10 @@
         "name": "CoreData",
         "printedName": "CoreData",
         "declKind": "Import",
-        "moduleName": "OSHealthFitnessLib"
+        "moduleName": "OSHealthFitnessLib",
+        "declAttributes": [
+          "AccessControl"
+        ]
       },
       {
         "kind": "TypeDecl",
@@ -11932,6 +12000,7 @@
             "declAttributes": [
               "Dynamic",
               "ObjC",
+              "Nonisolated",
               "Override"
             ],
             "init_kind": "Designated"
@@ -11994,6 +12063,7 @@
             "moduleName": "OSHealthFitnessLib",
             "declAttributes": [
               "Dynamic",
+              "Nonisolated",
               "AccessControl",
               "NSManaged",
               "ObjC"
@@ -12089,6 +12159,7 @@
             "moduleName": "OSHealthFitnessLib",
             "declAttributes": [
               "Dynamic",
+              "Nonisolated",
               "AccessControl",
               "NSManaged",
               "ObjC"
@@ -12176,6 +12247,7 @@
             "moduleName": "OSHealthFitnessLib",
             "declAttributes": [
               "Dynamic",
+              "Nonisolated",
               "AccessControl",
               "NSManaged",
               "ObjC"
@@ -12279,6 +12351,7 @@
             "moduleName": "OSHealthFitnessLib",
             "declAttributes": [
               "Dynamic",
+              "Nonisolated",
               "AccessControl",
               "NSManaged",
               "ObjC"
@@ -12362,6 +12435,7 @@
         "mangledName": "$s18OSHealthFitnessLib12NotificationC",
         "moduleName": "OSHealthFitnessLib",
         "declAttributes": [
+          "Nonisolated",
           "AccessControl",
           "ObjC"
         ],
@@ -12459,6 +12533,20 @@
           },
           {
             "kind": "Conformance",
+            "name": "Sendable",
+            "printedName": "Sendable",
+            "usr": "s:s8SendableP",
+            "mangledName": "$ss8SendableP"
+          },
+          {
+            "kind": "Conformance",
+            "name": "SendableMetatype",
+            "printedName": "SendableMetatype",
+            "usr": "s:s16SendableMetatypeP",
+            "mangledName": "$ss16SendableMetatypeP"
+          },
+          {
+            "kind": "Conformance",
             "name": "Identifiable",
             "printedName": "Identifiable",
             "children": [
@@ -12488,6 +12576,7 @@
         "declKind": "Import",
         "moduleName": "OSHealthFitnessLib",
         "declAttributes": [
+          "AccessControl",
           "RawDocComment"
         ]
       },
@@ -12496,7 +12585,10 @@
         "name": "CoreData",
         "printedName": "CoreData",
         "declKind": "Import",
-        "moduleName": "OSHealthFitnessLib"
+        "moduleName": "OSHealthFitnessLib",
+        "declAttributes": [
+          "AccessControl"
+        ]
       },
       {
         "kind": "Import",
@@ -12505,6 +12597,7 @@
         "declKind": "Import",
         "moduleName": "OSHealthFitnessLib",
         "declAttributes": [
+          "AccessControl",
           "RawDocComment"
         ]
       },
@@ -12513,7 +12606,10 @@
         "name": "CoreData",
         "printedName": "CoreData",
         "declKind": "Import",
-        "moduleName": "OSHealthFitnessLib"
+        "moduleName": "OSHealthFitnessLib",
+        "declAttributes": [
+          "AccessControl"
+        ]
       },
       {
         "kind": "TypeDecl",
@@ -12688,6 +12784,13 @@
             "printedName": "Sendable",
             "usr": "s:s8SendableP",
             "mangledName": "$ss8SendableP"
+          },
+          {
+            "kind": "Conformance",
+            "name": "SendableMetatype",
+            "printedName": "SendableMetatype",
+            "usr": "s:s16SendableMetatypeP",
+            "mangledName": "$ss16SendableMetatypeP"
           },
           {
             "kind": "Conformance",
@@ -13763,6 +13866,13 @@
           },
           {
             "kind": "Conformance",
+            "name": "SendableMetatype",
+            "printedName": "SendableMetatype",
+            "usr": "s:s16SendableMetatypeP",
+            "mangledName": "$ss16SendableMetatypeP"
+          },
+          {
+            "kind": "Conformance",
             "name": "Copyable",
             "printedName": "Copyable",
             "usr": "s:s8CopyableP",
@@ -13985,6 +14095,13 @@
             "printedName": "CustomDebugStringConvertible",
             "usr": "s:s28CustomDebugStringConvertibleP",
             "mangledName": "$ss28CustomDebugStringConvertibleP"
+          },
+          {
+            "kind": "Conformance",
+            "name": "SendableMetatype",
+            "printedName": "SendableMetatype",
+            "usr": "s:s16SendableMetatypeP",
+            "mangledName": "$ss16SendableMetatypeP"
           }
         ]
       }
@@ -14196,6 +14313,20 @@
       "value": "\"YEAR\""
     },
     {
+      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthRecordingMethod.swift",
+      "kind": "StringLiteral",
+      "offset": 66,
+      "length": 8,
+      "value": "\"MANUAL\""
+    },
+    {
+      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/Enums\/HealthRecordingMethod.swift",
+      "kind": "StringLiteral",
+      "offset": 96,
+      "length": 11,
+      "value": "\"AUTOMATIC\""
+    },
+    {
       "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Data Structure\/UInt128.swift",
       "kind": "IntegerLiteral",
       "offset": 22866,
@@ -14238,6 +14369,13 @@
       "value": "false"
     },
     {
+      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Extensions\/Double+Extension.swift",
+      "kind": "IntegerLiteral",
+      "offset": 281,
+      "length": 1,
+      "value": "4"
+    },
+    {
       "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/HealthKitManager.swift",
       "kind": "IntegerLiteral",
       "offset": 10070,
@@ -14246,22 +14384,29 @@
     },
     {
       "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/HealthKitManager.swift",
+      "kind": "BooleanLiteral",
+      "offset": 10345,
+      "length": 4,
+      "value": "true"
+    },
+    {
+      "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/HealthKitManager.swift",
       "kind": "IntegerLiteral",
-      "offset": 10511,
+      "offset": 10653,
       "length": 1,
       "value": "1"
     },
     {
       "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/HealthKitManager.swift",
       "kind": "IntegerLiteral",
-      "offset": 10622,
+      "offset": 10764,
       "length": 1,
       "value": "5"
     },
     {
       "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/HealthKitManager.swift",
       "kind": "BooleanLiteral",
-      "offset": 11072,
+      "offset": 11214,
       "length": 5,
       "value": "false"
     },
@@ -14506,14 +14651,14 @@
     {
       "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/AdvancedQueryResponseBlock.swift",
       "kind": "StringLiteral",
-      "offset": 1189,
+      "offset": 1288,
       "length": 7,
       "value": "\"Label\""
     },
     {
       "filePath": "\/Users\/ruimendes\/Documents\/Outsystems\/HealthFitness\/OSHealthFitnessLib-iOS\/OSHealthFitnessLib\/Model\/AdvancedQueryResponseBlock.swift",
       "kind": "StringLiteral",
-      "offset": 1206,
+      "offset": 1305,
       "length": 7,
       "value": "\"Value\""
     },

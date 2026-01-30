@@ -6,6 +6,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 The changes documented here do not include those from the original repository.
 
+### [3.0.0]
+
+### BREAKING CHANGE
+
+- (android) The signature of the `getLastRecord` and `advancedQuery` method has changed, and requires changes in how success is handled when updating to this version.
+
+### Features
+
+- (ios) Added metadata support for `MIN/MAX` operations.
+- (ios) Add metadata information to `HealthKitManager.workoutAdvancedQuery`(getWorkoutData) (https://outsystemsrd.atlassian.net/browse/RMET-4889).
+- (ios) Add metadata information to `HealthKitManager.advancedQuery`(advancedQuery) when RAW operation is selected (https://outsystemsrd.atlassian.net/browse/RMET-4888).
+- (android) Add metadata information to `advancedQuery` (https://outsystemsrd.atlassian.net/browse/RMET-4887).
+- (ios) Add support for `RAW` operations (https://outsystemsrd.atlassian.net/browse/RMET-4917).
+- (ios) Add metadata information to `HealthKitManager.advancedQuery` (getLastRecord) (https://outsystemsrd.atlassian.net/browse/RMET-4886).
+- (android) Add metadata information to `getLastRecord` (https://outsystemsrd.atlassian.net/browse/RMET-4767).
+- (ios) Set `HKMetadataKeyWasUserEntered` to `true` when writing profile data. (https://outsystemsrd.atlassian.net/browse/RMET-4890).
+- (android) Set `recordingMethod` to `manual` when writing profile data (https://outsystemsrd.atlassian.net/browse/RMET-4891)
+
+### Fixes
+
+- (ios) Several bugs in `operationsAllowed` and `MIN/MAX` calculations.
+
 ### [2.4.6]
 
 ### Chores

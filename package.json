@@ -1,6 +1,6 @@
 {
   "name": "com.outsystems.plugins.healthfitness",
-  "version": "2.4.6",
+  "version": "3.0.0",
   "description": "Health & Fitness cordova plugin for OutSystems applications.",
   "keywords": [
     "ecosystem:cordova",
