@@ -24,8 +24,7 @@ dependencies{
 
     implementation("com.github.outsystems:oscore-android:1.2.0@aar")
     implementation("com.github.outsystems:oscordova-android:2.0.1@aar")
-    //implementation("com.github.outsystems:oshealthfitness-android:2.4.1@aar")
-    implementation files("libs/OSHealthFitnessLib-debug.aar")
+    implementation("com.github.outsystems:oshealthfitness-android:3.0.0@aar")
 
     // activity
     implementation "androidx.activity:activity-ktx:1.8.2"
