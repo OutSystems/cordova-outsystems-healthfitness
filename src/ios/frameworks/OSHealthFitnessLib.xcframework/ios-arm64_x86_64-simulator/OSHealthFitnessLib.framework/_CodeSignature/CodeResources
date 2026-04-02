@@ -6,7 +6,7 @@
 	<dict>
 		<key>BackgroundModel.momd/BackgroundModel 2.mom</key>
 		<data>
-		Dxsa9BipfH8sBxUz/TYzMlyCsAo=
+		JgcpS9WBIbsFZZkU78OljYx82kE=
 		</data>
 		<key>BackgroundModel.momd/BackgroundModel 2.omo</key>
 		<data>
@@ -14,7 +14,7 @@
 		</data>
 		<key>BackgroundModel.momd/BackgroundModel.mom</key>
 		<data>
-		Ez29OCXpDsR+Jh74aWXa6yKIIL8=
+		NVhtvC2ryntNhAzeyIq5supX6sw=
 		</data>
 		<key>BackgroundModel.momd/VersionInfo.plist</key>
 		<data>
@@ -22,51 +22,51 @@
 		</data>
 		<key>Headers/OSHealthFitnessLib-Swift.h</key>
 		<data>
-		ZHlNH7ZndkY/NVU3/RH30YkJLp8=
+		l2c1J7iZhgWZ2nYSjKpwoEd9rKc=
 		</data>
 		<key>Info.plist</key>
 		<data>
-		nYbdEZMmhoizEhRK5+LojTYc0BU=
+		07gvk1WQu/qPbiwKQDqCDnBVVps=
 		</data>
 		<key>Modules/OSHealthFitnessLib.swiftmodule/arm64-apple-ios-simulator.abi.json</key>
 		<data>
-		AEE24ZniMvr9XLR2lrpzi3IX2i4=
+		avK09n8sL8QQ2mL12xIW/IHvIB0=
 		</data>
 		<key>Modules/OSHealthFitnessLib.swiftmodule/arm64-apple-ios-simulator.private.swiftinterface</key>
 		<data>
-		Ov2kRkWFA9IOWtYe/Ga857jdkUQ=
+		S/kjK2bju0j42ul4Ra78htAiNyc=
 		</data>
 		<key>Modules/OSHealthFitnessLib.swiftmodule/arm64-apple-ios-simulator.swiftdoc</key>
 		<data>
-		RIxYUIUgY0nGfZYcTkZCgdCxzRg=
+		Vy9jMr7SSxcU9ARL9xCWz1uRNcs=
 		</data>
 		<key>Modules/OSHealthFitnessLib.swiftmodule/arm64-apple-ios-simulator.swiftinterface</key>
 		<data>
-		Ov2kRkWFA9IOWtYe/Ga857jdkUQ=
+		S/kjK2bju0j42ul4Ra78htAiNyc=
 		</data>
 		<key>Modules/OSHealthFitnessLib.swiftmodule/arm64-apple-ios-simulator.swiftmodule</key>
 		<data>
-		i9LR6p0Usiwk/ogQvxmVMAD8JnQ=
+		6KoIWjzOCq1WTZSREuNdxjziplg=
 		</data>
 		<key>Modules/OSHealthFitnessLib.swiftmodule/x86_64-apple-ios-simulator.abi.json</key>
 		<data>
-		AEE24ZniMvr9XLR2lrpzi3IX2i4=
+		avK09n8sL8QQ2mL12xIW/IHvIB0=
 		</data>
 		<key>Modules/OSHealthFitnessLib.swiftmodule/x86_64-apple-ios-simulator.private.swiftinterface</key>
 		<data>
-		Er6kYlqbRvBl7Uy55XZ1d3/BRWM=
+		GNataAwOZKQ/im43QgBCv8Ty8Bc=
 		</data>
 		<key>Modules/OSHealthFitnessLib.swiftmodule/x86_64-apple-ios-simulator.swiftdoc</key>
 		<data>
-		dorxATlC0fssG/zY6+AdT+oefQo=
+		5vK0/IoxE1y7XTuptbRxjpW45yQ=
 		</data>
 		<key>Modules/OSHealthFitnessLib.swiftmodule/x86_64-apple-ios-simulator.swiftinterface</key>
 		<data>
-		Er6kYlqbRvBl7Uy55XZ1d3/BRWM=
+		GNataAwOZKQ/im43QgBCv8Ty8Bc=
 		</data>
 		<key>Modules/OSHealthFitnessLib.swiftmodule/x86_64-apple-ios-simulator.swiftmodule</key>
 		<data>
-		ETcTAHqeR7ydUKObap4j2mgCEp4=
+		i7EEnO6uxn6vrnaRl7FCdTWhrCY=
 		</data>
 		<key>Modules/module.modulemap</key>
 		<data>
@@ -83,7 +83,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			sjECjsWRVL2gUo4fbAUyK7mzztI+8l2s+JBggvldPxw=
+			kf3ZV9NuKF5q1cp7B33rJsY4mWKIqCgisjA0VS9C8iw=
 			</data>
 		</dict>
 		<key>BackgroundModel.momd/BackgroundModel 2.omo</key>
@@ -97,7 +97,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			IdyVz7Y4AnUIwlsFpikuQEGo5BXPV/8uUquhpQmawyQ=
+			rOMkxCRNRac762drvZfcq+lWwa4u2dvHTn2TNC8fyYY=
 			</data>
 		</dict>
 		<key>BackgroundModel.momd/VersionInfo.plist</key>
@@ -111,77 +111,77 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			iTZqba86Qze4tX8sNzFINR8Oss0SKhW90BA8EJICnZM=
+			lxDbc4dRPeIKo4+zXb7mDCX2tEqIzhLys68LMshn4pU=
 			</data>
 		</dict>
 		<key>Modules/OSHealthFitnessLib.swiftmodule/arm64-apple-ios-simulator.abi.json</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			k7oUa2mifUf1hs7DBGxfOQw2LfwJZmn3R48Xqj0jQoc=
+			gjBOtqRcOYFx7j0/gCS5VSL/mzMmwP4Qab0gOkc2LtU=
 			</data>
 		</dict>
 		<key>Modules/OSHealthFitnessLib.swiftmodule/arm64-apple-ios-simulator.private.swiftinterface</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			JWVxhLHQ8I0+h1JRkWVS7m0T4xWOP0yXJ5kkFh2qv/Y=
+			roB0SdBWeyiQ26RRc4BuTnwhBqqi2T8qoHd5S3agTj4=
 			</data>
 		</dict>
 		<key>Modules/OSHealthFitnessLib.swiftmodule/arm64-apple-ios-simulator.swiftdoc</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			8P1vZsq+5nGrnSkpeT0wp0xPq8JPF+8YhEZg7ogQK/I=
+			dtisV1rt2DBmlwACG+Tqi8jYBWeDzqBwj0KlPrmuEg0=
 			</data>
 		</dict>
 		<key>Modules/OSHealthFitnessLib.swiftmodule/arm64-apple-ios-simulator.swiftinterface</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			JWVxhLHQ8I0+h1JRkWVS7m0T4xWOP0yXJ5kkFh2qv/Y=
+			roB0SdBWeyiQ26RRc4BuTnwhBqqi2T8qoHd5S3agTj4=
 			</data>
 		</dict>
 		<key>Modules/OSHealthFitnessLib.swiftmodule/arm64-apple-ios-simulator.swiftmodule</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			6ZKL0B+d1jhg2MWe2X2h5zc9+o3DwF+6W/Y6W5xaL48=
+			KuA2rPG6ZUOJ7fcyjp4KPLcQumKlMEOgIUxJUvKGv18=
 			</data>
 		</dict>
 		<key>Modules/OSHealthFitnessLib.swiftmodule/x86_64-apple-ios-simulator.abi.json</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			k7oUa2mifUf1hs7DBGxfOQw2LfwJZmn3R48Xqj0jQoc=
+			gjBOtqRcOYFx7j0/gCS5VSL/mzMmwP4Qab0gOkc2LtU=
 			</data>
 		</dict>
 		<key>Modules/OSHealthFitnessLib.swiftmodule/x86_64-apple-ios-simulator.private.swiftinterface</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			4QHmmB7x+9rX221fvIlXiyd2SPdYBiesZv91rgrhwsc=
+			rtrC2G6T7WvOFvXi+1zM26hQXf+CO4BQt6FBx0ExRHA=
 			</data>
 		</dict>
 		<key>Modules/OSHealthFitnessLib.swiftmodule/x86_64-apple-ios-simulator.swiftdoc</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			qSC7JTO8D1fP5qwpUQAoxR51/w/m5ft5hNNA6k52i3E=
+			7nh+4TV7ygrDARzsqBWEn2nhbszev/9Y7A3VuqzDXJU=
 			</data>
 		</dict>
 		<key>Modules/OSHealthFitnessLib.swiftmodule/x86_64-apple-ios-simulator.swiftinterface</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			4QHmmB7x+9rX221fvIlXiyd2SPdYBiesZv91rgrhwsc=
+			rtrC2G6T7WvOFvXi+1zM26hQXf+CO4BQt6FBx0ExRHA=
 			</data>
 		</dict>
 		<key>Modules/OSHealthFitnessLib.swiftmodule/x86_64-apple-ios-simulator.swiftmodule</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			+nVUj/gGY0gQv7xrMemhMNMuK7uSM8duEOBXqdOCJhM=
+			sh92eSdaig/8nZTmojGzSAwn7stnB42U4+v35oZfr/c=
 			</data>
 		</dict>
 		<key>Modules/module.modulemap</key>

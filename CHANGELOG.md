@@ -6,7 +6,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 The changes documented here do not include those from the original repository.
 
-### [3.0.0]
+## [3.0.1]
+
+### Fixes
+
+- (ios) Build native library xcframework with Xcode 16 (https://outsystemsrd.atlassian.net/browse/RMET-5108)
+
+## [3.0.0]
 
 ### BREAKING CHANGE
 
