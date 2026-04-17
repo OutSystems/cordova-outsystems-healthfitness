@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 The changes documented here do not include those from the original repository.
 
+## [3.0.2]
+
+### Fixes
+
+- (android) convert LocalDateTime to Instant in `groupByDuration` to avoid DST crash (https://outsystemsrd.atlassian.net/browse/RMET-5
+
 ## [3.0.1]
 
 ### Fixes
