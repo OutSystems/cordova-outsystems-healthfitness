@@ -59,9 +59,19 @@ jobs:
         run: |
           echo "Creating PR from ${{ env.BRANCH_RELEASE }} → ${{ env.BRANCH_MAIN }}..."
           git push origin HEAD
-          gh pr create \
+          PR_URL=$(gh pr create \
             --title "Release $PACKAGE_VERSION_AFTER (automation)" \
             --body "# Git tag and Release created; **Do NOT squash nor rebase**, use regular merge commit, in order to keep commit hashes and tags" \
             --base ${{ env.BRANCH_MAIN }} \
             --head ${{ env.BRANCH_RELEASE }} \
-            --repo $GITHUB_REPOSITORY
+            --repo $GITHUB_REPOSITORY)
+          echo "PR_URL=$PR_URL" >> $GITHUB_ENV
+
+      - name: Enable auto-merge on release PR
+        if: env.PACKAGE_VERSION_BEFORE != env.PACKAGE_VERSION_AFTER
+        continue-on-error: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN_GITHUB }}
+        run: |
+          echo "Enabling auto-merge (merge commit) on $PR_URL..."
+          gh pr merge "$PR_URL" --auto --merge || echo "::warning::Auto-merge could not be enabled; PR will need to be merged manually."
