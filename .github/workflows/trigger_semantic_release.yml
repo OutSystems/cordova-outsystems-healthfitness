@@ -36,7 +36,7 @@ jobs:
         id: before
         run: |
           PACKAGE_VERSION_BEFORE=$(node -p 'require("./package.json").version')
-          echo "PACKAGE_VERSION_BEFORE=$PACKAGE_VERSION_BEFORE" >> $GITHUB_ENV
+          echo "PACKAGE_VERSION_BEFORE=$PACKAGE_VERSION_BEFORE" >> "$GITHUB_ENV"
           echo "PACKAGE_VERSION_BEFORE: $PACKAGE_VERSION_BEFORE"
 
       - name: Run Semantic Release
@@ -48,7 +48,7 @@ jobs:
         id: after
         run: |
           PACKAGE_VERSION_AFTER=$(node -p 'require("./package.json").version')
-          echo "PACKAGE_VERSION_AFTER=$PACKAGE_VERSION_AFTER" >> $GITHUB_ENV
+          echo "PACKAGE_VERSION_AFTER=$PACKAGE_VERSION_AFTER" >> "$GITHUB_ENV"
           echo "PACKAGE_VERSION_AFTER: $PACKAGE_VERSION_AFTER"
 
       - name: Create release PR
@@ -60,12 +60,16 @@ jobs:
           echo "Creating PR from ${{ env.BRANCH_RELEASE }} → ${{ env.BRANCH_MAIN }}..."
           git push origin HEAD
           PR_URL=$(gh pr create \
-            --title "Release $PACKAGE_VERSION_AFTER (automation)" \
-            --body "# Git tag and Release created; **Do NOT squash nor rebase**, use regular merge commit, in order to keep commit hashes and tags" \
+            --title "Release $PACKAGE_VERSION_AFTER (automation) — MERGE COMMIT ONLY" \
+            --body "> [!WARNING]
+          > **DO NOT squash or rebase this PR.** Use \"Create a merge commit\" only.
+          > Squashing or rebasing rewrites commit hashes and breaks the git tags
+          > created by semantic-release (tags would point at commits that no
+          > longer exist on \`${{ env.BRANCH_MAIN }}\`)." \
             --base ${{ env.BRANCH_MAIN }} \
             --head ${{ env.BRANCH_RELEASE }} \
-            --repo $GITHUB_REPOSITORY)
-          echo "PR_URL=$PR_URL" >> $GITHUB_ENV
+            --repo "$GITHUB_REPOSITORY")
+          echo "PR_URL=$PR_URL" >> "$GITHUB_ENV"
 
       - name: Enable auto-merge on release PR
         if: env.PACKAGE_VERSION_BEFORE != env.PACKAGE_VERSION_AFTER
